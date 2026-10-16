@@ -1,0 +1,6 @@
+{
+  "name": "handbook-designer-engine",
+  "private": true,
+  "description": "截图、QA 与 PDF 导出用的浏览器。安装：cd hb && npm install && npx playwright install chromium",
+  "dependencies": { "playwright": "^1.45.0" }
+}

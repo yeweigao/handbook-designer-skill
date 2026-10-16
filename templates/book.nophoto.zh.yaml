@@ -1,0 +1,102 @@
+# ============================================================================
+# book.nophoto.zh.yaml —— 样例三：无图模式（8 页中文新生手册，一张照片都不用）
+# 只改 book.style 就能换成 8 种风格之一：editorial / swiss / notebook / inkwash / papercut / riso / aurora / nebula
+# 没写 image 的页会按风格自动生成底图；拿到照片后给某页写上 image 即可（照片与底图可以混用）。
+# 试跑：bash hb/new_project.sh demo_np && cp templates/book.nophoto.zh.yaml demo_np/book.yaml && bash hb/run.sh demo_np
+# 各风格效果：references/gallery/style_<风格>.jpg
+# ============================================================================
+book:
+  title: 枫林学校 · 新生入学手册
+  folio: 枫林学校 · 新生入学手册
+  style: notebook            # 换成 editorial / swiss / inkwash / papercut / riso / aurora 试试
+  # fonts: hand              # 可选：覆盖风格默认字体（magazine / serif / sans / hand），见 references/style.md
+  # colors: klein            # 可选：经典配色方案名（klein / hermes / china-red / bauhaus / morandi …），或 {G: '#2E6E8E'}
+  # gradient: spotlight      # 可选：大标题渐变色
+
+pages:
+- layout: POSTER
+  top:
+    - {display: 新生入学手册, size: 64, spacing: .12}
+    - {en: Welcome to Maple School, size: 20}
+  bottom:
+    - {display: 2026 秋季学期, size: 26, spacing: .3, color: gold}
+    - {p: 开学第一周，请每天带着这本手册。, size: 14, weight: 700}
+    - {blanks: [姓名, 班级], w: 170}
+  folio: false
+
+- layout: SPREAD_OPENER
+  right_layout: T
+  left:
+    header: [Welcome · 致新同学, 2026]
+    top:
+      - {display: 致新同学, size: 54, spacing: .16}
+      - {en: A Letter Before Day One, size: 18}
+    bottom:
+      - letter:
+          - 欢迎来到枫林。新学校、新同学、新老师，一切都是新的，有点紧张很正常。
+          - 这本手册写着开学第一周你最需要知道的事。读一读，填一填，把它当成你的第一位朋友。
+  right:
+    header: [Daily Routine, 一日作息]
+    on_photo:
+      - {display: 一日作息, size: 40, spacing: .12}
+    body_top: 300
+    body:
+      - {kicker: 上学日 · Monday – Friday, mt: 0}
+      - kv: [['7:40', 到校、晨读], ['8:10', 第一、二节课], ['9:40', 大课间与眼保健操], ['10:10', 第三、四节课], ['11:50', 午餐与午休], ['13:30', 第五、六节课], ['15:10', 社团与课后活动], ['16:30', 放学]]
+        kw: 70
+        gap: 8
+
+- layout: SPREAD_H
+  left:
+    header: [Campus Life, 校园生活]
+    on_photo:
+      - {display: 校园生活, size: 60, spacing: .12}
+      - {p: 每位同学每学期至少参加一个社团。, weight: 700, size: 15}
+    body:
+      - {kicker: 社团一览, mt: 0}
+      - kv: [[周一, 机器人 · 合唱], [周二, 足球 · 绘画], [周三, 辩论 · 戏剧], [周四, 游泳 · 编程], [周五, 志愿服务]]
+        kw: 60
+        gap: 8
+      - {kicker: 我的选择, mt: 18}
+      - {choice: 最想参加（圈出）, options: [机器人, 合唱, 足球, 绘画, 戏剧]}
+      - {field: 为什么想参加}
+  right:
+    header: [My Week, 我的一周]
+    on_photo:
+      - {display: 我的一周, size: 40, spacing: .12}
+    body:
+      - {kicker: 小提示, mt: 0}
+      - items: [课表贴在书桌上方, 每晚整理第二天的书包, 不懂就问，老师和同学都会帮你]
+      - {kicker: 我的课程表, mt: 16}
+      - {table: ['', 周一, 周二, 周三, 周四, 周五], widths: 40px 1fr 1fr 1fr 1fr 1fr, rows: ['1', '2', '3', '4', '5', '6']}
+
+- layout: T
+  split: 340
+  header: [Health & Safety, 安全与健康]
+  on_photo:
+    - {display: 安全与健康, size: 46, spacing: .12}
+    - {p: 照顾好自己，是上学的第一件事。, size: 14, weight: 700}
+  body:
+    - items: [身体不舒服，第一时间告诉老师, 上下楼梯靠右走，不推不挤, 放学按时离校，有变动先告诉家长]
+      style: big
+      size: 15
+    - {kicker: 紧急联系人, mt: 20}
+    - {fields: [家长姓名, 电话]}
+    - {fields: [过敏或需要注意的情况]}
+
+- layout: PAPER
+  header: [My Goals, 我的目标]
+  body:
+    - {title: 这学期，我想……, kicker: My Goals, size: 32}
+    - {step: 1, lead: 学会一件新本领, write: [{lines: 2}]}
+    - {step: 2, lead: 认识三位新朋友, write: [{fields: [朋友一, 朋友二, 朋友三]}]}
+    - {step: 3, lead: 想对自己说的话, grow: true, write: [{fill: 96}]}
+    - {sign: 我会努力做到, label: 签名, size: 15}
+
+- layout: POSTER
+  header: [Contact, 联系我们]
+  bottom:
+    - {display: 有问题，随时找我们, size: 32, spacing: .1}
+    - kv: [[校务办公室, 0571-8800 1200], [校医室, 0571-8800 1210], [班主任, '']]
+      kw: 110
+      gap: 10

@@ -1,0 +1,116 @@
+# ============================================================================
+# book.brochure.zh.yaml —— 样例四：宣传册（8 页中文项目介绍，没有任何书写区）
+# purpose: brochure → 纸面内容默认顶部对齐；节奏 = 大图 + 关键数字 + 亮点卡片 + 图组 + 引语 + 报名方式/二维码
+# 用到的新块：stats 关键数字 · cards 亮点卡片 · gallery 图组 · figure 插图 · quote 引语 · qr 二维码
+# （模板里的照片文件名只是示例：换成你自己的照片放进 photos/，或先把 image 写成 placeholder 占位；效果见同名 .preview.jpg）
+# ============================================================================
+book:
+  title: 清迈国际研学营 · 项目介绍
+  folio: 清迈国际研学营 · 2026
+  purpose: brochure
+  style: photo
+  colors: campus
+
+pages:
+- layout: POSTER
+  image: aerial.jpg
+  top:
+    - {display: 清迈国际研学营, size: 56, spacing: .1}
+    - {en: Chiang Mai Global Study Camp 2026, size: 18}
+  bottom:
+    - {p: 五天四晚 · 兰纳文化 × 大象保育 × 大学实验室, size: 15, weight: 700}
+    - {display: 2026 年 4 月 · 7–9 年级, size: 22, spacing: .16, color: gold}
+  folio: false
+
+- layout: SPREAD_OPENER
+  image: pano_nimman.jpg
+  right_layout: T
+  left:
+    header: [Why Chiang Mai, 为什么是清迈]
+    top:
+      - {display: 为什么是清迈, size: 50, spacing: .1}
+      - {p: 一座古城、一片雨林、一所百年大学——课本里的世界在这里连成一片。, size: 14, weight: 700}
+    bottom:
+      - stats: [['12', 年研学经验], ['3000+', 名学员], ['40', 所合作学校], ['5', 天 4 晚]]
+        size: 36
+  right:
+    header: [Highlights, 项目亮点]
+    on_photo:
+      - {display: 项目亮点, size: 40, spacing: .1}
+    body:
+      - cards: [[兰纳文化, 走进古城寺庙与市集，跟当地老师学一堂兰纳手工课。], [大象保育, 在保育营了解亚洲象的生存现状，参与一次科学观察。], [大学实验室, 与清迈大学教授共同完成牛顿定律实验。], [森林徒步, 跟随向导走进雨林，记录三种以上本地动植物。]]
+        cols: 1
+        num: true
+
+- layout: SPREAD_H
+  image: g_aerial.jpg
+  left:
+    header: [Itinerary, 五天行程]
+    on_photo:
+      - {display: 五天行程, size: 56, spacing: .1}
+    body:
+      - {kicker: Day by Day, mt: 0}
+      - kv: [[Day 1, 抵达清迈 · 古城夜市], [Day 2, 兰纳学校全天课程], [Day 3, 清迈大学实验室], [Day 4, 大象保育营], [Day 5, 森林徒步与返程]]
+        kw: 70
+        gap: 14
+      - {p: 全程中英双语导师带队，每 8 名学员配 1 名带队老师。, mt: 20}
+      - figure: gift.jpg
+        caption: 与兰纳学校的同学交换礼物
+        h: 210
+        mt: 22
+  right:
+    header: [Highlights, 现场]
+    on_photo:
+      - {display: 课堂之外, size: 40, spacing: .1}
+    body:
+      - {kicker: 往届现场, mt: 0}
+      - gallery: [lab.jpg, class.jpg]
+        captions: [清迈大学实验室, 兰纳学校课堂]
+        h: 170
+      - figure: market.jpg
+        caption: 古城周末市集
+        h: 250
+        mt: 16
+
+- layout: HOLE
+  image: eleye.jpg
+  window: tr
+  header: [Voices, 学员说]
+  beside:
+    - {title: 学员说, kicker: Voices, size: 30}
+  body:
+    - quote: 这是我第一次真正理解课本上的生态系统——原来保护一头大象，需要一整片森林。
+      by: 2025 届学员 · 林同学
+      size: 22
+    - quote: 孩子回来后主动查资料、写报告，这种变化比任何分数都珍贵。
+      by: 学员家长 · 陈女士
+      size: 16
+      mt: 26
+
+- layout: SL
+  image: journal.jpg
+  header: [How to Join, 报名方式]
+  body:
+    - {title: 报名方式, kicker: How to Join, size: 32}
+    - {step: 1, lead: 在线报名, text: 扫描封底二维码填写报名表，截止日期 2026 年 3 月 31 日。}
+    - {step: 2, lead: 线上面谈, text: 项目老师与学员进行 15 分钟视频交流，了解兴趣与期待。}
+    - {step: 3, lead: 行前说明会, text: 出发前两周召开家长说明会，发放研学手册与行李清单。}
+    - {kicker: 费用说明, mt: 26}
+    - kv: [[项目费用, '人民币 16,800 元'], [包含, 机票、住宿、餐食、课程、保险], [不含, 护照办理与个人消费]]
+      kw: 80
+      gap: 10
+    - {kicker: 常见问题, mt: 26}
+    - cards: [[需要什么英语水平？, 能进行简单日常交流即可，课程配有中英双语讲义。], [安全怎么保障？, 全程购买境外意外险，24 小时带队老师值守，每日向家长群报平安。], [饮食能照顾到过敏吗？, 报名表中填写过敏信息，餐食由营地统一安排替代菜品。]]
+      cols: 1
+
+- layout: POSTER
+  image: trail.jpg
+  header: [Contact, 联系我们]
+  bottom:
+    - {display: 一起出发, size: 40, spacing: .12}
+    - kv: [[咨询电话, 0571-8800 1200], [电子邮箱, study@maple.example.com]]
+      kw: 80
+      gap: 10
+    - qr: https://example.com/apply
+      caption: 扫码在线报名
+      size: 92
