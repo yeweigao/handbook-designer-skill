@@ -14,7 +14,7 @@ STRIP=r'[｜→•✓✗▶☐\s—·\-–：:，,。.！!？?；;（）()“”
 def txt(s,drop_deco=False):
     s=re.sub(r'<style.*?</style>|<script.*?</script>|<title>.*?</title>','',s,flags=re.S)
     if drop_deco: s=re.sub(r'<(\w+)[^>]*data-deco[^>]*>.*?</\1>','',s,flags=re.S)
-    s=re.sub(r'<br\s*/?>','\n',s); s=re.sub(r'</(p|div|span|section)>','\n',s); s=re.sub(r'<[^>]+>','',s); return html.unescape(s)
+    s=re.sub(r'<br\s*/?>','\n',s); s=re.sub(r'</(p|div|span|section|li|td|th|h\d)>','\n',s); s=re.sub(r'<[^>]+>','',s); return html.unescape(s).replace('\u200b','')
 norm=lambda s:re.sub(STRIP,'',s).lower()
 raw=open(os.path.join(P,'book.html'),encoding='utf-8').read()
 pages=re.findall(r'<section class="page[^"]*"[^>]*data-n="(\d+)"[^>]*>(.*?)</section>',raw,flags=re.S)
@@ -26,6 +26,14 @@ book_deco_free=txt(raw,drop_deco=True); n_deco=len(re.findall(r'data-deco',raw))
 ref=open(REF,encoding='utf-8').read()
 ref=re.sub(r'<!--.*?-->','',ref,flags=re.S); ref=re.sub(r'(?m)^\s*(!\[[^\]]*\]\([^)]*\)|<img\b[^>]*>)\s*$','',ref)   # extract.py 的页码/图片注释、Markdown 图片不算正文
 if REF.endswith('.html'): ref=txt(ref)
+import json as _j   # 在线编辑页里用户改过、已写回 book.yaml 的文字（sync_edits.py 记的）：当作用户认可的改动，参照文本跟着换
+for _f in (os.path.join(P,'.qa','edits_applied.json'),os.path.join(os.path.dirname(P),'.qa','edits_applied.json')):
+    if not os.path.exists(_f): continue
+    for _e in _j.load(open(_f,encoding='utf-8')):
+        if _e.get('old') and _e.get('new') and (not _e.get('lang') or _e['lang']==os.path.basename(P) or _f.startswith(P)):
+            _o,_n=[re.sub(r'<br\s*/?>','\n',str(x)) for x in (_e['old'],_e['new'])]
+            ref=ref.replace(_o,_n) if _o in ref else ref.replace(re.sub(r'\s+',' ',_o),_n)
+    break
 CJK=len(re.findall(r'[一-鿿]',ref))>len(re.findall(r'[A-Za-z]',ref))/4   # 原文以中日韩文字为主？
 D=norm(re.sub(r'[•✓✗→▶☐｜]','',ref))
 segs=[]
@@ -40,17 +48,17 @@ for part,k in segs:
     i=N.find(k,cur)                 # 优先找“上一句之后”的出现位置（同一词可能在前文被引用过）
     if i<0: i=N.find(k)
     if i<0: miss.append(part); continue
-    if len(k)>=4:                   # 很短的片段（如“午餐”）多处出现，不参与顺序判断
+    if len(k)>=4 and N.count(k)==1:  # 很短或在成品里出现不止一次的片段（目录、章节页摘要），不参与顺序判断
         found.append((i,part))
         if i>=cur: cur=i+len(k)
 # 顺序：最长递增子序列之外的片段 = 位置“倒退”的片段
-pos=[i for i,_ in found]; L=len(pos); best=[1]*L; prev=[-1]*L
+pos=[owner[i] for i,_ in found]; L=len(pos); best=[1]*L; prev=[-1]*L   # 按页比较：同一页里的先后由版式决定（标题、正文栈的排法），只查跨页的倒退
 for a in range(L):
     for b in range(a):
-        if pos[b]<pos[a] and best[b]+1>best[a]: best[a]=best[b]+1; prev[a]=b
+        if pos[b]<=pos[a] and best[b]+1>best[a]: best[a]=best[b]+1; prev[a]=b
 keep=set(); a=max(range(L),key=lambda x:best[x]) if L else -1
 while a>=0: keep.add(a); a=prev[a]
-order=[(owner[pos[i]],found[i][1]) for i in range(L) if i not in keep]
+order=[(pos[i],found[i][1]) for i in range(L) if i not in keep]
 extra=[]
 for line in dict.fromkeys(l.strip() for l in book_deco_free.split('\n')):
     if not line: continue

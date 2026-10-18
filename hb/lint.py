@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+"""页序检查（构建前跑，只提示不拦截）：python3 lint.py <project>
+- 每页的 job:（这一页让读者做什么 / 知道什么）有没有写；写了 book.kind 时，job 要用 purposes/<kind>.yaml 的页面角色词
+- 用途要求的页（封面、报名方式、封底……）有没有
+- 节奏：每页按版式和字数归成 锚点 anchor / 密集 dense / 呼吸 breathing（页上可写 rhythm: 覆盖），
+  连续 3 页以上密集、6 页以上没有锚点、连续 3 页同版式 → 提示
+- 封面在第 1 页、封底在最后、页数是 4 的倍数
+结果打印并写到 .qa/lint.txt。"""
+import sys, os, re, yaml
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
+P = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else '.')
+spec = yaml.safe_load(open(os.path.join(P, 'book.yaml'), encoding='utf-8')) or {}
+sys.path.insert(0, HERE)
+from i18n_pick import first_lang
+spec = first_lang(spec)
+B = spec.get('book') or {}; pages = spec.get('pages') or []
+SPAN2 = {'SPREAD_P', 'SPREAD_H', 'SPREAD_OPENER'}
+ANCHOR = {'FULL', 'POSTER', 'COLLAGE'} | SPAN2
+CJK = re.compile(r'[㐀-鿿]')
+def size(o):
+    if isinstance(o, str): return len(CJK.findall(o)) + len(re.findall(r'[A-Za-z]+', o)) * 0.6
+    if isinstance(o, dict): return sum(size(v) for k, v in o.items() if k not in ('layout', 'image', 'images', 'note', 'job', 'surface', 'focus'))
+    if isinstance(o, list): return sum(size(v) for v in o)
+    return 0
+def rhythm(p):
+    if p.get('rhythm') in ('anchor', 'dense', 'breathing'): return p['rhythm']
+    lay = p.get('layout'); s = size(p)
+    if lay in ANCHOR: return 'anchor'
+    if lay in ('GRID', 'TWO') or s > 420: return 'dense'
+    if lay in ('CARDS', 'STAGGER') and s > 260: return 'dense'
+    return 'breathing'
+kind = B.get('kind'); roles = {}; must = []; K = {}
+if kind:
+    f = os.path.join(ROOT, 'purposes', f'{kind}.yaml')
+    if os.path.exists(f):
+        K = yaml.safe_load(open(f, encoding='utf-8')) or {}; roles = K.get('roles') or {}
+        must = [r for r, v in roles.items() if (v or {}).get('must')]
+out = []; warn = out.append
+n = 1; seq = []; nojob = []; jobs = []
+for i, p in enumerate(pages):
+    span = 2 if p.get('layout') in SPAN2 else 1
+    rh = rhythm(p); seq += [(n, p.get('layout'), rh)] * 1
+    job = p.get('job')
+    if not job: nojob.append(n)
+    else:
+        jobs.append(str(job).split()[0].split('·')[0].strip())
+        if roles and jobs[-1] not in roles: warn(f'[job] 第{n}页 job: {job} —— 不是 {kind} 的页面角色词（{" / ".join(roles)}）。用角色词开头，后面可以写说明，如 job: why · 三个理由')
+    n += span
+total = n - 1
+if nojob: warn(f'[job] {len(nojob)} 页没写 job:（第 {"、".join(map(str, nojob[:12]))} 页）→ 每页写一句“这一页让读者做什么 / 知道什么”，排版和审稿都按它判断')
+for r in must:
+    if r not in jobs: warn(f'[缺页] {K.get("name", kind)} 需要一页 {r}（{roles[r].get("zh", "")}），book.yaml 里没有 job: {r}')
+if pages:
+    if pages[0].get('layout') not in ('FULL', 'POSTER'): warn('[封面] 第 1 页不是 FULL / POSTER：封面要一张图或一个大标题，读者第一眼决定翻不翻')
+    if len(pages) > 3 and pages[-1].get('layout') not in ('FULL', 'POSTER'): warn('[封底] 最后一页不是 FULL / POSTER：封底放联系方式、二维码、下一步动作')
+run = 0; since = 0; same = 1
+for k, (pn, lay, rh) in enumerate(seq):
+    run = run + 1 if rh == 'dense' else 0
+    since = 0 if rh == 'anchor' else since + 1
+    same = same + 1 if k and lay == seq[k - 1][1] else 1
+    if run == 4: warn(f'[节奏] 第{pn - 3}–{pn}页连续 4 页密集（{"、".join(s[1] for s in seq[k - 3:k + 1])}）→ 中间插一页 FULL / COLLAGE，或把一页换成 ONE / MIX')
+    if since == 7: warn(f'[节奏] 第{pn - 6}–{pn}页 7 页没有锚点页 → 插一页 FULL（章节页）或 COLLAGE')
+    if same == 3: warn(f'[节奏] 第{pn - 2}–{pn}页连续 3 页都是 {lay} → 换一种版式（CARDS ↔ STAGGER / TWO / GRID）')
+todo = []
+def find_todo(o, path):
+    if isinstance(o, str) and o.strip() == 'TODO': todo.append(path)
+    elif isinstance(o, dict): [find_todo(v, f'{path}.{k}') for k, v in o.items()]
+    elif isinstance(o, list): [find_todo(v, f'{path}[{i}]') for i, v in enumerate(o)]
+find_todo(pages, 'pages')
+if todo: warn(f'[待填] 还有 {len(todo)} 处 TODO（沿用旧册时留的空）：{"、".join(todo[:6])}… → 从 doc.md 复制新文字填进去；用不上的键删掉')
+if total % 4 and total > 4: warn(f'[页数] 共 {total} 页，骑马钉需要 4 的倍数（差 {4 - total % 4} 页）')
+tgt = B.get('pages')
+line = '节奏：' + ' '.join({'anchor': '■', 'dense': '▤', 'breathing': '□'}[r] for _, _, r in seq) + '  （■ 锚点  ▤ 密集  □ 呼吸）'
+os.makedirs(os.path.join(P, '.qa'), exist_ok=True)
+open(os.path.join(P, '.qa', 'lint.txt'), 'w', encoding='utf-8').write('\n'.join([line] + out) + '\n')
+print(line)
+for o in out: print(o)
+if not out: print('页序检查：没有问题 ✓')

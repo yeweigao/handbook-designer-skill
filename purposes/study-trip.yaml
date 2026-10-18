@@ -1,0 +1,24 @@
+name: 研学任务册
+en: Study-trip workbook
+purpose: workbook
+pages: [16, 24, 32]
+reader: 研学途中的学生（边走边看边写），带队老师
+action: 每天完成任务、写下观察；回来交册子 / 做展示
+hook: 封面一张目的地照片 + 一句“这一趟要解决的问题”
+roles:
+  cover:    {zh: 封面 · 目的地 + 主题问题, layouts: [FULL], must: true}
+  welcome:  {zh: 致同学 / 出发前的话, layouts: [ONE]}
+  overview: {zh: 行程总览 · 每天一行, layouts: [GRID], must: true}
+  rules:    {zh: 安全守则 / 集合 / 联系人, layouts: [CARDS, GRID], must: true}
+  chapter:  {zh: 每天的章节页, layouts: [FULL]}
+  brief:    {zh: 当天背景知识, layouts: [STAGGER, MIX, TWO]}
+  task:     {zh: 任务页 · 书写区（进阶模式 T / B / PAPER 页 + field / lines / table）, layouts: [T, B, PAPER, SL, SR], must: true}
+  reflect:  {zh: 反思 / 总结, layouts: [PAPER, ONE]}
+  notes:    {zh: 笔记页, layouts: [PAPER]}
+  back:     {zh: 封底 · 紧急联系 + 姓名班级, layouts: [FULL, PAPER], must: true}
+order: [cover, welcome, overview, rules, chapter, brief, task, chapter, brief, task, reflect, notes, back]
+review:
+  - 每个任务都有足够的书写空间（一行 ≥ 8mm，表格格子能写字）
+  - 任务说明能在 10 秒内看懂：做什么、在哪做、交什么
+  - 紧急电话、集合时间地点在封底或第 2 页一眼可见
+  - 场馆开放时间、门票等事实提醒出发前按官方渠道复核

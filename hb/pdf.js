@@ -6,4 +6,7 @@ const launch=async()=>{try{return await chromium.launch({args:['--no-sandbox']})
 (async()=>{const b=await launch();
 const p=await b.newPage();await p.goto('file://'+path.join(dir,'book.html'),{waitUntil:'networkidle'});await p.evaluate(()=>document.fonts.ready);
 await p.waitForFunction(()=>document.body.dataset.ready==1);await p.waitForTimeout(600);
+if(process.env.HB_DRAFT)await p.evaluate(()=>document.querySelectorAll('.page').forEach(pg=>{const d=document.createElement('div');d.setAttribute('data-deco','1');   // 草稿水印
+ d.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:9999';
+ d.innerHTML='<div style="transform:rotate(-32deg);font:800 104px/1 Inter,sans-serif;letter-spacing:.06em;color:rgba(230,30,40,.22);white-space:nowrap">草稿 DRAFT</div>';pg.appendChild(d)}));
 await p.pdf({path:out,preferCSSPageSize:true,printBackground:true,tagged:true,outline:true});/* tagged/outline：较新的 playwright 支持，旧版会忽略 */await b.close();console.log('PDF',out);process.exit(0)})().catch(e=>{console.error(e);process.exit(1)});

@@ -1,0 +1,25 @@
+name: 新生手册
+en: New-student / onboarding handbook
+purpose: guide
+pages: [16, 24, 32]
+reader: 第一周的新生 / 新员工，遇到问题时翻到对应页
+action: 第一周顺利完成报到、找到地方、知道规矩和找谁
+hook: 封面欢迎 + “第一周你要做的 5 件事”放在最前面
+roles:
+  cover:    {zh: 封面 · 欢迎, layouts: [FULL], must: true}
+  welcome:  {zh: 欢迎辞, layouts: [ONE]}
+  first:    {zh: 第一周要做的事, layouts: [CARDS, GRID], must: true}
+  map:      {zh: 地图 / 地点 / 交通, layouts: [MIX, GRID]}
+  people:   {zh: 找谁 · 部门 / 老师 / 联系方式, layouts: [GRID, CARDS], must: true}
+  rules:    {zh: 规章 / 守则, layouts: [TWO, CARDS]}
+  life:     {zh: 生活 · 食堂 / 宿舍 / 社团, layouts: [COLLAGE, STAGGER, MIX]}
+  calendar: {zh: 校历 / 重要日期, layouts: [GRID]}
+  faq:      {zh: 常见问题, layouts: [CARDS]}
+  chapter:  {zh: 章节页, layouts: [FULL]}
+  back:     {zh: 封底 · 紧急联系, layouts: [FULL], must: true}
+order: [cover, welcome, first, chapter, map, people, rules, chapter, life, calendar, faq, back]
+review:
+  - 目录能直接跳到“找谁”“地图”“规章”（PDF 里目录可点）
+  - 第一周的事按时间排，每件写清地点和要带的东西
+  - 规章原文一个字不改；读起来难懂的地方在交付时提给用户，不自己改写
+  - 地图 / 平面图清晰度够印刷

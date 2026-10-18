@@ -21,12 +21,39 @@ STYLES = {
          '.ink .lt p:first-child::first-letter{float:left;font-family:var(--f-title);font-weight:900;font-size:3.1em;line-height:.92;margin:4px 8px 0 0;color:{G}}'
          '.ln,.fd i,.rl{border-bottom-width:.6px}')),
   'swiss': dict(edge='hard',
-    zh='瑞士网格：大色块 + 巨型几何形，无衬线、强对比、零装饰。适合入职手册、会议指南、机构介绍',
-    tone='dark', fonts='sans',
-    colors=dict(G='#C8102E', OCH='#141414', GOLD='#FFFFFF', INK='#141414', MUT='#4A4A4A', PAPER='#FFFFFF'),
+    zh='瑞士国际主义：网格、左对齐、无衬线、强层级。两档用色——单色（默认）：白纸黑字 + 一个强调色（默认瑞士红），细线分格、强调色大编号、照片转黑白；'
+       '撞色（color_mode: clash）：大色块 + 巨型几何形。适合机构介绍、入职手册、会议指南、产品手册',
+    tone='dark', fonts='sans', mode='mono',
+    colors=dict(G='#E3051B', OCH='#141414', GOLD='#FFFFFF', INK='#111111', MUT='#4A4A4A', PAPER='#F5F3EE'),
+    ccss=('.st-swiss .cn-tx{text-align:left}.st-swiss .cn-lab{letter-spacing:.16em}'
+          '.st-swiss .cn-top2{background:linear-gradient(var(--rule),var(--rule)) top/100% 1px no-repeat}'
+          '.st-swiss .cn-g2>:nth-child(2n),.st-swiss .cn-g3>:not(:nth-child(3n+1)){position:relative}'
+          '.st-swiss .cn-g2>:nth-child(2n)::before,.st-swiss .cn-g3>:not(:nth-child(3n+1))::before{content:"";position:absolute;left:calc(-.5 * var(--gut));top:0;bottom:0;width:1px;background:var(--line)}'
+          '.st-swiss .page.cn .cn-fo{background:linear-gradient(var(--line),var(--line)) top/100% 1px no-repeat}'),
     css=('.nu{font-style:normal;font-weight:900}.ink .kk{font-weight:800;color:{INK}}'
          '.ink .hd0 .sf{letter-spacing:.02em}.bx{border:1.4px solid {INK}}.ln,.fd i,.rl{border-bottom:1px solid {INK}}'
          '.ink .kk::before{content:"";display:inline-block;width:10px;height:10px;background:{G};margin-right:9px;vertical-align:-1px}')),
+  'stijl': dict(edge='hard',
+    zh='风格派（蒙德里安）：先分空间、再放内容、最后上颜色。线有层级——主结构（标题区、图与字、页脚）一两条粗线、条目之间细线、其余靠对齐；'
+       '颜色就是粗线围出的格子，按角色：红 = 主角区、蓝 = 图片区 / 窄条、黄 = 页码日期小格。封面、封底、章节页是一整幅构成，阅读页只有两三条主线和几小格颜色。'
+       '三种画法 book.look：classic 粗黑线 + 三原色大格子 / tone 无线（细线 + 深浅灰）/ beat 节奏（Grid + Rhythm：线细，大色块缩成小色块，切口页边一列跟着条目走的节拍）。照片转黑白。适合展览、品牌画册、机构介绍、年度回顾',
+    tone='light', fonts={'preset': 'magazine', 'label': ['inter', 'lxgw-neo-xihei', 'noto-sans-sc']}, mode='mono',
+    colors=dict(G='#D7261E', GOLD='#F2C318', OCH='#1F4C9C', C='#1F4C9C', INK='#141414', MUT='#55524C', PAPER='#F3EFE6'),
+    ccss=('.st-stijl .cn-tx{text-align:left}.st-stijl .cn-lab{letter-spacing:.2em}'
+          '.st-stijl .cn-top2{background:linear-gradient(var(--rule),var(--rule)) top/100% 1px no-repeat}'
+          '.st-stijl .cn-ino{position:relative}.st-stijl .cn-ino::after{content:"";position:absolute;left:0;bottom:0;width:40px;height:5px;background:var(--bar,transparent)}'
+          '.sj-blk,.sj-line,.sj-tick,.sj-rail{position:absolute;display:block;pointer-events:none}.sj-blk{z-index:1}.sj-line{z-index:3}.sj-tick{z-index:4}.sj-rail{z-index:3}.sj-rule{z-index:3}.sj-railbox{pointer-events:none}'
+          '.sj-pn{position:absolute;z-index:4;display:flex;align-items:center;justify-content:center;font-family:var(--f-title);font-weight:700;font-size:calc(20px * var(--s));font-feature-settings:"lnum" 1;color:var(--ink,#141414)}.sj-pn.sj-pnb{font-size:calc(34px * var(--s));letter-spacing:.01em}'
+          '.st-stijl .sj-ix{font-size:260px;line-height:.86;margin:12px 0 28px;letter-spacing:-.02em}'
+          '.st-stijl .cn-field{z-index:0}.st-stijl .cn-st{z-index:2}.st-stijl .cn-fo{z-index:2}'),
+    css=''),
+  'geo': dict(edge='hard',
+    zh='孟菲斯 / 几何拼块：拼块由网格算出来（四分之一圆、半圆、同心弧、条纹、三角、星……），只在页边——封面封底底边一条、章节页切口下角一团、其他页切口一列；'
+       '正文区永远是纸色，字只写在纸上。适合低龄、营地、活动、文创、亲子手册',
+    tone='light', fonts='sans', mode='mono',
+    colors=dict(G='#2D63C8', GOLD='#F5CF3F', OCH='#E9572B', INK='#16181D', MUT='#4A4F58', PAPER='#FFFFFF'),
+    ccss='.geo-band{position:absolute;z-index:3;pointer-events:none}',
+    css=''),
   'notebook': dict(edge='soft',
     zh='手账笔记：点阵纸 + 马卡龙色块 + 手绘涂鸦，手写字体、虚线书写行、荧光笔小标签。适合学生任务册、营地手册、亲子手册',
     tone='light', fonts='hand',

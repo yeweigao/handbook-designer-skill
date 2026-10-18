@@ -14,10 +14,10 @@ pages:
 - layout: POSTER
   image: aerial.jpg
   top:
-    - {display: Family Handbook, size: 84, lh: 1.02}
-    - {en: Lanna International School · 2026–27, size: 22}
+    - {display: Family Handbook, size: 96}
+    - {en: Lanna International School · 2026–27}
   bottom:
-    - {p: 'Everything you need for the school year: daily routines, key dates, health and safety, and the agreements we make together.', size: 15, weight: 600}
+    - {p: 'Everything you need for the school year: daily routines, key dates, health and safety, and the agreements we make together.', weight: 600}
     - {blanks: [Student, Grade], w: 200}
   folio: false
 
@@ -25,12 +25,12 @@ pages:
   header: [Welcome, From the Head of School]
   body:
     - {title: Welcome to Lanna, kicker: A Note to Families, size: 40}
-    - {p: 'Dear families, welcome to a new school year. This handbook brings together the practical information you will need most often. Please keep it somewhere easy to find and bring it to the first parent meeting.', size: 14}
-    - {p: 'Our teachers are always happy to talk. If something in this handbook is unclear, contact your child’s homeroom teacher first; they will point you to the right person.', size: 14}
-    - {kicker: Key Dates · 2026–27, mt: 26}
+    - {p: 'Dear families, welcome to a new school year. This handbook brings together the practical information you will need most often. Please keep it somewhere easy to find and bring it to the first parent meeting.'}
+    - {p: 'Our teachers are always happy to talk. If something in this handbook is unclear, contact your child’s homeroom teacher first; they will point you to the right person.'}
+    - {kicker: Key Dates · 2026–27}
     - kv: [[Aug 17, First day of school], [Sep 12, Family welcome evening], [Oct 23–27, Mid-term break], [Dec 18, Winter concert · last day of term], [Jan 6, Term 2 begins], [Jun 11, Graduation and last day]]
       kw: 110
-    - {kicker: Notes, mt: 22}
+    - {kicker: Notes}
     - {fill: 96}
 
 - layout: T
@@ -38,14 +38,13 @@ pages:
   split: 360
   header: [Daily Life, A Day at School]
   on_photo:
-    - {display: A Day at School, size: 46}
-    - {p: 'Doors open at 7:30. Please arrive by 7:50 so your child can settle in before homeroom.', size: 14}
+    - {display: A Day at School, size: 47}
+    - {p: 'Doors open at 7:30. Please arrive by 7:50 so your child can settle in before homeroom.'}
   body:
     - {kicker: Daily Schedule, mt: 0}
     - kv: [['7:50', Homeroom and attendance], ['8:10', Lessons · Blocks 1–2], ['10:30', Snack and recess], ['10:50', Lessons · Blocks 3–4], ['12:30', Lunch], ['13:20', Lessons · Block 5], ['15:00', Clubs and activities], ['16:00', Dismissal]]
       kw: 70
-      gap: 6
-    - {kicker: What to Bring Every Day, mt: 20}
+    - {kicker: What to Bring Every Day}
     - items: [A refillable water bottle and a named hat, The school planner — we read it every evening, Indoor shoes for the library and gym]
 
 - layout: SPREAD_H
@@ -55,21 +54,20 @@ pages:
   left:
     header: [Beyond the Classroom, Clubs · Trips · Service]
     on_photo:
-      - {display: Beyond the Classroom, size: 64, lh: 1.05}
-      - {p: 'Every student joins at least one club each term and one field study each year.', weight: 700, size: 15}
+      - {display: Beyond the Classroom, size: 72}
+      - {p: 'Every student joins at least one club each term and one field study each year.', weight: 700}
     body:
       - {kicker: After-School Clubs, mt: 0}
       - kv: [[Mon, Robotics · Choir], [Tue, Football · Art studio], [Wed, Debate · Thai cooking], [Thu, Swimming · Coding], [Fri, Community service]]
         kw: 60
-        gap: 8
-      - {kicker: Our Club Choices, mt: 22}
+      - {kicker: Our Club Choices}
       - {fields: [First choice, Second choice]}
       - {field: Why this club}
   right:
     header: [Field Study, Planning Together]
     on_photo:
       - {kicker: Field Study Weeks, mt: 0}
-      - {p: 'Grades 6–8 travel within Thailand; Grades 9–12 may join an international trip.', size: 15, weight: 700}
+      - {p: 'Grades 6–8 travel within Thailand; Grades 9–12 may join an international trip.', weight: 700}
     body:
       - {kicker: Family Planning Page, mt: 0}
       - {table: ['', Event, Date, Who goes], widths: 24px 1.4fr 1fr 1fr, rows: ['1', '2', '3', '4']}
@@ -82,7 +80,6 @@ pages:
     - {title: Health & Safety, kicker: Keeping Everyone Well}
     - items: [Keep your child at home with a fever and for 24 hours after it ends, Tell the nurse about any medicine taken at school, Update emergency contacts whenever they change]
       style: big
-      size: 14
   body:
     - {title: Emergency Contacts, kicker: Please Complete, size: 26}
     - {fields: [Parent / guardian 1, Phone]}
@@ -97,8 +94,7 @@ pages:
     - {title: Our Shared Agreements, kicker: Home & School, size: 36}
     - items: ['We treat every member of our community with kindness and respect.', 'We are on time, prepared and ready to learn.', 'We use devices responsibly and only for learning during the school day.', 'We speak up when something is wrong and look out for each other.', 'Families and teachers keep each other informed.']   # 英文里有逗号的条目必须加引号，否则会被拆成两条
       style: big
-      size: 15
-    - {kicker: Signatures, mt: 30}
+    - {kicker: Signatures}
     - {p: 'I have read this handbook and agree to the shared agreements.'}
     - {fields: [Student signature, Date], cols: 2fr 1fr}
     - {space: 12}
@@ -110,8 +106,7 @@ pages:
   image: g_wing.jpg
   header: [Contacts, Who to Ask]
   bottom:
-    - {display: Who to Ask, size: 40}
+    - {display: Who to Ask, size: 47}
     - kv: [[Front office, office@lanna.example · 053 000 100], [School nurse, nurse@lanna.example · 053 000 120], [Transport, bus@lanna.example · 053 000 130], [Counsellor, care@lanna.example · 053 000 140]]
       kw: 130
-      gap: 10
-    - {display: See you at school., size: 30, color: gold, mt: 34}
+    - {display: See you at school., size: 33, color: gold, mt: 34}

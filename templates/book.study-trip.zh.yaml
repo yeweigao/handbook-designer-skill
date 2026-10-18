@@ -17,12 +17,12 @@ pages:
   image: aerial.jpg            # 竖图做单页
   focus: [0.5, 0.5]            # 图片的哪个点（0–1）对准 target
   top:
-    - {display: 清迈, size: 168, spacing: .04, lh: 1.02}
-    - {display: 五日闯关记, size: 48, spacing: .3}
-    - {display: ——从国际课堂到大象雨林, size: 20, spacing: .22, mt: 16}
+    - {display: 清迈, size: 160}
+    - {display: 五日闯关记, size: 47}
+    - {display: ——从国际课堂到大象雨林, size: 23, mt: 16}
   bottom:
-    - {display: 研学手册, size: 34, spacing: .42, color: gold}
-    - {p: 兰纳学校 × 清迈大学 × 大象保育营, size: 15, weight: 700}
+    - {display: 研学手册, size: 33, color: gold}
+    - {p: 兰纳学校 × 清迈大学 × 大象保育营, weight: 700}
     - {blanks: [姓名, 班级], w: 180}           # 旧版就有的填写栏，不能丢
   folio: false
 
@@ -31,13 +31,13 @@ pages:
   image: moat.jpg
   header: [Foreword · 致同学, Chiang Mai 2026]
   top:
-    - {display: 亲爱的同学, size: 54, spacing: .16}
-    - {en: A Letter Before Takeoff, size: 19}
+    - {display: 亲爱的同学, size: 56}
+    - {en: A Letter Before Takeoff}
   bottom:
     - letter:
         - 当课本走出教室，当课堂延伸到雨林，这场清迈研学将带你走进真正的兰纳世界——不是游客式的走马观花，而是用手触摸、用脚丈量、用脑思考的五天探索。
         - 愿你保持好奇，勇敢提问，在观察中思考，在实践中成长。
-    - {display: 清迈见。, size: 38, spacing: .2, color: gold, mt: 26}
+    - {display: 清迈见。, size: 33, color: gold, mt: 26}
   fig: Fig. 01 · 古城护城河的黄昏
 
 # ---------- 03 目标 + 期待：HOLE（纸面开窗，窗在右上）
@@ -50,9 +50,9 @@ pages:
       style: big
   body:                        # 窗下方的整宽区域
     - {title: 我对本次研学的期待, kicker: Three Wishes, size: 28}
-    - {step: 1, lead: 我最想完成的一件事, write: [{lines: 2}, {field: 为什么}]}
-    - {step: 2, lead: 我最想认识的人是, write: [{lines: 2}, {field: 想认识他/她的原因}]}
-    - {step: 3, lead: 我最想弄明白的问题是, write: [{lines: 2}, {field: 我打算怎么找答案}]}
+    - {step: 1, lead: 我最想完成的一件事, write: [{lines: 1}, {field: 为什么}]}
+    - {step: 2, lead: 我最想认识的人是, write: [{lines: 1}, {field: 想认识他/她的原因}]}
+    - {step: 3, lead: 我最想弄明白的问题是, write: [{lines: 1}, {field: 我打算怎么找答案}]}
 
 # ---------- 04–05 双海报跨页 SPREAD_P（必须从偶数页开始；横图）
 - layout: SPREAD_P
@@ -61,18 +61,16 @@ pages:
   left:
     header: [Itinerary · 研学行程总览, Five Days]
     top:
-      - {display: 研学行程总览, size: 44, spacing: .16}
-      - {p: 5天4晚　2026.10.26 — 10.30　清迈, weight: 700, size: 14}
+      - {display: 研学行程总览, size: 47}
+      - {p: 5天4晚　2026.10.26 — 10.30　清迈, weight: 700}
       - kv: [[Day 1, 清迈接机 — 入住酒店 — 宁曼路散步 — 小组破冰], [Day 2, 兰纳学校全天研学 — 湄卡运河夜市], [Day 5, 帕拉寺僧侣步道徒步 — 前往机场]]
         kw: 90
-        gap: 18
   right:
     header: [Code of Conduct, Before Departure]
     top:
-      - {display: 研学安全文明公约, size: 44, spacing: .16}
+      - {display: 研学安全文明公约, size: 47}
       - items: [服从导师安排，不擅自离队，随身携带紧急联系卡, 尊重泰国当地习俗：进寺庙脱鞋、遮肩过膝、放低音量, 团结互助，主动用英语交流，积极完成团队任务]
         style: big
-        size: 18
     bottom:
       - {sign: 我已阅读并承诺遵守, label: 签名}
     fig: Fig. 02 · 清迈古城
@@ -80,11 +78,11 @@ pages:
 # ---------- 06 任务页：T（照片在上，纸面在下）
 - layout: T
   image: market.jpg
-  split: 330                   # 纸面从这里开始（越大照片越多）
+  split: 330                   # 纸面从这里开始（吸到最近的行线；越大照片越多）
   header: [Pre-Departure Missions, Whole Class]
   on_photo:                    # 照片上的白字（自动压暗）
-    - {display: 出发前·全班共同任务, size: 34, spacing: .12}
-    - {p: 以下任务由参加研学和未参加研学的同学共同完成。出发前两周启动，全班从下面4个任务中任选2个完成，让没出发的同学也成为这场研学的一部分。, size: 14}
+    - {display: 出发前·全班共同任务, size: 33}
+    - {p: 以下任务由参加研学和未参加研学的同学共同完成。出发前两周启动，全班从下面4个任务中任选2个完成，让没出发的同学也成为这场研学的一部分。}
   body:
     - {task: A, name: 任务A：「偏见对账」, sub: ——我们对清迈的3个刻板印象}
     - {p: 出发前一周，全班投票选出大家对泰国/清迈最常见的3个刻板印象（比如“泰国很乱”“泰国很落后”“去泰国就是看寺庙”）。, lead: 全班一起做：}
@@ -116,9 +114,9 @@ pages:
   left:
     header: [Day 1 · 01 / 05, 10.26 周一]
     on_photo:
-      - {display: Day 1, size: 112, color: gold, lh: 1}
-      - {display: 落地即入场, size: 48, spacing: .16}
-      - {p: 10.26 周一 ｜ 主题：初识清迈·破冰启航, weight: 700, size: 15}
+      - {display: Day 1, size: 120, color: gold}
+      - {display: 落地即入场, size: 47}
+      - {p: 10.26 周一 ｜ 主题：初识清迈·破冰启航, weight: 700}
     body:
       - {kicker: Field Missions · 研学任务, mt: 0}
       - {step: 1, lead: 小组破冰, text: 记录1位组员的名字、特点和他/她最期待的一件事, write: [{fields: [组员名字, 特点]}, {field: 他/她最期待的一件事}]}
@@ -127,7 +125,7 @@ pages:
     header: [Day 1 · Field Missions, Itinerary & Key Facts]
     on_photo:                  # 向下对齐到照片底部，不顶到页面最上方
       - {kicker: Itinerary · 今日行程, mt: 0}
-      - {p: 清迈接机 → 入住酒店 → 宁曼路散步 → 小组破冰, size: 17, weight: 700}
+      - {p: 清迈接机 → 入住酒店 → 宁曼路散步 → 小组破冰, weight: 700}
       - {kicker: Key Facts · 核心知识点}
       - items: [清迈：泰国第二大城市，兰纳王朝古都，位于泰国北部, 时差：清迈比北京慢1小时，几乎不用倒时差]
     body:
@@ -145,11 +143,11 @@ pages:
   left:
     header: [Day 3 · 03 / 05, 10.28 周三]
     top:
-      - {display: Day 3, size: 112, color: gold, lh: 1}
-      - {display: 大学与大象, size: 48, spacing: .16}
+      - {display: Day 3, size: 120, color: gold}
+      - {display: 大学与大象, size: 47}
     bottom:
       - {kicker: Itinerary · 今日行程}
-      - {p: 上午：清迈大学实验室 ｜ 下午：湄登大象保育营 ｜ 晚上：兰纳舞蹈表演餐, size: 15, weight: 700}
+      - {p: 上午：清迈大学实验室 ｜ 下午：湄登大象保育营 ｜ 晚上：兰纳舞蹈表演餐, weight: 700}
   right:
     header: [Day 3 · Laboratory, Chiang Mai University]
     body_top: 300
@@ -168,9 +166,9 @@ pages:
   left:
     header: [Day 5 · 05 / 05, 10.30 周五]
     top:
-      - {display: Day 5, size: 112, color: gold, lh: 1}
-      - {display: 走进森林, size: 48, spacing: .16}
-      - {p: 10.30 周五 ｜ 主题：信仰与自然·研学收官, weight: 700, size: 15}
+      - {display: Day 5, size: 120, color: gold}
+      - {display: 走进森林, size: 47}
+      - {p: 10.30 周五 ｜ 主题：信仰与自然·研学收官, weight: 700}
     bottom:
       - {kicker: Key Facts · 核心知识点}
       - items: [帕拉寺步道：单程约1.5公里，30-45分钟，树上绑橙色僧袍布条当路标, 进殿礼仪：脱鞋、遮肩过膝、放低音量]
@@ -187,7 +185,7 @@ pages:
 # ---------- 14 成果页：B（纸面在上，照片在下）
 - layout: B
   image: class.jpg
-  split: 780                   # 照片从这里开始
+  split: 780                   # 照片从这里开始（吸到最近的行线）
   header: [Field Report, My Takeaways]
   body:
     - {title: 我的研学收获, kicker: Field Report · 研学成果记录, size: 30}
@@ -216,5 +214,5 @@ pages:
 - layout: POSTER
   image: g_wing.jpg
   bottom:
-    - {display: 清迈五日闯关记, size: 30, spacing: .3}
+    - {display: 清迈五日闯关记, size: 33}
   folio: false

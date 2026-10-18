@@ -1,0 +1,7 @@
+# 用途方法：book.kind: <名字>。每种用途给出 页面角色词（每页 job: 用它开头）、必须有的页、推荐页序、版式、审稿重点。
+# lint.py 按它检查缺页和 job；方案、审稿按它的 review 逐条过。新增用途：复制一份改，加到这里。
+admissions: {zh: 招生简章, purpose: brochure, pages: '12–20', for: 学校 / 机构招生、开放日、升学展}
+study-trip: {zh: 研学任务册, purpose: workbook, pages: '16–32', for: 研学 / 营地 / 游学，学生边走边写}
+parents:    {zh: 家长手册, purpose: guide, pages: '12–24', for: 家校沟通、入学须知、活动说明（给家长看）}
+freshman:   {zh: 新生手册, purpose: guide, pages: '16–32', for: 新生入学、员工入职（照着用的指南）}
+annual:     {zh: 年度回顾, purpose: brochure, pages: '16–32', for: 年报、年度回顾、项目总结、校友通讯}

@@ -7,6 +7,7 @@ python3 -c "import yaml,PIL,numpy,fontTools" 2>/dev/null && say OK "pyyaml / pil
 python3 -c "import brotli" 2>/dev/null && say OK "brotli（woff2）" || say WARN "没有 brotli：字体会存成稍大的 woff（pip install brotli）"
 python3 -c "import pikepdf" 2>/dev/null && say OK "pikepdf（可编辑 PDF）" || say WARN "没有 pikepdf：不会生成可编辑 PDF（pip install pikepdf）"
 python3 -c "import qrcode" 2>/dev/null && say OK "qrcode（二维码块）" || say WARN "没有 qrcode：不能用 qr 二维码块（pip install qrcode），可以改用二维码图片 + figure"
+python3 -c "import spellchecker" 2>/dev/null && say OK "pyspellchecker（plan.py 英文拼写）" || say WARN "没有 pyspellchecker：plan.py 不查英文拼写（pip install pyspellchecker）"
 command -v pdfimages >/dev/null && say OK "poppler（PDF 里的图片抽取）" || say WARN "没有 poppler：PDF 资料里的图片抽不出来（mac：brew install poppler）"
 command -v node >/dev/null && say OK node || { say FAIL "node 未安装（需要 Node 18+）"; ok=0; }
 ( source "$HB/env.sh" >/dev/null && cd "$HB" && node -e "

@@ -1,0 +1,24 @@
+# 路线 brand：建品牌包 / 用品牌包
+
+品牌包 = 一个机构的配色、字体、logo、页脚、封底联系方式、口吻和禁忌，放在 `brands/<名字>/`，在 `brands/index.yaml` 登记。
+书里写 `book.brand: <名字>`：品牌包的设置作为默认值，book.yaml 里写了的优先；logo 自动放在封面、封底（其他页写 `logo: true`），封底自动加联系方式（装饰文字，不算 EXTRA，交付时列为非原文元素）。
+
+## 用现成的
+`brands/index.yaml` 里列着有哪些。用户说“用我们的品牌 / 和官网一致”且有对应的包 → 直接用，方向样张里至少一个方向是品牌包。
+现有：**allas**（All As AI：点缀档，白纸 + 浅紫，电光靛蓝做标题和数字，深色星云做封面和章节页，Comfortaa 圆润几何字体，文字标 logo 占位）。
+
+## 新建
+需要的材料（缺的问用户，或从官网 / 旧物料里取）：logo（单色 SVG 最好）、主色 + 强调色、字体（中文 / 西文）、公司全称、网址、地址 / 电话、口吻、禁忌。
+```bash
+bash $HB/new_brand.sh <名字> "<品牌显示名>" [logo.svg] [主色] [强调色]
+```
+→ `brands/<名字>/brand.yaml`（结构照 allas）、`logo.svg`（没给 logo 就用 Comfortaa 生成文字标占位：`hb/wordmark.py` 也能单独用，`--mark A` 加圆形字母标）、`preview.jpg` 样张、index.yaml 登记一条。
+然后打开 brand.yaml 补全：
+- `book.colors`：按角色写（style.md §8）：至少 `primary` 主色、`accent` 强调色、`background`、`body_text`。
+- `color_mode`：品牌色几乎都该用 `accent`（点缀）——品牌色只做标题、数字、细线，大面积是白纸和浅色；只有品牌本身就是强烈撞色（如橙 × 黑）才用 `clash`。拿不准写 `auto`，构建时会打印判断理由。
+- `book.fonts`：从 `python3 hb/fonts.py list` 里选；品牌字体不在列表里且是开源授权 → 放进 hb/fonts 并在 fonts.py 登记；商用授权字体不要嵌入，选最接近的开源字体并告诉用户。
+- `logo`：`mono: true`（单色，自动跟着当页字色变）；彩色 logo 写 `mono: false` 并给 `dark:` 深底版本。
+- `contact`、`voice`、`dont`。
+- 重新出样张核对：`python3 $HB/directions.py <临时目录> "X=brand:<名字>" --title "<品牌显示名>"`，看 logo、配色、字体。
+
+注意：仓库公开时，客户的品牌包可能不该提交。需要时把 `brands/<名字>/` 加进 .gitignore，只在本机用。

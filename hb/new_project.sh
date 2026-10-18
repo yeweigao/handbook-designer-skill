@@ -3,8 +3,13 @@
 # .pptx / 带图的 .docx .pdf：自动抽出图片到 photos/，清单 images.md，缩略图 photos/_contact.jpg（见 extract.py）
 # 每轮“用户改版”新建一个目录（v1、v2…），旧版留着对照（check_copy.py 可以拿旧版 book.html 当参照）。
 # 已有项目（目录里已有 book.yaml 或 doc.md）默认拒绝覆盖；确定要覆盖时：FORCE=1 bash hb/new_project.sh …
+#   沿用旧册（同一套外观、版式、页序换新内容，如今年的招生简章沿用去年的）：加 --from <旧项目目录>
+#   → 复制旧项目的 brief.md（route 改成 reuse）、book: 设置（风格、配色、品牌、字体、语言），页序骨架写进 book.yaml（文字换成 TODO，照片保留），
+#     旧 book.yaml 另存为 book.prev.yaml 对照。之后把 doc.md 的新文字填进 TODO；lint.py 会列出没填的 TODO。
 set -eo pipefail; HB="$(cd "$(dirname "$0")" && pwd)"
-[ -n "$1" ] || { echo "用法：bash $0 <project_dir> [原文] [图片目录]"; exit 2; }
+FROM=""; ARGS=(); while [ $# -gt 0 ]; do case "$1" in --from) FROM="$2"; shift 2;; *) ARGS+=("$1"); shift;; esac; done; set -- "${ARGS[@]}"
+[ -n "$1" ] || { echo "用法：bash $0 <project_dir> [原文] [图片目录] [--from 旧项目]"; exit 2; }
+[ -n "$FROM" ] && [ ! -f "$FROM/book.yaml" ] && { echo "--from 的旧项目里没有 book.yaml：$FROM"; exit 1; }
 P="$1"
 case "$(cd "$(dirname "$P")" 2>/dev/null && pwd)/$(basename "$P")" in /|/root|/home|"$HOME"|/Users|/tmp) echo "项目目录不能是 $P"; exit 2;; esac
 if [ -z "$FORCE" ] && { [ -f "$P/book.yaml" ] || [ -f "$P/doc.md" ]; }; then
@@ -24,8 +29,13 @@ if [ -n "$2" ]; then
     *) python3 "$HB/doc2yaml.py" "$2" "$P" ;;
   esac
   [ -s "$P/doc.md" ] || { echo "原文转换结果为空，请检查 $2"; exit 1; }
-elif [ ! -f "$P/book.yaml" ]; then   # 没给原文 = 试跑样例（无图风格，不需要照片）
+fi
+if [ -n "$FROM" ]; then
+  python3 "$HB/reuse.py" "$FROM" "$P"
+elif [ -z "$2" ] && [ ! -f "$P/book.yaml" ]; then   # 没给原文 = 试跑样例（无图风格，不需要照片）
   cp "$HB/../templates/book.nophoto.zh.yaml" "$P/book.yaml"
   echo "（未提供原文：已放入无图样例 book.yaml，可直接 run.sh 试跑）"
 fi
-echo "项目已建立：$P   下一步：照 book.draft.yaml 写 $P/book.yaml（结构参考 templates/），然后 bash $HB/run.sh $P"
+if [ -s "$P/doc.md" ]; then python3 "$HB/plan.py" "$P" >/dev/null && echo "素材盘点 → $P/plan.md"; fi
+echo "项目已建立：$P"
+echo "下一步（第 0 步）：读 plan.md，通读原文，给用户写 2–3 个方案并等用户选定；选定后再写 book.yaml，然后 bash $HB/run.sh $P"

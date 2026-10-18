@@ -69,7 +69,8 @@ for raw in md.splitlines():
 class D(yaml.SafeDumper): pass
 D.add_representer(str,lambda d,v:d.represent_scalar('tag:yaml.org,2002:str',v,style='"' if any(c in v for c in ':#{}[],?') else None))
 y=yaml.dump({'book':{'title':'TODO 手册标题','folio':'TODO 页脚文字','photos':'photos'},'pages':pages},Dumper=D,allow_unicode=True,sort_keys=False,width=1000)
-y=('# 骨架：每个 TODO 都要替换。layout 可选 PAPER/POSTER/T/B/SL/SR/HOLE/SPREAD_P/SPREAD_H/SPREAD_OPENER（见 references/blocks.md）\n'
+y=('# 骨架：每个 TODO 都要替换。标准模式用内容版式 ONE/TWO/CARDS/STAGGER/FULL/COLLAGE/GRID/MIX（见 references/layouts.md，plan.md 给了每段的建议）；\n'
+   '# 进阶模式用照片版式 PAPER/POSTER/T/B/SL/SR/HOLE/SPREAD_*（见 references/blocks.md）。\n'
    '# 相邻几个块可以合并到一页或一个跨页；文字只能挪动，不能改写。items 的 heading 是原文的小标题。\n'+y)
 open(os.path.join(P,'book.draft.yaml'),'w',encoding='utf-8').write(y)
 print(f'{len(pages)} 个内容块 → {P}/book.draft.yaml ；原文 → {P}/doc.md')

@@ -1,0 +1,28 @@
+name: 招生简章
+en: Admissions brochure
+purpose: brochure
+pages: [12, 16, 20]
+reader: 正在比较几所学校的家长 / 学生，翻 30 秒决定要不要来开放日
+action: 预约参观 / 扫码报名（最后两页必须给出动作 + 截止日期 + 联系方式）
+hook: 封面一句承诺（读者得到什么），不是校名加年份
+roles:                       # job: 用这些词开头，如 job: why · 三个理由
+  cover:    {zh: 封面 · 一句承诺 + 一张最能代表学校的照片, layouts: [FULL], must: true}
+  promise:  {zh: 开篇 · 校长 / 创始人一段话或一个数字, layouts: [ONE, FULL]}
+  why:      {zh: 为什么选我们 · 3–6 个理由, layouts: [CARDS, STAGGER], must: true}
+  program:  {zh: 课程 / 项目 · 学什么、怎么学, layouts: [STAGGER, TWO, GRID], must: true}
+  outcome:  {zh: 成果 · 升学去向、获奖、数字, layouts: [GRID, FULL]}
+  campus:   {zh: 校园与生活 · 照片为主, layouts: [COLLAGE, MIX]}
+  people:   {zh: 师资 / 团队, layouts: [CARDS, TWO]}
+  voice:    {zh: 学生 / 家长的话, layouts: [ONE, MIX]}
+  fees:     {zh: 学费 / 奖学金 / 名额, layouts: [GRID]}
+  apply:    {zh: 报名流程 · 步骤 + 截止日期 + 材料, layouts: [GRID, CARDS], must: true}
+  faq:      {zh: 常见问题, layouts: [CARDS]}
+  chapter:  {zh: 章节页, layouts: [FULL]}
+  back:     {zh: 封底 · 联系方式 + 二维码 + 地址, layouts: [FULL], must: true}
+order: [cover, promise, why, chapter, program, outcome, campus, people, voice, fees, apply, faq, back]
+review:
+  - 招生对象、学制 / 年级、费用、截止日期四项，翻到对应页 3 秒内能找到
+  - 每个“为什么”都有证据（数字、名字、照片），不是形容词
+  - 数字有口径和年份（“2025 届”“截至 2026 年 3 月”）
+  - 照片里的学生有授权；没有授权的不露正脸
+  - 报名页的步骤、日期、联系方式和原文逐字一致

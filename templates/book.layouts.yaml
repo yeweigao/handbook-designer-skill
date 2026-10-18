@@ -1,0 +1,156 @@
+# ============================================================================
+# book.layouts.yaml —— 内容版式样例（16 页，中英双语一份 yaml）
+# 每页只选一个内容版式（FULL / ONE / TWO / CARDS / STAGGER / GRID / COLLAGE / MIX），往固定空位里放原文。
+# 不写尺寸、坐标：全部排在 6 栏 × 32 行网格上（正文 16px、行距 28），文字成组钉住，照片和色块吸收长短，中文、英文同一套版式。
+# 文字写成 {zh: …, en: …}，book.langs 写 [zh, en]：bash hb/run.sh 一次出中文版和英文版，并出逐页对照图。
+#   只要一种语言：删掉 langs，直接写文字即可（也可以只保留 zh: 那一半）。
+#   英文里有逗号、冒号、问号时整段加单引号：en: 'Five days, four nights'
+# 照片：FULL / ONE / MIX 写 image: 文件名；STAGGER / TWO 的条目写 img: 文件名；COLLAGE 写 images: [...]。
+#   不写照片时，照片风格（photo）排成撞色色块 + 编号占位；无图风格（papercut 等）自动生成风格插画。
+#   照片发灰发白（褪色、过曝）会自动做成 A/B 双色调；book.duotone: all 全部做、off 都不做。
+# 配色：不写 colors 时默认 klein（克莱因蓝 × 拿坡里黄）；经典撞色还有 hermes / china-red / lemon-violet。
+# ============================================================================
+book:
+  title: {zh: 清迈国际研学营 · 项目介绍, en: Chiang Mai Global Study Camp}
+  folio: {zh: 清迈国际研学营 · 2026, en: Chiang Mai Study Camp · 2026}
+  purpose: brochure
+  style: photo
+  langs: [zh, en]
+
+pages:
+- layout: FULL                      # 封面：照片 + 一块出血撞色色块，书名压在里面
+  kicker: {zh: Chiang Mai Global Study Camp, en: Study camp · 2026}
+  title: {zh: "清迈\n国际研学营", en: "Chiang Mai\nGlobal Study Camp"}
+  en: {zh: 五天四晚 · 2026 年 4 月, en: 'Five days, four nights · April 2026'}
+  intro: {zh: 兰纳文化 × 大象保育 × 大学实验室, en: Lanna culture × Elephant conservation × University lab}
+  stats: [['5', {zh: 天 4 晚, en: days}], ['7–9', {zh: 年级, en: grades}], ['24', {zh: 人小班, en: per class}]]
+  folio: false
+
+- layout: GRID                      # 目录：toc: auto 自动收集带 index 的章节页
+  kicker: {zh: Contents · 目录, en: Contents}
+  title: {zh: 目录, en: Inside}
+  intro: {zh: 一座古城、一片雨林、一所百年大学——课本里的世界在这里连成一片。, en: 'An old city, a rainforest, a century-old university — where the world in the textbook comes together.'}
+  toc: auto
+
+- layout: ONE                       # 单栏：致辞
+  kicker: {zh: A Letter · 致家长, en: A letter to parents}
+  title: {zh: 让课本里的世界走到眼前, en: Bringing the textbook world to life}
+  text:
+    - {zh: 清迈是一座被群山与稻田环绕的古城。七百年前的兰纳王朝在这里留下了寺庙、手工艺和节庆；今天，它也是东南亚重要的大学城与生态保育中心。, en: 'Chiang Mai is an old city ringed by mountains and rice fields. Seven centuries ago the Lanna kingdom left its temples, crafts and festivals here; today it is also one of Southeast Asia’s great university towns and a centre for conservation.'}
+    - {zh: 我们把五天的行程设计成一条完整的学习线：从古城出发认识文化，走进雨林观察生态，再到大学实验室把观察变成数据。每一天都有一个要解决的问题，每一个问题都有一位当地导师陪伴。, en: 'We designed the five days as one continuous line of learning: begin in the old city to understand its culture, walk into the rainforest to observe its ecology, then turn observations into data in a university lab. Every day has a question to solve, and every question has a local mentor alongside.'}
+  quote: {zh: 孩子带回来的不是纪念品，而是一套看世界的方法。, en: 'Children won’t bring back souvenirs — they’ll bring back a way of seeing the world.'}
+  by: {zh: 项目主任 · 林老师, en: 'Ms Lin, Programme Director'}
+
+- layout: FULL                      # 章节页：index 写章节号
+  index: '01'
+  kicker: {zh: Chapter One · 第一章, en: Chapter one}
+  title: {zh: 五天，三条主线, en: 'Five days, three themes'}
+  intro: {zh: 文化、生态、科学——每一天都有一个要解决的问题。, en: 'Culture, ecology, science — every day has a question to solve.'}
+
+- layout: CARDS                     # 卡片：亮点
+  kicker: {zh: Highlights · 项目亮点, en: Highlights}
+  title: {zh: 六个关键词, en: Six keywords}
+  intro: {zh: 每一个亮点对应一天的核心任务，学生在出发前就会拿到对应的任务册。, en: 'Each highlight is the core task of one day; students receive the matching workbook before departure.'}
+  cards:
+    - [{zh: 兰纳文化, en: Lanna culture}, {zh: 走进古城寺庙与市集，跟当地老师学一堂兰纳手工课。, en: 'Explore old-city temples and markets, and take a Lanna craft class with a local teacher.'}]
+    - [{zh: 大象保育, en: Elephants}, {zh: 在保育营了解亚洲象的生存现状，参与一次科学观察。, en: 'Learn how Asian elephants live today and join a scientific observation at a sanctuary.'}]
+    - [{zh: 大学实验室, en: University lab}, {zh: 与清迈大学教授共同完成牛顿定律实验。, en: 'Run a Newton’s-laws experiment with professors at Chiang Mai University.'}]
+    - [{zh: 森林徒步, en: Forest trek}, {zh: 跟随向导走进雨林，记录三种以上本地动植物。, en: 'Follow a guide into the rainforest and record at least three local species.'}]
+    - [{zh: 双语展示, en: Bilingual showcase}, {zh: 最后一晚用中英双语向家长汇报五天的发现。, en: 'On the last night, present five days of discoveries to parents in two languages.'}]
+    - [{zh: 安全保障, en: Safety}, {zh: 1:8 师生比，全程随队校医与 24 小时值守。, en: 'One teacher for every eight students, a camp doctor and 24-hour duty throughout.'}]
+
+- layout: STAGGER                   # 错位：三条主线，图文棋盘交替
+  kicker: {zh: Three Themes · 三条主线, en: Three themes}
+  title: {zh: 文化 · 生态 · 科学, en: Culture · Ecology · Science}
+  items:
+    - {k: Culture, t: {zh: 古城里的兰纳, en: Lanna in the old city}, x: {zh: 在帕辛寺和周日夜市完成“古城侦探”任务，用速写和采访记录一个手艺人的一天。, en: 'Solve the “old-city detective” task at Wat Phra Singh and the Sunday market, sketching a craftsperson’s day.'}}
+    - {k: Ecology, t: {zh: 雨林与大象, en: Rainforest and elephants}, x: {zh: 在保育营观察亚洲象的行为，学习保育员如何用数据追踪每一头象的健康。, en: 'Watch Asian elephants and see how keepers track their health with data.'}}
+    - {k: Science, t: {zh: 大学实验室, en: The university lab}, x: {zh: 在清迈大学物理系完成小车与斜面实验，把测量结果画成第一张属于自己的图表。, en: 'Run the cart-and-ramp experiment and turn your measurements into your first chart.'}}
+
+- layout: TWO                       # 双栏文字
+  kicker: {zh: Who Should Join · 适合谁, en: Who should join}
+  title: {zh: 报名须知, en: Before you apply}
+  columns:
+    - {t: {zh: 适合的学生, en: Who it’s for}, items: [{zh: 7–9 年级在读, en: Students in grades 7–9}, {zh: 能用简单英语交流, en: Able to communicate in simple English}, {zh: 对文化或科学有好奇心, en: Curious about culture or science}, {zh: 能独立管理自己的物品, en: Able to look after their own belongings}]}
+    - {t: {zh: 出发前准备, en: Before departure}, items: [{zh: 有效期 6 个月以上的护照, en: A passport valid for at least six months}, {zh: 一份签署的安全承诺书, en: A signed safety agreement}, {zh: 个人常用药与防蚊用品, en: Personal medicine and insect repellent}, {zh: 一双适合徒步的鞋, en: A pair of hiking shoes}]}
+
+- layout: FULL                      # 章节页 02
+  index: '02'
+  kicker: {zh: Chapter Two · 第二章, en: Chapter two}
+  title: {zh: 出发之前, en: Before you go}
+  intro: {zh: 行程、费用、报名须知，以及家长最关心的几件事。, en: 'Itinerary, fees, how to apply — and what parents ask most.'}
+
+- layout: GRID                      # 网格：日程 + 费用 + 备注
+  kicker: {zh: Itinerary & Fees · 行程与费用, en: Itinerary & fees}
+  title: {zh: 五天行程, en: Five days}
+  intro: {zh: 行程以清迈当地时间为准，具体出发航班在出发前两周通知。, en: 'Times are Chiang Mai local time; flights are confirmed two weeks ahead.'}
+  timeline:
+    - [{zh: 第 1 天, en: Day 1}, {zh: 抵达清迈 · 开营仪式, en: Arrival · Opening ceremony}]
+    - [{zh: 第 2 天, en: Day 2}, {zh: 古城文化日 · 帕辛寺与周日夜市, en: Old City day · Wat Phra Singh and the Sunday market}]
+    - {k: {zh: 第 3 天, en: Day 3}, t: {zh: 大象保育营, en: Elephant sanctuary}, x: {zh: 保育员带领的科学观察, en: A guided scientific observation}, hot: true}
+    - [{zh: 第 4 天, en: Day 4}, {zh: 清迈大学实验日 · 小车与斜面实验, en: University lab day · Cart-and-ramp experiment}]
+    - [{zh: 第 5 天, en: Day 5}, {zh: 成果展示 · 返程, en: Showcase · Return}]
+  table:
+    head: [{zh: 项目, en: Item}, {zh: 说明, en: Details}, {zh: 费用, en: Fee}]
+    rows:
+      - [{zh: 学费, en: Tuition}, {zh: 课程、导师、任务册, en: 'Courses, mentors, workbook'}, {zh: 包含, en: Included}]
+      - [{zh: 食宿, en: Board}, {zh: 四晚双人间与全部餐食, en: 'Four nights twin share, all meals'}, {zh: 包含, en: Included}]
+      - [{zh: 机票, en: Flights}, {zh: 往返经济舱（团队统一预订）, en: 'Return economy, group booking'}, {zh: 另计, en: Extra}]
+      - [{zh: 保险, en: Insurance}, {zh: 境外旅行意外险, en: Travel accident insurance}, {zh: 包含, en: Included}]
+  notes: [{zh: 报名截止日期为 2026 年 2 月 28 日, en: Registration closes on 28 February 2026}, {zh: 满 16 人成团, en: Minimum 16 participants}, {zh: 退费规则见报名表背面, en: Refund policy is on the back of the form}]
+
+- layout: COLLAGE                   # 拼贴：往届回顾
+  kicker: {zh: Last Year · 往届回顾, en: Last year}
+  title: {zh: 2025 年的 48 位同学, en: 48 students in 2025}
+  text: {zh: 五天里他们走了 42 公里，记录了 136 种植物，完成了 12 个小组课题。, en: 'In five days they walked 42 km, recorded 136 plant species and completed 12 group projects.'}
+  images: ['', '', '', '', '']   # 照片文件名写进来（放在 photos/ 里）；空着 = 撞色色块 + 编号占位
+  captions: [{zh: 古城速写, en: Old-city sketching}, {zh: 保育营, en: The sanctuary}, {zh: 实验日, en: Lab day}, {zh: 雨林徒步, en: Rainforest trek}, {zh: 成果展, en: Showcase}]
+
+- layout: GRID                      # 网格 facts：大数字
+  kicker: {zh: By the Numbers · 数字里的营地, en: By the numbers}
+  title: {zh: 五天，四个数字, en: Five days in numbers}
+  facts: [['42', {zh: 公里徒步, en: km walked}], ['136', {zh: 种植物记录, en: plant species}], ['12', {zh: 个小组课题, en: group projects}], ['1:8', {zh: 师生比, en: teacher ratio}]]
+  notes: [{zh: 数据来自 2025 年营地的任务册汇总。, en: Figures from the 2025 camp workbooks.}]
+
+- layout: TWO                       # items 带 img：图文交替的格子
+  kicker: {zh: Daily Life · 营地生活, en: Daily life}
+  title: {zh: 一天是怎么度过的, en: A day at camp}
+  items:
+    - {t: {zh: 早餐与晨会, en: Breakfast and briefing}, x: {zh: 七点半在营地餐厅用餐，导师发布当天任务。, en: 'Breakfast at 7:30, then mentors set the day’s task.'}}
+    - {t: {zh: 上午任务, en: Morning task}, x: {zh: 分组外出，完成实地观察与采访。, en: Groups head out for field observation and interviews.}}
+    - {t: {zh: 下午工作坊, en: Afternoon workshop}, x: {zh: 回到营地整理数据、制作展示材料。, en: 'Back at camp to sort data and build presentations.'}}
+    - {t: {zh: 晚间分享, en: Evening sharing}, x: {zh: 每组五分钟汇报，导师点评。, en: 'Five minutes per group, with mentor feedback.'}}
+
+- layout: MIX                       # 组合 hero：主图 + 撞色色带 + 分栏
+  kicker: {zh: Our Team · 导师团队, en: Our team}
+  title: {zh: 陪伴他们的人, en: The people beside them}
+  sections:
+    - {t: {zh: 中方带队老师, en: Accompanying teachers}, x: {zh: 每 8 名学生配 1 名带队老师，均有三年以上国际研学带队经验。, en: 'One teacher for every eight students, each with at least three years of international study-trip experience.'}}
+    - {t: {zh: 当地导师, en: Local mentors}, x: {zh: 来自清迈大学与保育营的专业导师，负责每天的核心课程。, en: 'Specialists from Chiang Mai University and the sanctuary lead each day’s core sessions.'}}
+  quote: {zh: 我们不替孩子找答案，我们陪他们把问题问清楚。, en: 'We don’t find the answers for them — we help them ask better questions.'}
+  by: {zh: 当地导师 · Dr. Somchai, en: 'Dr Somchai, local mentor'}
+
+- layout: MIX                       # 组合 side：竖叠照片 + 文字
+  kicker: {zh: Safety · 安全保障, en: Safety}
+  title: {zh: 每一步都有人在, en: Someone at every step}
+  images: ['', '']
+  sections:
+    - {t: {zh: 医疗, en: Medical}, x: {zh: 随队校医全程同行，每家合作酒店 15 分钟内可到达国际医院。, en: 'A camp doctor travels with the group; every partner hotel is within 15 minutes of an international hospital.'}}
+    - {t: {zh: 通讯, en: Contact}, x: {zh: 每位学生配发当地电话卡，导师 24 小时值守。, en: 'Every student gets a local SIM card; mentors are on duty around the clock.'}}
+    - {t: {zh: 保险, en: Insurance}, x: {zh: 全员购买境外旅行意外险，保额 50 万元。, en: 'Everyone is covered by travel accident insurance up to ¥500,000.'}}
+
+- layout: CARDS                     # 线条式卡片：FAQ
+  kicker: {zh: FAQ · 常见问题, en: FAQ}
+  title: {zh: 家长最常问的四个问题, en: Four questions parents ask}
+  style: line
+  cards:
+    - [{zh: 孩子英语不好可以参加吗？, en: 'What if my child’s English is weak?'}, {zh: 可以。所有课程配有中文助教，英语只是展示环节的加分项。, en: 'They can still join. Every session has a Chinese-speaking assistant; English is a bonus in the showcase.'}]
+    - [{zh: 饮食能适应吗？, en: 'Will the food suit them?'}, {zh: 营地餐厅每餐提供中式选项，可提前登记过敏与忌口。, en: 'The camp kitchen offers a Chinese option at every meal; allergies and diets can be registered in advance.'}]
+    - [{zh: 手机怎么管理？, en: 'How are phones handled?'}, {zh: 白天统一保管，晚上 20:00–21:00 发放与家人联系。, en: 'Phones are kept safe during the day and handed out from 20:00 to 21:00 to call home.'}]
+    - [{zh: 可以中途退出吗？, en: 'Can my child leave early?'}, {zh: 可以，由家长书面申请，按退费规则处理。, en: 'Yes, on written request from a parent, under the refund policy.'}]
+
+- layout: FULL                      # 封底
+  kicker: {zh: Join Us · 报名与咨询, en: Join us}
+  title: {zh: "二〇二六\n清迈见", en: "See you in\nChiang Mai"}
+  intro: {zh: 项目办公室 · 周一至周五 9:00–18:00, en: 'Programme Office · Mon–Fri, 9:00–18:00'}
+  folio: false

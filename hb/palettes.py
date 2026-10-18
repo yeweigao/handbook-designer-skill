@@ -7,15 +7,18 @@
 配色只有 6 个键（INK G OCH GOLD MUT PAPER，含义见 references/style.md §3）。经典撞色里的“原色”往往太亮，
 直接做 10px 小字在纸上看不清——所以每套都拆成两种用法：原色放在 GOLD（深色底/底图上的大字与点缀、无图风格的大色块），
 纸面上的小字用同色相加深的版本（G/OCH，对纸色 ≥ 5.5:1）。写进 book.colors 的单个键会覆盖方案里的同名键。
+另有一对撞色 A / B：内容版式里大面积的色块用它们（A 主色块，B 撞色块；A 上的字用 B，B 上的字用 A）。不写时 A = G、B = GOLD。
+没写 book.colors、风格本身也没有配色（photo）时，默认 klein（克莱因蓝 × 拿坡里黄）。
 """
 import sys
 
 PALETTES = {
   # ---- 设计圈经典撞色
-  'klein':     dict(zh='克莱因蓝 × 拿坡里黄', use='艺术、设计、展览、高识别度活动', colors=dict(G='#002BA5', OCH='#6B4E00', GOLD='#FFE893', INK='#0A1433', MUT='#46506A', PAPER='#FFFBEB')),
-  'hermes':    dict(zh='爱马仕橙 × 乌漆黑', use='高端品牌、时尚、精品活动', colors=dict(G='#000010', OCH='#A84300', GOLD='#FF770F', INK='#000010', MUT='#4A4038', PAPER='#FFF5EC')),
-  'china-red': dict(zh='中国红 × 鱼肚白（配金）', use='节庆、传统文化、政企、开学典礼', colors=dict(G='#B5000C', OCH='#7A5A1E', GOLD='#F4C76B', INK='#1F1414', MUT='#574848', PAPER='#F7F7EE')),
-  'lemon-violet': dict(zh='柠檬黄 × 帝王紫', use='潮流、青年、音乐节、社团招新', colors=dict(G='#6A0DAD', OCH='#6E5800', GOLD='#FFF300', INK='#1E0A33', MUT='#4E4560', PAPER='#FFFDE8')),
+  # 四组“世界上最经典的撞色”：第 0 步的方案里优先给用户选（默认 klein）
+  'klein':     dict(zh='克莱因蓝 × 拿坡里黄（默认）', use='艺术、设计、教育、展览、高识别度活动', colors=dict(G='#002BA5', OCH='#6B4E00', GOLD='#FFE893', INK='#0A1433', MUT='#46506A', PAPER='#FFFBEB', A='#002BA5', B='#FFE893')),
+  'hermes':    dict(zh='爱马仕橙 × 乌漆嘛黑', use='高端品牌、时尚、精品活动', colors=dict(G='#000010', OCH='#A84300', GOLD='#FF770F', INK='#000010', MUT='#4A4038', PAPER='#FFF5EC', A='#FF770F', B='#000010')),
+  'china-red': dict(zh='中国红 × 鱼肚白', use='节庆、传统文化、政企、开学典礼', colors=dict(G='#B5000C', OCH='#7A5A1E', GOLD='#F4C76B', INK='#1F1414', MUT='#574848', PAPER='#FFFFFF', A='#D7000F', B='#F1F2E5')),
+  'lemon-violet': dict(zh='柠檬黄 × 帝王紫', use='潮流、青年、音乐节、社团招新', colors=dict(G='#6A0DAD', OCH='#6E5800', GOLD='#FFF300', INK='#1E0A33', MUT='#4E4560', PAPER='#FFFDE8', A='#6A0DAD', B='#FFF300')),
   'navy':      dict(zh='海军蓝 × 芥末黄 × 雾灰', use='学院、商务、航海、稳重正式', colors=dict(G='#114F99', OCH='#08337D', GOLD='#ECCA3E', INK='#0B2249', MUT='#4A5568', PAPER='#F5F4EF')),
   'tiffany':   dict(zh='蒂芙尼蓝 × 白', use='婚礼、女性向、轻奢、春夏', colors=dict(G='#00706A', OCH='#1F4F4B', GOLD='#81D8D0', INK='#14201F', MUT='#4A5655', PAPER='#F7FBFA')),
   'bordeaux':  dict(zh='勃艮第酒红 × 香槟金', use='晚宴、年会、颁奖、秋冬', colors=dict(G='#7B1E2B', OCH='#7A5C22', GOLD='#E9CF9B', INK='#2A1A1C', MUT='#5A4A4C', PAPER='#FBF7F0')),
@@ -59,6 +62,45 @@ def lum(h):
     return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]
 def contrast(a, b): a, b = lum(a), lum(b); return (max(a, b) + .05) / (min(a, b) + .05)
 
+CLASSIC = ['klein', 'hermes', 'china-red', 'lemon-violet']   # 经典撞色，方案里优先推荐
+DEFAULT = 'klein'
+
+def pair(c):
+    """内容版式的两块撞色：A 主色块、B 撞色块。没单独写时 A = G、B = GOLD。"""
+    return c.get('A') or c['G'], c.get('B') or c['GOLD']
+
+def on(bg, *cands):
+    """在 bg 上可读的字色：按顺序取第一个对比度 ≥ 4.5 的；都不够就取对比度最高的"""
+    for x in cands:
+        if contrast(x, bg) >= 4.5: return x
+    return max(cands, key=lambda x: contrast(x, bg))
+
+# ---------------------------------------------------------------- 颜色角色（借 ppt-master：按角色给颜色，品牌色锁进对应角色）
+ROLES = {'background': 'PAPER', 'secondary_bg': 'TINT', 'primary': 'A', 'accent': 'B', 'secondary_accent': 'OCH', 'body_text': 'INK'}
+ROLE_ZH = {'background': '背景', 'secondary_bg': '次级背景', 'primary': '主色', 'accent': '强调色', 'secondary_accent': '次强调色', 'body_text': '正文'}
+def mix(a, b, t):
+    a, b = [[int(x.lstrip('#')[i:i + 2], 16) for i in (0, 2, 4)] for x in (a, b)]
+    return '#' + ''.join(f'{round(p + (q - p) * t):02X}' for p, q in zip(a, b))
+def roles(c):
+    A, B = pair(c); P = c.get('PAPER', '#FFFFFF')
+    return dict(background=P, secondary_bg=c.get('TINT') or mix(P, A, .07), primary=A, accent=B, secondary_accent=c.get('OCH', A), body_text=c.get('INK', '#17211C'))
+def _hsv(h):
+    import colorsys
+    return colorsys.rgb_to_hsv(*[int(h.lstrip('#')[i:i + 2], 16) / 255 for i in (0, 2, 4)])
+MODES = ('clash', 'accent', 'mono')
+def mode(c, want=None):
+    """用色档位：clash 撞色（主色、强调色轮流做整页底）/ accent 点缀（大面积纸色和次级背景，主色只给封面、章节页，强调色只上数字、细线、标签）/ mono 单色。
+    没写时自动判断：两色对比 ≥ 3 且色相差得开（或其中一个接近黑白）才是撞色；同色系深浅、对比不够 → accent。返回 (档位, 理由)"""
+    A, B = pair(c)
+    if want and want != 'auto':
+        if want not in MODES: raise SystemExit(f'ERROR: book.color_mode 可选 auto / {" / ".join(MODES)}，当前 {want}')
+        return want, '（book.color_mode 指定）'
+    (ha, sa, va), (hb, sb, vb) = _hsv(A), _hsv(B)
+    dh = min(abs(ha - hb), 1 - abs(ha - hb)) * 360; ct = contrast(A, B)
+    neutral = min(sa, sb) < .25 or min(va, vb) < .15
+    if ct >= 3 and (dh >= 45 or neutral): return 'clash', f'主色 {A} × 强调色 {B}：对比 {ct:.1f}，色相差 {dh:.0f}° → 撞色'
+    return 'accent', f'主色 {A} × 强调色 {B}：' + (f'同一色系（色相差 {dh:.0f}°）' if dh < 45 else '') + (f'对比只有 {ct:.1f}' if ct < 3 else '') + ' → 不是撞色，用点缀档（品牌色只做强调）'
+
 def resolve(spec, base):
     """book.colors 可以写：方案名（'klein'）、{preset: klein, G: '#...'}、或只写颜色键。base = 风格默认配色。"""
     out = dict(base)
@@ -69,7 +111,11 @@ def resolve(spec, base):
     if pid is not None:
         if pid not in PALETTES: raise SystemExit(f'ERROR: 未知配色方案 {pid}，可选：{", ".join(PALETTES)}（python3 hb/palettes.py list）')
         out.update(PALETTES[pid]['colors'])
-    out.update({k: v for k, v in spec.items() if k != 'preset'})
+    for k, v in spec.items():   # 角色写法（primary / accent / background …）映射到内部键
+        if k == 'preset': continue
+        out[ROLES.get(k, k)] = v
+    if 'primary' in spec and 'G' not in spec: out['G'] = spec['primary']
+    if 'accent' in spec and 'GOLD' not in spec: out['GOLD'] = spec['accent']
     return out
 
 def gradient(spec, colors, dark):
@@ -93,6 +139,8 @@ def check(quiet=False):
         need = dict(G=5.5, OCH=5.5, INK=7, MUT=4.5)
         fails = [f'{k} {v:.1f}' for k, v in r.items() if v < need[k]]
         if 'GOLD' in c and contrast(c['GOLD'], c['G']) < 3: fails.append(f'GOLD/G {contrast(c["GOLD"], c["G"]):.1f}')   # 深色底图（swiss 等）上的强调大字
+        a, b_ = pair(c)
+        if contrast(a, b_) < 3: fails.append(f'A/B {contrast(a, b_):.1f}')   # 撞色块上的大字（A 上用 B、B 上用 A）
         if fails: bad.append((pid, fails))
         if not quiet: print(f'{pid:13s} ' + '  '.join(f'{k} {v:4.1f}' for k, v in r.items()) + ('   ✗ ' + ', '.join(fails) if fails else '   ✓'))
     for gid, g in GRADIENTS.items():
@@ -107,7 +155,7 @@ def sheet(out):
     cards = []
     for pid, p in PALETTES.items():
         c = p['colors']
-        sw = ''.join(f'<span class="sw" style="background:{c[k]}"><b style="color:{"#fff" if lum(c[k]) < .3 else "#111"}">{k}<br>{c[k]}</b></span>' for k in ('G', 'OCH', 'GOLD', 'INK', 'MUT', 'PAPER') if k in c)
+        sw = ''.join(f'<span class="sw" style="background:{c[k]}"><b style="color:{"#fff" if lum(c[k]) < .3 else "#111"}">{k}<br>{c[k]}</b></span>' for k in ('A', 'B', 'G', 'OCH', 'GOLD', 'INK', 'MUT', 'PAPER') if k in c)
         cards.append(f'<div class="pc" style="background:{c.get("PAPER", "#FBFAF7")};color:{c.get("INK", "#17211C")}"><div class="t" style="color:{c["G"]}">{H.escape(p["zh"])}</div>'
                      f'<div class="id">colors: {pid} · {H.escape(p["use"])}</div><div class="row">{sw}</div></div>')
     gr = []
@@ -130,7 +178,7 @@ h2{{font-size:15px;margin:6px 0 12px;color:#333}}.grid{{display:grid;grid-templa
 if __name__ == '__main__':
     cmd = sys.argv[1] if len(sys.argv) > 1 else 'list'
     if cmd == 'list':
-        print('配色方案（book.colors: <名字>）：')
+        print('配色方案（book.colors: <名字>；不写时默认 klein）。经典撞色：' + ' / '.join(CLASSIC))
         for pid, p in PALETTES.items(): print(f'  {pid:13s} {p["zh"]} —— {p["use"]}')
         print('\n渐变标题（book.gradient: <名字>，或块里写 gradient:）：\n  brand         用当前配色自动生成')
         for gid, g in GRADIENTS.items(): print(f'  {gid:13s} {g["zh"]}')

@@ -1,0 +1,24 @@
+name: 年度回顾
+en: Annual review
+purpose: brochure
+pages: [16, 24, 32]
+reader: 董事会、家长、合作方、校友——翻一遍记住今年最重要的 3 件事
+action: 认同今年的成绩，愿意继续支持 / 合作 / 捐赠
+hook: 封面一个年度数字或一张年度照片 + 一句年度主题
+roles:
+  cover:    {zh: 封面 · 年份 + 年度主题, layouts: [FULL], must: true}
+  letter:   {zh: 负责人致辞, layouts: [ONE], must: true}
+  numbers:  {zh: 年度数字, layouts: [GRID, FULL], must: true}
+  chapter:  {zh: 章节页（按季度 / 按主题）, layouts: [FULL]}
+  story:    {zh: 故事 · 一件事讲透, layouts: [MIX, STAGGER, ONE]}
+  moments:  {zh: 照片墙 · 年度瞬间, layouts: [COLLAGE]}
+  timeline: {zh: 大事记, layouts: [GRID]}
+  people:   {zh: 感谢 / 名单, layouts: [GRID, CARDS]}
+  next:     {zh: 明年计划, layouts: [CARDS, ONE]}
+  back:     {zh: 封底, layouts: [FULL], must: true}
+order: [cover, letter, numbers, chapter, story, moments, chapter, story, timeline, people, next, back]
+review:
+  - 年度数字都有口径（统计时间、范围）且和原文一致
+  - 大事记按时间排，日期格式统一
+  - 名单页：人名逐字核对（错一个字是事故），顺序按原文
+  - 照片有授权，合影里的人名对得上

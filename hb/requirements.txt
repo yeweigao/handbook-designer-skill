@@ -7,3 +7,4 @@ brotli>=1.0                 # 输出更小的 woff2（没有也能用，会退�
 pikepdf>=8                  # 生成可编辑 PDF（完整嵌入常用字库）
 qrcode>=7                   # 可选：qr 二维码块（没有时把二维码图片放进 photos/ 用 figure）
 markitdown[docx,pdf]>=0.1   # 原文转换；也可以用 pandoc 或 python-docx 代替
+pyspellchecker>=0.8      # 可选：plan.py 查英文拼写

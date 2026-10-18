@@ -6,7 +6,8 @@ from PIL import Image,ImageDraw
 P=os.path.abspath(sys.argv[1] if len(sys.argv)>1 else '.'); Q=os.path.join(P,'.qa'); ts=time.strftime('%H%M%S')
 for f in glob.glob(os.path.join(Q,'review_*.jpg')): os.remove(f)
 fs=sorted(glob.glob(os.path.join(Q,'pg*.png')),key=lambda f:int(os.path.basename(f)[2:-4]))
-ims=[Image.open(f).convert('RGB').resize((397,561)) for f in fs]; n=len(ims); w,h=397,561
+w=397; h=round(w*Image.open(fs[0]).height/Image.open(fs[0]).width) if fs else 561   # 按画布比例（A4 / A5 / 小红书 3:4）
+ims=[Image.open(f).convert('RGB').resize((w,h)) for f in fs]; n=len(ims)
 rows=[[None,0]]+[[i,i+1 if i+1<n else None] for i in range(1,n,2)]
 for k in range(0,len(rows),8):
     ch=rows[k:k+8]; R=(len(ch)+1)//2

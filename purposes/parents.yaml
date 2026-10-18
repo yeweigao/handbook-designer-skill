@@ -1,0 +1,24 @@
+name: 家长手册
+en: Parent handbook
+purpose: guide
+pages: [12, 16, 24]
+reader: 家长（常在手机上看 PDF，也会打印贴冰箱）
+action: 知道要准备什么、什么时候、找谁；按清单做完
+hook: 封面直接说“这本里有你需要的一切”：日期 + 主题
+roles:
+  cover:    {zh: 封面, layouts: [FULL], must: true}
+  letter:   {zh: 致家长的一封信, layouts: [ONE]}
+  calendar: {zh: 关键日期 / 日程, layouts: [GRID], must: true}
+  checklist: {zh: 准备清单, layouts: [CARDS, GRID], must: true}
+  how:      {zh: 流程说明 · 一步一步, layouts: [STAGGER, GRID]}
+  policy:   {zh: 规定 / 安全 / 健康, layouts: [TWO, CARDS]}
+  contact:  {zh: 联系人 / 通讯录, layouts: [GRID, CARDS], must: true}
+  faq:      {zh: 常见问题, layouts: [CARDS]}
+  chapter:  {zh: 章节页, layouts: [FULL]}
+  back:     {zh: 封底, layouts: [FULL], must: true}
+order: [cover, letter, calendar, chapter, checklist, how, policy, faq, contact, back]
+review:
+  - 所有日期、时间、电话和原文逐字一致，并按时间顺序排
+  - 手机竖屏上看得清（正文 ≥ 14px，日期用表格不用大段文字）
+  - 每条规定都说清“为什么”和“违反了怎么办”（原文有的话）
+  - 联系人页：姓名、角色、电话、何时打——缺一项就标出来问用户

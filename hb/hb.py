@@ -10,7 +10,7 @@ import wash, art, fonts as FONTS_
 from styles import STYLES
 import palettes as PAL
 MX=56   # 页边距（出血图片用）
-W,H=794,1123; M0=56; LH=32
+W,H=794,1123
 ERR=[]; WARN=[]
 SAFE=re.compile(r'&lt;(/?)(b|strong|i|em|u|br|sup|sub|small)\s*/?&gt;',re.I)
 def esc(s):   # 文案一律 HTML 转义，只放行不带属性的 <b> <strong> <i> <em> <u> <br> <sup> <sub> <small>；需要任意 HTML 用 {html: ...} 块
@@ -23,14 +23,36 @@ except yaml.YAMLError as e:
     m=getattr(e,'problem_mark',None)
     sys.exit(f"ERROR: book.yaml 语法错误{f'（第 {m.line+1} 行第 {m.column+1} 列附近）' if m else ''}：{getattr(e,'problem',e)}\n"
              "  常见原因：花括号 {...} 里的文字含有 : , ? # [ ] { } 或以引号开头 → 给整段文字加单引号，如 {p: '时间：上午 9:00'}")
-BK=SPEC.get('book',{})
+_LG={'zh','zh-hans','zh-hant','zh-tw','zh-hk','en','ja','ko','fr','de','es','it','pt','ru','th','vi','ms','ar'}
+def _multi(o): return isinstance(o,dict) and o and all(str(k).lower() in _LG for k in o)
+def _pick(o,l):   # 多语言写法 {zh: …, en: …}：直接跑 hb.py 时取 book.lang（或第一种）；run.sh 会先拆成各语言子项目
+    if _multi(o): return _pick(next((v for k,v in o.items() if str(k).lower()==l.lower()),next(iter(o.values()))),l)
+    if isinstance(o,dict): return {k:_pick(v,l) for k,v in o.items()}
+    if isinstance(o,list): return [_pick(v,l) for v in o]
+    return o
+_b=SPEC.get('book') or {}
+_l=str(_b.get('lang') or (_b.get('langs') or ['zh'])[0]); SPEC=_pick(SPEC,_l); SPEC.setdefault('book',{})['lang']=_l
+import brand as BRAND_
+BK,BRAND=BRAND_.apply(SPEC.get('book',{})); SPEC['book']=BK   # book.brand：品牌包的配色、字体、页脚、logo 作为默认值
+if SPEC.get('pages') and len(SPEC['pages'])>3 and SPEC['pages'][-1].get('layout') in ('FULL','POSTER'): SPEC['pages'][-1]=dict(SPEC['pages'][-1],_last=True)   # 封底（品牌包在这里放 logo + 联系方式）
+import canon as CN
+CANVAS=str(BK.get('canvas','a4')); W,H=CN.setup(CANVAS,int(BK['body']) if str(BK.get('body','')).isdigit() else BK.get('body'))   # 画布：a4（默认）/ a5 / xhs（小红书 3:4）；非 A4 只能用 8 个内容版式
 SRC=os.path.join(PROJ,BK.get('photos','photos'))
 STYLE=str(BK.get('style','photo'))
 PURPOSE=str(BK.get('purpose','workbook'))   # workbook 任务册（有书写区）/ guide 指南须知（以阅读为主）/ brochure 宣传册（不要书写区）
 if PURPOSE not in ('workbook','guide','brochure'): sys.exit(f'ERROR: book.purpose 可选 workbook / guide / brochure，当前 {PURPOSE}')
 if STYLE not in STYLES: sys.exit(f'ERROR: 未知 style {STYLE}，可选 {list(STYLES)}')
 SD=STYLES[STYLE]
-TH_=dict(INK='#17211C',G='#1D5A43',MUT='#3F4A44',GOLD='#F2C14E',OCH='#7E560E',PAPER='#FBFAF7'); TH_.update(SD['colors']); TH_=PAL.resolve(BK.get('colors'),TH_)
+TH_=dict(INK='#17211C',G='#1D5A43',MUT='#3F4A44',GOLD='#F2C14E',OCH='#7E560E',PAPER='#FBFAF7'); TH_.update(SD['colors']); TH_=PAL.resolve(BK.get('colors') or (None if SD['colors'] else PAL.DEFAULT),TH_)   # 没写配色、风格也没自带配色 → 默认 klein（克莱因蓝 × 拿坡里黄）
+TH_['A'],TH_['B']=PAL.pair(TH_)   # 内容版式的两块撞色（角色：主色 primary、强调色 accent）
+COLOR_MODE,MODE_WHY=PAL.mode(TH_,BK.get('color_mode') if BK.get('color_mode') not in (None,'auto') else SD.get('mode'))   # 用色档位：clash 撞色 / accent 点缀 / mono 单色；没写时用风格的默认档（swiss → mono），再没有就按两色的色相差和对比度自动判断
+if SD.get('mode') and BK.get('color_mode') in (None,'auto'): MODE_WHY=f'{STYLE} 风格默认 {COLOR_MODE}（要大色块写 color_mode: clash）'
+if STYLE=='swiss' and COLOR_MODE=='clash' and not BK.get('colors'):   # 瑞士撞色档没写配色 → 用默认撞色方案（风格自带的红 + 白撑不起撞色）
+    TH_=PAL.resolve(PAL.DEFAULT,dict(INK='#17211C',G='#1D5A43',MUT='#3F4A44',GOLD='#F2C14E',OCH='#7E560E',PAPER='#FBFAF7')); TH_['A'],TH_['B']=PAL.pair(TH_)
+if STYLE=='stijl' and str(BK.get('look','classic')).lower()=='tone': TH_['A']=TH_['INK']   # 风格派无线：强调用墨色
+if STYLE=='stijl' and str(BK.get('look','classic')).lower()!='tone': TH_['TINT']=TH_['PAPER']   # 风格派：次级背景就是纸色，分区靠粗线
+if COLOR_MODE=='mono' and not TH_.get('TINT'): TH_['TINT']=PAL.mix(TH_['PAPER'],TH_['INK'],.055)   # 单色：次级背景是中性浅灰
+if COLOR_MODE!='clash' and not TH_.get('TINT'): TH_['TINT']=PAL.mix(TH_['PAPER'],TH_['A'],.07)
 INK,G,MUT,GOLD,OCH,PAPER=[TH_[k] for k in ('INK','G','MUT','GOLD','OCH','PAPER')]
 FOLIO=BK.get('folio',BK.get('title',''))
 wash.PAPERC=wash.np.array([int(PAPER.lstrip('#')[i:i+2],16) for i in (0,2,4)],wash.np.float32)   # 照片融合色 = 纸色
@@ -43,7 +65,7 @@ def sp(v): return v if CJK else round(float(v)*0.15,3)   # 西文不需要中文
 COLON='：' if CJK else ': '
 def lab(s): return esc(str(s).rstrip('：: '))+COLON   # 标签后自动加冒号（原文已带冒号也不会重复）
 # ---------------------------------------------------------------- image baking
-IMGS={}; LOCAL=[]; CLIP={}; FLAT=[]
+IMGS={}; LOCAL=[]; CLIP={}; FLAT=[]; USE=[]   # USE：每张照片用在哪页、印出来约多少 dpi（images.py → images.yaml）
 def src(p,f):
     s=os.path.join(SRC,f)
     if not os.path.exists(s): ERR.append(f'p{p}: 找不到图片 {s}'); return None
@@ -104,7 +126,7 @@ def bake(n,name,f,w,mask,focus,target,zoom,kind,local,box=(0,0,1,1)):
     if not s: return
     if not is_art(f):   # 清晰度：按铺满后的缩放估算印出来的 dpi
         from PIL import Image as _I
-        iw,ih=_I.open(s).size; dpi=96/(max((w+4)/iw,(H+2)/ih)*zoom)
+        iw,ih=_I.open(s).size; dpi=96/(max((w+4)/iw,(H+2)/ih)*zoom); USE.append(dict(page=n,file=str(f),dpi=round(dpi),img=name))
         if dpi<96: WARN.append(f'第{n}页：{f} 只有 {iw}×{ih}px，放在这里约 {dpi:.0f}dpi，满版会糊 → 换更大的原图，或放进 figure 插图块')
         elif dpi<130: WARN.append(f'第{n}页：{f}（{iw}×{ih}px）放在这里约 {dpi:.0f}dpi：电子版没问题，印刷会偏软')
     if is_art(f):   # 底图按 box 精确构图：不缩放、不裁切
@@ -116,12 +138,6 @@ def bake(n,name,f,w,mask,focus,target,zoom,kind,local,box=(0,0,1,1)):
     if local: LOCAL.append(name)
 def IMGTAG(name,x=-2,w=W+4): return f'<img class="a" alt="" src="img/{name}" style="left:{x}px;top:-1px;width:{w}px;height:{H+2}px">'
 # ---------------------------------------------------------------- blocks  (每个 block 是一个 dict，第一个已知键决定类型)
-def num(i,c=None,s=20): return f'<span class="nu" style="font-size:{s}px;color:{c or G}">{int(i):02d}</span>' if str(i).isdigit() else f'<span class="nu" style="font-size:{s}px;color:{c or G}">{i}</span>'
-def LN(n): return '<div class="ln"></div>'*int(n)
-def FD(l,size=None):
-    st=f' style="font-size:{size}px"' if size else ''
-    return f'<div class="fd"{st}><span{DECO}>{esc(l)}</span><i></i></div>'
-def ROW(items,cols=None): return f'<div class="row" style="grid-template-columns:{cols or " ".join(["1fr"]*len(items))}">{"".join(items)}</div>'
 def GT(b,ph,html):   # 渐变标题（可选）：块里 gradient 优先；否则用 book.gradient（只用在适合的底色上）
     spec=b.get('gradient',None)
     if spec is None:
@@ -138,11 +154,11 @@ def FIGIMG(f,need):
     s=os.path.join(SRC,str(f))
     if not os.path.exists(s): ERR.append(f'第{CURN}页: 找不到图片 {s}'); return ''
     if str(f).lower().endswith('.svg'):   # 矢量（logo 等）原样嵌入，PDF 里仍是矢量
-        name='fig_'+hashlib.md5((str(f)+str(os.path.getmtime(s))).encode()).hexdigest()[:10]+'.svg'; shutil.copy(s,os.path.join(PROJ,'img',name)); return 'img/'+name
-    im=_I.open(s); iw,ih=im.size
+        name='fig_'+hashlib.md5((str(f)+str(os.path.getmtime(s))).encode()).hexdigest()[:10]+'.svg'; shutil.copy(s,os.path.join(PROJ,'img',name)); USE.append(dict(page=CURN,file=str(f),dpi=None,img=name)); return 'img/'+name
+    im=_I.open(s); iw,ih=im.size; USE.append(dict(page=CURN,file=str(f),dpi=round(96*iw/max(1,need/1.5)),img=None))
     if iw<need*1.0: WARN.append(f'第{CURN}页：插图 {f} 只有 {iw}px 宽，显示约 {need:.0f}px 宽，印出来约 {96*iw/need:.0f}dpi（偏软）')
     png=im.mode in ('RGBA','LA','P') or str(f).lower().endswith('.png')
-    name='fig_'+hashlib.md5((str(f)+str(os.path.getmtime(s))).encode()).hexdigest()[:10]+('.png' if png else '.jpg'); out=os.path.join(PROJ,'img',name)
+    name='fig_'+hashlib.md5((str(f)+str(os.path.getmtime(s))).encode()).hexdigest()[:10]+('.png' if png else '.jpg'); out=os.path.join(PROJ,'img',name); USE[-1]['img']=name
     if not os.path.exists(out):
         im=im.convert('RGBA' if png else 'RGB')
         if max(iw,ih)>2400: im.thumbnail((2400,2400),_I.LANCZOS)
@@ -192,248 +208,84 @@ def OUTLINE(text,size,stroke,color,track=0):
     h=size*1.18
     return (f'<svg width="{x+stroke*2:.1f}" height="{h:.1f}" viewBox="{-stroke:.1f} {-stroke:.1f} {x+stroke*2:.1f} {h:.1f}" style="overflow:visible;display:block">'
             f'<path d="{" ".join(paths)}" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linejoin="round"/></svg>')
-def B(b,ph):
-    if isinstance(b,str): b={'p':b}
-    g=lambda k,d=None:b.get(k,d)
-    gold=GOLD if ph else G
-    if 'display' in b:   # 海报大字
-        c={'gold':GOLD if ph else OCH,'white':'#fff' if ph else INK,'ink':INK}.get(g('color','white'),g('color'))
-        if g('stroke'):   # 描边空心大字（章节号、L1–L4）：转成矢量路径——Chrome 会把描边文字写成 Type 3 字体
-            return f'<div class="disp" aria-label="{esc(str(b["display"]))}" style="margin-top:{g("mt",6)}px;line-height:0">{OUTLINE(str(b["display"]),g("size",48),g("stroke"),c,g("spacing",0))}</div>'
-        ol=f'color:{c};'
-        return f'<div class="disp" style="font-size:{g("size",48)}px;letter-spacing:{sp(g("spacing",.14))}em;line-height:{g("lh",1.15)};{ol}margin-top:{g("mt",6)}px">{GT(b,ph,esc(b["display"]))}</div>'
-    if 'title' in b:
-        k=f'<div class="k"{DECO}>{esc(g("kicker"))}</div>' if g('kicker') else ''
-        t=f'<div class="sf" style="font-size:{g("size",34)}px;font-weight:var(--title-w);letter-spacing:{sp(.12)}em;margin-top:8px;line-height:1.3">{GT(b,ph,esc(b["title"]))}</div>'
-        s=f'<div class="sub"{DECO}>{esc(g("sub"))}</div>' if g('sub') else ''
-        return f'<div class="hd0">{k}{t}{s}</div>'
-    if 'en' in b:   # 英文斜体副标题
-        return f'<div{DECO} style="font-family:var(--f-accent);font-style:var(--accent-style);font-weight:600;font-size:{g("size",17)}px;color:{GOLD if ph else OCH};margin-top:{g("mt",8)}px">{esc(b["en"])}</div>'
-    if 'kicker' in b: return f'<div class="kk"{DECO} style="margin-top:{g("mt",14)}px">{esc(b["kicker"])}</div>'
-    if 'worksheet' in b: return f'<div class="kk"{DECO} style="margin-top:18px;color:{"#fff" if ph else MUT}">Worksheet · {esc(b["worksheet"])}</div>'
-    if 'task' in b:
-        return (f'<div class="hd0"><div style="display:flex;align-items:baseline;gap:14px"><span style="font-family:var(--f-accent);font-style:var(--accent-style);font-weight:800;font-size:58px;line-height:1;color:{GOLD if ph else OCH}">{esc(b["task"])}</span>'
-                f'<span class="sf" style="font-size:{g("size",25)}px;font-weight:var(--title-w);letter-spacing:{sp(.04)}em">{esc(g("name",""))}</span></div>'
-                +(f'<div class="sf" style="font-size:14.5px;font-weight:700;margin:6px 0 4px;letter-spacing:.06em">{esc(g("sub"))}</div>' if g('sub') else '')+'</div>')
-    if 'p' in b:
-        lead=f'<b>{esc(g("lead"))}</b>' if g('lead') else ''
-        st=f'font-size:{g("size")}px;' if g('size') else ''
-        if g('weight'): st+=f'font-weight:{g("weight")};'
-        if g('mt') is not None: st+=f'margin-top:{g("mt")}px;'
-        return f'<p class="op" style="{st}">{lead}{esc(b["p"])}</p>'
-    if 'letter' in b:   # 书信体段落（海报页）
-        return '<div class="lt">'+''.join(f'<p>{esc(x)}</p>' for x in b['letter'])+'</div>'
-    if 'items' in b:
-        if g('style')=='big':
-            s=g('size',16); return (f'<div class="kk" style="margin-top:8px">{esc(g("heading"))}</div>' if g('heading') else '')+''.join(f'<div class="big" style="grid-template-columns:{int(s*3.2)}px 1fr">{num(i,gold,int(s*1.8))}<div class="sf" style="font-size:{s}px;font-weight:{g("weight",700)};line-height:1.6">{esc(t)}</div></div>' for i,t in enumerate(b['items'],1))
-        return f'<div class="ob2">'+(f'<div class="kk">{esc(g("heading"))}</div>' if g('heading') else '')+''.join(f'<div class="oi"><span class="nu" style="font-size:13px;color:{"#fff" if ph else G}">{i}</span><span>{esc(t)}</span></div>' for i,t in enumerate(b['items'],1))+'</div>'
-    if 'kv' in b:   # 键值行：行程表、时间表
-        kw=g('kw',90); return ''.join(f'<div style="display:grid;grid-template-columns:{kw}px 1fr;margin-top:{g("gap",10)}px;align-items:baseline"><span class="sf" style="font-size:{g("ksize",15)}px;font-weight:800;color:{gold}">{esc(k)}</span><span style="font-size:{g("vsize",14)}px;font-weight:{g("weight",600)};line-height:1.6">{esc(v)}</span></div>' for k,v in b['kv'])
-    if 'step' in b:   # 编号任务 + 书写区
-        t=f'<b style="color:{gold}">{lab(g("lead"))}</b>{esc(g("text",""))}' if g('lead') else esc(g('text',''))
-        grow=';flex:1 1 auto' if g('grow') else ''
-        return f'<div class="tk" style="{grow}"><div class="tr">{num(b["step"],gold)}<div class="tt">{t}</div></div><div class="tb">{R(g("write",[]),ph)}</div></div>'
-    if 'q' in b:
-        return f'<div class="tk" style="flex:1 1 auto;display:flex;flex-direction:column"><div class="tr"><span class="qn">Q{esc(b["q"])}</span><div class="tt">{esc(g("text",""))}</div></div><div class="tb">{R(g("write",[{"fill":64}]),ph)}</div></div>'
-    # 多栏 / 表格放在 field、lines 之前判断：它们自己也可能带 cols、lines 参数
-    if isinstance(b.get('cols'),list):   # 多栏：cols: [[blocks],[blocks]]（fields/boxes 的 cols 是列宽字符串，不算）
-        return f'<div class="row" style="grid-template-columns:{g("widths"," ".join(["1fr"]*len(b["cols"])))};column-gap:{g("gap",36)}px">'+''.join(f'<div>{R(c,ph)}</div>' for c in b['cols'])+'</div>'
-    if 'table' in b:
-        cols=b['table']; n=g('lines',1); hd=''.join(f'<div class="thd"{DECO}>{esc(c)}</div>' for c in cols)
-        for r in g('rows',[]): hd+=f'<div class="rl" style="height:{LH*n}px">{esc(r)}</div>'+''.join(f'<div>{LN(n)}</div>' for _ in cols[1:])
-        return f'<div class="tbl" style="grid-template-columns:{g("widths"," ".join(["1fr"]*len(cols)))}">{hd}</div>'
-    if 'field' in b: return FD(b['field'],g('size'))
-    if 'fields' in b: return ROW([FD(x,g('size')) for x in b['fields']],g('cols'))
-    if 'lines' in b: return LN(b['lines'])
-    if 'fill' in b: return f'<div class="fill" style="flex:1 1 0;min-height:{b["fill"]}px"></div>'
-    if 'box' in b: return f'<div class="bx" style="height:{g("h",140)}px"><span class="bl"{DECO} style="top:7px">{esc(b["box"])}</span></div>'
-    if 'boxes' in b: return ROW([f'<div class="bx" style="height:{g("h",140)}px"><span class="bl"{DECO} style="top:7px">{esc(x)}</span></div>' for x in b['boxes']],g('cols'))
-    if 'choice' in b: return f'<div class="ch"><span class="cl">{esc(b["choice"])}</span>'+''.join(f'<span class="co">{esc(o)}</span>' for o in g('options',[]))+'</div>'
-    if 'blanks' in b:   # 封面/签名：姓名____ 班级____
-        return '<div class="bl2" style="font-size:%spx;margin-top:%spx">'%(g('size',15),g('mt',20))+''.join(f'<span>{lab(l)}</span><i style="width:{g("w",180)}px"></i><span style="width:26px"></span>' for l in b['blanks'])+'</div>'
-    if 'sign' in b:
-        return f'<div class="bl2" style="font-size:{g("size",17)}px;margin-top:{g("mt",24)}px">{esc(b["sign"])}<span style="width:40px"></span>{lab(g("label","签名" if CJK else "Signature"))}<i style="width:{g("w",240)}px"></i></div>'
-    if 'figure' in b:   # 插图：照片、截图、图表、logo（fit: contain 不裁切；frame: true 加细框，适合截图）
-        bl=g('bleed'); mg=f'margin-right:-{MX}px;' if bl=='right' else f'margin-left:-{MX}px;' if bl=='left' else f'margin-left:-{MX}px;margin-right:-{MX}px;' if bl=='both' else ''
-        return f'<div class="{"bleed " + bl if bl else ""}" style="margin-top:{g("mt",12)}px;{mg}">'+FIG(b['figure'],g('h',220),b,g('w',682),g('caption'))+'</div>'
-    if 'gallery' in b:   # 图组：一行几张
-        fs=b['gallery']; caps=g('captions',[None]*len(fs)); ws=g('widths',' '.join(['1fr']*len(fs)))
-        return f'<div class="row gal" style="grid-template-columns:{ws};column-gap:{g("gap",10)}px;margin-top:{g("mt",12)}px">'+''.join(FIG(f,g('h',160),b,682/len(fs),c) for f,c in zip(fs,caps))+'</div>'
-    if 'stats' in b:   # 关键数字：[[数字, 说明], …]
-        st=b['stats']; s=g('size',44)
-        cells=''.join(f'<div class="st"><div class="stn" style="font-size:{s}px;color:{gold}">{GT(b,ph,re.sub(r'([+＋%])$',r'<sup>\1</sup>',esc(str(x[0]))))}</div><div class="stl">{esc(x[1]) if len(x)>1 else ""}</div></div>' for x in st)
-        return f'<div class="sts" style="grid-template-columns:repeat({g("cols",len(st))},1fr);margin-top:{g("mt",16)}px">{cells}</div>'
-    if 'quote' in b:   # 引语 / 学员说 / 校长语录（原文自带的引号去掉、“——署名”自动拆成 by）
-        qt,by=str(b['quote']).strip(),g('by')
-        if not by:
-            m_=re.match(r'^(.*?)\s*(?:——|—|--)\s*([^—]{1,30})$',qt,re.S)
-            if m_: qt,by=m_.group(1),m_.group(2)
-        qt=re.sub(r'^[“「『"]+|[”」』"]+$','',qt.strip())
-        return (f'<div class="qt" style="margin-top:{g("mt",16)}px"><div class="qm"{DECO} style="color:{gold}">“</div>'
-                f'<div class="qx" style="font-size:{g("size",19)}px">{esc(qt)}</div>'+(f'<div class="qb">{esc(by)}</div>' if by else '')+'</div>')
-    if 'cards' in b:   # 亮点卡片：[[标题, 说明], …]；num: true 加编号
-        cs=b['cards']; cols=g('cols',2 if len(cs) in (2,4) else min(3,len(cs)))
-        def cell(i,c):   # 卡片：[标题, 说明] 或 {k: 眉标, t: 标题, x: 说明, img: 图标}
-            if isinstance(c,dict): k_,t_,x_,im_=c.get('k'),c.get('t',''),c.get('x'),c.get('img')
-            else: k_,t_,x_,im_=None,c[0],(c[1] if len(c)>1 else None),None
-            return (f'<div class="cd">'+(f'<img class="cdi" alt="" src="{FIGIMG(im_,120)}">' if im_ else '')+(f'<div class="cdn" style="color:{gold}">{i:02d}</div>' if g('num') else '')
-                    +(f'<div class="cdk">{esc(k_)}</div>' if k_ else '')+f'<div class="cdt" style="color:{gold}">{esc(t_)}</div>'+(f'<div class="cdx">{esc(x_)}</div>' if x_ else '')+'</div>')
-        return f'<div class="cds{" line" if g("style")=="line" else ""}" style="grid-template-columns:repeat({cols},1fr);margin-top:{g("mt",14)}px">'+''.join(cell(i,c) for i,c in enumerate(cs,1))+'</div>'
-    if 'qr' in b:   # 二维码（矢量）：报名链接、公众号、问卷
-        try: import qrcode, qrcode.image.svg
-        except ImportError: ERR.append('二维码块需要 qrcode：pip install qrcode（或把二维码图片放进 photos/，用 figure 块）'); return ''
-        sv=qrcode.make(str(b['qr']),image_factory=qrcode.image.svg.SvgPathImage,border=0).to_string(encoding='unicode')
-        sv=re.sub(r'<\?xml[^>]*>','',sv); sv=re.sub(r'width="[^"]*" height="[^"]*"',f'width="{g("size",104)}" height="{g("size",104)}"',sv,count=1)
-        sv=sv.replace('<path ',f'<path fill="{INK}" ')   # 二维码永远深色码 + 白底静区：反色码很多扫码软件认不出
-        pad=round(g('size',104)*.12)
-        return f'<div class="qr" style="margin-top:{g("mt",14)}px"><div class="qrt" style="padding:{pad}px">{sv}</div>'+(f'<div class="qrc"{DECO}>{esc(g("caption"))}</div>' if g('caption') else '')+'</div>'
-    if 'bars' in b:   # 对比条形图：[[指标, 我方, 对照], …]，series 是两组的名字
-        sr=g('series',['', '']); un=g('unit','%'); mx=g('max',100)
-        rows=''.join(f'<div class="br"><div class="brl">{esc(r[0])}</div><div class="brt"><i class="b1" style="width:{r[1]/mx*100:.1f}%"></i><span class="brv">{esc(r[1])}{esc(un)}</span></div>'
-                     f'<div class="brt b2w"><i class="b2" style="width:{r[2]/mx*100:.1f}%"></i><span class="brv2">{esc(sr[1])}{COLON}{esc(r[2])}{esc(un)}</span></div></div>' for r in b['bars'])
-        lg=f'<div class="brg"{DECO}><span><i class="b1"></i>{esc(sr[0])}</span><span><i class="b2"></i>{esc(sr[1])}</span></div>' if sr[0] else ''
-        return f'<div class="bars" style="margin-top:{g("mt",14)}px">{lg}{rows}</div>'
-    if 'product' in b:   # 产品卡：渐变图区 + 标签 + 名称 + 说明
-        im_=g('image')
-        if im_ and str(im_).startswith('ai:'): im_=AIFIG(im_,g('w',320),g('h',200),'产品卡插图')
-        im=FIGIMG(im_,340) if im_ else ''
-        pic=f'<div class="pdi" style="height:{g("h",200)}px"><img alt="" src="{im}" style="object-fit:{g("fit","contain")}"></div>' if im else ''
-        tag=f'<span class="pdt"{DECO}>{esc(g("tag"))}</span>' if g('tag') else ''
-        return (f'<div class="pd" style="margin-top:{g("mt",14)}px">{pic}<div class="pdb">{tag}<div class="pdn" style="font-size:{g("size",20)}px">{esc(b["product"])}</div>'
-                +(f'<div class="pdx">{esc(g("text"))}</div>' if g('text') else '')+'</div></div>')
-    if 'chips' in b:   # 层级/分类胶囊：on = 当前第几个（从 1 开始）
-        return f'<div class="chs"{DECO} style="margin-top:{g("mt",0)}px">'+''.join(f'<span class="ch1{" on" if i==g("on") else ""}">{esc(c)}</span>' for i,c in enumerate(b['chips'],1))+'</div>'
-    if 'cycle' in b:   # 循环图（飞轮）：节点沿圆周，中心一句话；节点文字算装饰，说明写在旁边的块里
-        ns=b['cycle']; S_=g('size',300); r=S_*.38; c=S_/2; n=len(ns)
-        pts=[(c+r*math.sin(2*math.pi*i/n),c-r*math.cos(2*math.pi*i/n)) for i in range(n)]
-        arcs=''.join(f'<path d="M{pts[i][0]:.1f},{pts[i][1]:.1f} A{r:.1f},{r:.1f} 0 0 1 {pts[(i+1)%n][0]:.1f},{pts[(i+1)%n][1]:.1f}" fill="none" stroke="url(#cg)" stroke-width="2" marker-end="url(#ca)" opacity=".85"/>' for i in range(n))
-        nodes=''.join(f'<g><circle cx="{x:.1f}" cy="{y:.1f}" r="{S_*.075:.1f}" class="cyn{" on" if i==0 else ""}"/><text x="{x:.1f}" y="{y+S_*.016:.1f}" class="cyt{" on" if i==0 else ""}" text-anchor="middle">{esc(nd[0])}</text>'
-                      +(f'<text x="{x:.1f}" y="{y+S_*.13:.1f}" class="cys" text-anchor="middle">{esc(nd[1])}</text>' if len(nd)>1 else '')+'</g>' for i,(nd,(x,y)) in enumerate(zip(ns,pts)))
-        ctr=f'<text x="{c}" y="{c+5}" class="cyc" text-anchor="middle">{esc(g("center",""))}</text>'
-        return (f'<div class="cyc0"{DECO} style="margin-top:{g("mt",10)}px"><svg width="{S_}" height="{S_}" viewBox="0 0 {S_} {S_}"><defs><linearGradient id="cg"><stop offset="0" stop-color="{G}"/><stop offset="1" stop-color="{OCH}"/></linearGradient>'
-                f'<marker id="ca" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0L10,5L0,10z" fill="{OCH}"/></marker></defs>{arcs}{nodes}{ctr}</svg></div>')
-    if 'space' in b: return f'<div style="height:{b["space"]}px;flex-shrink:0"></div>'
-    if 'html' in b: return b['html']
-    ERR.append(f'未知 block 类型: {list(b)[:3]}'); return ''
-def R(bs,ph=False): return ''.join(B(b,ph) for b in (bs or []))
-CUR_PH=True   # 当前页“图上文字”用白字（深色照片/深色底图）还是深色字（浅色底图）
-def LT(): return '#fff' if CUR_PH else INK
-# ---------------------------------------------------------------- regions
-def TOP(bs,l,r,t,ph=None):
-    ph=CUR_PH if ph is None else ph
-    return _TOP(bs,l,r,t,ph)
-def _TOP(bs,l,r,t,ph): return f'<div class="a{" ph" if ph else " ink"}" style="left:{l}px;right:{r}px;top:{t}px">{R(bs,ph)}</div>' if bs else ''
-def BOT(bs,l,r,b,ph=None):
-    ph=CUR_PH if ph is None else ph
-    return _BOT(bs,l,r,b,ph)
-def _BOT(bs,l,r,b,ph): return f'<div class="a{" ph" if ph else " ink"}" style="left:{l}px;right:{r}px;bottom:{b}px">{R(bs,ph)}</div>' if bs else ''
-ALIGN='spread'   # 当前页的纵向排布：spread 撑满（适合书写页）/ top 顶部对齐（适合阅读页）/ bottom
-def FLOW(bs,l,r,t,b,ph=False): return f'<div class="a flow{" ph" if ph else " ink"}{"" if ALIGN=="spread" else " "+ALIGN}" style="left:{l}px;right:{r}px;top:{t}px;bottom:{b}px">{R(bs,ph)}</div>' if bs else ''
-def head(hd,l=M0,r=M0,col=None):
-    if not hd: return ''
-    col=col or LT()
-    a,b=(hd+[''])[:2] if isinstance(hd,list) else (hd,'')
-    return f'<div class="a os rh"{DECO} style="left:{l}px;right:{r}px;color:{col}"><span>{esc(a)}</span><span>{esc(b)}</span></div>'
-def folio(n,col=None,l=M0,r=M0): col=col or LT(); return f'<div class="a fo"{DECO} style="left:{l}px;right:{r}px;color:{col}"><span>{esc(FOLIO)}</span><span>{n:02d}</span></div>'
-def figc(t,col=None,l=M0): col=col or LT(); return f'<div class="a os fig"{DECO} style="left:{l}px;color:{col}">{esc(t)}</div>' if t else ''
+# 内容块（title、p、cards、figure …）由 flow.py 按 canon 的字号档和整行间距排（canon.blocks / flow.R）
 # ---------------------------------------------------------------- layouts
 PP=[]; MAP={}
 def page(n,html,img,side,bg,cls=''):
-    PP.append(f'<section class="page{cls}" style="background:{bg}" data-n="{n}">{html}</section>')
+    PP.append(f'<section class="page{cls}" id="p{n}" style="background:{bg}" data-n="{n}">{html}</section>')   # id：目录、PDF 里的页内链接跳到这里
     if img: MAP[len(PP)-1]=dict(img=img,side=side)
-def F(p): return tuple(p.get('focus',[.5,.5]))
-def L_POSTER(n,p):
-    name=f'p{n:02d}.jpg'; bake(n,name,p.get('image'),W,lambda X,Y:0*X,F(p),p.get('target',[W/2,H/2]),p.get('zoom',1.0),'single',False)
-    fb=96 if p.get('fig') else 60
-    h=IMGTAG(name)+head(p.get('header'))+TOP(p.get('top'),M0,M0,p.get('top_y',78))+BOT(p.get('bottom'),M0,M0,p.get('bottom_y',fb))+figc(p.get('fig'))+(folio(n) if p.get('folio',True) else '')
-    page(n,h,name,'S','#0B1410')
-def L_T(n,p):   # 照片在上，纸面在下
-    sp=p.get('split',330); name=f'p{n:02d}.jpg'
-    bake(n,name,p.get('image'),W,wash.M_T(sp-130,sp+10),F(p),p.get('target',[W/2,sp*.45]),p.get('zoom',1.0),'single',True,(0,0,1,sp/H))
-    h=IMGTAG(name)+head(p.get('header'))+TOP(p.get('on_photo'),M0,M0,78)+FLOW(p.get('body'),M0,M0,p.get('body_top',sp),60)+folio(n,MUT)
-    page(n,h,name,'S',PAPER)
-def L_B(n,p):   # 纸面在上，照片在下
-    sp=p.get('split',760); name=f'p{n:02d}.jpg'
-    bake(n,name,p.get('image'),W,wash.M_B(sp-40,sp+150),F(p),p.get('target',[W/2,(sp+H)/2]),p.get('zoom',1.0),'single',True,(0,sp/H,1,1))
-    h=IMGTAG(name)+head(p.get('header'),col=MUT)+FLOW(p.get('body'),M0,M0,64,H-sp+20)+BOT(p.get('on_photo'),M0,M0,70)+folio(n)
-    page(n,h,name,'S',PAPER)
-def L_SIDE(n,p,right=False):  # SL 照片在左 / SR 照片在右
-    st=p.get('strip',270); name=f'p{n:02d}.jpg'
-    m=wash.M_SR(W,st-150,st) if right else wash.M_SL(st-150,st)
-    bake(n,name,p.get('image'),W,m,F(p),p.get('target',[W-st/2 if right else st/2,H/2]),p.get('zoom',1.6),'single',True,(1-st/W,0,1,1) if right else (0,0,st/W,1))
-    l,r=(M0,st-5) if right else (st-5,M0)
-    h=IMGTAG(name)+head(p.get('header'),l,r,MUT)+FLOW(p.get('body'),l,r,64,60)+folio(n,MUT,l,r)
-    page(n,h,name,'S',PAPER)
-def L_PAPER(n,p):  # 纯纸面页（无照片）：规章制度、日程表、通讯录、附录、笔记页
-    h=head(p.get('header'),col=MUT)+FLOW(p.get('body'),M0,M0,p.get('body_top',64),60)+folio(n,MUT)
-    page(n,h,None,'S',PAPER,' paper')
-HOLES={'tr':((600,230),(M0,440,60,560),(580,60)),'tl':((194,230),(440,M0,60,560),(580,60)),
-       'br':((600,890),(M0,440,560,60),(60,560)),'bl':((194,890),(440,M0,560,60),(60,560))}
-def L_HOLE(n,p):  # 纸面上开窗露出照片
-    c,bs,bd=HOLES[p.get('window','tr')]; name=f'p{n:02d}.jpg'
-    rx,ry=p.get('size',[300,250])
-    bake(n,name,p.get('image'),W,wash.M_HOLE(c[0],c[1],rx,ry,.25,1.1),F(p),p.get('target',list(c)),p.get('zoom',1.4),'single',True,(max(0,(c[0]-rx*.8)/W),max(0,(c[1]-ry*.8)/H),min(1,(c[0]+rx*.8)/W),min(1,(c[1]+ry*.8)/H)))
-    h=IMGTAG(name)+FLOW(p.get('beside'),*bs)+FLOW(p.get('body'),M0,M0,*bd)+folio(n,MUT)
-    page(n,h,name,'S',PAPER)
-SPM={'P':lambda X,Y:0*X,'H':lambda X,Y:0.92*wash.ss(410,530,Y),
-     'SL':lambda X,Y:wash.A*wash.ss(W+110,W+260,X),
-     'T':lambda X,Y:wash.A*wash.ss(W-50,W+40,X)*wash.ss(130,280,Y)}
-def spread_img(n,p,kind,clip=None):
-    name=f's{n:02d}.jpg'
-    box={'P':(0,0,1,1),'H':(0,0,1,500/H),'SL':(0,0,(W+180)/(2*W),1),'T':(0,0,.5,1)}[kind]
-    bake(n,name,p.get('image'),2*W,SPM[kind],F(p),p.get('target',[W,H/2]),p.get('zoom',1.0),'spread',kind!='P',box)
-    if clip: CLIP[name]=clip
-    return name,IMGTAG(name,-2,2*W+4),IMGTAG(name,-W-2,2*W+4)
-def L_SPREAD_P(n,p):   # 双海报跨页
-    name,a,b=spread_img(n,p,'P'); L,Rr=p.get('left',{}),p.get('right',{})
-    for k,(img,side,q) in enumerate([(a,'L',L),(b,'R',Rr)]):
-        fb=96 if q.get('fig') else 60
-        page(n+k,img+head(q.get('header'))+TOP(q.get('top'),M0,M0,q.get('top_y',80))+BOT(q.get('bottom'),M0,M0,q.get('bottom_y',fb))+figc(q.get('fig'))+folio(n+k),name,side,'#0B1410')
-def L_SPREAD_H(n,p):   # 横向跨页：照片横贯上半部
-    name,a,b=spread_img(n,p,'H'); L,Rr=p.get('left',{}),p.get('right',{}); bt=p.get('body_top',548)
-    page(n,a+head(L.get('header'))+TOP(L.get('on_photo'),M0-4,M0,66)+FLOW(L.get('body'),M0,M0,bt,60)+folio(n,MUT),name,'L',PAPER)
-    page(n+1,b+head(Rr.get('header'))+BOT(Rr.get('on_photo'),M0,M0,H-392)+FLOW(Rr.get('body'),M0,M0,bt,60)+folio(n+1,MUT),name,'R',PAPER)
-def L_SPREAD_OPENER(n,p):  # 左页开篇海报，照片延伸到右页并过渡成纸面
-    kind=p.get('right_layout','SL'); name,a,b=spread_img(n,p,kind,(-200,W)); L,Rr=p.get('left',{}),p.get('right',{})
-    page(n,a+head(L.get('header'))+TOP(L.get('top'),M0,M0,L.get('top_y',78))+BOT(L.get('bottom'),M0,M0,L.get('bottom_y',96 if L.get('fig') else 60))+figc(L.get('fig'))+folio(n),name,'L','#0B1410')
-    if kind=='SL': body=FLOW(Rr.get('body'),265,M0,64,60); hd=head(Rr.get('header'),265,M0,MUT); fo=folio(n+1,MUT,265,M0)
-    else: body=TOP(Rr.get('on_photo'),M0,M0,70)+FLOW(Rr.get('body'),M0,M0,Rr.get('body_top',300),60); hd=head(Rr.get('header')); fo=folio(n+1,MUT)
-    page(n+1,b+hd+body+fo,name,'R',PAPER)
-LAY={'PAPER':(L_PAPER,1),'POSTER':(L_POSTER,1),'T':(L_T,1),'B':(L_B,1),'SL':(L_SIDE,1),'SR':(lambda n,p:L_SIDE(n,p,True),1),'HOLE':(L_HOLE,1),
-     'SPREAD_P':(L_SPREAD_P,2),'SPREAD_H':(L_SPREAD_H,2),'SPREAD_OPENER':(L_SPREAD_OPENER,2)}
+# 照片版式（POSTER / T / B / SL / SR / HOLE / PAPER / 跨页）也排在 6 栏网格上：见 flow.py
+
+# ---------------------------------------------------------------- 内容版式库（recipes）
+# 和上面“照片放在哪”的版式不同，这里每个版式回答“内容怎么排”：单栏 ONE · 双栏 TWO · 卡片 CARDS · 错位 STAGGER ·
+# 全屏 FULL · 拼贴 COLLAGE · 网格 GRID · 组合 MIX。yaml 里只写固定的几个空位（title / intro / cards / items / images …），
+# 不写尺寸：全部排在 canon.py 的 6 栏网格上（A4 默认 32 行 × 28px，book.body: 14 为 38 行 × 24px）——文字栈钉在版心上下沿，照片和色块吸收长短（中文、英文同一套版式），
+# fill.js 在浏览器里把每条边补齐到行线并自检（出版心 / 出色块 / 互压 / 照片被挤小）。相邻两页同版式时自动换镜像变体。
+RECIPE_PREV=[None,0]   # 上一页的内容版式、连用次数（用来轮换变体）
+SURF_HIST=[]           # 每页的主底色（plan.txt 里写出来）
+PCUR=[{}]
+def LIMIT(name,xs,lo,hi,what):
+    if len(xs)<lo: ERR.append(f'第{CURN}页 {name}：{what}至少 {lo} 个（现在 {len(xs)}）→ 换别的版式，或和相邻内容合并')
+    if len(xs)>hi: ERR.append(f'第{CURN}页 {name}：{what}最多 {hi} 个（现在 {len(xs)}）→ 拆成两页：前 {(len(xs)+1)//2} 个一页、后 {len(xs)//2} 个一页（两页用同一版式，引擎会自动换变体）')
+def BUDGET(p,keys,share=1.0):   # 粗估字数是否放得下（中文按字、西文按 2 字符≈1 字）
+    def cnt(v):
+        if isinstance(v,dict): return sum(cnt(x) for k,x in v.items() if k not in ('img','focus','src'))
+        if isinstance(v,(list,tuple)): return sum(cnt(x) for x in v)
+        s=str(v) if v is not None else ''; return sum(1 if ord(ch)>0x2e80 else .5 for ch in s)
+    c=sum(cnt(p.get(k)) for k in keys); cap=1200*share*(1 if CJK else 1.1)*(14/CN.BS)**2   # 1200 字是 14px 网格的量；16px 约 920 字
+    if c>cap: WARN.append(f'第{CURN}页 {p["layout"]}：正文约 {c:.0f} 字，这个版式大约放 {cap:.0f} 字 → 很可能溢出，建议拆成两页或换 GRID / TWO')
+def VAR(name,k):   # 变体轮换：页上写 mirror: true/false 优先；否则相邻同版式自动换
+    m=PCUR[0].get('mirror')
+    return (1 if m else 0) if m is not None else RECIPE_PREV[1]%k
+import canon as CN
+CN.init(globals())
+RECIPES=CN.RECIPES
+import flow
+LAY=dict(flow.LAYOUTS)   # 照片版式（flow.py）和 8 个内容版式（canon.py）共用一个网格、一套字号
+LAY.update({k:(f,1) for k,f in RECIPES.items()})
 # ---------------------------------------------------------------- build
-n=1; prev=None; plan=[]
+n=1; prev=None; plan=[]; PIDX=[]   # PIDX：yaml 里第 i 个页面 → 成品第几页（在线编辑、图片清单用）
 for i,p in enumerate(SPEC['pages']):
     lay=p.get('layout')
     if lay not in LAY: ERR.append(f'第{i+1}个页面: 未知 layout {lay}，可选 {list(LAY)}'); continue
-    fn,span=LAY[lay]
-    if lay!='PAPER' and not p.get('image') and STYLE=='photo': ERR.append(f'第{n}页 {lay}: 缺少 image（没照片时写 image: placeholder 先占位，或换无图风格 book.style，或用 layout: PAPER）'); n+=span; prev=lay; continue
-    CUR_PH=(SD['tone']=='dark') if is_art(p.get('image')) and not (str(p.get('image','')).startswith('ai:') and ai_file(p.get('image'))) else True
-    if p.get('tone') in ('dark','light'): CUR_PH=p['tone']=='dark'   # 图上文字用白字（dark）还是深色字（light）；AI 配图按需求单里写的明暗来
+    if CANVAS!='a4' and lay not in RECIPES: ERR.append(f'第{i+1}个页面: {lay} 是 A4 专用的照片版式；canvas: {CANVAS} 只能用内容版式 {list(RECIPES)}'); continue
+    if CANVAS=='xhs' and LAY[lay][1]==2: ERR.append(f'第{i+1}个页面: 小红书画布是单页，不能用跨页 {lay}'); continue
+    fn,span=LAY[lay]; PIDX.append([i,n,span])
+    if lay=='PAPER' or (lay in RECIPES and lay!='FULL'): pass
+    elif not p.get('image') and STYLE=='photo' and lay not in ('FULL','POSTER'): ERR.append(f'第{n}页 {lay}: 缺少 image（没照片时写 image: placeholder 先占位，或换无图风格 book.style，或用 layout: PAPER）'); n+=span; prev=lay; continue
     if span==2 and n%2==1: ERR.append(f'{lay} 从第{n}页开始，跨页左页必须是偶数页 → 在它前面增/减一页，或把前面的内容挪动')
-    if lay==prev and span==1 and lay!='POSTER': print(f'提示：第{n}页与上一页版式相同（{lay}），建议换一种')
-    ALIGN=p.get('align','top' if lay=='PAPER' or PURPOSE!='workbook' else 'spread')   # 没有书写区的页：内容顶部对齐，不被撑散
+    RECIPE_PREV[1]=RECIPE_PREV[1]+1 if lay==RECIPE_PREV[0] else 0; RECIPE_PREV[0]=lay; PCUR[0]=p
+    if lay==prev and span==1 and lay in ('ONE','TWO','CARDS','STAGGER','COLLAGE','MIX'): print(f'提示：第{n}页与上一页同为 {lay}，已自动换镜像变体（不想要就写 mirror: false）')
+    elif lay==prev and span==1 and lay not in ('POSTER','FULL'): print(f'提示：第{n}页与上一页版式相同（{lay}），建议换一种')
     if STYLE=='photo' and str(p.get('image','')).startswith('placeholder'): print(f'提示：第{n}页用的是占位底图（{p["image"]}），拿到照片后把 image 换成文件名即可')
     CURN=n
     try: fn(n,p)
-    except Exception as e: ERR.append(f'第{n}页 {lay}: {type(e).__name__}: {e}')
-    plan.append(f'{n:02d}{"-%02d"%(n+1) if span==2 else "   "} {lay:14s} {p.get("image","") or ("" if lay=="PAPER" else "（"+STYLE+" 底图）")}  {p.get("note","")}')
+    except Exception as e:
+        ERR.append(f'第{n}页 {lay}: {type(e).__name__}: {e}')
+        if os.environ.get('HB_DEBUG'): import traceback; traceback.print_exc()
+    if lay not in RECIPES: SURF_HIST.append('image' if lay in ('POSTER','SPREAD_P','SPREAD_OPENER') else 'paper'); CN.used(SURF_HIST[-1])
+    elif len(SURF_HIST)<len(plan)+1: SURF_HIST.append('paper')
+    SN={'A':'A 色块','B':'B 色块','paper':'纸色','image':'照片'}
+    plan.append(f'{n:02d}{"-%02d"%(n+1) if span==2 else "   "} {lay:14s} {"（内容版式 · 主底 "+SN.get(SURF_HIST[-1],SURF_HIST[-1])+"）" if lay in RECIPES else p.get("image","") or ("" if lay=="PAPER" else "（"+STYLE+" 底图）")}  {p.get("note","")}')
     n+=span; prev=lay
 total=n-1
-CSS=open(os.path.join(HERE,'style.css')).read()+SD['css']
-if not CJK: CSS+='.op,.lt p{text-align:left}.fo span:first-child{letter-spacing:.18em}'   # 西文：左对齐（两端对齐会撑出大空格）
+CSS=open(os.path.join(HERE,'style.css')).read()+open(os.path.join(HERE,'canon.css')).read()+SD['css']+SD.get('ccss','')
+if not CJK: CSS+='.op,.lt p{text-align:left}.fo span:first-child{letter-spacing:.18em}.cn-tx{text-align:left;hyphens:auto}.cn-disp{letter-spacing:-.015em}'   # 西文：左对齐（两端对齐会撑出大空格）
 for k,v in dict(W=W,H=H-1,G=G,INK=INK,MUT=MUT,GOLD=GOLD,OCH=OCH,PAPER=PAPER).items(): CSS=CSS.replace('{'+k+'}',str(v))
 # 字体：按本书实际用到的字裁切嵌入（见 fonts.py）
 TEXT=_h.unescape(re.sub(r'<[^>]+>','',''.join(PP)))+str(BK.get('title',''))
 FCSS,FROLES,FMISS=FONTS_.build_css(BK.get('fonts',SD['fonts']),TEXT,PROJ,CJK)
 CSS=FCSS+CSS
 JS=open(os.path.join(HERE,'fill.js')).read()
-open(os.path.join(PROJ,'book.html'),'w',encoding='utf-8').write(f'<!doctype html><html lang="{LANG}"><head><meta charset="utf-8"><title>{esc(BK.get("title","Handbook"))}</title><style>{CSS}</style></head><body>{"".join(PP)}{JS}</body></html>')
+open(os.path.join(PROJ,'book.html'),'w',encoding='utf-8').write(f'<!doctype html><html lang="{LANG}"><head><meta charset="utf-8"><title>{esc(BK.get("title","Handbook"))}</title><style>{CSS}</style></head><body class="st-{STYLE} m-{COLOR_MODE}" style="--bs:{CN.BS if CJK or CN.BS<16 else CN.BS-1}px;--lh:{CN.LH}px;--gut:{CN.GUT}px;--s:{CN.S:.4f}" data-grid="{CN.TOP},{CN.LH},{CN.y(CN.LAST)},{W},{H},{CN.COL},{CN.GUT},{CN.LAST},{CN.IN},{CN.OUT}" data-canvas="{CANVAS}">{"".join(PP)}{JS}</body></html>')
 os.makedirs(os.path.join(PROJ,'.qa'),exist_ok=True); json.dump(dict(slots=AISLOTS,scale=wash.S,colors=TH_,style=STYLE),open(os.path.join(PROJ,'.qa','ai_slots.json'),'w'),ensure_ascii=False)
-json.dump(dict(map=MAP,imgs=IMGS,local=LOCAL,clip=CLIP,paper=PAPER,flat=FLAT),open(os.path.join(PROJ,'map.json'),'w'))
+json.dump(dict(map=MAP,imgs=IMGS,local=LOCAL,clip=CLIP,paper=PAPER,flat=FLAT,use=USE,pidx=PIDX,W=W,H=H,canvas=CANVAS,color_mode=COLOR_MODE),open(os.path.join(PROJ,'map.json'),'w'))
+_used=set(re.findall(r'img/(slot_[0-9a-f]+\.jpg)',''.join(PP)))
+for _f in os.listdir(os.path.join(PROJ,'img')):   # 删掉不再用到的旧图位缓存，免得源文件 zip 越来越大
+    if _f.startswith('slot_') and _f not in _used: os.remove(os.path.join(PROJ,'img',_f))
 for nm in IMGS: shutil.copy(os.path.join(PROJ,'img',nm.replace('.jpg','_base.jpg')),os.path.join(PROJ,'img',nm))
 open(os.path.join(PROJ,'plan.txt'),'w').write('\n'.join(plan)+'\n')
-print('\n'.join(plan)); print(f'风格 {STYLE} · 字体 ' + ' / '.join(f'{r}:{"+".join(v)}' for r,v in FROLES.items()))
+print('\n'.join(plan)); print(f'用色 {COLOR_MODE}：{MODE_WHY}'); print(f'风格 {STYLE} · 字体 ' + ' / '.join(f'{r}:{"+".join(v)}' for r,v in FROLES.items()))
 print(f'== {total} 页', '（骑马钉需 4 的倍数，当前余 %d）'%(total%4) if total%4 else '（4 的倍数 ✓）')
 if WARN: print('\n'.join('注意：'+w for w in dict.fromkeys(WARN)))
 if ERR: print('\n'.join('ERROR: '+e for e in ERR)); sys.exit(1)

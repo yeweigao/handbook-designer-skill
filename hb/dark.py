@@ -5,8 +5,7 @@ from PIL import Image
 def gaussian_filter1d(p,sig,mode=None):
     r=int(3*sig); k=np.exp(-.5*(np.arange(-r,r+1)/sig)**2); k/=k.sum()
     return np.convolve(np.pad(p,r,mode='edge'),k,'valid')
-W,H=794,1123
-M=json.load(open('map.json')); B=json.load(open('.qa/b3.json'))
+M=json.load(open('map.json')); W,H=M.get('W',794),M.get('H',1123); B=json.load(open('.qa/b3.json'))
 def lum(c):
     c=c/255.0; c=np.where(c<=.03928,c/12.92,((c+.055)/1.055)**2.4); return .2126*c[...,0]+.7152*c[...,1]+.0722*c[...,2]
 def hx(c): c=c.lstrip('#'); return np.array([int(c[i:i+2],16) for i in (0,2,4)],np.float32)
