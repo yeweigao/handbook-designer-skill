@@ -10,11 +10,12 @@
   photos/_assets/   重复出现的元素（logo、页眉装饰、背景）和太小的图标——一般不用，封面/封底需要 logo 时从这里取
   images.md         图片清单：尺寸、类型（照片 / 图形）、在原页面里的占比、建议用法
   photos/_contact.jpg  缩略图总览（先看它再排版）
+  .qa/artifacts.txt 页码 artifacts（页脚页码、居中短数字）：不是正文，check_copy 原文核对不要求出现
 
 不需要额外安装：.pptx/.docx 直接解析文件结构；.pdf 用 poppler 的 pdftotext / pdfimages（mac：brew install poppler）。
 EMF/WMF 矢量图会尝试用 LibreOffice 转 PNG，转不了就列在 images.md 里。
 """
-import sys, os, re, io, zipfile, hashlib, shutil, subprocess, posixpath
+import sys, os, re, io, zipfile, hashlib, shutil, subprocess, posixpath, tempfile
 import xml.etree.ElementTree as ET
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
@@ -24,6 +25,10 @@ NS = dict(a='http://schemas.openxmlformats.org/drawingml/2006/main', p='http://s
           rel='http://schemas.openxmlformats.org/package/2006/relationships')
 RID = '{%s}embed' % NS['r']
 def q(tag): pre, t = tag.split(':'); return '{%s}%s' % (NS[pre], t)
+PAGENO = re.compile(r'^\d{1,2}\s*/\s*\d{1,2}$|^\d{1,2}$')   # 页脚页码样式：「02 / 23」、居中短数字行
+def is_pageno(line):
+    t = re.sub(r'^(#{1,3}\s*|[-*•▶✓]\s+|\d+[.、)]\s+)', '', line.strip()).strip()
+    return bool(PAGENO.match(t))
 
 def rels(z, part):
     d, b = posixpath.split(part); rp = posixpath.join(d, '_rels', b + '.rels')
@@ -139,7 +144,7 @@ def from_pdf(path, tmp):
             if not l: continue
             l = re.sub(r'^[•●▪◦‣·▶■□\-–]\s*', '- ', l)
             prev = lines[-1] if lines else ''
-            if prev and not l.startswith('- ') and len(prev.lstrip('- ')) >= 14 and not re.search(r'[。！？：:；;.!?」”）)]$', prev):
+            if prev and not l.startswith('- ') and not is_pageno(l) and len(prev.lstrip('- ')) >= 14 and not re.search(r'[。！？：:；;.!?」”）)]$', prev):
                 lines[-1] = prev + ('' if re.search(r'[一-鿿]$', prev) and re.match(r'[一-鿿]', l) else ' ') + l   # 版面断行 → 接回一行
             else: lines.append(l)
         pages.append(dict(n=i, lines=lines, imgs=byp.get(i, []), notes=''))
@@ -150,10 +155,11 @@ def load(data, name):
     try: im = Image.open(io.BytesIO(data)); im.load(); return im
     except Exception:
         if name.lower().endswith(('.emf', '.wmf', '.svg')) and (shutil.which('soffice') or shutil.which('libreoffice')):
-            d = os.path.abspath('.hb_extract_tmp'); os.makedirs(d, exist_ok=True); src = os.path.join(d, os.path.basename(name)); open(src, 'wb').write(data)
-            subprocess.run([shutil.which('soffice') or shutil.which('libreoffice'), '--headless', '--convert-to', 'png', '--outdir', d, src], capture_output=True)
-            png = os.path.splitext(src)[0] + '.png'
-            if os.path.exists(png): im = Image.open(png); im.load(); return im
+            with tempfile.TemporaryDirectory(prefix='hb-extract-') as d:   # 不落固定名目录：并发/异常退出也不会误建误删
+                src = os.path.join(d, os.path.basename(name)); open(src, 'wb').write(data)
+                subprocess.run([shutil.which('soffice') or shutil.which('libreoffice'), '--headless', '--convert-to', 'png', '--outdir', d, src], capture_output=True)
+                png = os.path.splitext(src)[0] + '.png'
+                if os.path.exists(png): im = Image.open(png); im.load(); return im
         return None
 
 def kind(im):
@@ -193,9 +199,14 @@ def main(src, P, images_only=False):
     seen = {}; hashes = {}; count = {}
     for pg in pages:                                                             # 统计每张图出现在几页（logo、装饰会反复出现）
         for t, f, d in pg['imgs']: count.setdefault(hashlib.md5(d).hexdigest(), set()).add(pg['n'])
-    rows = []; md = []; notes = []
+    rows = []; md = []; notes = []; arts = []
     for pg in pages:
         names = []; k_ = 0
+        keep = []
+        for l in pg['lines']:   # 页码 artifacts（页脚页码、居中短数字）不当正文：记下来，原文核对不要求它们出现
+            if is_pageno(l): arts.append((pg['n'], l.strip()))
+            else: keep.append(l)
+        pg['lines'] = keep
         for t, frac, data in pg['imgs']:
             h5 = hashlib.md5(data).hexdigest()
             if h5 in seen: names.append(seen[h5]); continue
@@ -223,15 +234,19 @@ def main(src, P, images_only=False):
         md += pg['lines'] + ['']
         if pg['notes']: notes += [f'## 第 {pg["n"]} 页', pg['notes'], '']
     if not images_only: open(os.path.join(P, 'doc.md'), 'w', encoding='utf-8').write('\n'.join(md))
+    qa = os.path.join(P, '.qa'); os.makedirs(qa, exist_ok=True)   # 页码 artifacts：从必含文本排除的依据（check_copy.py 读）
+    open(os.path.join(qa, 'artifacts.txt'), 'w', encoding='utf-8').write(
+        '# 页码 artifacts（extract.py 识别：页脚页码、居中短数字；不是正文，check_copy 原文核对不要求出现）\n' + ''.join(f'第 {n} 页：{t}\n' for n, t in arts))
     if notes: open(os.path.join(P, 'notes.md'), 'w', encoding='utf-8').write('# 演讲者备注（不是正文；需要时取用，取用的句子要写进 doc.md 才会被原文核对覆盖）\n\n' + '\n'.join(notes))
     tbl = ['| 文件 | 出处 | 尺寸 | 类型 | 原页面占比 | 建议用法 |', '|---|---|---|---|---|---|'] + [f'| {a} | 第 {b} 页 | {c} | {d} | {e} | {f} |' for a, b, c, d, e, f in rows]
     open(os.path.join(P, 'images.md'), 'w', encoding='utf-8').write(
         '# 图片清单（extract.py 生成）\n\n照片：按“建议用法”放进版式的 image；图形（截图、图表、插画）只放进 figure 插图块，不做满版。\n'
         '尺寸按 A4 估算：单页满版 ≥ 1600px 宽较稳，跨页 ≥ 3000px；低于这个印出来会发软。\n\n' + '\n'.join(tbl) + '\n')
     contact(ph, rows, os.path.join(ph, '_contact.jpg'))
-    shutil.rmtree(os.path.join(P, '.extract_tmp'), ignore_errors=True); shutil.rmtree('.hb_extract_tmp', ignore_errors=True)
+    shutil.rmtree(os.path.join(P, '.extract_tmp'), ignore_errors=True)
     n_use = sum(1 for r in rows if not r[0].startswith('_assets/') and r[2] != '—')
     print(f'{len(pages)} 页 → doc.md；图片 {n_use} 张可用（photos/），{sum(1 for r in rows if r[0].startswith("_assets/"))} 张 logo/装饰/图标（photos/_assets/）')
+    if arts: print(f'页码 artifacts {len(arts)} 处（页脚页码不当正文，已排除出原文核对）→ .qa/artifacts.txt')
     print(f'先看 photos/_contact.jpg 和 images.md，再排版。' + (' 演讲者备注在 notes.md。' if notes else ''))
 
 def contact(ph, rows, out):

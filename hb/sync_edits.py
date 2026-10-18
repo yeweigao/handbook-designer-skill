@@ -80,7 +80,7 @@ img_ok = []
 for r in images:
     if r.get('status') == 'synced': continue
     if not r.get('local'): skip.append((r, '换图没有 local：先把 asset 下载到 photos/，在这一行写上 local: 新文件名')); continue
-    mp = next((json.load(open(f)) for f in mpf if os.path.exists(f) and (not r.get('lang') or f'/{r["lang"]}/' in f or f == mpf[-1])), {})
+    mp = next((json.load(open(f, encoding='utf-8')) for f in mpf if os.path.exists(f) and (not r.get('lang') or f'/{r["lang"]}/' in f or f == mpf[-1])), {})
     i = next((i for i, n, span in mp.get('pidx', []) if n <= int(r['page']) < n + span), None)
     a, b = page_region(text, i) if i is not None else (0, len(text))
     seg = text[a:b]

@@ -5,7 +5,7 @@
 内容来源：<project>/book.yaml 的第 1–3 页；没有 book.yaml 时用 templates/book.layouts.yaml 的封面 + 第 4–5 页（章节页 | 卡片）。
 方向里能写的键：style、colors、fonts、brand、duotone，以及任何 book: 设置（逗号分隔，冒号赋值）。
 输出：<project>/.qa/directions.jpg（每行一个方向：封面 | 跨页），每个方向的小项目在 <project>/.dir/<名>/。"""
-import sys, os, subprocess, glob, shutil, yaml, json
+import sys, os, re, subprocess, glob, shutil, yaml, json
 from PIL import Image, ImageDraw, ImageFont
 HB = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HB)
 a = sys.argv[1:]; opt = {}
@@ -14,6 +14,27 @@ for k in ('--title', '--sub', '--kicker', '--lang'):
 if len(a) < 2: sys.exit(__doc__)
 P = os.path.abspath(a[0]); dirs = a[1:]
 src = os.path.join(P, 'book.yaml'); PAGES = '1-3'; TEMPLATE = not os.path.exists(src)
+if not TEMPLATE:   # 方向样张必须验证真实图片（至少一个主图页 + 一个多图页）；没有照片时明确说明验证范围
+    try:
+        _b = yaml.safe_load(open(src, encoding='utf-8')) or {}
+        _pg = _b.get('pages') or []
+        def _has_img(p):
+            if p.get('image') or p.get('images'): return True
+            return any(isinstance(b, dict) and (b.get('figure') or b.get('gallery')) for b in (p.get('body') or []))
+        def _multi(p):
+            if isinstance(p.get('images'), (list, tuple)) and len(p['images']) > 1: return True
+            return any(isinstance(b, dict) and b.get('gallery') for b in (p.get('body') or []))
+        picks = [1]
+        for i, _p in enumerate(_pg, 1):
+            if i > 1 and _has_img(_p): picks.append(i); break
+        for i, _p in enumerate(_pg, 1):
+            if i not in picks and _multi(_p): picks.append(i); break
+        if len(picks) == 1:
+            print('提示：book.yaml 里没有图片页——方向样张未覆盖真实照片，验证范围仅限版式与配色')
+        else:
+            PAGES = ','.join(map(str, picks))
+    except Exception as _e:
+        print(f'提示：方向样张选页失败（{_e}），回退 1-3')
 if TEMPLATE:
     PAGES = '1,4-5'   # 模板：封面 + 章节页 | 卡片（撞色最能看出方向）
     t = yaml.safe_load(open(os.path.join(ROOT, 'templates', 'book.layouts.yaml'), encoding='utf-8'))
@@ -30,6 +51,8 @@ lang = opt.get('lang') or str((B.get('langs') or [B.get('lang', 'zh')])[0])
 rows = []
 for d in dirs:
     name, _, kv = d.partition('=')
+    if not re.fullmatch(r'[\w-]+', name):   # 防 ../ 逃逸删除目录
+        sys.exit(f'ERROR: 方向名不合法：{name!r}（只允许字母/数字/下划线/连字符）')
     sets = [s.replace(':', '=', 1) for s in kv.split(',') if s.strip()]
     out = os.path.join(P, '.dir', name); shutil.rmtree(out, ignore_errors=True)
     subprocess.run([sys.executable, os.path.join(HB, 'subset.py'), P, out, PAGES, '--src', src, '--lang', lang] + sets, check=True, stdout=subprocess.DEVNULL)
@@ -37,8 +60,8 @@ for d in dirs:
     gate = 'PASS' if 'GATE: PASS' in r.stdout else 'FAIL'
     if r.returncode and 'GATE' not in r.stdout: print(r.stdout[-1500:], r.stderr[-1500:]); sys.exit(f'方向 {name} 构建出错')
     pgs = sorted(glob.glob(os.path.join(out, '.qa', 'pg*.png')), key=lambda f: int(os.path.basename(f)[2:-4]))
-    mp = json.load(open(os.path.join(out, 'map.json'))) if os.path.exists(os.path.join(out, 'map.json')) else {}
-    cols = json.load(open(os.path.join(out, '.qa', 'ai_slots.json'))).get('colors', {}) if os.path.exists(os.path.join(out, '.qa', 'ai_slots.json')) else {}
+    mp = json.load(open(os.path.join(out, 'map.json'), encoding='utf-8')) if os.path.exists(os.path.join(out, 'map.json')) else {}
+    cols = json.load(open(os.path.join(out, '.qa', 'ai_slots.json'), encoding='utf-8')).get('colors', {}) if os.path.exists(os.path.join(out, '.qa', 'ai_slots.json')) else {}
     rows.append((name, kv, gate, pgs, cols, mp.get('color_mode', ''))); print(f'方向 {name}（{kv}）：{len(pgs)} 页 · GATE {gate} · 用色 {mp.get("color_mode", "")}')
 w, g, lw = 397, 18, 180; f0 = rows[0][3][0] if rows and rows[0][3] else None; h = round(w * Image.open(f0).height / Image.open(f0).width) if f0 else 561
 c = Image.new('RGB', (lw + 3 * w + 2 * g + g, len(rows) * (h + g) + g), '#404040'); dr = ImageDraw.Draw(c)

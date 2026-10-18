@@ -11,9 +11,10 @@ function cnLines(e){   // 每一行的宽度（按竖直方向重叠归行：不
  return L.map(o=>o.r-o.l)}
 function cnFit(e){   // 大标题：量出最长一行，缩放到正好撑满栏宽（有上限）；在允许折行的地方（空格、·、，）折成 2–3 行能大很多时就折行；太长也折行
  const cs=getComputedStyle(e);const w=e.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
- const mx=+e.dataset.fit,mn=+(e.dataset.min||Math.min(mx,44)),maxl=+(e.dataset.lines||3);
- const set=s=>{e.style.fontSize=s+'px';const q=CN.L/2;e.style.lineHeight=(Math.ceil(s*1.04/q)*q)+'px'};const longest=()=>Math.max(0,...cnLines(e));
  const hasBr=!!e.querySelector('br');
+ const brN=hasBr?(e.innerText||'').split('\n').length:0;   // 作者显式断了几行，就必须渲染成几行（不允许某一作者行再折）
+ const mx=+e.dataset.fit,mn=+(e.dataset.min||Math.min(mx,44)),maxl=hasBr?brN:+(e.dataset.lines||3);   // 显式断行时行数固定为作者行数，字号缩到每行都放得下为止
+ const set=s=>{e.style.fontSize=s+'px';const q=CN.L/2;e.style.lineHeight=(Math.ceil(s*1.04/q)*q)+'px'};const longest=()=>Math.max(0,...cnLines(e));
  e.classList.remove('cn-wrap','cn-any');set(100);let s=Math.floor(Math.min(mx,100*w/Math.max(1,longest())));
  if(s<mx){e.classList.add('cn-wrap');let best=0;
   for(let t=mx;t>=Math.max(mn,Math.ceil(s*1.3));t-=2){set(t);if(longest()<=w+.5&&cnLines(e).length<=maxl){best=t;break}}
@@ -37,7 +38,8 @@ function cnRows(e){const rows=[...e.children].filter(c=>c.classList.contains('cn
  rows.forEach(r=>{r.style.height='auto'});const need=rows.map(cnNeed);const sum=need.reduce((a,b)=>a+b,0);
  let hs;if(sum<=tot){const extra=tot-sum;const each=Math.floor(extra/rows.length/CN.L)*CN.L;hs=need.map(n=>n+each);hs[hs.length-1]+=tot-hs.reduce((a,b)=>a+b,0)}
  else{const base=Math.floor(tot/rows.length/CN.L)*CN.L;hs=rows.map(()=>base);hs[hs.length-1]+=tot-base*rows.length}
- rows.forEach((r,i)=>{r.style.height=Math.max(0,hs[i])+'px';r.style.marginTop=i?gp+'px':'0'})}
+ // 固定页内的行不能参与打印分页；普通流的第二行会被 Chromium 推到下一页，再被 page 的 overflow 裁掉。
+ let top=0;rows.forEach((r,i)=>{const height=Math.max(0,hs[i]);r.style.position='absolute';r.style.left='0';r.style.width='100%';r.style.top=top+'px';r.style.height=height+'px';r.style.marginTop='0';top+=height+gp})}
 function cnPlace(){const all=[...document.querySelectorAll('.page.cn [data-y0],.page.cn [data-y1],.page.cn [data-gold],.page.cn [data-rows]')];
  // 先排文字栈（它们只依赖别的文字栈），再排照片、色块和按行平分的区域（它们依赖文字栈的最终位置）
  [...all.filter(e=>e.classList.contains('cn-st')),...all.filter(e=>!e.classList.contains('cn-st'))].forEach(e=>{
@@ -67,6 +69,7 @@ function cnCheck(){const out=[];const pages=[...document.querySelectorAll('.page
   sts.forEach(([s])=>{if(s.dataset.bad==null)return;[s.dataset.y0,s.dataset.y1].filter(Boolean).forEach(v=>(String(v).match(/[\w-]+(?=\.(top|bottom))/g)||[]).forEach(id=>{const t=document.getElementById(id);if(t&&t.classList.contains('cn-st'))t.dataset.bad=1}))});
   pg.querySelectorAll('.cn-row').forEach(rw=>{const R=rw.getBoundingClientRect();let mb=-1e9;cnText(rw).forEach(q=>mb=Math.max(mb,q.b));if(mb>R.bottom+2)out.push([pi(rw),'cn-row',Math.round(mb-R.bottom),tx(rw)])});
   pg.querySelectorAll('[data-minh]').forEach(b=>{const h=b.getBoundingClientRect().height;if(h<+b.dataset.minh-1)out.push([pi(b),'cn-small',Math.round(h),'']) });
+  pg.querySelectorAll('.cn-pic img').forEach(im=>{const r=im.getBoundingClientRect();if(r.height>0&&r.height<150)out.push([pi(im),'cn-imgarea',Math.round(r.height),(im.getAttribute('src')||'').split('/').pop()||'']) });   // 主图可见高度不足（F07/cn-imgarea：合照/主体被压成一条边）
   pg.querySelectorAll('[data-below]').forEach(f=>{const t=document.getElementById(f.dataset.below);if(!t)return;const R=cnText(t);if(!R.length)return;const d=Math.max(...R.map(q=>q.b))-(f.getBoundingClientRect().top-12);if(d>2)out.push([pi(f),'cn-band',Math.round(d),tx(t)])});   // 正文压进下方色带
   pg.querySelectorAll('[data-clear]').forEach(f=>{const t=document.getElementById(f.dataset.clear);if(!t)return;const d=f.getBoundingClientRect().bottom-(t.getBoundingClientRect().top-12);if(d>2)out.push([pi(f),'cn-in',Math.round(d),tx(t)])});
   if(!(pg.innerText||'').trim()&&!pg.querySelector('img'))out.push([pi(pg),'cn-over',0,'空白页（版面没排出来）']);
@@ -147,12 +150,22 @@ function sjStructure(){document.querySelectorAll('.page.cn').forEach(pg=>{const 
  merge(lines).forEach(s=>{const h=s.o==='h',a0=s.a>1?s.a-T/2:0,a1=s.b<(h?W:H)-1?s.b+T/2:(h?W:H);
   el('sj-line',h?`left:${a0}px;top:${s.p-T/2}px;width:${a1-a0}px;height:${T}px;background:${lc}`:`left:${s.p-T/2}px;top:${a0}px;width:${T}px;height:${a1-a0}px;background:${lc}`)})})}
 function cnQA(){document.body.dataset.cnqa=JSON.stringify(cnCheck())}
+function cnReading(){const en=!/^(zh|ja|ko)(-|$)/i.test(document.documentElement.lang||'zh');
+ const wide=5*CN.C+4*CN.G;
+ document.querySelectorAll('.page.cn .cn-tx:not(.cn-cols2)').forEach(e=>{
+  if(e.dataset.reading==='keep')return;
+  if(e.dataset.reading==='columns'){e.classList.add('cn-cols2');e.style.maxWidth='none';return}
+  if(e.getBoundingClientRect().width<wide-1)return;
+  const ps=[...e.querySelectorAll(':scope > p')];
+  if(ps.length>1&&ps.every(p=>(p.textContent||'').replace(/\s/g,'').length<(en?120:100)))return;
+  if((e.textContent||'').replace(/\s/g,'').length<(en?120:100))return;
+  e.classList.add('cn-cols2');e.style.maxWidth='none'})}
 function cnLayout(){document.querySelectorAll('.page.cn .cn-snap').forEach(e=>cnSnap(e,false));
  document.querySelectorAll('.page.cn .cn-st').forEach(e=>cnSnap(e,e.dataset.anchor=='bottom'));cnPlace()}
-function canon(){document.querySelectorAll('.page.cn [data-fit]').forEach(e=>{e.dataset.fit0=e.dataset.fit;cnFit(e)});cnLayout();
+function canon(){document.querySelectorAll('.page.cn [data-fit]').forEach(e=>{e.dataset.fit0=e.dataset.fit;cnFit(e)});cnReading();cnLayout();
  // 放不下（出版心 / 出色块 / 互压 / 条目行放不下 / 图被挤小）→ 这一页的大标题先缩小一档再排，最多 6 轮；标题也是“吸收体”
  const pages=[...document.querySelectorAll('.page')];
- const bads=()=>new Set(cnCheck().filter(o=>o[1]!='cn-fit').map(o=>o[0]));
+ const bads=()=>new Set(cnCheck().filter(o=>o[1]!='cn-fit'&&o[1]!='cn-imgarea').map(o=>o[0]));   // cn-fit / cn-imgarea 是诊断项，不能靠缩字号修复，不参与收缩循环
  const shrink=()=>{for(let it=0;it<6;it++){const bad=bads();if(!bad.size)break;let changed=false;
   bad.forEach(pn=>{pages[pn-1].querySelectorAll('[data-fit]').forEach(e=>{const cur=parseFloat(e.style.fontSize)||+e.dataset.fit;const mn=+(e.dataset.min||44);
    if(cur>mn+1){e.dataset.fit=Math.max(mn,Math.floor(cur*.86));cnFit(e);changed=true}})});

@@ -1,0 +1,11 @@
+# 参考环境精确版本（pip install -r hb/requirements.lock 可复现本机验证过的构建）
+# 生成于 2026-10-18，Python 3.13 受管 venv。Python 3.10 用户请用 requirements.txt 的下限约束。
+pyyaml==6.0.3
+pillow==12.3.0
+numpy==2.5.1
+fonttools==4.63.0
+brotli==1.2.0
+pikepdf==10.17.0
+qrcode==8.2
+markitdown[docx,pdf]==0.1.8
+pyspellchecker==0.9.1

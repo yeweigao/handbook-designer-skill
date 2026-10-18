@@ -4,7 +4,7 @@
 
 ```
 建项目 → 盘点 → 第 1 轮：沟通合同 → 第 2 轮：三个方向样张 → 写 brief.md
-       → 写 book.yaml → （16 页以上）试排 --proof → 全本 run.sh → 审稿 → 导出 → 交付
+       → 编辑顾问 → page-plan → book.yaml → （16 页以上）试排 --proof → 全本 run.sh → 对照建议审稿 → 导出 → 交付
 ```
 
 ## 1 · 建项目、盘点
@@ -43,9 +43,12 @@ python3 $HB/directions.py $P "A=style:photo,colors:klein" "B=style:swiss,colors:
 
 ## 4 · 写 brief.md
 `cp <skill>/templates/brief.md $P/brief.md`，把两轮确认的东西写进去：顶部设置块（route、purpose、kind、brand、style、colors、langs、canvas、pages）+ 沟通合同 + 选中的方向 + 原文问题的处理。
-从这一刻起，`run.sh` 每次都先跑 `lock.py`：book.yaml 的设置和 brief.md 不一致就停（`[决策不一致]`）。要改设置 → 先问用户 → 改 brief.md 并在“改动记录”记一笔 → 再改 book.yaml。
+排版前读 `references/adaptation.md`，按内容角色选择信息块，并在 brief.md 记明本轮文案保留或允许改写的范围；已有明确授权不重复询问。
+从这一刻起，`run.sh` 每次都先跑 `lock.py`（决策锁纪律见 SKILL.md §2）：设置和 brief.md 不一致就停；要改设置先问用户、改 brief.md 再改 book.yaml。
 
 ## 5 · 写 book.yaml
+- 先按 `references/editorial-advisor.md` 调用顾问审核完整输入（逐页文案、页面去重、系列建议），已有授权不重复询问。
+- 先完成 `page-plan.md`（格式见 `references/adaptation.md`）：逐页采用文案、角色层级、展示与阅读顺序；再执行以下映射，不直接从原稿大字猜title。
 - 先排页序：按 `purposes/<kind>.yaml` 的 order 和 roles，每页写 `job: 角色词 · 一句话`（如 `job: apply · 报名三步 + 截止日期`），再给每页选版式（`references/layouts.md`），最后填字。
 - 文字一律从 `doc.md` 复制，不凭记忆重写；中英两版写成 `{zh: …, en: …}` + `book.langs: [zh, en]`。
 - 完整样例 `templates/book.layouts.yaml`。

@@ -8,7 +8,9 @@
 set -eo pipefail
 HB="$(cd "$(dirname "$0")" && pwd)"; [ -n "$1" ] || { echo "用法：bash $0 <project_dir> [--proof]"; exit 2; }
 P="$(cd "$1" && pwd)"; MODE="$2"
+case "$MODE" in ""|--proof) ;; *) echo "未知参数：$MODE（只支持 --proof）"; exit 2;; esac
 source "$HB/env.sh"
+python3 -c "import yaml,PIL,numpy,fontTools" 2>/dev/null || { echo "缺少 Python 依赖：pip install -r \"$HB/requirements.txt\"（或先跑 bash hb/check_env.sh）"; exit 2; }
 log() { mkdir -p "$P/.qa"; [ -f "$P/.qa/log.md" ] || printf '# 构建日志\n| 时间 | 步骤 | 结果 | 说明 |\n|---|---|---|---|\n' > "$P/.qa/log.md"; echo "| $(date '+%m-%d %H:%M') | $1 | $2 | $3 |" >> "$P/.qa/log.md"; }
 if [ "$MODE" = "--proof" ]; then
   rm -rf "$P/.proof"; python3 "$HB/subset.py" "$P" "$P/.proof" proof
@@ -27,7 +29,7 @@ if [ "$(echo $LANGS | wc -w)" -gt 1 ] && [ -z "$HB_SUB" ]; then
   python3 "$HB/lint.py" "$P" || true
   python3 "$HB/i18n.py" split "$P/book.yaml" || exit 1
   RC=0; for L in $LANGS; do echo "================ $L ================"; HB_SUB=1 bash "$0" "$P/$L" || RC=1; done
-  python3 "$HB/compare.py" "$P" $LANGS && echo "中英对照：$(ls "$P"/.qa/compare_*.jpg | tr '\n' ' ')"
+  python3 "$HB/compare.py" "$P" $LANGS && echo "中英对照：$(ls "$P"/.qa/compare_*.jpg | tr '\n' ' ')" || log build WARN "中英对照图生成失败（不影响门禁）"
   python3 "$HB/gate.py" write "$P" $([ $RC = 0 ] && echo PASS || echo FAIL) $LANGS
   log build "$([ $RC = 0 ] && echo PASS || echo FAIL)" "$LANGS"
   [ $RC = 0 ] && echo "ALL LANGS: GATE PASS" || echo "ALL LANGS: GATE FAIL —— 看上面各语言的提示"
@@ -41,8 +43,8 @@ node "$HB/shot.js" "$P" bg >/dev/null
 node "$HB/shot.js" "$P" | awk '/^\[(字号|书写线)收紧\]/||/^overflow/'
 (cd "$P" && { python3 "$HB/qa.py" > .qa/contrast.txt || true; } && tail -6 .qa/contrast.txt)
 if [ -f "$P/doc.md" ]; then python3 "$HB/check_copy.py" "$P" > "$P/.qa/copy.txt" || true; cat "$P/.qa/copy.txt"; else echo "（没有 doc.md，跳过原文核对）"; fi
-python3 "$HB/montage.py" "$P" >/dev/null && echo "看图：$(ls "$P"/.qa/review_*.jpg | tr '\n' ' ')"
-python3 "$HB/brief.py" "$P"   # AI 配图位 → image_brief.md（没有配图位时不输出）
+python3 "$HB/montage.py" "$P" >/dev/null && echo "看图：$(ls "$P"/.qa/review_*.jpg | tr '\n' ' ')" || log build WARN "拼版图生成失败（不影响门禁）"
+python3 "$HB/brief.py" "$P" || true   # AI 配图位 → image_brief.md（没有配图位时不输出）
 python3 "$HB/images.py" "$P" | tail -4 || true
 python3 "$HB/facts.py" "$P" || true
 python3 "$HB/colorqa.py" "$P" || true   # 用色比例（60-30-10）：主色整块太多 → [颜色过重]   # 成品里的数字都能在原文 / facts.md 里找到吗   # 图片清单 images.yaml（来源、授权、用在哪页、清晰度）

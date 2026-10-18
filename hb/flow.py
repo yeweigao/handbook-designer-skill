@@ -10,7 +10,7 @@
     图上有字时照片烘焙成页面底图，dark.py 在字下面渐进压暗（对比度达标为止）。
   · 页眉、页码和内容版式同一位置、同一字号。
 """
-import re, math
+import re, math, os
 import canon as C
 h = C.h
 
@@ -45,17 +45,29 @@ def line_of(px, d):
     try: v = float(px)
     except (TypeError, ValueError): return d
     return max(0, min(C.LAST, round((v - C.TOP) / C.LH)))
+def photo_rows(p, dflt_px, dflt_rows, lo, hi):
+    """照片带行数（T 上 / B 下）：
+    photo_rows: N 是语义参数——照片带占几行（直接数行，递增单调有效）；
+    split: 像素是旧写法——从页顶起算的像素，round((v-88)/28) 换算成行（同一个像素在 6~10 行间会落在同一行，调着纹丝不动）。
+    两个参数都接受（都写了以 photo_rows 为准）；越界时收敛到合法范围 [lo, hi] 并 WARN「已按最小/最大照片带收敛」。"""
+    if p.get('photo_rows') is not None:
+        try: v = int(round(float(p['photo_rows'])))
+        except (TypeError, ValueError): v = dflt_rows
+        if v < lo: h.WARN.append(f'第{h.CURN}页：photo_rows: {p["photo_rows"]} 小于最小照片带 {lo} 行，已按最小照片带收敛'); v = lo
+        elif v > hi: h.WARN.append(f'第{h.CURN}页：photo_rows: {p["photo_rows"]} 大于最大照片带 {hi} 行，已按最大照片带收敛'); v = hi
+        return v
+    return max(lo, min(hi, line_of(p.get('split', dflt_px), dflt_rows)))
 def T(s): return C.T_(s)
 def W_(c0, c1): return C.wd(c0, c1)
 
 # ---------------------------------------------------------------- 内容块
 # 每个块：第一个认识的键决定类型；渲染出来的东西只用 canon 的字号档和颜色变量（--fg 字 · --hd 标题 · --acc 强调 · --lab 小标签 · --mut 次要 · --rule 粗线 · --line 细线）
-KINDS = ('display', 'title', 'en', 'kicker', 'worksheet', 'task', 'p', 'letter', 'items', 'kv', 'step', 'q', 'table', 'field', 'fields', 'lines', 'fill',
+KINDS = ('series_header', 'display', 'title', 'en', 'kicker', 'worksheet', 'task', 'p', 'letter', 'items', 'kv', 'step', 'q', 'table', 'field', 'fields', 'lines', 'fill',
          'box', 'boxes', 'choice', 'blanks', 'sign', 'figure', 'gallery', 'stats', 'quote', 'cards', 'qr', 'bars', 'product', 'chips', 'cycle', 'timeline',
          'sheet', 'logos', 'space', 'html', 'caption')
-GAP = {'kicker': 1, 'worksheet': 1, 'display': 0, 'title': 1, 'en': 0, 'task': 1, 'p': 1, 'letter': 1, 'items': 1, 'kv': 1, 'step': 1, 'q': 1, 'cols': 1,
+GAP = {'series_header': 1, 'kicker': 1, 'worksheet': 1, 'display': 0, 'title': 1, 'en': 0, 'task': 1, 'p': 1, 'letter': 1, 'items': 1, 'kv': 1, 'step': 1, 'q': 1, 'cols': 1,
        'table': 1, 'field': 0, 'fields': 1, 'lines': 0, 'fill': 0, 'box': 1, 'boxes': 1, 'choice': 1, 'blanks': 1, 'sign': 2, 'figure': 1, 'gallery': 1,
-       'stats': 1, 'quote': 2, 'cards': 2, 'qr': 1, 'bars': 1, 'product': 1, 'chips': 1, 'cycle': 1, 'timeline': 1, 'sheet': 1, 'logos': 1, 'space': 0,
+       'stats': 1, 'quote': 2, 'cards': 1, 'qr': 1, 'bars': 1, 'product': 1, 'chips': 1, 'cycle': 1, 'timeline': 1, 'sheet': 1, 'logos': 1, 'space': 0,
        'html': 0, 'caption': 0}
 TIGHT = {('kicker', 'title'), ('kicker', 'display'), ('worksheet', 'title'), ('worksheet', 'task'), ('title', 'en'), ('display', 'en'), ('display', 'title'),
          ('display', 'display'), ('kicker', 'task'), ('field', 'field'), ('lines', 'lines'), ('figure', 'caption'), ('gallery', 'caption')}
@@ -83,18 +95,47 @@ def figure(f, hpx, b, width, cap=None):
         v = {'src': f, 'focus': b.get('focus', [.5, .5])} if b.get('focus') else f
         im = C.pic(v, width, hpx, 1, 'B', label=False)
     c = f'<div class="cn-cap"{h.DECO}>{T(cap)}</div>' if cap else ''
-    mn = min(hpx, max(3 * C.LH, round(hpx * .45 / C.LH) * C.LH))   # 放不下时图先让：按整行缩，最少到原高的一半左右（fill.js canon）
+    primary = b.get('role') == 'primary' or ('h' not in b and width >= C.wd(1, 4))
+    mn = min(hpx, max((8 if primary else 3) * C.LH, round(hpx * (.75 if primary else .45) / C.LH) * C.LH))
     return f'<figure class="cn-fig{" fr" if frame else ""}"><div class="cn-figi" data-fh="{hpx}" data-fmin="{mn}" style="height:{hpx}px">{im}</div>{c}</figure>'
 
-# 行宽（measure）：大一号的导语字只在够宽的栏里用（中文每行 ≥ 18 字，即 ≥ 4 栏）；西文正文一行不超过约 75 个字符（6 栏整宽时收到 5 栏，右侧留白）
-def wide(width): return width >= C.wd(1, 4) - 1
-def measure(width): return f'max-width:{C.wd(1, 5)}px;' if not h.CJK and width > C.wd(1, 5) + 1 else ''
+# 行宽：导语中文至少四栏，西文至少三栏；西文按当前字号限到60ch，不固定空出右栏。
+def wide(width): return width >= C.wd(1, 4 if h.CJK else 3) - 1
+def measure(width): return 'max-width:60ch;' if not h.CJK else ''
+
+def image_bleed(b, ctx):
+    """出血是项目的图像策略；嵌在文字栏内的图和功能图不隐式越过相邻文字。"""
+    bl = b.get('bleed')
+    if bl is None and ctx['w'] >= C.wd(1, 6) - 1 and b.get('role') not in ('qr', 'logo', 'diagram'):
+        bl = h.BK.get('image_bleed')
+    st = ''
+    if bl in ('left', 'both'): st += f'margin-left:-{ctx["bl"]}px;'
+    if bl in ('right', 'both'): st += f'margin-right:-{ctx["br"]}px;'
+    width = ctx['w'] + (ctx['bl'] if bl in ('left', 'both') else 0) + (ctx['br'] if bl in ('right', 'both') else 0)
+    return bl, st, width
 
 def B(b, ctx):
     """一个块 → HTML（不含块与块之间的间距）"""
     if isinstance(b, str): b = {'p': b}
     k = kind(b); g = b.get; width = ctx['w']
     if k is None: h.ERR.append(f'第{h.CURN}页：未知内容块 {list(b)[:3]}'); return ''
+    if k == 'series_header':
+        q = b[k]; name, item = q['series'], str(q['item'])
+        series = h.BK.get('series', {}).get(name)
+        if not series or item not in series.get('items', {}):
+            raise ValueError(f'series_header 找不到 book.series.{name}.items.{item}')
+        title = series['items'][item]
+        attrs = f' data-series="{h.esc(name)}" data-item="{h.esc(item)}"'
+        if q.get('continuation'):
+            label = f'{series["label"]} {item} · CONTINUED'
+            return (f'<div class="cn-series-header cn-series-cont"{attrs}>' + C.lab(label)
+                    + f'<div class="cn-h cn-ttl cn-t40">{T(q.get("title", title))}</div></div>')
+        if q.get('title'): raise ValueError('系列首页标题统一从 book.series 读取，不在单页覆盖')
+        label = C.lab(series['label'])
+        return (f'<div class="cn-series-header"{attrs}>{label}<div class="cn-series-grid" '
+                f'style="grid-template-columns:{C.COL}px minmax(0,1fr)">'
+                f'<div class="cn-series-index">{T(item)}</div>'
+                f'<div class="cn-h cn-ttl cn-t40">{T(title)}</div></div></div>')
     if k == 'display':
         s = dsize(g('size'), 56); col = 'var(--acc)' if g('color') == 'gold' else 'var(--hd)'
         if g('stroke'):
@@ -120,11 +161,15 @@ def B(b, ctx):
         lead = f'<b class="cn-lead">{colon(g("lead"))}</b>' if g('lead') else ''
         big = g('size') is not None and float(g('size')) >= 18 and wide(width)
         st = f'font-weight:{g("weight")};' + measure(width)
-        return f'<div class="cn-tx{" cn-t20" if big else ""}" style="{st}"><p>{lead}{T(b["p"])}</p></div>'
+        return f'<div class="cn-tx{" cn-t20" if big else ""}"{C.reading(g("flow", "keep" if big else None))} style="{st}"><p>{lead}{T(b["p"])}</p></div>'
     if k == 'letter':
-        return f'<div class="cn-tx{" cn-t20" if wide(width) else ""} cn-letter" style="{measure(width)}">' + ''.join(f'<p>{T(x)}</p>' for x in C.listify(b['letter'])) + '</div>'
+        ps = ''.join(f'<p>{T(x)}</p>' for x in C.listify(b['letter']))
+        sg = (f'<div class="cn-cap" style="margin-top:{C.LH // 2}px;color:var(--fg)">' + '<br>'.join(T(x) for x in C.listify(b['sign'])) + '</div>') if g('sign') else ''   # 落款：独立小字号块吸在正文下方，不占 letter 的 42px 行距
+        return f'<div class="cn-tx{" cn-t20" if wide(width) else ""} cn-letter"{C.reading(g("flow"))} style="{measure(width)}">{ps}{sg}</div>'
     if k == 'items':
         its = C.listify(b['items']); hd = f'<div class="cn-h cn-t20">{T(g("heading"))}</div>' if g('heading') else ''
+        if g('style') in ('bullet', 'plain'):
+            return hd + f'<ul class="cn-li cn-list-{g("style")}">' + ''.join(f'<li>{T(t)}</li>' for t in its) + '</ul>'
         if g('style') == 'big':
             t20 = ' cn-t20' if wide(width) else ''
             return hd + '<ol class="cn-ol big">' + ''.join(f'<li>{accent_num(f"{i:02d}", round(28 * C.S), round(1.5 * C.LH))}<span class="cn-h{t20}">{T(t)}</span></li>' for i, t in enumerate(its, 1)) + '</ol>'
@@ -170,15 +215,27 @@ def B(b, ctx):
         return (f'<div class="cn-tx"><p>{T(b["sign"])}</p></div><div class="cn-blank" style="margin-top:{C.LH}px"><span class="cn-h">{colon(g("label", "签名" if h.CJK else "Signature"))}</span>'
                 f'<i style="width:{g("w", 240)}px"></i></div>')
     if k == 'figure':
-        bl = g('bleed'); st = ''
-        if bl in ('left', 'both'): st += f'margin-left:-{ctx["bl"]}px;'
-        if bl in ('right', 'both'): st += f'margin-right:-{ctx["br"]}px;'
-        w = width + (ctx['bl'] if bl in ('left', 'both') else 0) + (ctx['br'] if bl in ('right', 'both') else 0)
-        return f'<div style="{st}">' + figure(b['figure'], nrows(g('h', 220), 8) * C.LH, b, w, g('caption')) + '</div>'
+        bl, st, w = image_bleed(b, ctx)
+        if bl == 'page':
+            if width < C.wd(1, 6) - 1: raise ValueError('bleed: page 只能放在整版心中，不能放在文字分栏内')
+            if g('caption'): raise ValueError('整页出血图版的说明请移到相邻页，不能追加在满页图片下方')
+            return (f'<div data-bleed="page" style="position:absolute;left:-{ctx["bl"]}px;top:-{C.TOP}px;width:{C.W}px;height:{C.H}px">'
+                    + figure(b['figure'], C.H, b, C.W, g('caption')) + '</div>')
+        hp = g('h')
+        if hp is None:
+            try:
+                from PIL import Image
+                with Image.open(os.path.join(h.SRC, str(b['figure']))) as im: hp = width * im.height / im.width
+            except (OSError, ValueError): hp = 8 * C.LH
+        limit = min(10, C.LAST - 2) if g('role') == 'supporting' else C.LAST - 2
+        return f'<div data-bleed="{bl or "none"}" style="{st}">' + figure(b['figure'], nrows(hp, 8, hi=limit) * C.LH, b, w, g('caption')) + '</div>'
     if k == 'gallery':
         fs = C.listify(b['gallery']); caps = C.listify(g('captions')) + [None] * len(fs); n = len(fs)
+        bl, st, w = image_bleed(b, ctx)
         wds = g('widths', ' '.join(['1fr'] * n)); hpx = nrows(g('h', 160), 6) * C.LH
-        return f'<div class="cn-cols cn-gal" style="grid-template-columns:{wds}">' + ''.join(figure(f, hpx, b, width / n, c) for f, c in zip(fs, caps)) + '</div>'
+        gap = 0 if bl in ('left', 'right', 'both') else C.GUT
+        return (f'<div data-bleed="{bl or "none"}" class="cn-cols cn-gal" style="{st}grid-template-columns:{wds};column-gap:{gap}px">'
+                + ''.join(figure(f, hpx, b, (w - gap * (n - 1)) / n, c) for f, c in zip(fs, caps)) + '</div>')
     if k == 'stats':
         st = [s if isinstance(s, (list, tuple)) else [s, ''] for s in C.listify(b['stats'])]
         nc = int(g('cols', len(st)) or 1); sz = min(round(72 * C.K), max(round(40 * C.S), dsize(g('size', 56))))   # 关键数字：47 · 56 · 72
@@ -199,9 +256,13 @@ def B(b, ctx):
         def cell(i, c):
             if isinstance(c, dict): k_, t_, x_, im_ = c.get('k'), c.get('t', ''), c.get('x'), c.get('img')
             else: k_, t_, x_, im_ = None, c[0], (c[1] if len(c) > 1 else None), (c[2] if len(c) > 2 else None)
+            meta = ('<div class="cn-cardmeta">' + ''.join(f'<span class="cn-cap">{T(x)}</span>' for x in c.get('meta', [])) + '</div>') if isinstance(c, dict) and c.get('meta') else ''
             im = f'<div class="cn-cardi" style="height:{2 * C.LH}px"><img alt="" src="{h.FIGIMG(im_, 120)}"></div>' if im_ else ''
             no = f'<span class="cn-cardn">{i:02d}</span>' if g('num') else ''   # 编号和标题同一行（省出一行，编号用强调色）
-            return f'<div class="cn-card {rule} cn-snap">{im}{C.lab(k_, deco=False) if k_ else ""}<div class="cn-h cn-t20">{no}{T(t_)}</div>{C.TX(x_) if x_ else ""}</div>'
+            if g('balance') and nc == 2 and len(cs) % 2 and i == len(cs) and not im_:
+                return (f'<div class="cn-card {rule} cn-snap" style="grid-column:1 / -1"><div class="cn-cols" style="grid-template-columns:repeat(2,minmax(0,1fr))">'
+                        + f'<div>{C.lab(k_, deco=False) if k_ else ""}<div class="cn-h cn-t20">{no}{T(t_)}</div>{meta}</div><div>{C.TX(x_) if x_ else ""}</div></div></div>')
+            return f'<div class="cn-card {rule} cn-snap">{im}{C.lab(k_, deco=False) if k_ else ""}<div class="cn-h cn-t20">{no}{T(t_)}</div>{meta}{C.TX(x_) if x_ else ""}</div>'
         return f'<div class="cn-cols" data-rg="1" style="grid-template-columns:repeat({nc},minmax(0,1fr));row-gap:{C.LH}px">' + ''.join(cell(i, c) for i, c in enumerate(cs, 1)) + '</div>'   # data-rg：放不下时行间距收到 0（卡片自带顶线分隔）
     if k == 'qr':
         try: import qrcode, qrcode.image.svg
@@ -238,8 +299,28 @@ def B(b, ctx):
         return f'<div class="cn-cyc0"{h.DECO}><svg width="{S_}" height="{S_}" viewBox="0 0 {S_} {S_}">{arcs}{nodes}{ctr}</svg></div>'
     if k == 'timeline':
         tl = b['timeline']; v = g('direction', 'h' if len(tl) <= 5 else 'v') == 'v'
+        if g('style') == 'axis':
+            rows = []
+            for item in tl:
+                d = item if isinstance(item, dict) else dict(zip(('k', 't', 'x'), item))
+                details = C.TX(d.get('x'))
+                if d.get('period'):
+                    details += f'<div class="cn-cap cn-axisperiod">{T(d["period"])}</div>'
+                if d.get('events'):
+                    details += '<ul class="cn-axis-events">' + ''.join(f'<li>{T(x)}</li>' for x in d['events']) + '</ul>'
+                rows.append(f'<div class="cn-axisrow" style="grid-template-columns:{C.wd(1, 1) + C.GUT}px minmax(0,1fr)">'
+                            + f'<span class="cn-axisdot"></span><div class="cn-axisdate cn-h cn-t28">{T(d.get("k", ""))}</div>'
+                            + f'<div><div class="cn-h cn-t20">{T(d.get("t", ""))}</div>{details}</div></div>')
+            end = f'<div class="cn-axismore cn-cap"{h.DECO}>{T(g("next"))}</div>' if g('next') else ''
+            return '<div class="cn-timeaxis">' + ''.join(rows) + end + '</div>'
         if v:
-            return '<div class="cn-tb cn-top2">' + ''.join(f'<div class="cn-tr" style="grid-template-columns:{C.wd(1, 1) + C.GUT}px 1fr"><span class="cn-h" style="color:var(--acc)">{T(d)}</span><span>{T(t)}</span></div>' for d, t in tl) + '</div>'
+            big = g('size') is not None and float(g('size')) >= 18 and wide(width)
+            rows = []
+            for item in tl:
+                d, t = item[:2]
+                detail = f'<div class="cn-tx">{T(item[2])}</div>' if len(item) > 2 else ''
+                rows.append(f'<div class="cn-tr" style="grid-template-columns:{C.wd(1, 1) + C.GUT}px 1fr"><span class="cn-h cn-t20" style="color:var(--acc)">{T(d)}</span><div class="{"cn-t20" if big else ""}">{T(t)}{detail}</div></div>')
+            return '<div class="cn-tb cn-top2">' + ''.join(rows) + '</div>'
         return (f'<div class="cn-cols" style="grid-template-columns:repeat({len(tl)},minmax(0,1fr))">'
                 + ''.join(f'<div class="cn-top2 cn-snap" style="padding-top:{C.LH // 2}px"><div class="cn-h cn-t20" style="color:var(--acc)">{T(d)}</div><div>{T(t)}</div></div>' for d, t in tl) + '</div>')
     if k == 'sheet':
@@ -250,7 +331,8 @@ def B(b, ctx):
         return f'<div class="cn-tb cn-top2">{out}</div>'
     if k == 'logos':
         hp = max(C.LH // 2, round(float(g('h', 40)) / (C.LH / 2)) * C.LH // 2)
-        return f'<div class="cn-logos">' + ''.join(f'<img alt="" src="{h.FIGIMG(x, hp * 4)}" style="height:{hp}px">' for x in C.listify(b['logos'])) + '</div>'
+        mat = f' style="background:#FFFFFF;padding:{C.LH // 2}px;width:fit-content;max-width:100%"' if g('frame') else ''
+        return f'<div class="cn-logos"{mat}>' + ''.join(f'<img alt="" src="{h.FIGIMG(x, hp * 4)}" style="height:{hp}px">' for x in C.listify(b['logos'])) + '</div>'
     if k == 'space': return ''
     if k == 'html': return b['html']
     return ''
@@ -332,7 +414,7 @@ def poster_fields(p):
             continue
         if k == 'en' and 'en' not in q: q['en'] = b['en']; continue
         if k == 'p' and not b.get('lead'): texts.append(b['p']); continue
-        if k == 'letter': texts += C.listify(b['letter']); continue
+        if k == 'letter': texts += C.listify(b['letter']) + C.listify(b.get('sign')); continue   # sign 落款跟着信件文字走（POSTER 里没有独立落款位，不当内容丢掉）
         if k == 'stats' and 'stats' not in q: q['stats'] = b['stats']; continue
         if k in ('figure', 'gallery'): q.setdefault('inset', []).append(b); continue   # 海报上的插图：放进网格里的一格（切口一侧三栏），不跟着文字栈走
         extra.append(b)
@@ -354,20 +436,23 @@ def POSTER(n, p):
 def PAPER(n, p):
     """纯纸面页：页头 + 内容块排满 6 栏"""
     r = C.pg(n); top = line_of(p.get('body_top'), 0) if p.get('body_top') and float(p['body_top']) > C.TOP + C.LH else 0
-    C.emit(n, p, r, 'paper', region(1, 6, r, p.get('body'), top, C.LAST, id_=C.sid(n, 'b'), align=p.get('align')), 'paper')
+    sf = C.SURF_ALIAS.get(str(p.get('surface', 'paper')).strip().lower())
+    if sf not in ('paper', 'A', 'B', 'dark'):
+        raise ValueError('PAPER surface 可选 paper / A / B / dark')
+    C.emit(n, p, r, sf, region(1, 6, r, p.get('body'), top, C.LAST, sf=sf, id_=C.sid(n, 'b'), align=p.get('align')), sf)
 
 def T_(n, p, bottom=False):
     """T：照片在上（满版出血，下沿落在行线上），纸面在下；B：反过来。图上的字（on_photo）压在照片里、贴着照片的边"""
     r = C.pg(n); v = p.get('image')
     if not bottom:
-        Ls = max(6, min(C.LAST - 8, line_of(p.get('split', 330), 9)))
+        Ls = photo_rows(p, 330, 9, 6, C.LAST - 8)   # 照片带 6~LAST-8 行；photo_rows: N（行数）或 split: 像素（旧写法）
         if p.get('body_top'): Ls = max(Ls, line_of(p['body_top'], Ls) - 1)
         yS = C.y(Ls); name, body = bake_page(n, p, v, (0, 0, 1, yS / C.H), p.get('target'))
         body += paper(0, yS, C.W, C.H) + zone(0, 0, C.W, yS)
         if p.get('on_photo'): body += cut(n, 'o', yS) + region(1, 6, r, p['on_photo'], 0, Ls - 1, sf=osf(name), align='bottom', id_=C.sid(n, 'o'))
         body += region(1, 6, r, p.get('body'), Ls + 1, C.LAST, id_=C.sid(n, 'b'))
         return C.emit(n, p, r, 'paper', body, 'image', name, hsf='image' if name else 'paper')
-    Ls = max(8, min(C.LAST - 6, line_of(p.get('split', 760), 24)))
+    Ls = photo_rows(p, 760, 24, 8, C.LAST - 6)   # 照片带 8~LAST-6 行（上面至少留 6 行给文字）
     yS = C.y(Ls); name, body = bake_page(n, p, v, (0, yS / C.H, 1, 1), p.get('target'))
     body += paper(0, 0, C.W, yS) + zone(0, yS, C.W, C.H)
     body += region(1, 6, r, p.get('body'), 0, Ls - 1, id_=C.sid(n, 'b'))
@@ -431,6 +516,15 @@ def SPREAD_P(n, p):
 
 def SPREAD_H(n, p):
     """横图贯穿两页上半部（下沿落在行线上）；左页标题压在图的上部，右页的字贴着图的下沿；下半是纸面"""
+    if p.get('image_position') == 'bottom':
+        Ls = max(8, min(C.LAST - 8, line_of(p.get('split', 564), 17))); yS = C.y(Ls)
+        name, a, b = spread_bake(n, p, (0, yS / C.H, 1, 1))
+        for k, (img, side, q) in enumerate([(a, 'L', p.get('left', {})), (b, 'R', p.get('right', {}))]):
+            m = n + k; r = m % 2 == 1
+            body = img + paper(0, 0, C.W, yS) + zone(0, yS, C.W, C.H)
+            body += region(1, 6, r, q.get('body'), 0, Ls - 1, id_=C.sid(m, 'b'))
+            C.emit(m, q, r, 'paper', body, 'image', name, side=side, fsf=osf(name))
+        return
     Ls = max(8, min(C.LAST - 8, line_of(p.get('body_top', 548), 16) - 1)); yS = C.y(Ls)
     name, a, b = spread_bake(n, p, (0, 0, 1, yS / C.H)); L, Rr = p.get('left', {}), p.get('right', {}); la = C.LIGHT_ART[0]
     for k, (img, side, q) in enumerate([(a, 'L', L), (b, 'R', Rr)]):

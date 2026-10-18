@@ -1,11 +1,21 @@
+/* 注意：@page 与 .page 分页规则住在 style.css（hb.py 按 style.css → canon.css 顺序拼接），单独引用本文件不产生分页 */
 /* ---- 内容版式（canon.py）：6 栏网格。正文字号 --bs、行距 --lh、栏间 --gut 由 hb.py 按画布写在 body 上（A4：16 / 28 / 32；book.body: 14、A5、小红书：14 / 24 / 28）；--s = 行距 / 24，小字号和间距按它等比。颜色走变量（--fg 字 · --hd 标题 · --acc 强调 · --num 大数字 · --lab 小标签 · --mut 次要 · --rule 粗线 · --line 细线），每个文字栈按它所在的底色设好 ---- */
 body{--bs:16px;--lh:28px;--gut:32px;--s:1.1667}
 .page.cn.cn-tight{--s:1}.page.cn.cn-tight .cn-tb .cn-tr{padding:1px 0}.page.cn.cn-tight .cn-tl{margin-top:0!important}.page.cn.cn-tight .cn-ino{font-size:calc(1.5 * var(--lh))!important;line-height:calc(2 * var(--lh))!important}   /* 这一页放不下：辅助字号回到行距 24 时的比例（fill.js 自动加，正文字号不变） */
 .page.cn{font-size:var(--bs);line-height:var(--lh)}
 .cn-a{position:absolute}
 .cn-st{color:var(--fg);font-family:var(--f-body);font-weight:var(--body-w);font-size:var(--bs);line-height:var(--lh)}
+.cn-series-grid{display:grid;gap:var(--gut);align-items:start}
+.cn-series-index{font-family:var(--f-label);font-weight:800;font-size:calc(72px * var(--s) / 1.1667);line-height:calc(3 * var(--lh));color:var(--num)}
+/* 西文编辑式排印：正文行距与布局网格分开；全册统一，不用单页坐标补丁。 */
+.ty-editorial .cn-tx:not(.cn-t20):not(.cn-t28):not(.cn-t40),.ty-editorial .cn-li{line-height:calc(1.5 * var(--bs))}
+.ty-editorial .cn-tx.cn-t20{font-size:calc(1.25 * var(--bs));line-height:calc(1.75 * var(--bs))}
+.ty-editorial .cn-num,.ty-editorial .cn-h.cn-t20,.ty-editorial .cn-h.cn-t28,.ty-editorial .cn-kv .cn-h{font-family:var(--f-label);font-weight:600}
+.ty-editorial .cn-h.cn-ttl{font-family:var(--f-title);font-weight:var(--title-w)}
+.ty-editorial .cn-letter p{font-family:var(--f-body)}
 .cn-st .m1,.cn-cell .m1,.cn-card .m1{margin-top:var(--lh)}.cn-st .m2{margin-top:calc(2 * var(--lh))}.cn-st .m3{margin-top:calc(3 * var(--lh))}
 .cn-tx{text-align:justify;text-justify:inter-character}.cn-tx p+p{margin-top:var(--lh)}
+.cn-tx p,.cn-li li,.cn-sub{text-wrap:pretty}
 .cn-cols2{column-count:2;column-gap:var(--gut);column-fill:balance}.cn-cols2 p{break-inside:auto}
 .cn-lab{font-family:var(--f-label);font-weight:600;font-size:calc(11px * var(--label-scale) * var(--s));line-height:var(--lh);letter-spacing:var(--label-track);text-transform:var(--label-case);color:var(--lab)}
 .cn-cap{font-family:var(--f-label);font-size:calc(11px * var(--label-scale) * var(--s));line-height:var(--lh);letter-spacing:.06em;color:var(--mut)}
@@ -18,6 +28,7 @@ body{--bs:16px;--lh:28px;--gut:32px;--s:1.1667}
 .cn-top2{background:linear-gradient(var(--rule),var(--rule)) top/100% 2px no-repeat;padding-top:calc(.5 * var(--lh))}
 .cn-top1{background:linear-gradient(var(--line),var(--line)) top/100% 1px no-repeat;padding-top:calc(.5 * var(--lh))}
 .cn-li{list-style:none}.cn-li li{position:relative;padding-left:1.15em}.cn-li li::before{content:"–";position:absolute;left:0;color:var(--acc)}
+.cn-list-bullet li::before{content:"•"}.cn-list-plain li{padding-left:0}.cn-list-plain li::before{content:none}
 .cn-q{border-left:3px solid var(--acc);padding-left:25px}
 .cn-qt{font-family:var(--f-accent);font-style:var(--accent-style);font-weight:500;font-size:calc(24px * var(--s));line-height:calc(1.5 * var(--lh));color:var(--hd)}
 .cn-2up{display:grid;align-items:start}
@@ -30,7 +41,7 @@ body{--bs:16px;--lh:28px;--gut:32px;--s:1.1667}
 .cn-row>.cn-ibox,.cn-row>.cn-cell{height:100%}.cn-row .cn-flexcol{height:100%}.cn-row .cn-card.cn-flexcol{height:100%}
 .cn-cell{overflow:hidden}
 .cn-field{z-index:0}
-.cn-chip{width:24px;height:24px;line-height:24px;text-align:center;background:var(--chip-bg,#fff);color:#111;font-family:var(--f-title);font-feature-settings:"lnum" 1;font-size:13px;z-index:3}
+.cn-chip{width:24px;height:24px;line-height:24px;text-align:center;background:var(--chip-bg,#fff);color:var(--chip-fg,#111);font-family:var(--f-title);font-feature-settings:"lnum" 1;font-size:13px;z-index:3}
 .cn-lg{display:inline-block;margin-right:14px;white-space:nowrap}.cn-lg .cn-num{display:inline}
 .cn-fo{font-family:var(--f-label);font-size:calc(11px * var(--label-scale) * var(--s));line-height:var(--lh);letter-spacing:.18em;text-transform:var(--label-case);display:flex;justify-content:space-between}
 .cn-block{z-index:2}
@@ -40,6 +51,13 @@ body{--bs:16px;--lh:28px;--gut:32px;--s:1.1667}
 .cn-tls.comp .cn-tl>div:last-child{display:flex;gap:14px;align-items:baseline}
 .cn-tb .cn-tr{display:grid;column-gap:var(--gut);padding:calc(.25 * var(--lh)) 0;background:linear-gradient(var(--line),var(--line)) bottom/100% 1px no-repeat}
 .cn-tb{padding-top:0}.cn-th{font-family:var(--f-label);font-size:calc(11px * var(--label-scale) * var(--s));letter-spacing:.16em;text-transform:var(--label-case);color:var(--mut)}
+.cn-timeaxis{position:relative}.cn-timeaxis::before{content:"";position:absolute;left:8px;top:calc(.75 * var(--lh));bottom:0;width:2px;background:var(--acc)}
+.cn-axisrow{position:relative;display:grid;column-gap:var(--gut);padding-bottom:var(--lh)}
+.cn-axisdate{padding-left:calc(1.1 * var(--lh));color:var(--acc)!important;white-space:nowrap}
+.cn-axisdot{position:absolute;left:2px;top:calc(.75 * var(--lh) - 6px);width:14px;height:14px;border-radius:50%;background:var(--acc)}
+.cn-axisrow .cn-tx{margin-top:calc(.25 * var(--lh));text-align:left}.cn-axismore{padding-left:calc(1.1 * var(--lh));color:var(--acc)}
+.cn-axisperiod{letter-spacing:0;text-transform:none}
+.cn-axis-events{list-style:disc;padding-left:1.1em;line-height:calc(1.5 * var(--bs));text-wrap:pretty}
 .cn-notes .cn-li li{color:var(--mut);font-size:calc(var(--bs) - 1px)}
 .cn-tocr{display:grid}
 .deco{pointer-events:none}
@@ -58,6 +76,7 @@ a.hb-link,a.cn-tocr{color:inherit;text-decoration:none}a.cn-tocr{display:grid}
 .cn-flow{display:flex;flex-direction:column}.cn-flow>.cn-b{flex:0 0 auto}.cn-flow>.cn-b.grow{flex:1 1 0;min-height:0;display:flex;flex-direction:column}
 .cn-b.grow>.cn-fill,.cn-b.grow>.cn-step{flex:1 1 0;min-height:0}.cn-step.grow .cn-stepw,.cn-step.grow .cn-stepw>.cn-b.grow{flex:1 1 0;min-height:0;display:flex;flex-direction:column}
 .cn-ttl{font-weight:var(--title-w);text-wrap:balance;color:var(--hd)}
+.cn-cardmeta{display:flex;flex-wrap:wrap;column-gap:.8em}.cn-cardmeta .cn-cap{letter-spacing:0}
 b.cn-lead{color:var(--acc);font-weight:700}
 .cn-letter p{font-family:var(--f-title)}
 .cn-ol{list-style:none}.cn-ol li{display:grid;grid-template-columns:calc(1.6 * var(--bs)) 1fr;align-items:baseline}.cn-oln{font-family:var(--f-title);font-weight:700;font-feature-settings:"lnum" 1;color:var(--acc)}

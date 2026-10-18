@@ -12,7 +12,7 @@ if not os.path.exists(os.path.join(P, 'book.html')):
     sys.exit(f'{P} 里没有 book.html：先 run.sh；多语言的书指定语言子目录，如 {os.path.join(P, langs[0]) if langs else P + "/zh"}')
 spec = yaml.safe_load(open(os.path.join(P, 'book.yaml'), encoding='utf-8')) or {}
 B = spec.get('book') or {}; lang = str(B.get('lang', 'zh'))
-mp = json.load(open(os.path.join(P, 'map.json')))
+mp = json.load(open(os.path.join(P, 'map.json'), encoding='utf-8'))
 pidx = {i: list(range(n, n + span)) for i, n, span in mp.get('pidx', [])}
 SKIP = {'layout', 'image', 'images', 'img', 'src', 'focus', 'target', 'zoom', 'surface', 'mirror', 'variant', 'style', 'cols', 'count', 'deco', 'num', 'tone',
         'note', 'job', 'align', 'rhythm', 'index', 'toc', 'duo', 'folio', 'logo', 'contact', '_last', 'widths', 'columns', 'items_cols', 'fit', 'h', 'w', 'mt',

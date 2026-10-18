@@ -11,7 +11,9 @@ srcs = glob.glob(os.path.join(P, 'doc*.md')) + glob.glob(os.path.join(P, 'facts*
 if not srcs: print('（没有 doc.md / facts.md，跳过数字出处检查）'); sys.exit(0)
 ref = re.sub(r'[,，\s]', '', ' '.join(open(f, encoding='utf-8').read() for f in srcs))
 SKIP = {'layout', 'image', 'images', 'img', 'src', 'focus', 'target', 'zoom', 'surface', 'mirror', 'variant', 'style', 'cols', 'count', 'deco', 'num', 'tone',
-        'index', 'toc', 'note', 'job', 'size', 'h', 'w', 'mt', 'spacing', 'lh', 'widths', 'columns', 'colors', 'fonts', 'scale', 'paper', 'pages', 'canvas', 'stroke', 'items_cols'}
+        'index', 'toc', 'note', 'job', 'size', 'h', 'w', 'mt', 'spacing', 'lh', 'widths', 'columns', 'colors', 'fonts', 'scale', 'paper', 'pages', 'canvas', 'stroke', 'items_cols',
+        'split', 'strip', 'body_top', 'top_y', 'bottom_y', 'kw',
+        'fill', 'space', 'lines', 'photo_rows'}   # fill/space/lines：块的行数（排版）；photo_rows：T 版照片带行数（排版）
 nums = {}
 def walk(o, path):
     if isinstance(o, dict): [walk(v, f'{path}.{k}') for k, v in o.items() if k not in SKIP]

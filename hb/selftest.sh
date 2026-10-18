@@ -36,11 +36,16 @@ print('  ✓ 文档提到的文件都在' if not bad else ''); sys.exit(1 if bad
 PY
 echo "4 · 常驻文档预算"
 C=$(wc -m < "$R/SKILL.md" | tr -d ' '); [ "$C" -le 12000 ] && ok "SKILL.md $C 字符（≤ 12000）" || bad "SKILL.md $C 字符，超过 12000：把细节挪到 workflows/ 或 references/，SKILL.md 只留路由和纪律"
+echo "4b · 元数据与工程纪律"
+grep -qE '^agent_created: *true' "$R/SKILL.md" && ok "SKILL.md agent_created: true" || bad "SKILL.md frontmatter 缺 agent_created: true（skill_manage 需要）"
+BAD=$(grep -nE 'open\(' "$HB"/*.py 2>/dev/null | grep -v 'encoding' | grep -vE "urlopen|[A-Za-z_][A-Za-z0-9_]*\.open|'(rb|wb|ab)'|\"(rb|wb|ab)\"" | wc -l | tr -d ' ')
+[ "$BAD" = "0" ] && ok "文本 open 全部带 encoding" || bad "有 $BAD 处文本 open 缺 encoding（grep open 检查）"
+grep -q 'hyphens:auto' "$HB/hb.py" && bad "hb.py 又出现 hyphens:auto（西文断词已关闭，见 ROADMAP P1-9）" || ok "西文不断词（hyphens:auto 已关闭）"
 [ "$1" = "--quick" ] && { [ $FAIL = 0 ] && echo "SELFTEST: PASS（quick）" || echo "SELFTEST: FAIL"; exit $FAIL; }
 echo "5 · 构建回归"
 mkdir -p "$T"
 for y in "$R"/templates/book.*.yaml; do n=$(basename "$y" .yaml); mkdir -p "$T/$n"; cp "$y" "$T/$n/book.yaml"
-  python3 -c "import yaml,sys;b=yaml.safe_load(open(sys.argv[1],encoding='utf-8'));sys.exit(0 if b.get('book',{}).get('style','photo')!='photo' or all(p.get('layout') in ('FULL','ONE','TWO','CARDS','STAGGER','GRID','COLLAGE','MIX','PAPER') for p in b['pages']) else 3)" "$y" || { echo "  - $n：需要照片，跳过"; continue; }
+  python3 "$HB/make_test_photos.py" "$T/$n" "$T/$n/book.yaml" >/dev/null 2>&1 || { echo "  ✗ $n：合成测试照片生成失败"; FAIL=1; continue; }   # 照片模板用 CC0 合成图补齐引用，不再跳过（F53/照片回归）
   bash "$HB/run.sh" "$T/$n" > "$T/$n.log" 2>&1 && ok "$n" || bad "$n（日志 $T/$n.log）"; done
 mkdir -p "$T/brand"; python3 - "$R" "$T/brand" <<'PY'
 import yaml, sys
@@ -51,11 +56,16 @@ PY
 bash "$HB/run.sh" "$T/brand" > "$T/brand.log" 2>&1 && ok "品牌包 allas（中英）" || bad "品牌包 allas（日志 $T/brand.log）"
 python3 "$HB/subset.py" "$R" "$T/swiss" 1,5,9,10 --src "$R/templates/book.layouts.yaml" --lang zh style=swiss >/dev/null
 bash "$HB/run.sh" "$T/swiss" > "$T/swiss.log" 2>&1 && ok "瑞士单色档" || bad "瑞士单色档（日志 $T/swiss.log）"
-for st in stijl geo; do python3 "$HB/subset.py" "$R" "$T/$st" 1,4,5,6,9,10 --src "$R/templates/book.layouts.yaml" --lang en style=$st >/dev/null
-  bash "$HB/run.sh" "$T/$st" > "$T/$st.log" 2>&1 && ok "风格 $st" || bad "风格 $st（日志 $T/$st.log）"; done
+for st in stijl geo editorial notebook inkwash papercut riso aurora nebula; do python3 "$HB/subset.py" "$R" "$T/$st" 1,4,5,6,9,10 --src "$R/templates/book.layouts.yaml" --lang en style=$st >/dev/null
+  bash "$HB/run.sh" "$T/$st" > "$T/$st.log" 2>&1 && ok "风格 ${st}" || bad "风格 ${st}（日志 $T/$st.log）"; done
 python3 "$HB/subset.py" "$R" "$T/stijl_beat" 1,4,5,6,9,16 --src "$R/templates/book.layouts.yaml" --lang zh style=stijl look=beat >/dev/null
 bash "$HB/run.sh" "$T/stijl_beat" > "$T/stijl_beat.log" 2>&1 && ok "风格派节奏画法" || bad "风格派节奏画法（日志 $T/stijl_beat.log）"
 for cv in a5 xhs; do python3 "$HB/subset.py" "$R" "$T/$cv" 1,4,13 --src "$R/templates/book.layouts.yaml" --lang zh canvas=$cv >/dev/null
   bash "$HB/run.sh" "$T/$cv" > "$T/$cv.log" 2>&1 && ok "画布 $cv" || bad "画布 $cv（日志 $T/$cv.log）"; done
-[ $FAIL = 0 ] && { echo "SELFTEST: PASS"; rm -rf "$T"; } || echo "SELFTEST: FAIL（构建目录 $T 留着查）"
+echo "6 · 图片与打印回归"
+python3 "$HB/test_photo_layout.py" && ok "固定页图片与正文" || bad "图片与打印回归"
+if [ $FAIL = 0 ]; then
+  echo "SELFTEST: PASS"
+  if [ -n "$HB_SELFTEST_KEEP" ]; then echo "构建目录：$T"; else rm -rf "$T"; fi
+else echo "SELFTEST: FAIL（构建目录 $T 留着查）"; fi
 exit $FAIL

@@ -24,12 +24,11 @@ def font(m):
 h = re.sub(r'src="((?!data:|https?:)[^"]+)"', img, h)
 h = re.sub(r'url\((fonts/[^)]+)\)', font, h)
 h = h.replace('"Noto Serif CJK SC"', '"Noto Serif CJK SC","Noto Serif SC"').replace('"Noto Sans CJK SC"', '"Noto Sans CJK SC","Noto Sans SC"')
-GF = ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900'
-      '&family=Noto+Serif+SC:wght@600;700;900&display=swap">')
+# 字体已在上面 base64 内嵌（woff2/woff），不再注入 Google Fonts 外链：离线可用，也不把收件人 IP/UA 暴露给第三方（F12）
 STYLE = ('<meta name="viewport" content="width=840"><style>body{background:#8a8f8c}'
          '.page{margin:20px auto;box-shadow:0 4px 24px rgba(0,0,0,.25)}'
          '@media print{body{background:none}.page{margin:0;box-shadow:none}}</style>')
-h = h.replace('<head>', '<head>' + GF + STYLE, 1)
+h = h.replace('<head>', '<head>' + STYLE, 1)
 lic = os.path.join(base, 'fonts', 'LICENSES.txt')   # 字体许可随网页附上（IPA 字体用于网页嵌入时的要求；OFL 也建议附上）
 if os.path.exists(lic):
     t = open(lic, encoding='utf-8').read().replace('&', '&amp;').replace('<', '&lt;')

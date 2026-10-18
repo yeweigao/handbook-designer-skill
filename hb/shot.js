@@ -2,7 +2,8 @@
 const {chromium}=require('playwright');const fs=require('fs');const path=require('path');
 const dir=path.resolve(process.argv[2]||'.');const mode=process.argv[3]||'all';const Q=path.join(dir,'.qa');fs.mkdirSync(Q,{recursive:true});
 // 先用 playwright 自带的 chromium；不行再找系统里的 chromium/chrome
-const launch=async()=>{try{return await chromium.launch({args:['--no-sandbox']})}catch(e){const exe=require('child_process').execSync('which chromium || which chromium-browser || which google-chrome || true').toString().split('\n')[0].trim();if(!exe)throw e;return chromium.launch({executablePath:exe,args:['--no-sandbox']})}};
+const launch=async()=>{try{return await chromium.launch({args:['--no-sandbox']})}catch(e){const exe=process.env.HB_CHROME||require('child_process').execSync('which chromium || which chromium-browser || which google-chrome || true').toString().split('\n')[0].trim();if(!exe)throw e;return chromium.launch({executablePath:exe,args:['--no-sandbox']})}};
+const friendly=e=>{const m=String(e&&e.message||e);if(/ERR_FILE_NOT_FOUND|ENOENT/.test(m))return '找不到页面文件 book.html：先运行 bash hb/run.sh <项目> 生成页面';if(/Executable doesn.t exist|browserType\.launch|Failed to launch/i.test(m))return '浏览器启动失败：cd hb && npm install && npx playwright install chromium（或安装系统 Chrome/Edge）';return null};
 (async()=>{const b=await launch();
 const p=await b.newPage({viewport:{width:794,height:1123},deviceScaleFactor:1});await p.goto('file://'+path.join(dir,'book.html'),{waitUntil:'networkidle'});
 await p.waitForFunction(()=>document.body.dataset.ready==1,{timeout:30000});await p.waitForTimeout(300);
@@ -29,9 +30,9 @@ fs.writeFileSync(path.join(Q,'sparse.json'),JSON.stringify(await p.evaluate(()=>
 info.ov.push(...JSON.parse(await p.evaluate(()=>document.body.dataset.cnqa||'[]')));   // 内容版式网格的自检（fill.js canon()）
 {const ln=await p.evaluate(()=>document.body.dataset.cnlines||'');if(ln)console.log(`[书写线收紧] 第 ${ln} 页内容偏多：多行书写线自动少了几行（每组至少留 1 行）→ 要留足书写空间就拆页`)}
 {const tg=await p.evaluate(()=>document.body.dataset.cntight||'');if(tg)console.log(`[字号收紧] 第 ${tg} 页内容偏多：导语、小标题、标签自动小了一档（正文字号不变）→ 能拆页就拆页`)}
-fs.writeFileSync(path.join(Q,'b3.json'),JSON.stringify(info.out));fs.writeFileSync(path.join(Q,'overflow.json'),JSON.stringify(info.ov));console.log('overflow',JSON.stringify(info.ov));
+fs.writeFileSync(path.join(Q,'b3.json'),JSON.stringify(info.out));fs.writeFileSync(path.join(Q,'overflow.json'),JSON.stringify(info.ov));fs.writeFileSync(path.join(Q,'schema.json'),JSON.stringify({v:1,b3:1,overflow:1,sparse:1}));console.log('overflow',JSON.stringify(info.ov));
 const pages=await p.$$('.page');
 if(mode!='bg'){for(let i=0;i<pages.length;i++)fs.writeFileSync(path.join(Q,`pg${i}.png`),await pages[i].screenshot({type:'png'}));}
 await p.evaluate(()=>{const st=document.createElement('style');st.textContent='*:not(#hb_a):not(#hb_b){color:transparent!important;-webkit-text-fill-color:transparent!important;-webkit-text-stroke-color:transparent!important;border-color:transparent!important;text-shadow:none!important}.gt,.cdn,.cn-ino::after{background:none!important}';document.head.appendChild(st)});
 for(let i=0;i<pages.length;i++)fs.writeFileSync(path.join(Q,`bg${i}.png`),await pages[i].screenshot({type:'png'}));
-await b.close();process.exit(0)})().catch(e=>{console.error(e);process.exit(1)});
+await b.close();process.exit(0)})().catch(e=>{const f=friendly(e);if(f)console.error(f);else console.error(e);process.exit(1)});

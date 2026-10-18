@@ -97,6 +97,10 @@ for k, v in tails.items():
     if v >= 2 and count(k) >= 4: issues.append(('同一内容出现在不同条目里', f'“{k[:60]}”（{v} 处）'))
 for l in lines:
     if re.search(r'(?<![\d.:])\b\d{1,3}\s*/\s*\d{1,3}\b(?![\d/])', l) and not re.search(r'\d{4}', l): issues.append(('页码样式文字', plain(l)[:60]))
+_artf = os.path.join(P, '.qa', 'artifacts.txt')
+_arts = [l.strip().split('：', 1)[-1].strip() for l in open(_artf, encoding='utf-8')] if os.path.exists(_artf) else []
+_arts = [a for a in _arts if a and not a.startswith('#')]
+if _arts: issues.append(('页码 artifacts', f'{len(_arts)} 处已按页码排除（{"、".join(_arts[:6])}）：页脚页码不当正文，成品用手册自动页码；其中若混了真正文，改 doc.md 删掉该行'))
 for m in re.finditer(r'\b(\w+)\s+\1\b', md, re.I):
     if not m.group(1).isdigit(): issues.append(('连续重复的词', m.group(0)))
 try:

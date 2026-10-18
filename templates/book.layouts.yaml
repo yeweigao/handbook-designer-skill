@@ -63,7 +63,7 @@ pages:
   kicker: {zh: Three Themes · 三条主线, en: Three themes}
   title: {zh: 文化 · 生态 · 科学, en: Culture · Ecology · Science}
   items:
-    - {k: Culture, t: {zh: 古城里的兰纳, en: Lanna in the old city}, x: {zh: 在帕辛寺和周日夜市完成“古城侦探”任务，用速写和采访记录一个手艺人的一天。, en: 'Solve the “old-city detective” task at Wat Phra Singh and the Sunday market, sketching a craftsperson’s day.'}}
+    - {k: Culture, t: {zh: 古城里的兰纳, en: Lanna in the old city}, x: {zh: 在帕辛寺和周日夜市完成“古城侦探”任务，用速写和采访记录一个手艺人的一天。, en: 'Old-city detective task at Wat Phra Singh and the Sunday market.'}}
     - {k: Ecology, t: {zh: 雨林与大象, en: Rainforest and elephants}, x: {zh: 在保育营观察亚洲象的行为，学习保育员如何用数据追踪每一头象的健康。, en: 'Watch Asian elephants and see how keepers track their health with data.'}}
     - {k: Science, t: {zh: 大学实验室, en: The university lab}, x: {zh: 在清迈大学物理系完成小车与斜面实验，把测量结果画成第一张属于自己的图表。, en: 'Run the cart-and-ramp experiment and turn your measurements into your first chart.'}}
 

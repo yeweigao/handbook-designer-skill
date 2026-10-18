@@ -4,6 +4,8 @@
 
 **和内容版式是同一个引擎**（`hb/flow.py` + `hb/canon.py` + `hb/fill.js`）：同一张 6 栏 × 28px 行线的网格、同一套字号档、同一套行宽规则、同一个放不下时的处理顺序（layouts.md §0）。所以这里写的 px 数值（`h`、`size`、`mt`、`space`、`fill`、`kw`、`split`、`strip`、`body_top`、窗口 `size`）都**不是精确尺寸，会吸到最近的整行、整栏或字号档**——写个大概就行，表里的数是默认值。
 
+组件控制样张：`references/gallery/timeline_axis.jpg`（连续五天时间轴）、`references/gallery/spread_bottom.jpg`（下部共享跨页图框；使用程序生成的控制图，无第三方照片）。
+
 ## 0. book 设置
 ```yaml
 book:
@@ -29,11 +31,12 @@ pages:
 |---|---|---|---|---|---|
 | PAPER | 1 | — | header, body_top | body（6 栏整宽） | 没有合适照片的页：规章、日程表、通讯录、附录、笔记页、签署页 |
 | POSTER | 1 | image* | focus, target, zoom, header, fig, folio:false | top、bottom 里的块会被归到封面的空位（见下） | 封面、致辞/欢迎信、章节扉页、尾页、封底 |
-| T / B | 1 | image* | T: split(330), body_top；B: split(760)；focus, target, zoom | T: on_photo（白字，贴照片下沿）+ body（纸面）；B: body 在上 + on_photo 在下 | 带主题图的内容页、任务页、评价页、成果页 |
+| T / B | 1 | image* | T: split(330) 或 photo_rows(9), body_top；B: split(760) 或 photo_rows(24)；focus, target, zoom | T: on_photo（白字，贴照片下沿）+ body（纸面）；B: body 在上 + on_photo 在下 | 带主题图的内容页、任务页、评价页、成果页 |
 | SL / SR | 1 | image* | strip(270)：≥ 340 时照片占 3 栏，否则 2 栏 | body（其余几栏） | 长清单、长任务单、表单 |
 | HOLE | 1 | image* | window: tr/tl/br/bl, size:[300,250]（= 2–3 栏 × 5–18 行） | beside（窗旁边几栏）、body（窗下/上整宽；beside 写长了 body 自动往下让） | 目标、要点、实验、安全须知 |
 | SPREAD_P | 2 | image*(横图) | target | left/right 各自 {header, top, bottom, fig} | 总览｜公约、章节扉页、目录式大图 |
 | SPREAD_H | 2 | image*(横图) | body_top(548) | left{header,on_photo,body}、right{header,on_photo(自动贴照片底),body} | 一个单元（一天/一章/一个模块）的主力页：上半图+标题+要点，下半写/读 |
+| SPREAD_H（下部主图） | 2 | image*(横图)、image_position: bottom | split(564) | left/right各自body | 上部两页联合编辑，下部一张照片连续贯穿纸边与中缝；适合合照，文字不盖人脸 |
 | SPREAD_OPENER | 2 | image*(横图) | right_layout: SL 或 T | left{header,top,bottom,fig}、right{header,body,(T 时 on_photo, body_top)} | 章节开篇 + 第一页内容 |
 
 - **照片和纸面的交界是硬边，落在行线上**（T/B、SPREAD_H 的 split / body_top 吸到最近的行线；侧条的内沿在栏间中线上）。深色字只写在纸面上，照片上只放 on_photo 的白字，字下面自动压暗。浅色插画上写字时，插画停在文字上方一行，下面垫一块纸。
@@ -52,6 +55,7 @@ pages:
 
 | block | 写法 | 说明 |
 |---|---|---|
+| 系列页头 | `{series_header: {series: highlights, item: '01'}}` | 栏目、序号、主标题共用一个组件；标题从book.series登记读取，不在单页覆盖。续页加continuation: true，可另给title说明本页任务 |
 | 大字 | `{display: 标题, size: 56, color: gold, stroke: 1.2, gradient: energy}` | 海报标题、单元编号（Day 1 / Unit 3 / 第一章）。size 吸到 23 · 33 · 47 · 56 · 72 · 96 · 120 · 160（和网格字号同一套档） |
 | 标题 | `{title: 页标题, kicker: Small Label, sub: 斜体副题, size: 34}` | 纸面上的页标题：默认 47px 档；size ≤ 30 → 33px 档，≥ 52 → 展示大字 |
 | 英文副题 | `{en: A Letter Before Takeoff}` | 斜体 |
@@ -62,7 +66,9 @@ pages:
 
 | block | 写法 | 说明 |
 |---|---|---|
-| 书信 | `{letter: [段1, 段2]}` | 致辞页（≥ 4 栏宽时用 23px 导语档） |
+| 书信 | `{letter: [段1, 段2], sign: '署名 · 机构'}` | 致辞页（≥ 4 栏宽时用 23px 导语档）；`sign` 是独立小字号落款，吸在正文下方，不占 letter 行距 |
+| 阅读流向 | `{p: '一段连续正文', flow: keep}` / `flow: columns` | p/letter 默认auto；keep保留同一阅读块，仍自然换行；columns明确两栏；统计与时间地点先按 adaptation.md 组织 |
+| 连续时间轴 | `{timeline: [[D1, 'Fri · Arrival', 'Evening\n活动说明'], [D2, 'Sat · Session', '活动说明']], style: axis, next: 'D3 →'}` | 日期/星期或主题/说明是三层；竖轴、节点和大号日期统一。跨页使用相同组件和栏宽；next是可选导航提示 |
 | 清单 | `{items: [..], heading: 小标题, style: big}` | 原文的项目符号列表；style:big 为大号编号（窄栏里条目回到正文字号） |
 | 键值 | `{kv: [[左, 右], …], kw: 90}` | 日程、时间表、联系方式、术语表；kw 吸到整栏 |
 | 任务大标题 | `{task: A, name: 任务名, sub: 副题}` | 大号字母/编号 + 标题 |
@@ -99,8 +105,27 @@ pages:
 | logo 墙 | `{logos: [a.png, b.svg], h: 40}` | 主办方、合作机构；只放封面/封底 |
 
 - `display` 加 `stroke: 1.2` = 描边空心大字（章节号、L1–L4），自动转成矢量路径（不产生 Type 3 字体）；`display` 里可用 `<br>` 断行。
-- `cards` 的每一项可以写成 `{k: 眉标, t: 标题, x: 说明, img: 图标.png}`；`style: line` = 线条式（发丝线分隔、无底框），比白卡片更像印刷品。
-- `figure` 加 `bleed: right | left | both` = 出血到页边；`figure: logo.svg` 矢量直接嵌入。
+- `cards` 的每一项可以写成 `{k: 眉标, t: 标题, meta: [地点, 类型], x: 说明, img: 图标.png}`；meta分别显示信息字段，不把副名/地点用分号拼入正文。`style: line` = 线条式（发丝线分隔、无底框），比白卡片更像印刷品。
+- 系列先在项目登记，再在全部成员页引用；`item`加引号，避免丢前导零。配图位置可按内容变化，不能因此另拼一种系列标题。示例：
+  ```yaml
+  book:
+    series:
+      highlights:
+        label: HIGHLIGHT
+        items: {'01': Cultural Night, '02': Eco-Diplomat Field Day}
+  pages:
+    - layout: PAPER
+      body:
+        - series_header: {series: highlights, item: '01'}
+  ```
+- `timeline`的`style: axis`除了旧`[日期, 主题, 说明]`，也支持`{k: D1, t: Arrival, period: Evening, events: [Check-in, Dinner]}`。period为原文已知时段，events为活动清单；不为每项臆配钟点。普通竖向timeline可用第三字段为节点说明，不必用分隔符拼进主题。
+- `items`默认有序；无顺序清单用`style: bullet`（圆点）或`style: plain`（无标记但保留列表语义）。包含/不含等已由栏目分组、逐行可辨的短信息优先plain，避免再生成一排短横；不能自动设计成步骤。原稿Markdown的`-`是格式线索，不是要印出的文字。
+- `logos`在深色纸面上可写`frame: true`，整组保留白底承托；不把原logo反色、裁切或重画。改完仍需看实际图，确认原图含透明字/深色字时可读。
+- 系列组件控制预览：`references/gallery/series_header.jpg`；时间轴结构化活动预览：`references/gallery/timeline_axis.jpg`。均为自编控制文案，不含用户照片，不代表真实内容已通过审稿。
+- `figure` 加 `bleed: right | left | both` = 出血到页边；项目的 `book.image_bleed: both` 统一作用于整版心的 figure/gallery，图组接成出血照片带。栏内小图不自动越过旁边的正文，应重组页面或选择 T/SL 等接纸边版式。二维码、logo、图表用 `role: qr | logo | diagram` 保持完整。
+- 独立 `PAPER` 图版只放 `{figure: poster.jpg, bleed: page}`，并写 `folio: false`，图片覆盖四边。正文/说明移到相邻页，不能追加在满页图下方。
+- `cards` 的两栏奇数条目可写 `balance: true`：末项横跨两栏，但标题和说明仍各占一个阅读栏，不把说明拉成整行。
+- `figure: logo.svg` 矢量直接嵌入。
 - 图片写 `ai:编号`（版式 image、figure、产品卡 image）= AI 配图位，见 references/images.md §4；页上写 `tone: dark | light` 指定图上文字用白字还是深色字。
 
 清晰度：构建时 hb.py 按实际显示尺寸估算 dpi，低于 96 会提示“满版会糊”、96–130 提示“印刷偏软”。插图显示得越小越清楚。
@@ -108,27 +133,30 @@ pages:
 ### YAML 易错点
 - 花括号 `{…}` / 方括号 `[…]` 里的文字含有半角 `: , ? # [ ] { }` → **给整段文字加引号**：`{p: '时间：9:00, 地点：礼堂'}`。英文原文几乎每句都有逗号，`items: [...]` 里每条都要加引号，否则一条会被拆成两条。
 - 中文全角标点（，：？）不受影响。
+- 需要任意 HTML 用 `{html: …}` 块：它**不做转义**，只用于你确认可信的内容；来自原文 / 第三方的文字不要放进 `{html:}`。
 - 像数字的文字会被当成数字：`[Day 1, 11.20]` 会印成 “11.2”，`08:30` 在某些写法下也会变形 → 日期、时间、编号统一加引号：`'11.20'`、`'08:30'`。
 - hb.py 会指出出错的行号。
 
 ## 3. 容量预算（按行算，排页前估算）
-A4 版心 32 行（行距 28px）。各文字区大约有：PAPER 32 行 · T（split 330）纸面约 22 行 · B（split 760）纸面约 23 行 · SL/SR 32 行（3–4 栏宽）· HOLE 窗旁 ≈ 窗高、窗下 ≈ 32 − 窗高 − 1 · SPREAD_H 每页纸面约 16 行。
+网格与容量常数见 layouts.md §0（A4 版心 32 行）。各文字区大约有：PAPER 32 行 · T（split 330）纸面约 22 行 · B（split 760）纸面约 23 行 · SL/SR 32 行（3–4 栏宽）· HOLE 窗旁 ≈ 窗高、窗下 ≈ 32 − 窗高 − 1 · SPREAD_H 每页纸面约 16 行。
 常见块占几行：kicker + title 3 · task 3 · p 每行 1（整宽 6 栏 40 个汉字或约 75 个英文字母一行；4 栏 26 字、3 栏 19 字）· items 每条 1–2 · kv 每行 1 · step（引导词 + 2 行书写 + 1 个填写栏）≈ 5 · q 最少 4 · table 每行 lines 行 + 表头 1 · box = h ÷ 28 · figure = h ÷ 28 + 图注 1 · stats 3 · quote 每行 1 + 署名 2 · 块间 1。
 英文比中文长 30–60%：同样内容的西文版要留更多余量。
 超出预算时引擎会先缩图、收空行、少书写线、缩标题（layouts.md §0），构建时报 `[书写线收紧]` `[字号收紧]` 的页最好拆开：把原文挪到相邻页（不要删原文、不要手写小字号）。
 
 ## 4. 图片
 - 资料里自带的图（PPT/Word/PDF）：`new_project.sh` 已用 `extract.py` 抽到 photos/，先看 `images.md` 和 `photos/_contact.jpg`；`doc.md` 的注释写着每页原来配哪几张图。照片按“建议用法”进版式，图形（截图、图表）只进 `figure`。
+- **主图与辅助图分工**：主要现场照（人物、场馆、活动主体）进主图位（版式 `image`、ONE/TWO/MIX 的主图带、跨页、POSTER）；`figure` / `gallery` 只放辅助图、图形（截图、图表）和小图；不要靠执行者碰巧选对 ONE——主图位不够就换版式或拆页（会报 `[主图过小]`）。
 - 横图（宽 ≥ 1.4×高）→ 跨页；竖图 → POSTER；任意 → T/B/SL/SR/HOLE。
 - 按内容选图：每个单元用和它对应的地点/活动/对象；同一张图不要用两次；主体（人脸、建筑）别放在文字区。
-- 印刷清晰度：A4 单页图 ≥ 2500px 宽、跨页图 ≥ 5000px 宽才能撑到 300dpi；手机原图一般够单页。低于 1600px 的图只适合小区域（HOLE、SL/SR 侧条、figure）。
+- 印刷清晰度：档位以 images.md §2 为准（A4 单页 ≥ 2500px、跨页 ≥ 5000px 撑 300dpi；低于 1500px 只适合小区域：HOLE、SL/SR 侧条、figure）。
+- 主图可见高度 < 150px（封面 / 跨页 / ONE / TWO / MIX 的主图带）会报 `[主图过小]`：减少该页文字或拆页，不要把合照压成一条边。
 - 没有照片：先问用户要（活动现场、学校、产品、往届照片都行）；拿不到就用无图风格（style.md §1），或 photo 风格 + `image: placeholder` 占位；环境里有图像生成工具时可以生成，提示词骨架：`documentary photo, {场景}, natural light, {时间}, wide angle, no text, 3:2`（横图）/ `2:3`（竖图）——在交付说明里标明哪些是生成图。
 
 ## 5. 照片版式的节奏（进阶模式）
 | layout | 页数 | 样子 | 常见用途 |
 |---|---|---|---|
 | POSTER | 1 | 满版照片，白字 + 自动渐进压暗 | 封面、欢迎信/致辞、章节扉页、封底 |
-| PAPER | 1 | 纯纸面，无照片 | 规章、日程表、通讯录、附录、笔记页、签署页 |
+| PAPER | 1 | 纯纸面，无照片；`surface: paper / A / B / dark`，见style.md §8 | 规章、日程表、通讯录、附录、笔记页、签署页 |
 | T / B | 1 | 照片在上 / 在下（硬边落在行线上），其余是纸面 | 带主题图的内容页、任务页、评价页 |
 | SL / SR | 1 | 照片在左 / 右侧条（出血到页边，内沿在栏间中线上），文字在其余几栏 | 长清单、长任务单、表单 |
 | HOLE | 1 | 版心里开一个窗（2–3 栏 × 若干行）放照片 | 目标、要点、实验、安全须知 |

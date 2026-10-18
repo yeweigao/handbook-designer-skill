@@ -10,8 +10,16 @@
 import os, sys, json
 import yaml
 
-W, H = 794, 1123
 RATIOS = [('1:1', 1.0), ('2:3 竖', 2 / 3), ('3:2 横', 1.5), ('3:4 竖', .75), ('4:3 横', 4 / 3), ('9:16 竖', 9 / 16), ('16:9 横', 16 / 9)]
+
+def canvas(P):
+    """画布尺寸：读 hb.py 构建时写的 map.json（W/H 按 book.canvas 实际算：a4 / a5 / xhs）；
+    还没有 map.json（没构建过）时按 A4 794×1123 估。"""
+    try:
+        m = json.load(open(os.path.join(P, 'map.json'), encoding='utf-8'))
+        return int(m.get('W') or 794), int(m.get('H') or 1123)
+    except (OSError, ValueError, TypeError):
+        return 794, 1123
 
 def zones(boxes, x0, y0, w, h):
     """把落在图上的文字框聚成几块，返回相对图片的百分比区域"""
@@ -29,10 +37,11 @@ def main(P):
     sp = os.path.join(P, '.qa', 'ai_slots.json')
     if not os.path.exists(sp): return
     S = json.load(open(sp, encoding='utf-8')); slots = S['slots']
+    W, H = canvas(P)   # 图位尺寸按项目的实际画布算（a5 / xhs 不再是 A4 的数字）
     if not slots:
         if os.path.exists(os.path.join(P, 'image_brief.md')): os.remove(os.path.join(P, 'image_brief.md'))
         return
-    boxes = json.load(open(os.path.join(P, '.qa', 'b3.json'))) if os.path.exists(os.path.join(P, '.qa', 'b3.json')) else []
+    boxes = json.load(open(os.path.join(P, '.qa', 'b3.json'), encoding='utf-8')) if os.path.exists(os.path.join(P, '.qa', 'b3.json')) else []
     spec = yaml.safe_load(open(os.path.join(P, 'ai_images.yaml'), encoding='utf-8')) if os.path.exists(os.path.join(P, 'ai_images.yaml')) else {}
     imgs = spec.get('images', {}) or {}; suffix = (spec.get('style') or '').strip(); neg = (spec.get('negative') or '').strip()
     seen = {}; out = ['# 图片需求单（hb/brief.py 按版式自动生成，重跑 run.sh 会更新）', '']

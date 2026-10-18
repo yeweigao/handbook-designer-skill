@@ -45,6 +45,12 @@ def setup(name, body=None):
     W, H, COL, GUT, TOP, IN, OUT, LAST, LH, BS = CANVAS[key]; S = LH / 24; K = W / 794
     return W, H
 def L(n): return round(n * LAST / 38)   # A4 上的第 n 行 → 当前画布上对应的行
+def nrows(px, d=18, lo=2, hi=40):
+    """旧写法的高度（像素）→ 整行数（照片位、方框的高度落在行线上；A4 上 520px ≈ 19 行、300px ≈ 11 行）。
+    和 flow.nrows 同一套换算（flow 导入 canon，这里不能再回头 import flow）。"""
+    try: v = float(px) if px is not None else d * LH
+    except (TypeError, ValueError): v = d * LH
+    return max(lo, min(hi, round(v / LH)))
 def left(r): return IN if r else OUT
 def x(c, r): return left(r) + (c - 1) * (COL + GUT)
 def xe(c, r): return x(c, r) + COL
@@ -65,12 +71,15 @@ def tokens(sf):
     if sf in ('D', 'S', 'X') and G.get('STYLE') == 'stijl':   # 风格派的三原色格（stijl.py）
         import stijl; return stijl.tok(sf)
     T = h.TH_; A, B, P, INK = T['A'], T['B'], T['PAPER'], T['INK']
-    if QUIET() and sf in ('paper', 'A', 'B'):   # 单色：只有纸色和浅灰两种底；标题、标签用墨色，强调色只给编号、数字、**强调**
+    if sf == 'dark':
+        bg = INK; fg = max(('#FFFFFF', '#000000'), key=lambda c: contrast(c, bg))
+        return dict(bg=bg, fg=fg, hd=fg, acc=fg, num=fg, lab=fg, mut=rgba(fg, .84), rule=fg, line=rgba(fg, .38))
+    if QUIET() and sf in ('paper', 'B'):   # 单色默认纸色/浅灰；显式 A 保留主题色纸面
         bg = T['TINT'] if sf == 'B' else P
         return dict(bg=bg, fg=INK, hd=INK, acc=A if contrast(A, bg) >= 4.5 else INK, num=A if contrast(A, bg) >= 3 else INK, lab=INK, mut=T['MUT'], rule=INK, line=rgba(INK, .3))
     if MODE() != 'clash' and sf in ('paper', 'A', 'B'):   # 点缀 / 单色档：A = 主色整块（只给封面、章节页），B = 次级背景（浅色块），强调色只上数字、标签、细线
         if sf == 'A':
-            bg = A; fg = '#FFFFFF' if contrast('#FFFFFF', A) >= 4.5 else INK   # 彩色块上只用白字或正文色
+            bg = A; fg = '#FFFFFF' if contrast('#FFFFFF', A) >= 4.5 else '#000000'   # 实色纸面按对比度选白字/黑字
             return dict(bg=bg, fg=fg, hd=fg, acc=fg, num=fg, lab=fg, mut=rgba(fg, .84), rule=fg, line=rgba(fg, .38))
         bg = T.get('TINT') or (P if sf == 'paper' else _mix(P, A, .07)) if sf == 'B' else P
         acc = A if contrast(A, bg) >= 5 else _on5(bg, T['G'], T['OCH'], INK)
@@ -101,17 +110,20 @@ def vs(sf): return ''.join(f'--{k}:{v};' for k, v in tokens(sf).items() if k != 
 def other(sf): return 'B' if sf == 'A' else 'A'
 
 # ---------------------------------------------------------------- 底色节奏
-SURF_ALIAS = {'a': 'A', 'brand': 'A', 'split': 'A', 'ink': 'A', 'b': 'B', 'pop': 'B', 'paper': 'paper', 'tint': 'paper', 'image': 'image', 'photo': 'image'}
+SURF_ALIAS = {'a': 'A', 'brand': 'A', 'split': 'A', 'ink': 'A', 'b': 'B', 'pop': 'B', 'paper': 'paper', 'tint': 'paper', 'dark': 'dark', 'image': 'image', 'photo': 'image'}
 ST = dict(prev=None, last='B', count={}, run=0)
 def choose(lay, p, variants):
     """variants = [(变体名, 主底色)]。页上写了 surface 就用对应的变体；否则不和上一页同底、A/B 色块交替、同版式再出现时换下一种。"""
     k = ST['count'].get(lay, 0); ST['count'][lay] = k + 1
+    want = SURF_ALIAS.get(str(p.get('surface', '')).strip().lower())
+    if want:   # 显式选底优先于用色档位的默认节制
+        for v in variants:
+            if v[1] == want: return v[0], v[1]
     if QUIET():   # 瑞士单色：没有主色整块，“A 色块”一律是纸色
         variants = list(dict.fromkeys((n, 'paper' if d == 'A' else d) for n, d in variants))
     elif MODE() != 'clash' and lay != 'FULL':   # 点缀档：主色整块只留给封面、章节页（FULL）；其他页的“A 色块”换成次级背景，强调色只上数字和线
         variants = list(dict.fromkeys((n, 'B' if d == 'A' else d) for n, d in variants))
-    want = SURF_ALIAS.get(str(p.get('surface', '')).strip().lower())
-    if p.get('surface') and not want: h.WARN.append(f'第{h.CURN}页：surface 只能写 paper / A / B / image（或旧写法 brand / pop / split / tint），已忽略 {p["surface"]}')
+    if p.get('surface') and not want: h.WARN.append(f'第{h.CURN}页：surface 只能写 paper / A / B / dark / image（或旧写法 brand / pop / split / tint），已忽略 {p["surface"]}')
     if want:
         for v in variants:
             if v[1] == want: return v[0], v[1]
@@ -148,12 +160,15 @@ def disp(t, mx=112, cols=None, mn=None, m=0, lines=3, cls='', style=''):
         tt = tt.replace(ch, ch + '\u200b')
     return f'<div class="cn-disp m{m} {cls}"{a} style="{W_(cols)}{style}">{tt}</div>' if t else ''
 def sub(t, m=0, cols=None): return f'<div class="cn-sub cn-snap m{m}" style="{W_(cols)}">{T_(t)}</div>' if t else ''
-def para(t, cls='', m=0, cols=None, style=''):
+def reading(flow):
+    if flow not in (None, 'auto', 'keep', 'columns'): raise ValueError('flow 可选 auto / keep / columns')
+    return f' data-reading="{flow}"' if flow else ''
+def para(t, cls='', m=0, cols=None, style='', flow=None):
     if t in (None, '', []): return ''
     if isinstance(t, list): inner = ''.join(f'<p>{T_(s)}</p>' for s in t)
     else: inner = f'<p>{T_(t)}</p>'
-    return f'<div class="cn-tx {cls} m{m}" style="{W_(cols)}{style}">{inner}</div>'
-def lead(t, m=0, cols=None): return para(t, 'cn-t20 cn-snap', m, cols)
+    return f'<div class="cn-tx {cls} m{m}"{reading(flow)} style="{W_(cols)}{style}">{inner}</div>'
+def lead(t, m=0, cols=None): return para(t, 'cn-t20 cn-snap', m, cols, flow='keep')
 def bullets(xs, m=0):
     return f'<ul class="cn-li cn-tx m{m}">' + ''.join(f'<li>{T_(s)}</li>' for s in xs) + '</ul>' if xs else ''
 def TX(v, m=0):   # 说明：一段文字 / 列表 → 短横线条目
@@ -226,6 +241,7 @@ PHWARN = set()
 def pic(v, w, hgt, idx=1, sf='A', label=True):
     """图片位里放什么：照片 / AI 配图 / 风格插画（无图风格）/ 色块 + 大号编号（照片风格没给图时，像是有意的设计，构建时提示补图）"""
     duo = None
+    fit = v.get('fit', 'cover') if isinstance(v, dict) else 'cover'
     if isinstance(v, dict): f, (fx, fy), duo = v.get('src'), tuple(v.get('focus', [.5, .5])), v.get('duo')
     else: f, (fx, fy) = v, (.5, .5)
     if f and str(f).startswith('ai:'):
@@ -237,7 +253,7 @@ def pic(v, w, hgt, idx=1, sf='A', label=True):
         if rel.endswith(('.jpg', '.jpeg', '.png')) and (duo is True or (duo is None and (mode == 'all' or (mode == 'auto' and weak(os.path.join(h.PROJ, rel)))))):
             rel = duotone(rel)
             if h.USE: h.USE[-1]['img'] = rel.split('/')[-1]; h.USE[-1]['duo'] = True
-        return f'<img class="cn-img" alt="" src="{rel}" style="object-position:{fx * 100:.0f}% {fy * 100:.0f}%">'
+        return f'<img class="cn-img" alt="" src="{rel}" style="object-fit:{fit};object-position:{fx * 100:.0f}% {fy * 100:.0f}%">'
     if h.STYLE != 'photo' and not NOART():   # 无图风格：生成风格插画（瑞士单色档、风格派、孟菲斯不生成，用色块 + 编号）
         d = os.path.join(h.PROJ, 'img'); os.makedirs(d, exist_ok=True)
         key = hashlib.md5(repr((h.STYLE, sorted(h.TH_.items()), h.CURN, idx, round(w), round(hgt), os.path.getmtime(h.art.__file__))).encode()).hexdigest()[:10]
@@ -313,6 +329,8 @@ def FULL(n, p):
     if G.get('STYLE') == 'stijl':   # 风格派：封面、封底、章节页是一整幅构成
         import stijl; return stijl.FULL(n, p)
     r = pg(n); v = p.get('image'); photo = has_photo(v) or (h.STYLE != 'photo' and v is not False and not NOART())
+    if p.get('inset') and not photo:   # 无图 POSTER 里的 figure/gallery 没有图位：明确报警，不静默丢内容
+        h.WARN.append(f'第{n}页：这一页没有照片（photo 关），其中的 figure / gallery 没有图位、会被丢弃 → 改用 logos 块，或换成有图的版式（T / TWO / MIX）')
     chapter = p.get('index') is not None
     T = h.esc; kids_bot = []
     bottom_blocks = (blocks(p.get('bottom'), 1, 5, r, 'image' if (has_photo(v) or (h.STYLE != 'photo' and v is not False and not NOART())) else 'paper') if p.get('bottom') else '') + brand_contact(p)
@@ -356,14 +374,16 @@ def FULL(n, p):
                  f'padding:{2 * LH}px 0 {H - y(LAST)}px {pad_l}px;{vs(bsf)}"><div style="width:{wd(1, 5)}px">{inner}</div></div>')
         return emit(n, p, r, 'image', body, 'image', name, fsf=bsf, fspan=(1, 5) if r else (2, 6), hsf='image')   # 页眉在照片 / 插画上，页码在色块里
     # 没有照片（照片风格）：整页撞色的字体海报——标题落在黄金分割附近，一轮“日”或章节号压出页边
-    if QUIET(): sf = choose('FULL', p, [('A', 'A'), ('B', 'B')])[1] if n != 1 else 'paper'   # 单色：纸色或浅灰，强调色只给章节号和一个圆点
+    if chapter and not p.get('surface') and p.get('alternate') is not True:
+        sf = 'paper' if QUIET() else 'A'   # 章节页默认统一 A 色块（四章翻起来一致；accent 档的 B 是浅色底，大章节号会看不见）。要轮换写 alternate: true，要指定底色写 surface
+    elif QUIET(): sf = choose('FULL', p, [('A', 'A'), ('B', 'B')])[1] if n != 1 else 'paper'   # 单色：纸色或浅灰，强调色只给章节号和一个圆点
     else: sf = choose('FULL', p, [('A', 'A'), ('B', 'B')])[0] if n != 1 else 'A'
     t = tokens(sf); o = tokens(other(sf)); body = ''
     D = wd(1, 4)
     bot = [lead(p.get('intro'), 0, 4), para(listify(p.get('text')), cols=4, m=1) if p.get('text') else '', stats_row(p.get('stats')),
            f'<div class="m1">{bottom_blocks}</div>' if bottom_blocks else '']
     has_bot = any(bot)
-    ixs, fl = (480, 19) if not has_bot else (320, 13)   # 章节号：页面只有章名时 480px（占到第 18 行）；下面还有导语、正文时降到 320px（占到第 12 行），给字让出行数
+    ixs, fl = (320, 13) if QUIET() or has_bot else (480, 19)
     if chapter:
         pos = f'right:{round(-48 * K)}px' if r else f'left:{round(-48 * K)}px'
         body += f'<div class="cn-a cn-num deco"{h.DECO} style="{pos};top:{y(0) - round(60 * K * ixs / 480)}px;font-size:{round(ixs * K)}px;line-height:{round(ixs * K)}px;color:{t["num"]};letter-spacing:-.04em">{T(str(p["index"]))}</div>'
@@ -380,25 +400,26 @@ def FULL(n, p):
         import geo; botl = geo.corner_line()
     else: botl = LAST
     if has_bot: body += stack(1, 6, r, bot, bot=botl, sf=sf, id_=sid(n, 'b'))
-    body += stack(1, 6, r, [lab(p.get('kicker')), disp(p.get('title'), 160, 6, 64), sub(p.get('en') or p.get('sub'))],
+    body += stack(1, 6, r, [lab(p.get('kicker')), disp(p.get('title'), 96 if QUIET() and chapter else 160, 6, 56 if QUIET() and chapter else 64, lines=2 if chapter else 3), sub(p.get('en') or p.get('sub'))],
                   top=L(14), sf=sf, id_=sid(n, 't'), gold=L(fl) if chapter else L(14), floor=L(fl) if chapter else (L(10) if p.get('deco', True) is not False else None), y1=f'{sid(n, "b")}.top-2' if has_bot else None)   # 章节号 480px 占到第 18 行，标题从它下面开始
     emit(n, p, r, sf, body, sf, fo=not geo_)   # 孟菲斯封面 / 封底 / 章节页：底边、下角是拼块，不放页码
 
 # ---------------------------------------------------------------- ONE 单栏：致辞、简介
-def body_row(n, p, cols_if_short=4):
-    """正文 + 引语：有引语 → 左三栏正文、右三栏引语；没有 → 字多分两栏，字少占四栏"""
+def body_row(n, p, cols_if_short=6):
+    """正文 + 引语：引语并列；多段中长文分两栏，短文使用整个版心。"""
     text = listify(p.get('text')); q = p.get('quote')
     if q:
         return (f'<div class="cn-2up m1" style="grid-template-columns:{wd(1, 3)}px {wd(1, 3)}px;column-gap:{GUT}px">'
                 + (para(text) or '<div></div>') + quote(q, p.get('by')) + '</div>')
-    long_ = chars(text) > (330 if h.CJK else 1100) * (14 / BS) ** 2
-    return para(text, 'cn-cols2' if long_ else '', m=1, cols=6 if long_ else cols_if_short)
+    flow = p.get('text_flow', 'auto')
+    long_ = flow == 'columns' or (flow == 'auto' and chars(text) > (330 if h.CJK else 300) * (14 / BS) ** 2)
+    return para(text, 'cn-cols2' if long_ else '', m=1, cols=6 if long_ else cols_if_short, flow=flow)
 def ONE(n, p):
     h.BUDGET(p, ['intro', 'text', 'quote'], .7)
     r = pg(n); v = p.get('image'); B_ = sid(n, 'b')
     if v:
         name_sf = 'paper'
-        body = box(0, 0, W, 10, pic(v, W, 520, 1, field_color()), 'cn-pic', y1r=f'{B_}.top-2', minh=144)
+        body = box(0, 0, W, 10, pic(v, W, nrows(520, 18) * LH, 1, field_color()), 'cn-pic', y1r=f'{B_}.top-2', minh=nrows(200, 8) * LH)   # 主图带最小约 200px（A4 约 7 个行距）：再小就报 cn-small，别把合照裁成一条
         ix = num(p['index'], 56, 72) if p.get('index') is not None else ''
         body += stack(1, 6, r, [ix, lab(p.get('kicker')), disp(p.get('title'), 64, 6, 40), sub(p.get('en') or p.get('sub')), lead(p.get('intro'), 1, 6), body_row(n, p)], bot=LAST, id_=B_)
         return emit(n, p, r, 'paper', body, 'image')
@@ -407,7 +428,7 @@ def ONE(n, p):
     body = field(0, 0, W, 10, sf, y1r=f'{B_}.top-2|{sid(n, "h")}.bottom+1', id_=F_, attr=f' data-clear="{B_}"')
     body += stack(1, 6, r, [body_row(n, p)], bot=LAST, id_=B_)
     ix = [num(str(p['index']), 80, 96)] if p.get('index') is not None else []
-    body += stack(1, 6, r, ix + head(p, 160, 6, 56, icols=4), top=0, sf=sf, id_=sid(n, 'h'), inside=F_, y1=f'{B_}.top-4')
+    body += stack(1, 6, r, ix + head(p, 112, 6, 56, icols=6), top=0, sf=sf, id_=sid(n, 'h'), inside=F_, y1=f'{B_}.top-4')
     emit(n, p, r, 'paper', body, sf)
 
 # ---------------------------------------------------------------- CARDS 卡片：2–9 条并列短条目
@@ -434,19 +455,19 @@ def CARDS(n, p):
         cells = ''.join(f'<div class="cn-card cn-top1 cn-snap">{num(f"{i:02d}", 20, 36, deco=True) if p.get("num", True) is not False else ""}<div class="cn-h cn-t20 cn-snap">{T_(c.get("t", ""))}</div>{TX(c.get("x"))}{TX(c.get("items"))}</div>' for i, c in enumerate(cs, 1))
         body = field(0, 0, W, 10, sf, y1r=f'{C_}.top-2|{H_}.bottom+1', id_=F_, attr=f' data-clear="{C_}"')
         body += stack(1, 6, r, [f'<div class="{gcls}" style="{grid};row-gap:{LH}px">{cells}</div>'], bot=LAST, id_=C_)
-        body += stack(1, 6, r, head(p, 160, 6, 44, icols=4) + [stats_row(p.get('stats'))], top=0, sf=sf, id_=H_, inside=F_, y1=f'{C_}.top-4')
+        body += stack(1, 6, r, head(p, 112, 6, 44, icols=6) + [stats_row(p.get('stats'))], top=0, sf=sf, id_=H_, inside=F_, y1=f'{C_}.top-4')
         return emit(n, p, r, 'paper', body, sf)
     if withimg:   # 带图：页头在一条撞色色带里，卡片按行平分剩下的高度，图片吃掉多余的高度
         name, sf = choose('CARDS', p, [('band', 'A'), ('band', 'B')])
         body = field(0, 0, W, 10, sf, y1r=f'{H_}.bottom+1')
-        body += stack(1, 6, r, head(p, 80, 4, 44, icols=4) + [stats_row(p.get('stats'))], top=0, sf=sf, id_=H_)
+        body += stack(1, 6, r, head(p, 80, 6, 44, icols=6) + [stats_row(p.get('stats'))], top=0, sf=sf, id_=H_)
         rws = ''.join(f'<div class="cn-row {gcls}" style="{grid};align-items:stretch">' + ''.join(card_html(i, c, p, 40, True) for i, c in enumerate(cs[j * cols:(j + 1) * cols], j * cols + 1)) + '</div>' for j in range(rows))
         body += f'<div class="cn-a cn-rows" data-rows="1" data-gap="2" data-y0="{H_}.bottom+3" style="left:{x(1, r)}px;width:{wd(1, 6)}px;top:{y(L(10))}px;height:{y(LAST) - y(L(10))}px">{rws}</div>'
         return emit(n, p, r, 'paper', body, sf)
     name, sf = choose('CARDS', p, [('top', 'A'), ('full', 'B'), ('top', 'B'), ('full', 'A')])
     cells = ''.join(card_html(i, c, p, size) for i, c in enumerate(cs, 1))
     big = f'<div class="cn-a cn-num deco"{h.DECO} style="right:{round(-30 * K)}px;top:{round(-96 * K)}px;font-size:{round(480 * K)}px;line-height:{round(480 * K)}px;color:{tokens(sf)["num"]}">{k}</div>' if p.get('count', True) is not False and G.get('STYLE') != 'stijl' else ''
-    hc = 4 if r or p.get('count', True) is False else 3      # 巨型条目数（480px，约 300px 宽）在右边：右手页标题占 1–4 栏，左手页（订口在右）占 1–3 栏
+    hc = 6 if p.get('count', True) is False else 4 if r else 3
     hd = head(p, 112, hc, 40 if hc == 3 else 48, icols=hc) + [stats_row(p.get('stats'), hc)]   # 三栏宽的标题允许缩到 40px，免得在词中间断开
     if name == 'top':   # 上半页撞色色块（长到卡片上方 2 行）+ 巨型条目数；卡片钉在下沿
         body = field(0, 0, W, 10, sf, y1r=f'{C_}.top-2|{H_}.bottom+1', id_=sid(n, 'f'), attr=f' data-clear="{C_}"') + big
@@ -493,13 +514,13 @@ def TWO(n, p):
         k = len(cs); nc = 3 if k == 3 or (k > 4 and k % 3 == 0) else 2; span = 6 // nc
         grid = f'<div class="cn-g{nc}" style="display:grid;grid-template-columns:repeat({nc},{wd(1, span)}px);column-gap:{GUT}px;row-gap:{2 * LH}px">' + ''.join(col_html(c) for c in cs) + '</div>'
         if v:   # 顶部出血照片，长到文字上方 2 行
-            body = box(0, 0, W, 10, pic(v, W, 420, 1, field_color()), 'cn-pic', y1r=f'{C_}.top-2', minh=144)
-            body += stack(1, 6, r, head(p, 80, 6, 44, icols=4) + [f'<div class="m2">{grid}</div>'], bot=LAST, id_=C_)
+            body = box(0, 0, W, 10, pic(v, W, nrows(420, 15) * LH, 1, field_color()), 'cn-pic', y1r=f'{C_}.top-2', minh=nrows(200, 8) * LH)
+            body += stack(1, 6, r, head(p, 80, 6, 44, icols=6) + [f'<div class="m2">{grid}</div>'], bot=LAST, id_=C_)
             return emit(n, p, r, 'paper', body, 'image')
         name, sf = choose('TWO', p, [('top', 'A'), ('top', 'B')])
         F_ = sid(n, 'f')
         body = field(0, 0, W, 10, sf, y1r=f'{C_}.top-2|{H_}.bottom+1', id_=F_, attr=f' data-clear="{C_}"') + stack(1, 6, r, [grid], bot=LAST, id_=C_)
-        body += stack(1, 6, r, head(p, 160, 6, 56, icols=4), top=0, sf=sf, id_=H_, inside=F_, y1=f'{C_}.top-4')
+        body += stack(1, 6, r, head(p, 112, 6, 56, icols=6), top=0, sf=sf, id_=H_, inside=F_, y1=f'{C_}.top-4')
         return emit(n, p, r, 'paper', body, sf)
     h.LIMIT('TWO', its, 2, 8, 'items 条目'); h.BUDGET(p, ['intro', 'items'], .55)
     name, sf = choose('TWO', p, [('grid', 'A'), ('grid', 'B')])
@@ -528,6 +549,26 @@ def chapters():
             out.append([str(q['index']), q.get('title', ''), q.get('en') or q.get('sub') or q.get('intro') or '', m])
         m += h.LAY.get(lay, (None, 1))[1]
     return out
+def toc_es(p):
+    """目录条目 [编号, 标题, 描述, 页码]；toc: auto 从章节页收集"""
+    if p['toc'] == 'auto': return chapters()
+    return [list(e) + [''] * (4 - len(e)) if isinstance(e, (list, tuple)) else [e.get('no', ''), e.get('t', ''), e.get('x', ''), e.get('page', '')] for e in listify(p['toc'])]
+TOC_DEG = [0]   # GRID.toc 容量降级档（sec_html 按页设置，GRID 读它决定去不去页头导语）：0 完整 · 1 描述截到一行 · 2 再降字号档 · 3 再去页头导语
+def toc_need(es, p, big, clamp, intro):
+    """粗估目录页要多少行：页头 9 行（+ 导语 3 行）+ 每块 2 行；每条目录大档 8 行 / 小档 4 行，标题、描述折行往上加（clamp：描述只算一行）"""
+    L = 9 + (3 if intro else 0) + 2
+    cpl = (wd(1, 3) + GUT) // BS if h.CJK else round((wd(1, 3) + GUT) / BS * 2.2)   # 中间一栏（标题 + 描述）每行约多少字
+    for e in es:
+        no, t, s = (list(e) + [''] * 3)[:3]
+        body = 1 + -(-chars(t) // max(1, cpl)) + (0 if clamp or not s else -(-chars(s) // max(1, cpl)))
+        L += max(8 if big else 4, body)
+    return L
+def toc_deg(es, p):
+    """4 章目录 + 页头常超出版心（约 350px）→ 自动降级让位：① 描述截到一行（CSS 省略号，不改文字）② 字号降档（8 行/条 → 4 行/条）③ 去页头导语。
+    按行数估算选档，不硬编码坐标；降完仍放不下就保持 3，由 fill.js 报溢出（提示拆成两页目录）。"""
+    for d in (0, 1, 2, 3):
+        if toc_need(es, p, d < 2, d >= 1, d < 3) <= LAST - 1: return d
+    return 3
 def sec_html(key, p, r):
     if key == 'facts':
         fs = [f if isinstance(f, (list, tuple)) else [f, ''] for f in listify(p['facts'])]
@@ -564,16 +605,22 @@ def sec_html(key, p, r):
     if key == 'notes':
         return f'<div class="cn-notes">{bullets(listify(p["notes"]))}</div>'
     if key == 'toc':
-        es = chapters() if p['toc'] == 'auto' else [list(e) + [''] * (4 - len(e)) if isinstance(e, (list, tuple)) else [e.get('no', ''), e.get('t', ''), e.get('x', ''), e.get('page', '')] for e in listify(p['toc'])]
+        es = toc_es(p)
         if p['toc'] == 'auto' and not es: h.WARN.append(f'第{h.CURN}页：toc: auto 没找到章节页（带 index 的 FULL 页）')
-        big = len(es) <= 5
+        TOC_DEG[0] = toc_deg(es, p)
+        if TOC_DEG[0]:
+            what = '描述截到一行' if TOC_DEG[0] == 1 else '字号降档' if TOC_DEG[0] == 2 else '去页头导语'
+            more = '；降完仍超出版心，建议拆成两页目录' if toc_need(es, p, False, True, False) > LAST - 1 else '；还要完整显示就拆成两页目录'
+            h.WARN.append(f'第{h.CURN}页：目录 + 页头超出版心，已自动降级（{what}）{more}')
+        big = len(es) <= 5 and TOC_DEG[0] < 2
+        clamp = TOC_DEG[0] >= 1
         def row(no, t, s, pg_):
             link = str(pg_).isdigit()   # 目录行可点（HTML 和 PDF 里都能跳页）
             pn = f'{int(pg_):02d}' if link else T_(pg_)
             return ((f'<a class="cn-tocr cn-top1 cn-snap" href="#p{int(pg_)}"' if link else '<div class="cn-tocr cn-top1 cn-snap"')
                     + f' style="grid-template-columns:{wd(1, 2) + GUT}px {wd(1, 3) + GUT}px {COL}px;min-height:{8 * LH if big else 4 * LH}px">'
                     + f'{num(no, 112 if big else 56, 120 if big else 72)}<div style="padding-top:{LH}px"><div class="cn-h {"cn-t40" if big else "cn-t28"}">{T_(t)}</div>'
-                    + (f'<div class="cn-mut">{T_(s)}</div>' if s else '') + '</div>'
+                    + (f'<div class="cn-mut" style="{"white-space:nowrap;overflow:hidden;text-overflow:ellipsis" if clamp else ""}">{T_(s)}</div>' if s else '') + '</div>'
                     + f'<div class="cn-num" style="font-size:{round(28 * S)}px;line-height:{round(1.5 * LH)}px;text-align:right;padding-top:{LH}px;color:var(--fg)"{h.DECO}>{pn}</div>'
                     + ('</a>' if link else '</div>'))
         return '<div class="cn-toc">' + ''.join(row(*e) for e in es) + '</div>'
@@ -597,6 +644,7 @@ def grid_lines(p):
 def GRID(n, p):
     h.BUDGET(p, ['intro'] + list(GRIDKEYS), 1.1)
     GRID_TIGHT[0] = grid_lines(p) > LAST - 1
+    TOC_DEG[0] = 0   # 每页重置；sec_html('toc') 按容量设档，head 的导语跟着让位
     r = pg(n); M_, N_ = sid(n, 'm'), sid(n, 'n'); v = p.get('image')
     keys = [k for k in p if k in GRIDKEYS]
     if keys and set(keys) <= {'facts', 'notes'} and not v:   # 只有大数字：数字做成整页的主角（2×2，钉在下沿），页头在上
@@ -615,7 +663,7 @@ def GRID(n, p):
     name, sf = choose('GRID', p, vs_)
     notes_band = (name == 'paper' or QUIET()) and 'notes' in keys and not v   # 单色档没有整页色块：备注总是放进底部浅灰色带
     secs = [f'<div class="cn-sec cn-snap m2">{sec_html(k, p, r)}</div>' for k in keys if not (notes_band and k == 'notes')]
-    main = head(p, 112, 4, 56, icols=4) + secs
+    main = head(p, 80, 6, 44, icols=6, intro=TOC_DEG[0] < 3) + secs   # 目录放不下时最后才去页头导语（TOC_DEG 3 档）
     body = ''
     if notes_band:   # 纸面 + 底部一条撞色色带装备注
         bsf = field_color()
@@ -625,7 +673,7 @@ def GRID(n, p):
         return emit(n, p, r, 'paper', body, 'paper', fsf=bsf)
     body += stack(1, 6, r, main, top=0, sf=sf if name == 'full' else 'paper', id_=M_)
     if v and name == 'paper':
-        body += box(0, 10, W, y(LAST), pic(v, W, 300, 1, field_color()), 'cn-pic', y0r=f'{M_}.bottom+2', minh=96)
+        body += box(0, 10, W, y(LAST), pic(v, W, nrows(300, 11) * LH, 1, field_color()), 'cn-pic', y0r=f'{M_}.bottom+2', minh=96)
     emit(n, p, r, sf if name == 'full' else 'paper', body, sf if name == 'full' else ('image' if v else 'paper'))
 
 # ---------------------------------------------------------------- COLLAGE 拼贴：3–7 张照片满版拼接（3px 细缝）+ 一块撞色模块
@@ -674,16 +722,16 @@ def MIX(n, p):
         cols = f'<div class="cn-g{nc}" style="display:grid;grid-template-columns:repeat({nc},{wd(1, span)}px);column-gap:{GUT}px;row-gap:{LH}px">' + ''.join(col_html(s) for s in ss) + '</div>'
         bot = [cols, quote(p.get('quote'), p.get('by'), 2) if p.get('quote') else '']
         body = stack(1, 6, r, bot, bot=LAST, id_=C_)
-        body += box(0, 0, W, 10, pic(ims[0] if ims else None, W, 420, 1, other(sf)), 'cn-pic', y1r=f'{H_}.top-1', minh=120)
+        body += box(0, 0, W, 10, pic(ims[0] if ims else None, W, nrows(420, 15) * LH, 1, other(sf)), 'cn-pic', y1r=f'{H_}.top-1', minh=nrows(200, 8) * LH)
         body += field(0, 10, W, 20, sf, y0r=f'{H_}.top-1', y1r=f'{H_}.bottom+1')
-        body += stack(1, 6, r, head(p, 80, 5, 44, icols=5), sf=sf, id_=H_, y1=f'{C_}.top-3')
+        body += stack(1, 6, r, head(p, 80, 6, 44, icols=6, lines=2), sf=sf, id_=H_, y1=f'{C_}.top-3')
         return emit(n, p, r, 'paper', body, 'image')
     # side：照片竖叠在切口一侧（满版出血、3px 细缝），有引语时换成一块撞色色块装引语；文字在订口一侧三栏
     sf = choose('MIX', p, [('side', 'A'), ('side', 'B')])[1]
     tc = side_cols(r, inner=True); cut = gc(3, r)
     ox0, ox1 = (cut, W) if r else (0, cut)
     tiles = ims[:3]; q = p.get('quote')
-    rows = ''.join(f'<div class="cn-row"><div class="cn-ibox" data-minh="96" style="height:100%">{pic(v_, ox1 - ox0, 300, i + 1, other(sf))}</div></div>' for i, v_ in enumerate(tiles))
+    rows = ''.join(f'<div class="cn-row"><div class="cn-ibox" data-minh="96" style="height:100%">{pic(v_, ox1 - ox0, nrows(300, 11) * LH, i + 1, other(sf))}</div></div>' for i, v_ in enumerate(tiles))
     if q:
         oc = (4, 6) if r else (1, 3); tx0 = ox0 + (3 if r else 0); tx1 = ox1 - (0 if r else 3)
         qs = (f'<div class="cn-row"><div class="cn-cell" style="height:100%;background:{tokens(sf)["bg"]};{vs(sf)}padding:{LH}px {tx1 - xe(oc[1], r)}px {LH}px {x(oc[0], r) - tx0}px">'

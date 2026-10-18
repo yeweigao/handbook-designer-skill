@@ -9,7 +9,7 @@
   const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const norm = s => String(s || '').replace(/<[^>]+>/g, '').replace(/[\u200b\s]+/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').toLowerCase();
   const TA = document.createElement('textarea');
-  const txt = el => { TA.innerHTML = el.innerHTML.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, ''); return TA.value.replace(/\u200b/g, ''); };   // 不受 CSS 大写影响；<br> → 换行
+  const txt = el => { TA.textContent = (el.innerHTML || '').replace(/<br\s*\/?>/gi, '\n').replace(/<\/(p|div|li|h[1-6]|tr)>/gi, '\n').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/&amp;/g, '&'); return TA.value.replace(/\u200b/g, ''); };   // 纯文本派生（不用 innerHTML 解析，避免属性注入面）；<br>/块级闭合 → 换行，常见实体手动解码
   const sid = s => s.replace(/[^A-Za-z0-9]+/g, '_').slice(0, 180);
   let db = null, assets = null, comments = null, user = null, me = '', mode = 'view';
   const local = { edits: {}, images: {} };   // 没有 db 时的本地记录

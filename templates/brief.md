@@ -8,6 +8,7 @@ brand: allas          # 品牌包（brands/）；没有品牌包就删掉这一�
 style: photo          # photo / editorial / swiss / stijl 风格派 / geo 孟菲斯 / notebook / inkwash / papercut / riso / aurora / nebula
 look: classic         # 只有 style: stijl 用：classic 三原色 / tone 无线 / beat 节奏；其他风格删掉这一行
 colors: klein
+# fonts: {title: 'Playfair Display', body: 'Source Serif 4'}   # 可选：只锁你写了的字体角色；整册字体分工记进 page-plan.md
 color_mode: auto      # auto / clash 撞色 / accent 点缀（品牌色只做强调）/ mono
 langs: [zh, en]
 canvas: a4            # a4 / a5 / xhs（小红书 3:4）

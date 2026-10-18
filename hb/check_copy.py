@@ -6,6 +6,8 @@ MISSING：参照文本里的句子没出现在成品里（逐条给出）。
 ORDER  ：句子都在，但先后顺序和参照文本不同（给出页码；可能是有意调整，逐条确认）。
 EXTRA  ：成品里不在参照文本中的行 —— 自创句子要删。页眉、页脚、图注、小标签、填写提示等
          引擎标记为“装饰”的文字不列入 EXTRA，只计数。
+页码 artifacts（页脚「02 / 23」、居中短数字）不算正文：extract.py 识别后写进 .qa/artifacts.txt，
+         不列入 MISSING / EXTRA（成品用手册自动页码）。
 中文与西文原文都支持（按句号/问号/叹号与换行切分）。"""
 import sys,os,re,html
 P=os.path.abspath(sys.argv[1] if len(sys.argv)>1 else '.')
@@ -26,6 +28,17 @@ book_deco_free=txt(raw,drop_deco=True); n_deco=len(re.findall(r'data-deco',raw))
 ref=open(REF,encoding='utf-8').read()
 ref=re.sub(r'<!--.*?-->','',ref,flags=re.S); ref=re.sub(r'(?m)^\s*(!\[[^\]]*\]\([^)]*\)|<img\b[^>]*>)\s*$','',ref)   # extract.py 的页码/图片注释、Markdown 图片不算正文
 if REF.endswith('.html'): ref=txt(ref)
+_ART=set()   # 页码 artifacts（extract.py 写进 .qa/artifacts.txt）：页脚页码不当正文，从必含文本里排除（成品用手册自动页码）
+for _f in (os.path.join(P,'.qa','artifacts.txt'),os.path.join(os.path.dirname(P),'.qa','artifacts.txt')):
+    if not os.path.exists(_f): continue
+    for _l in open(_f,encoding='utf-8'):
+        _l=_l.strip()
+        if _l and not _l.startswith('#'): _ART.add(_l.split('：',1)[-1].strip())
+    break
+def _noise(l):   # 页码样式行（「02 / 23」页脚、居中短数字）：原资料的页码，成品用手册自动页码
+    t=re.sub(r'^(#{1,3}\s*|[-*•▶✓]\s+|\d+[.、)]\s+)','',l.strip()).strip()
+    return t in _ART or bool(re.fullmatch(r'\d{1,2}\s*/\s*\d{1,2}|\d{1,2}',t))
+ref='\n'.join(l for l in ref.splitlines() if not _noise(l))
 import json as _j   # 在线编辑页里用户改过、已写回 book.yaml 的文字（sync_edits.py 记的）：当作用户认可的改动，参照文本跟着换
 for _f in (os.path.join(P,'.qa','edits_applied.json'),os.path.join(os.path.dirname(P),'.qa','edits_applied.json')):
     if not os.path.exists(_f): continue

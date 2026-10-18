@@ -1,6 +1,6 @@
 import json,re,numpy as np
 from PIL import Image
-B=json.load(open('.qa/b3.json'));imgs={}
+B=json.load(open('.qa/b3.json', encoding='utf-8'));imgs={}
 def lum(c):
     c=c/255.0; c=np.where(c<=.03928,c/12.92,((c+.055)/1.055)**2.4); return .2126*c[...,0]+.7152*c[...,1]+.0722*c[...,2]
 bad=0

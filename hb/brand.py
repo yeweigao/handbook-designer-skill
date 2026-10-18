@@ -6,7 +6,10 @@ def index():
     f = os.path.join(ROOT, 'brands', 'index.yaml')
     return (yaml.safe_load(open(f, encoding='utf-8')) or {}) if os.path.exists(f) else {}
 def load(name):
-    d = os.path.join(ROOT, 'brands', str(name)); f = os.path.join(d, 'brand.yaml')
+    n = str(name)
+    if not re.fullmatch(r'[\w-]+', n):   # 防 ../ 逃逸：品牌名只允许字母数字下划线连字符
+        raise SystemExit(f'ERROR: 品牌名不合法：{name}（只允许字母/数字/下划线/连字符）；已有：{", ".join(index()) or "无"}')
+    d = os.path.join(ROOT, 'brands', n); f = os.path.join(d, 'brand.yaml')
     if not os.path.exists(f):
         raise SystemExit(f'ERROR: 找不到品牌包 {name}（brands/{name}/brand.yaml）。已有：{", ".join(index()) or "无"}；新建见 workflows/brand.md')
     b = yaml.safe_load(open(f, encoding='utf-8')) or {}; b['_dir'] = d; b['_name'] = str(name)

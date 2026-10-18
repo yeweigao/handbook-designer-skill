@@ -13,8 +13,8 @@ Q = os.path.join(P, '.qa')
 pgs = sorted(glob.glob(os.path.join(Q, 'pg*.png')), key=lambda f: int(os.path.basename(f)[2:-4]))
 ai = os.path.join(Q, 'ai_slots.json')
 if not pgs or not os.path.exists(ai): sys.exit(0)
-C = json.load(open(ai)).get('colors', {})
-mode = json.load(open(os.path.join(P, 'map.json'))).get('color_mode', 'clash') if os.path.exists(os.path.join(P, 'map.json')) else 'clash'
+C = json.load(open(ai, encoding='utf-8')).get('colors', {})
+mode = json.load(open(os.path.join(P, 'map.json'), encoding='utf-8')).get('color_mode', 'clash') if os.path.exists(os.path.join(P, 'map.json')) else 'clash'
 hx = lambda h: np.array([int(h.lstrip('#')[i:i + 2], 16) for i in (0, 2, 4)], np.float32)
 A, B = hx(C.get('A', C.get('G', '#000000'))), hx(C.get('B', C.get('GOLD', '#FFFFFF')))
 rows = []
@@ -42,6 +42,6 @@ if field > lim['field']:
                + ('几页写 surface: paper；或换 color_mode: accent' if mode == 'clash' else '这些页写 surface: paper，或换成图 / 纸色多的版式'))
 if mode != 'clash' and tot['accent'] > .15: out.append(f'[颜色过重] 强调色约占 {tot["accent"] * 100:.0f}%（点缀档 ≤ 15%）：强调色只上数字、细线、标签')
 for r in runs: out.append(f'[颜色过重] 第 {r[0]}–{r[-1]} 页连续整页色块 → 中间换一页纸色（surface: paper）')
-json.dump(dict(mode=mode, total=tot, pages=rows, heavy=heavy, warn=out), open(os.path.join(Q, 'color.json'), 'w'), ensure_ascii=False)
+json.dump(dict(mode=mode, total=tot, pages=rows, heavy=heavy, warn=out), open(os.path.join(Q, 'color.json'), 'w', encoding='utf-8'), ensure_ascii=False)
 print(line)
 for o in out: print(o)

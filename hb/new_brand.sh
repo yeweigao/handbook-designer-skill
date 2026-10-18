@@ -7,6 +7,7 @@ set -eo pipefail
 HB="$(cd "$(dirname "$0")" && pwd)"; R="$(dirname "$HB")"
 [ -n "$2" ] || { echo "用法：bash $0 <名字> \"<品牌显示名>\" [logo.svg] [A色] [B色]"; exit 2; }
 N="$1"; NAME="$2"; LOGO="$3"; A="${4:-#002BA5}"; B="${5:-#FFE893}"
+case "$N" in ""|*[!A-Za-z0-9_-]*) echo "ERROR: 品牌名只允许字母/数字/下划线/连字符：$N"; exit 2;; esac   # 防 ../ 逃逸
 D="$R/brands/$N"; [ -e "$D/brand.yaml" ] && { echo "品牌包 $N 已存在：$D"; exit 1; }
 mkdir -p "$D"
 if [ -n "$LOGO" ]; then cp "$LOGO" "$D/logo.svg"; else python3 "$HB/wordmark.py" "$NAME" comfortaa "$D/logo.svg" --weight 700; fi

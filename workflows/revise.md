@@ -1,9 +1,11 @@
 # 路线 revise：改版、出错后续跑
 
 ## 改版的规矩
-- 用户每提一轮修改，新建目录（`_v2`、`_v3`），旧版留着对照：`check_copy.py <新项目> <旧项目>/book.html` 找出被弄丢的文字。
+- 改版纪律见 SKILL.md §2「改版不丢已认可的东西」：每轮新建 `_v2`/`_v3`、`check_copy.py` 对照旧版、已认可的页不顺手大改。
 - 先看 `brief.md`：用户这次说的是不是推翻了当时确认的东西（风格、配色、页数、用途）？是 → 确认后改 brief.md 并记一笔；否 → 只改 book.yaml。
 - 已经认可的页不顺手大改（`references/review.md`「不要动」）。
+- 用户指出文案和版面不合适时，按 `references/editorial-advisor.md` 审完整输入及同系列，再走 `references/adaptation.md` 的适配检查；不能只改被截图的页。
+- 先更新page-plan.md中的页面文案分工和设计方案，再修改book.yaml；同类问题一起检查栏目字、序号、主标题和时间地点的角色。
 
 ## 常见反馈 → 改 book.yaml 的哪里
 | 用户说 | 改法 |
@@ -18,6 +20,7 @@
 | 照片到了 | 放进 photos/，把占位换成文件名，重跑（images.yaml 自动更新） |
 | 图片糊 / [低清] | 换原图；或从 FULL / 跨页挪到小图位 |
 | 换个风格 | 改 `book.style`（只改这一行）+ brief.md 记一笔；拿不准就先出 directions.py 样张 |
+| 想换字体 | 按 style.md §2.2 改 `book.fonts`（只写要覆盖的角色），整册字体分工记进 page-plan.md；brief.md 的 fonts 行同步 |
 | 用我们的品牌 | `book.brand: <名字>`（brands/index.yaml）；没有品牌包 → `workflows/brand.md` |
 | 字看不清（照片上） | 改 focus / target，让字落在照片较暗、较简单的区域；换更简洁的图；换让字落在纸面上的版式（T/B 调 split、HOLE 换窗的位置） |
 | `[书写线收紧]` / `[字号收紧]` | 这一页内容偏多，引擎已经收了书写线或辅助字号；要原样的书写空间和字号就拆页（同一版式，自动镜像） |

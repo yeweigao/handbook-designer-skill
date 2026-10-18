@@ -2,14 +2,13 @@
 """hb.py — 数据驱动的手册排版器。  用法:  python3 hb.py <project_dir>
 读 <project_dir>/book.yaml → 烘焙图片(纸面 wash) → 写 book.html + map.json + plan.txt。
 你（agent）只需要写 book.yaml；坐标、遮罩、跨页拼接、页码都由本程序计算。
-页面固定为 A4 竖版（794×1123 CSS px）。
+画布由 book.canvas 决定（a4 / a5 / xhs，网格与字号档见 canon.CANVAS）；默认 A4 竖版 794×1123 CSS px。
 """
 import math, sys, os, re, json, shutil, html as _h, yaml
 HERE=os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0,HERE)
 import wash, art, fonts as FONTS_
 from styles import STYLES
 import palettes as PAL
-MX=56   # 页边距（出血图片用）
 W,H=794,1123
 ERR=[]; WARN=[]
 SAFE=re.compile(r'&lt;(/?)(b|strong|i|em|u|br|sup|sub|small)\s*/?&gt;',re.I)
@@ -20,9 +19,14 @@ DECO=' data-deco="1"'   # 标记“允许新增的装饰/提示文字”（页�
 PROJ=os.path.abspath(sys.argv[1] if len(sys.argv)>1 else '.')
 try: SPEC=yaml.safe_load(open(os.path.join(PROJ,'book.yaml'),encoding='utf-8'))
 except yaml.YAMLError as e:
-    m=getattr(e,'problem_mark',None)
+    m=getattr(e,'problem_mark',None); tip=''
+    if m is not None:
+        try: ln=open(os.path.join(PROJ,'book.yaml'),encoding='utf-8').read().splitlines()[m.line]
+        except (OSError,IndexError): ln=''
+        if "'" in re.sub(r"'[^']*'",'',ln):   # 去掉完整的 '…' 串后还有单引号 → 撇号写在了单引号串里（如 Thailand's）
+            tip="\n  这一行有单引号字符串里带撇号 → 单引号内的撇号要双写 '' 或改用双引号"
     sys.exit(f"ERROR: book.yaml 语法错误{f'（第 {m.line+1} 行第 {m.column+1} 列附近）' if m else ''}：{getattr(e,'problem',e)}\n"
-             "  常见原因：花括号 {...} 里的文字含有 : , ? # [ ] { } 或以引号开头 → 给整段文字加单引号，如 {p: '时间：上午 9:00'}")
+             "  常见原因：花括号 {...} 里的文字含有 : , ? # [ ] { } 或以引号开头 → 给整段文字加单引号，如 {p: '时间：上午 9:00'}"+tip)
 _LG={'zh','zh-hans','zh-hant','zh-tw','zh-hk','en','ja','ko','fr','de','es','it','pt','ru','th','vi','ms','ar'}
 def _multi(o): return isinstance(o,dict) and o and all(str(k).lower() in _LG for k in o)
 def _pick(o,l):   # 多语言写法 {zh: …, en: …}：直接跑 hb.py 时取 book.lang（或第一种）；run.sh 会先拆成各语言子项目
@@ -118,6 +122,26 @@ def placeholder(n,f,w):
     img=img*(1-.35*r)+hx(GOLD)*.35*r
     img+=rng.normal(0,4,img.shape[:2])[...,None]
     Image.fromarray(img.clip(0,255).astype(np.uint8)).save(out,quality=90); return out
+BAKE_USED=set()   # 本轮构建用到的烘焙缓存键（.art/bake_*.jpg；构建末尾清掉不再用的）
+def _mask_id(mask,w,H):
+    """掩膜标识：在一小片采样网格上量它的值（同一函数每次结果一致；换了掩膜或参数，缓存即失效）"""
+    import hashlib
+    try:
+        import numpy as _np
+        gx,gy=_np.meshgrid(_np.linspace(-2,w+2,11),_np.linspace(-1,H+1,11))
+        return hashlib.md5(_np.asarray(mask(gx,gy),_np.float32).tobytes()).hexdigest()[:8]
+    except Exception:
+        c=getattr(mask,'__code__',None)
+        return hashlib.md5(repr((c and c.co_code,c and c.co_consts,c and c.co_names,bool(getattr(mask,'__closure__',None)))).encode()).hexdigest()[:8]
+def _bkey(s,w,H,focus,target,zoom,mask,kind,box):
+    """照片烘焙缓存键：源文件（mtime+size）+ 目标 w/H + focus/target/zoom + 掩膜标识 + kind + 纸面倍率/不透明度。
+    都没变就命中 .art/bake_<键>.jpg，跳过重烤（改一字看效果的循环不再每次全量重算）。"""
+    import hashlib
+    try: mt,sz=os.path.getmtime(s),os.path.getsize(s)
+    except OSError: mt,sz=0,0
+    r4=lambda vs: tuple(round(float(v),4) for v in vs)
+    return hashlib.md5(repr((os.path.abspath(s),mt,sz,round(w),round(H),r4(focus),r4(target),round(float(zoom),4),
+                             _mask_id(mask,w,H),kind,r4(box),round(wash.A,4),wash.S,wash.PAPERC.tolist())).encode()).hexdigest()[:12]
 def bake(n,name,f,w,mask,focus,target,zoom,kind,local,box=(0,0,1,1)):
     if str(f).startswith('ai:'):   # AI 配图位：有成图就当照片用，没有就画占位
         fn=ai_file(f); AISLOTS.append(dict(id=str(f)[3:].strip(),page=n,where='版式图片',img=name,css=[w,H],box=list(box),done=fn))
@@ -126,14 +150,22 @@ def bake(n,name,f,w,mask,focus,target,zoom,kind,local,box=(0,0,1,1)):
     if not s: return
     if not is_art(f):   # 清晰度：按铺满后的缩放估算印出来的 dpi
         from PIL import Image as _I
-        iw,ih=_I.open(s).size; dpi=96/(max((w+4)/iw,(H+2)/ih)*zoom); USE.append(dict(page=n,file=str(f),dpi=round(dpi),img=name))
+        iw,ih=_I.open(s).size; dpi=96/(max((w*(box[2]-box[0])+4)/iw,(H*(box[3]-box[1])+2)/ih)*zoom); USE.append(dict(page=n,file=str(f),dpi=round(dpi),img=name))
         if dpi<96: WARN.append(f'第{n}页：{f} 只有 {iw}×{ih}px，放在这里约 {dpi:.0f}dpi，满版会糊 → 换更大的原图，或放进 figure 插图块')
         elif dpi<130: WARN.append(f'第{n}页：{f}（{iw}×{ih}px）放在这里约 {dpi:.0f}dpi：电子版没问题，印刷会偏软')
     if is_art(f):   # 底图按 box 精确构图：不缩放、不裁切
         zoom,focus,target=1.0,(.5,.5),(w/2,H/2)
         if SD.get('edge')=='hard':   # 平面风格：纸面完全不透明、硬边（在原淡出带的末端切开），不和画面半透明混色
             m0=mask; mask=lambda X,Y,m0=m0: wash.ss(.966,.974,m0(X,Y)/max(wash.A,1e-6)); FLAT.append(name)
-    wash.bake2(s,os.path.join(PROJ,'img',name.replace('.jpg','_base.jpg')),w,H,tuple(focus),tuple(target),zoom,mask)
+    out=os.path.join(PROJ,'img',name.replace('.jpg','_base.jpg'))
+    ckey=_bkey(s,w,H,focus,target,zoom,mask,kind,(0,0,1,1) if is_art(f) else box)
+    cdir=os.path.join(PROJ,'.art'); os.makedirs(cdir,exist_ok=True); cfile=os.path.join(cdir,f'bake_{ckey}.jpg')
+    BAKE_USED.add(ckey)
+    if os.path.exists(cfile):   # 命中缓存：源图、尺寸、focus、掩膜都没变 → 跳过重烤
+        shutil.copy(cfile,out)
+    else:
+        wash.bake2(s,out,w,H,tuple(focus),tuple(target),zoom,mask,box if not is_art(f) else (0,0,1,1))
+        shutil.copy(out,cfile)
     IMGS[name]=kind
     if local: LOCAL.append(name)
 def IMGTAG(name,x=-2,w=W+4): return f'<img class="a" alt="" src="img/{name}" style="left:{x}px;top:-1px;width:{w}px;height:{H+2}px">'
@@ -269,23 +301,32 @@ for i,p in enumerate(SPEC['pages']):
     plan.append(f'{n:02d}{"-%02d"%(n+1) if span==2 else "   "} {lay:14s} {"（内容版式 · 主底 "+SN.get(SURF_HIST[-1],SURF_HIST[-1])+"）" if lay in RECIPES else p.get("image","") or ("" if lay=="PAPER" else "（"+STYLE+" 底图）")}  {p.get("note","")}')
     n+=span; prev=lay
 total=n-1
-CSS=open(os.path.join(HERE,'style.css')).read()+open(os.path.join(HERE,'canon.css')).read()+SD['css']+SD.get('ccss','')
-if not CJK: CSS+='.op,.lt p{text-align:left}.fo span:first-child{letter-spacing:.18em}.cn-tx{text-align:left;hyphens:auto}.cn-disp{letter-spacing:-.015em}'   # 西文：左对齐（两端对齐会撑出大空格）
+CSS=open(os.path.join(HERE,'style.css'), encoding='utf-8').read()+open(os.path.join(HERE,'canon.css'), encoding='utf-8').read()+SD['css']+SD.get('ccss','')
+if not CJK: CSS+='.op,.lt p{text-align:left}.fo span:first-child{letter-spacing:.18em}.cn-tx{text-align:left}.cn-tx:not(.cn-t20):not(.cn-t28):not(.cn-t40) p{text-wrap:pretty}.cn-disp{letter-spacing:-.015em}'   # 西文：左对齐（两端对齐会撑出大空格）；不自动断词（窄栏要断用 <wbr> / 软连字符）；正文段落 text-wrap:pretty 收过短末行（Chromium 117+；导语 cn-t20 与大字号 display 不加）
 for k,v in dict(W=W,H=H-1,G=G,INK=INK,MUT=MUT,GOLD=GOLD,OCH=OCH,PAPER=PAPER).items(): CSS=CSS.replace('{'+k+'}',str(v))
 # 字体：按本书实际用到的字裁切嵌入（见 fonts.py）
 TEXT=_h.unescape(re.sub(r'<[^>]+>','',''.join(PP)))+str(BK.get('title',''))
 FCSS,FROLES,FMISS=FONTS_.build_css(BK.get('fonts',SD['fonts']),TEXT,PROJ,CJK)
 CSS=FCSS+CSS
-JS=open(os.path.join(HERE,'fill.js')).read()
-open(os.path.join(PROJ,'book.html'),'w',encoding='utf-8').write(f'<!doctype html><html lang="{LANG}"><head><meta charset="utf-8"><title>{esc(BK.get("title","Handbook"))}</title><style>{CSS}</style></head><body class="st-{STYLE} m-{COLOR_MODE}" style="--bs:{CN.BS if CJK or CN.BS<16 else CN.BS-1}px;--lh:{CN.LH}px;--gut:{CN.GUT}px;--s:{CN.S:.4f}" data-grid="{CN.TOP},{CN.LH},{CN.y(CN.LAST)},{W},{H},{CN.COL},{CN.GUT},{CN.LAST},{CN.IN},{CN.OUT}" data-canvas="{CANVAS}">{"".join(PP)}{JS}</body></html>')
-os.makedirs(os.path.join(PROJ,'.qa'),exist_ok=True); json.dump(dict(slots=AISLOTS,scale=wash.S,colors=TH_,style=STYLE),open(os.path.join(PROJ,'.qa','ai_slots.json'),'w'),ensure_ascii=False)
-json.dump(dict(map=MAP,imgs=IMGS,local=LOCAL,clip=CLIP,paper=PAPER,flat=FLAT,use=USE,pidx=PIDX,W=W,H=H,canvas=CANVAS,color_mode=COLOR_MODE),open(os.path.join(PROJ,'map.json'),'w'))
+JS=open(os.path.join(HERE,'fill.js'), encoding='utf-8').read()
+TYPESETTING=BK.get('typesetting', 'grid')
+if TYPESETTING not in ('grid', 'editorial') or (TYPESETTING == 'editorial' and CJK):
+    raise SystemExit('ERROR: book.typesetting 可选 grid（默认）或 editorial（西文编辑式排印）')
+open(os.path.join(PROJ,'book.html'),'w',encoding='utf-8').write(f'<!doctype html><html lang="{LANG}"><head><meta charset="utf-8"><title>{esc(BK.get("title","Handbook"))}</title><style>{CSS}</style></head><body class="st-{STYLE} m-{COLOR_MODE} ty-{TYPESETTING}" style="--bs:{CN.BS}px;--lh:{CN.LH}px;--gut:{CN.GUT}px;--s:{CN.S:.4f}" data-grid="{CN.TOP},{CN.LH},{CN.y(CN.LAST)},{W},{H},{CN.COL},{CN.GUT},{CN.LAST},{CN.IN},{CN.OUT}" data-canvas="{CANVAS}">{"".join(PP)}{JS}</body></html>')
+os.makedirs(os.path.join(PROJ,'.qa'),exist_ok=True); json.dump(dict(slots=AISLOTS,scale=wash.S,colors=TH_,style=STYLE),open(os.path.join(PROJ,'.qa','ai_slots.json'),'w', encoding='utf-8'),ensure_ascii=False)
+json.dump(dict(map=MAP,imgs=IMGS,local=LOCAL,clip=CLIP,paper=PAPER,flat=FLAT,use=USE,pidx=PIDX,W=W,H=H,canvas=CANVAS,color_mode=COLOR_MODE),open(os.path.join(PROJ,'map.json'),'w', encoding='utf-8'))
 _used=set(re.findall(r'img/(slot_[0-9a-f]+\.jpg)',''.join(PP)))
 for _f in os.listdir(os.path.join(PROJ,'img')):   # 删掉不再用到的旧图位缓存，免得源文件 zip 越来越大
     if _f.startswith('slot_') and _f not in _used: os.remove(os.path.join(PROJ,'img',_f))
+_ad=os.path.join(PROJ,'.art')
+if os.path.isdir(_ad):
+    for _f in os.listdir(_ad):   # 删掉不再用的照片烘焙缓存（plate / slot 缓存各有自己的清理，只动 bake_*）
+        if _f.startswith('bake_') and _f not in {f'bake_{k}.jpg' for k in BAKE_USED}: os.remove(os.path.join(_ad,_f))
 for nm in IMGS: shutil.copy(os.path.join(PROJ,'img',nm.replace('.jpg','_base.jpg')),os.path.join(PROJ,'img',nm))
-open(os.path.join(PROJ,'plan.txt'),'w').write('\n'.join(plan)+'\n')
+open(os.path.join(PROJ,'plan.txt'),'w', encoding='utf-8').write('\n'.join(plan)+'\n')
 print('\n'.join(plan)); print(f'用色 {COLOR_MODE}：{MODE_WHY}'); print(f'风格 {STYLE} · 字体 ' + ' / '.join(f'{r}:{"+".join(v)}' for r,v in FROLES.items()))
 print(f'== {total} 页', '（骑马钉需 4 的倍数，当前余 %d）'%(total%4) if total%4 else '（4 的倍数 ✓）')
-if WARN: print('\n'.join('注意：'+w for w in dict.fromkeys(WARN)))
+if WARN:
+    _w = list(dict.fromkeys(WARN)); print('\n'.join('注意：' + w for w in _w))
+    open(os.path.join(PROJ, '.qa', 'warn.txt'), 'w', encoding='utf-8').write('\n'.join(_w) + '\n')   # 进 QA 报告（doctor 作为提示输出，不算失败）
 if ERR: print('\n'.join('ERROR: '+e for e in ERR)); sys.exit(1)

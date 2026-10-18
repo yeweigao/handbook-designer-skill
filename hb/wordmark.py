@@ -38,5 +38,5 @@ for ch in text:
     if pen.getCommands(): paths.append(f'<path d="{pen.getCommands()}" fill="{color}"/>')
     x += g.width * sc + S * track
 top = Y[0] - 1; hgt = Y[1] - Y[0] + 2
-open(out, 'w').write(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 {top:.1f} {x:.1f} {hgt:.1f}" width="{x:.1f}" height="{hgt:.1f}">{"".join(paths)}</svg>\n')
+open(out, 'w', encoding='utf-8').write(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 {top:.1f} {x:.1f} {hgt:.1f}" width="{x:.1f}" height="{hgt:.1f}">{"".join(paths)}</svg>\n')
 print(out, f'{x:.0f}×{hgt:.0f}')
