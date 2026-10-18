@@ -39,6 +39,25 @@ def rels(z, part):
     return out
 
 # ------------------------------------------------------------------ PPTX
+SHAPES = ('p:sp', 'p:grpSp', 'p:graphicFrame', 'p:pic', 'p:cxnSp')
+def visual(slide, SH):
+    """按幻灯片上看到的顺序遍历：从上到下、同一横带里从左到右（PPT 文件里的顺序是叠放顺序，常常和阅读顺序不一样）。
+    没写位置的占位框：标题排最前，其余按 1/4 高处算；位置一样时保持原来的先后"""
+    def pos(el):
+        off = el.find(q('p:grpSpPr') + '/' + q('a:xfrm') + '/' + q('a:off')) if el.tag == q('p:grpSp') else el.find('.//' + q('a:xfrm') + '/' + q('a:off'))
+        if off is None: off = el.find(q('p:xfrm') + '/' + q('a:off'))   # 表格、图表（graphicFrame）的位置在 p:xfrm 里
+        if off is not None: return int(off.get('y', 0)), int(off.get('x', 0))
+        ph = el.find('.//' + q('p:ph'))
+        return (-1, 0) if ph is not None and ph.get('type') in ('title', 'ctrTitle') else (SH // 4, 0)
+    def walk(parent):
+        kids = [(k, c) for k, c in enumerate(parent) if c.tag in [q(t) for t in SHAPES]]
+        band = max(1, SH // 30)   # 同一横带（约 1/30 页高）里的文本框按从左到右
+        for _, c in sorted(kids, key=lambda kc: (pos(kc[1])[0] // band, pos(kc[1])[1], kc[0])):
+            if c.tag == q('p:grpSp'): yield c; yield from walk(c)
+            else: yield from c.iter()
+    tree = slide.find('.//' + q('p:spTree'))
+    return walk(tree) if tree is not None else slide.iter()
+
 def from_pptx(path):
     z = zipfile.ZipFile(path); pres = ET.fromstring(z.read('ppt/presentation.xml')); prel = rels(z, 'ppt/presentation.xml')
     sz = pres.find(q('p:sldSz')); SW, SH = (int(sz.get('cx')), int(sz.get('cy'))) if sz is not None else (12192000, 6858000)
@@ -46,7 +65,7 @@ def from_pptx(path):
     pages = []
     for i, part in enumerate(slides, 1):
         x = ET.fromstring(z.read(part)); rl = rels(z, part); lines = []; imgs = []
-        for el in x.iter():
+        for el in visual(x, SH):
             if el.tag == q('p:sp'):
                 ph = el.find('.//' + q('p:ph')); is_title = ph is not None and ph.get('type') in ('title', 'ctrTitle')
                 if ph is not None and ph.get('type') in ('sldNum', 'dt', 'ftr'): continue
@@ -226,7 +245,7 @@ def main(src, P, images_only=False):
             else: im.save(out)
             seen[h5] = sub + name; hashes[ah] = sub + name; names.append(sub + name)
             why = '重复出现（logo / 装饰）' if rep else '太小（图标）' if tiny else '弥散/纯色背景（风格底图会替代）' if bg else ''
-            rows.append((sub + name, pg['n'], f'{w}×{h}', '照片' if kd == 'photo' else '图形', f'{frac * 100:.0f}%' if frac is not None else '', why or advice(w, h, kd, frac)))
+            rows.append((sub + name, pg['n'], f'{w}×{h} ' + ('横' if w > 1.3 * h else '竖' if h > 1.15 * w else '方'), '照片' if kd == 'photo' else '图形', f'{frac * 100:.0f}%' if frac is not None else '', why or advice(w, h, kd, frac)))
         use = [x for x in dict.fromkeys(names) if not x.startswith('_assets/')]
         kinds = {r[0]: r[3] for r in rows}
         pho = [x for x in use if kinds.get(x) == '照片']; gra = [x for x in use if kinds.get(x) == '图形']

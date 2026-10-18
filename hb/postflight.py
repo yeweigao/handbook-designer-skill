@@ -49,6 +49,10 @@ if os.path.exists(iy):
     if nosrc: miss.append(f'{len(nosrc)} 张缺来源（{", ".join(nosrc[:5])}）')
     if nolic: miss.append(f'{len(nolic)} 张缺授权（{", ".join(nolic[:5])}）')
     add(not miss, '来源 / 授权：全部图片都写了来源与授权' if not miss else '来源 / 授权：' + '、'.join(miss) + ' → 在 images.yaml 的 source / license 里补上')
+lt = os.path.join(Q, 'lint.txt')
+if os.path.exists(lt):   # 先设计再写 yaml：page-plan.md 覆盖每一页（lint.py）
+    dz = [l for l in open(lt, encoding='utf-8').read().splitlines() if l.startswith('[设计]')]
+    add(not dz, '逐页方案：page-plan.md 覆盖了每一页' if not dz else '逐页方案：' + dz[0][5:60] + '… → 补 page-plan.md（references/adaptation.md）')
 if DRAFT: add(True, '草稿版：每页带“草稿 DRAFT”水印，不能交印刷厂')
 # ---- 交印清单（F37/F38）：低 DPI 图清单 + 装订建议 → .qa/print_checklist.md（export.sh 拷进 out/）
 plan = os.path.join(P, 'plan.txt')

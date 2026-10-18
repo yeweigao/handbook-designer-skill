@@ -373,7 +373,7 @@ def region(c0, c1, r, bs, top, bot, sf='paper', id_='', align=None, after=None):
 # ---------------------------------------------------------------- 照片版式（都在 6 栏网格上）
 def F(p): return tuple(p.get('focus', [.5, .5]))
 def light_art(v): return (not C.has_photo(v)) and h.SD['tone'] != 'dark'
-def bake_page(n, p, v, box, target=None, name=None):
+def bake_page(n, p, v, box, target=None, name=None, mask=None, bake_box=None):
     """照片烘焙成整页底图（图上有字时用：dark.py 会在字下面渐进压暗）；box 是照片露出来的区域（0–1），风格插画在这个区域里构图。
     瑞士单色、风格派、孟菲斯没有插画：没给照片时这一格是浅灰色块 + 淡灰编号（返回的 name 是 None）"""
     if not C.has_photo(v) and C.NOART():
@@ -381,7 +381,7 @@ def bake_page(n, p, v, box, target=None, name=None):
         x0, y0, x1, y1 = box[0] * C.W, box[1] * C.H, box[2] * C.W, box[3] * C.H
         return None, C.box(round(x0), round(y0), round(x1), round(y1), C.pic(None, x1 - x0, y1 - y0, 1, 'B', label=False), 'cn-pic')   # 这一格上面要压字：不放占位编号
     name = name or f'p{n:02d}.jpg'
-    h.bake(n, name, v, C.W, lambda X, Y: 0 * X, F(p), target or p.get('target', [C.W * (box[0] + box[2]) / 2, C.H * (box[1] + box[3]) / 2]), p.get('zoom', 1.0), 'single', True, box)
+    h.bake(n, name, v, C.W, mask or (lambda X, Y: 0 * X), F(p), target or p.get('target', [C.W * (box[0] + box[2]) / 2, C.H * (box[1] + box[3]) / 2]), p.get('zoom', 1.0), 'single', True, bake_box or box)
     C.LIGHT_ART[0] = light_art(v)
     return name, h.IMGTAG(name)
 def osf(name):
@@ -392,6 +392,19 @@ def cut(n, k, y_end):
     if not C.LIGHT_ART[0]: return ''
     return f'<div class="cn-a cn-field cn-paper" data-y0="{C.sid(n, k)}.top-1" style="left:0;top:0;width:{C.W}px;height:{round(y_end)}px;background:{C.tokens("paper")["bg"]}"></div>'
 def paper(x0, y0, x1, y1): return C.box(round(x0), round(y0), round(x1), round(y1), '', 'cn-field cn-paper', f'background:{C.tokens("paper")["bg"]}')
+# ---------------------------------------------------------------- photo 风格（国家地理式）：照片淡进半透明纸面，不切硬边
+def soft(v):
+    """photo 风格有照片时：照片和纸面的交界不是硬边，照片在交界处（约 1.5 行）慢慢淡进半透明纸面（book.paper，默认 0.9），
+    写字的纸面上照片淡淡透出来；交界落在行线上，过渡带里不放字。book.edge: hard → 回到不透明纸面 + 硬边"""
+    return h.STYLE == 'photo' and C.has_photo(v) and str(h.BK.get('edge', 'soft')).lower() != 'hard'
+def _ss(e0, e1, x): return h.wash.ss(e0, e1, x)
+def fade_down(yS, bb):
+    """照片在上：第 yS 行线以上是照片，往下 1.5 行内淡进纸面（不透明度 book.paper）；照片铺到 bb，bb 前 4 行再淡成纯纸"""
+    A, L = h.wash.A, C.LH
+    return lambda X, Y: h.wash.np.maximum(A * _ss(yS - L * .5, yS + L, Y), _ss(bb - 5 * L, bb - L, Y))
+def fade_up(yS, tt):
+    A, L = h.wash.A, C.LH
+    return lambda X, Y: h.wash.np.maximum(A * (1 - _ss(yS - L, yS + L * .5, Y)), 1 - _ss(tt + L, tt + 5 * L, Y))
 def zone(x0, y0, x1, y1): return C.box(round(x0), round(y0), round(x1), round(y1), '', 'cn-pic cn-zone')   # 烘焙底图里照片露出来的那一格：给版面结构（风格派的线和色格）用，不画东西
 
 def poster_fields(p):
@@ -447,14 +460,24 @@ def T_(n, p, bottom=False):
     if not bottom:
         Ls = photo_rows(p, 330, 9, 6, C.LAST - 8)   # 照片带 6~LAST-8 行；photo_rows: N（行数）或 split: 像素（旧写法）
         if p.get('body_top'): Ls = max(Ls, line_of(p['body_top'], Ls) - 1)
-        yS = C.y(Ls); name, body = bake_page(n, p, v, (0, 0, 1, yS / C.H), p.get('target'))
-        body += paper(0, yS, C.W, C.H) + zone(0, 0, C.W, yS)
+        yS = C.y(Ls)
+        if soft(v):   # 照片往下多铺一段（约到剩余纸面的一半），淡淡透在纸面后面
+            bb = yS + .55 * (C.H - yS); name, body = bake_page(n, p, v, (0, 0, 1, yS / C.H), p.get('target'), mask=fade_down(yS, bb), bake_box=(0, 0, 1, bb / C.H))
+            body += zone(0, 0, C.W, yS)
+        else:
+            name, body = bake_page(n, p, v, (0, 0, 1, yS / C.H), p.get('target'))
+            body += paper(0, yS, C.W, C.H) + zone(0, 0, C.W, yS)
         if p.get('on_photo'): body += cut(n, 'o', yS) + region(1, 6, r, p['on_photo'], 0, Ls - 1, sf=osf(name), align='bottom', id_=C.sid(n, 'o'))
         body += region(1, 6, r, p.get('body'), Ls + 1, C.LAST, id_=C.sid(n, 'b'))
         return C.emit(n, p, r, 'paper', body, 'image', name, hsf='image' if name else 'paper')
     Ls = photo_rows(p, 760, 24, 8, C.LAST - 6)   # 照片带 8~LAST-6 行（上面至少留 6 行给文字）
-    yS = C.y(Ls); name, body = bake_page(n, p, v, (0, yS / C.H, 1, 1), p.get('target'))
-    body += paper(0, 0, C.W, yS) + zone(0, yS, C.W, C.H)
+    yS = C.y(Ls)
+    if soft(v):
+        tt = .45 * yS; name, body = bake_page(n, p, v, (0, yS / C.H, 1, 1), p.get('target'), mask=fade_up(yS, tt), bake_box=(0, tt / C.H, 1, 1))
+        body += zone(0, yS, C.W, C.H)
+    else:
+        name, body = bake_page(n, p, v, (0, yS / C.H, 1, 1), p.get('target'))
+        body += paper(0, 0, C.W, yS) + zone(0, yS, C.W, C.H)
     body += region(1, 6, r, p.get('body'), 0, Ls - 1, id_=C.sid(n, 'b'))
     if p.get('on_photo'): body += region(1, 6, r, p['on_photo'], Ls + 1, C.LAST, sf=osf(name), id_=C.sid(n, 'o'))
     C.emit(n, p, r, 'paper', body, 'image', name, fsf='image' if name else 'paper', hsf='paper')
@@ -464,9 +487,15 @@ def SIDE(n, p, right=False):
     r = C.pg(n); v = p.get('image'); k = 3 if float(p.get('strip', 270)) >= 340 else 2
     if not right: x0, x1, cols = 0, C.gc(k, r), (k + 1, 6)
     else: x0, x1, cols = C.gc(6 - k, r), C.W, (1, 6 - k)
-    body = C.box(round(x0), 0, round(x1), C.H, C.pic(v, x1 - x0, C.H, 1, C.field_color()), 'cn-pic')
+    name = None
+    if soft(v):   # 照片铺满整页，在竖条内沿外淡进纸面
+        A, L = h.wash.A, C.LH
+        m = (lambda X, Y: A * _ss(x1 - L, x1 + 8, X)) if not right else (lambda X, Y: A * (1 - _ss(x0 - 8, x0 + L, X)))
+        name, body = bake_page(n, p, v, (x0 / C.W, 0, x1 / C.W, 1), mask=m, bake_box=(0, 0, 1, 1)); body += zone(x0, 0, x1, C.H)
+    else:
+        body = C.box(round(x0), 0, round(x1), C.H, C.pic(v, x1 - x0, C.H, 1, C.field_color()), 'cn-pic')
     body += region(*cols, r, p.get('body'), 0, C.LAST, id_=C.sid(n, 'b'), align=p.get('align'))
-    C.emit(n, p, r, 'paper', body, 'image', fspan=cols, hspan=cols)
+    C.emit(n, p, r, 'paper', body, 'image', name, fspan=cols, hspan=cols)
 
 def HOLE(n, p):
     """开窗：照片是版心里的一格（3 栏 × 若干行，四个角之一），旁边一栏文字，另一边整宽文字"""
@@ -476,14 +505,28 @@ def HOLE(n, p):
     right = win.endswith('r'); topw = win.startswith('t')
     wc = (7 - k, 6) if right else (1, k); bc = (1, 6 - k) if right else (k + 1, 6)
     l0, l1 = (0, m) if topw else (C.LAST - m, C.LAST)
-    body = C.box(C.x(wc[0], r), C.y(l0), C.xe(wc[1], r), C.y(l1), C.pic(v, C.wd(*wc), m * C.LH, 1, C.field_color()), 'cn-pic')
+    name = None
+    if soft(v):   # 照片铺满整页，窗里清楚、窗外淡进半透明纸面（窗边 1 行的柔边）
+        X0, Y0, X1, Y1, A, L = C.x(wc[0], r), C.y(l0), C.xe(wc[1], r), C.y(l1), h.wash.A, C.LH
+        e = 4 * L; B0, B1, B2, B3 = max(0, X0 - e), max(0, Y0 - e), min(C.W, X1 + e), min(C.H, Y1 + e)   # 照片只往窗外多铺 4 行（不整页放大，窗里的构图不变）
+        def mk(X, Y):
+            win = _ss(X0, X0 + L, X) * (1 - _ss(X1 - L, X1, X)) * _ss(Y0, Y0 + L, Y) * (1 - _ss(Y1 - L, Y1, Y))
+            keep = 1.0   # 照片多铺出来的那一圈：在外沿 3 行内淡成纯纸（贴页边的那一侧照片出血，不淡）
+            if B0 > 0: keep = keep * _ss(B0, B0 + 3 * L, X)
+            if B2 < C.W: keep = keep * (1 - _ss(B2 - 3 * L, B2, X))
+            if B1 > 0: keep = keep * _ss(B1, B1 + 3 * L, Y)
+            if B3 < C.H: keep = keep * (1 - _ss(B3 - 3 * L, B3, Y))
+            return h.wash.np.maximum(A * (1 - win), 1 - keep)
+        name, body = bake_page(n, p, v, (X0 / C.W, Y0 / C.H, X1 / C.W, Y1 / C.H), mask=mk, bake_box=(B0 / C.W, B1 / C.H, B2 / C.W, B3 / C.H)); body += zone(X0, Y0, X1, Y1)
+    else:
+        body = C.box(C.x(wc[0], r), C.y(l0), C.xe(wc[1], r), C.y(l1), C.pic(v, C.wd(*wc), m * C.LH, 1, C.field_color()), 'cn-pic')
     body += region(*bc, r, p.get('beside'), l0, l1, id_=C.sid(n, 's'), align=None if topw else 'bottom')
     if topw: body += region(1, 6, r, p.get('body'), m + 1, C.LAST, id_=C.sid(n, 'b'), after=C.sid(n, 's') if p.get('beside') else None)
     else: body += region(1, 6, r, p.get('body'), 0, C.LAST - m - 1, id_=C.sid(n, 'b'))
-    C.emit(n, p, r, 'paper', body, 'image')
+    C.emit(n, p, r, 'paper', body, 'image', name)
 
 # ---------------------------------------------------------------- 跨页：一张横图烘焙成两页宽，两页各排各的文字栈
-def spread_bake(n, p, box):
+def spread_bake(n, p, box, mask=None, bake_box=None):
     """横图烘焙成两页宽的底图；box 是照片露出来的区域（0–1，按两页宽算）。
     瑞士 / 孟菲斯 / 风格派没给照片：两页各一块安静的色块（name 是 None）"""
     if not C.has_photo(p.get('image')) and C.NOART():
@@ -494,7 +537,7 @@ def spread_bake(n, p, box):
             return C.box(round(x0), round(box[1] * C.H), round(x1), round(box[3] * C.H), C.pic(None, x1 - x0, (box[3] - box[1]) * C.H, 1, 'B', label=False), 'cn-pic')
         return None, half(0), half(C.W)
     name = f's{n:02d}.jpg'
-    h.bake(n, name, p.get('image'), 2 * C.W, lambda X, Y: 0 * X, F(p), p.get('target', [C.W, C.H * (box[1] + box[3]) / 2]), p.get('zoom', 1.0), 'spread', True, box)
+    h.bake(n, name, p.get('image'), 2 * C.W, mask or (lambda X, Y: 0 * X), F(p), p.get('target', [C.W, C.H * (box[1] + box[3]) / 2]), p.get('zoom', 1.0), 'spread', True, bake_box or box)
     C.LIGHT_ART[0] = light_art(p.get('image'))
     return name, h.IMGTAG(name, -2, 2 * C.W + 4), h.IMGTAG(name, -C.W - 2, 2 * C.W + 4)
 def cutb(n, k, y_start):
@@ -517,19 +560,20 @@ def SPREAD_P(n, p):
 def SPREAD_H(n, p):
     """横图贯穿两页上半部（下沿落在行线上）；左页标题压在图的上部，右页的字贴着图的下沿；下半是纸面"""
     if p.get('image_position') == 'bottom':
-        Ls = max(8, min(C.LAST - 8, line_of(p.get('split', 564), 17))); yS = C.y(Ls)
-        name, a, b = spread_bake(n, p, (0, yS / C.H, 1, 1))
+        Ls = max(8, min(C.LAST - 8, line_of(p.get('split', 564), 17))); yS = C.y(Ls); sft = soft(p.get('image')); tt = .45 * yS
+        name, a, b = spread_bake(n, p, (0, yS / C.H, 1, 1), **(dict(mask=fade_up(yS, tt), bake_box=(0, tt / C.H, 1, 1)) if sft else {}))
         for k, (img, side, q) in enumerate([(a, 'L', p.get('left', {})), (b, 'R', p.get('right', {}))]):
             m = n + k; r = m % 2 == 1
-            body = img + paper(0, 0, C.W, yS) + zone(0, yS, C.W, C.H)
+            body = img + ('' if sft else paper(0, 0, C.W, yS)) + zone(0, yS, C.W, C.H)
             body += region(1, 6, r, q.get('body'), 0, Ls - 1, id_=C.sid(m, 'b'))
             C.emit(m, q, r, 'paper', body, 'image', name, side=side, fsf=osf(name))
         return
     Ls = max(8, min(C.LAST - 8, line_of(p.get('body_top', 548), 16) - 1)); yS = C.y(Ls)
-    name, a, b = spread_bake(n, p, (0, 0, 1, yS / C.H)); L, Rr = p.get('left', {}), p.get('right', {}); la = C.LIGHT_ART[0]
+    sft = soft(p.get('image')); bb = yS + .55 * (C.H - yS)
+    name, a, b = spread_bake(n, p, (0, 0, 1, yS / C.H), **(dict(mask=fade_down(yS, bb), bake_box=(0, 0, 1, bb / C.H)) if sft else {})); L, Rr = p.get('left', {}), p.get('right', {}); la = C.LIGHT_ART[0]
     for k, (img, side, q) in enumerate([(a, 'L', L), (b, 'R', Rr)]):
         m = n + k; r = m % 2 == 1; C.LIGHT_ART[0] = la
-        body = img + paper(0, yS, C.W, C.H) + zone(0, 0, C.W, yS)
+        body = img + ('' if sft else paper(0, yS, C.W, C.H)) + zone(0, 0, C.W, yS)
         if q.get('on_photo'):
             top_ = side == 'L'
             body += (cutb(m, 'o', 0) if top_ else cut(m, 'o', yS)) + region(1, 6, r, q['on_photo'], 0, Ls - 1, sf=osf(name), align=None if top_ else 'bottom', id_=C.sid(m, 'o'))
@@ -539,14 +583,21 @@ def SPREAD_H(n, p):
 def SPREAD_OPENER(n, p):
     """左页开篇海报，照片延伸到右页：右页 SL = 订口一侧两栏宽的照片竖条，T = 上部照片；其余是纸面"""
     kind_ = p.get('right_layout', 'SL'); L, Rr = p.get('left', {}), p.get('right', {})
-    name, a, b = spread_bake(n, p, (0, 0, .5 + (C.gc(2, True) / (2 * C.W)), 1) if kind_ == 'SL' else (0, 0, 1, 1)); la = C.LIGHT_ART[0]
+    sft = soft(p.get('image')); A_, L_ = h.wash.A, C.LH; W_ = C.W + 2; cut0 = C.gc(2, True)
+    Ls = max(6, min(C.LAST - 8, line_of(Rr.get('body_top', 300), 7))); yS = C.y(Ls)
+    if kind_ == 'SL':   # 照片从左页铺过订口，在右页竖条内沿外淡进纸面
+        mk = lambda X, Y: A_ * _ss(W_ + cut0 - L_, W_ + cut0 + 8, X)
+        bx, bbx = (0, 0, .5 + (cut0 / (2 * C.W)), 1), (0, 0, 1, 1)
+    else:              # 右页上部是照片，往下淡进半透明纸面（左页整页照片不动）
+        mk = lambda X, Y: A_ * _ss(yS - L_ * .5, yS + L_, Y) * (X > W_)
+        bx, bbx = (0, 0, 1, 1), None
+    name, a, b = spread_bake(n, p, bx, **(dict(mask=mk, bake_box=bbx) if sft else {})); la = C.LIGHT_ART[0]
     poster_side(n, L, False, a, name, 'L', la)
     m = n + 1; r = True; C.LIGHT_ART[0] = la
     if kind_ == 'SL':
-        cut_ = C.gc(2, r); body = b + paper(cut_, 0, C.W, C.H) + zone(0, 0, cut_, C.H) + region(3, 6, r, Rr.get('body'), 0, C.LAST, id_=C.sid(m, 'b'))
+        cut_ = C.gc(2, r); body = b + ('' if sft else paper(cut_, 0, C.W, C.H)) + zone(0, 0, cut_, C.H) + region(3, 6, r, Rr.get('body'), 0, C.LAST, id_=C.sid(m, 'b'))
         return C.emit(m, Rr, r, 'paper', body, 'image', name, side='R', fspan=(3, 6), hspan=(3, 6))
-    Ls = max(6, min(C.LAST - 8, line_of(Rr.get('body_top', 300), 7))); yS = C.y(Ls)
-    body = b + paper(0, yS, C.W, C.H) + zone(0, 0, C.W, yS)
+    body = b + ('' if sft else paper(0, yS, C.W, C.H)) + zone(0, 0, C.W, yS)
     if Rr.get('on_photo'): body += cut(m, 'o', yS) + region(1, 6, r, Rr['on_photo'], 0, Ls - 1, sf=osf(name), align='bottom', id_=C.sid(m, 'o'))
     body += region(1, 6, r, Rr.get('body'), Ls + 1, C.LAST, id_=C.sid(m, 'b'))
     C.emit(m, Rr, r, 'paper', body, 'image', name, side='R', hsf=osf(name))

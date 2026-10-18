@@ -94,7 +94,9 @@ def tokens(sf):
         return dict(bg=P, fg=INK, hd=INK, acc=INK, num=A if contrast(A, P) >= 3 else INK, lab=INK, mut=T['MUT'], rule=INK, line=rgba(INK, .3))
     if sf == 'image':
         lt = max((A, B), key=lum); lt = lt if lum(lt) > .6 and MODE() == 'clash' else '#FFFFFF'   # 照片上的大数字：很浅的撞色（拿坡里黄、柠檬黄、鱼肚白）才用，否则白字
-        return dict(bg='#111111', fg='#FFFFFF', hd='#FFFFFF', acc='#FFFFFF', num=lt, lab='#FFFFFF', mut='rgba(255,255,255,.88)', rule='#FFFFFF', line='rgba(255,255,255,.45)')
+        acc = '#FFFFFF'
+        if G.get('STYLE') == 'photo' and T.get('GOLD') and lum(T['GOLD']) > .4: lt = acc = T['GOLD']   # 国家地理式：照片上的 Day 大字、编号、时段标签、color: gold 用金色
+        return dict(bg='#111111', fg='#FFFFFF', hd='#FFFFFF', acc=acc, num=lt, lab='#FFFFFF', mut='rgba(255,255,255,.88)', rule='#FFFFFF', line='rgba(255,255,255,.45)')
     acc = A if contrast(A, P) >= 5 else _on5(P, T['G'], T['OCH'], INK)
     return dict(bg=P, fg=INK, hd=acc, acc=acc, num=A if contrast(A, P) >= 3.2 else acc, lab=acc, mut=T['MUT'], rule=INK, line=rgba(INK, .22))
 def _mix(a, b, t):

@@ -45,7 +45,7 @@ description: 把 Word/PDF/PPT/Markdown/纯文字稿（或只有一个题目）�
 
 **颜色按角色给，按档位用。** 配色写成 6 个角色（背景 / 次级背景 / 主色 / 强调色 / 次强调色 / 正文），`book.color_mode`：clash 撞色、accent 点缀或 mono 单色（`style: swiss` 的默认：白纸黑字 + 一个强调色）；不写时按风格或两色自动判断。无图页也要规划纸面节奏，显式主题色纸面不受默认mono压成白纸；白字/黑字按对比度选择。用法、档位边界及`colorqa.py`比例提示见 `references/style.md` §8。
 
-**秩序来自网格，气势来自满版和撞色。** 所有风格、所有版式共用一个排版引擎：8 种内容版式（FULL 全屏 / ONE 单栏 / TWO 双栏 / CARDS 卡片 / STAGGER 错位 / GRID 网格 / COLLAGE 拼贴 / MIX 组合）和照片版式（POSTER / T / SL / HOLE / SPREAD…）都排在同一张 6 栏网格上（A4 32 行，正文 16px 印出来 12pt / 小四；字多的册子写 `book.body: 14` 回到 10.5pt；A5、小红书 28 行、14px），同一套字号档和行宽规则，英文正文同样用所选正文字号；照片和插画只放在网格里的一格或满版，和纸面硬边相接；大标题撑满栏宽；底色在纸色 / A 色块 / B 色块 / 满版照片间轮换。风格只换字体、颜色、插画和页边装饰。只选版式、放原文，**不写尺寸、坐标、颜色**；写了的 px 数也会吸到整行、整栏、字号档（`references/layouts.md` §0）。
+**秩序来自网格，气势来自满版和撞色。** 所有风格、所有版式共用一个排版引擎：8 种内容版式（FULL 全屏 / ONE 单栏 / TWO 双栏 / CARDS 卡片 / STAGGER 错位 / GRID 网格 / COLLAGE 拼贴 / MIX 组合）和照片版式（POSTER / T / SL / HOLE / SPREAD…）都排在同一张 6 栏网格上（A4 32 行，正文 16px 印出来 12pt / 小四；字多的册子写 `book.body: 14` 回到 10.5pt；A5、小红书 28 行、14px），同一套字号档和行宽规则，英文正文同样用所选正文字号；照片和插画只放在网格里的一格或满版，边落在行线上（photo 风格淡进半透明纸面，其余硬边）；大标题撑满栏宽；底色在纸色 / A 色块 / B 色块 / 满版照片间轮换。风格只换字体、颜色、插画和页边装饰。只选版式、放原文，**不写尺寸、坐标、颜色**；写了的 px 数也会吸到整行、整栏、字号档（`references/layouts.md` §0）。
 
 **中文版、英文版同一套版式。** 文字写成 `{zh: …, en: …}` + `book.langs: [zh, en]`，`run.sh` 一次出两本、各自检查、出逐页对照图。
 
@@ -61,7 +61,7 @@ description: 把 Word/PDF/PPT/Markdown/纯文字稿（或只有一个题目）�
 ```bash
 HB=<skill目录>/hb; P=<工作目录>/<项目名>_v1
 bash $HB/check_env.sh                                   # 新环境第一次
-bash $HB/new_project.sh $P 原文 [照片目录] [--from 旧项目]  # 建项目 → doc.md + plan.md + photos/
+bash $HB/new_project.sh $P 原文 [照片目录] [--from 旧项目]  # 建项目 → doc.md + plan.md + copy_map.md + page-plan.md 骨架 + photos/
 python3 $HB/directions.py $P "A=style:photo,colors:klein" "B=style:stijl" "C=style:swiss" --title "书名"   # 三个方向的样张（风格见 references/style.md §1）
 bash $HB/run.sh $P [--proof]                            # 构建 + 全部检查 + 门禁（--proof 只排前 5 页）
 bash $HB/export.sh $P[/语言] [文件名] [--draft]           # PDF + 可编辑 PDF + HTML + 源文件 + 拼版图

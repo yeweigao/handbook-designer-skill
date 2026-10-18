@@ -11,9 +11,10 @@
 ```bash
 HB=<skill目录>/hb; P=<工作目录>/<项目名>_v1
 bash $HB/check_env.sh                          # 新环境第一次用时跑一次
-bash $HB/new_project.sh $P 原文.pptx 照片目录/   # → doc.md + plan.md + photos/（资料里的图自动抽出）
+bash $HB/new_project.sh $P 原文.pptx 照片目录/   # → doc.md + plan.md + copy_map.md + page-plan.md 骨架 + photos/（资料里的图自动抽出）
 ```
 读 `plan.md`（字数、照片按清晰度分档、每段建议版式、页数估计、原文里的空白 / 重复 / 页码问题），再自己通读原文，补上脚本查不出的：错别字、前后矛盾、过时信息、要复核的事实。
+`copy_map.md` 是逐段编号的文案清单（S01…，带位置、类型猜测、字数），之后 page-plan.md 用这些编号写每页放哪几段。类型是脚本猜的，对照原文改对四件事：**层级**（PPT 里字大 ≠ 层级高；Word 里加粗短句常是小标题）、**成组**（一个任务的标题 + 说明 + 产出是一组，设计时不拆开）、**阅读顺序**（PPT 已按幻灯片上从上到下、从左到右抽取，仍要对照原幻灯片确认）、**原文问题**（空白、错字、重复、矛盾——只记录，不改）。PPT 先把幻灯片导出成图看一遍原作者的重点（`soffice --headless --convert-to pdf 原文.pptx && pdftoppm -r 40 -jpeg 原文.pdf slide`）；演讲者备注在 notes.md，默认不排版。
 
 ## 2 · 第 1 轮：沟通合同（先对齐“给谁看、读完做什么”）
 先判断用途方法：`purposes/index.yaml` 里哪一种最接近（招生简章 admissions / 研学任务册 study-trip / 家长手册 parents / 新生手册 freshman / 年度回顾 annual）。读那个 yaml 的 reader / action / hook / roles。

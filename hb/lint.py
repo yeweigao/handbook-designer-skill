@@ -5,6 +5,7 @@
 - 节奏：每页按版式和字数归成 锚点 anchor / 密集 dense / 呼吸 breathing（页上可写 rhythm: 覆盖），
   连续 3 页以上密集、6 页以上没有锚点、连续 3 页同版式 → 提示
 - 封面在第 1 页、封底在最后、页数是 4 的倍数
+- 先设计再写 yaml：page-plan.md 有没有覆盖 book.yaml 的每一页（references/adaptation.md）
 结果打印并写到 .qa/lint.txt。"""
 import sys, os, re, yaml
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
@@ -61,6 +62,24 @@ for k, (pn, lay, rh) in enumerate(seq):
     if run == 4: warn(f'[节奏] 第{pn - 3}–{pn}页连续 4 页密集（{"、".join(s[1] for s in seq[k - 3:k + 1])}）→ 中间插一页 FULL / COLLAGE，或把一页换成 ONE / MIX')
     if since == 7: warn(f'[节奏] 第{pn - 6}–{pn}页 7 页没有锚点页 → 插一页 FULL（章节页）或 COLLAGE')
     if same == 3: warn(f'[节奏] 第{pn - 2}–{pn}页连续 3 页都是 {lay} → 换一种版式（CARDS ↔ STAGGER / TWO / GRID）')
+# ---------------------------------------------------------------- 设计先行：page-plan.md 覆盖每一页（references/adaptation.md）
+PL = os.path.join(P, 'page-plan.md')
+if pages and not B.get('frozen') and os.path.basename(P) != '.proof':
+    txt = open(PL, encoding='utf-8').read() if os.path.exists(PL) else ''
+    covered = set(); done = set()
+    def span(a_, b_): return set(range(int(a_), int(b_ or a_) + 1))
+    for m in re.finditer(r'^\|\s*[pP第]?\s*(\d+)\s*(?:[–—~-]\s*(\d+))?\s*页?\s*\|(.*)$', txt, re.M):   # 页面总表的行（还是〔占位〕的不算）
+        if '〔' not in m.group(3): covered |= span(m.group(1), m.group(2))
+    for m in re.finditer(r'^#{2,4}\s*(?:第\s*|[pP]\.?\s*)(\d+)\s*(?:[–—~-]\s*(\d+))?\s*页?[^\n]*\n((?:(?!^#{1,4}\s).*\n?)*)', txt, re.M):   # 逐页小节
+        body = m.group(3).strip()
+        if body and '〔读者看完要知道' not in body: covered |= span(m.group(1), m.group(2)); done |= span(m.group(1), m.group(2))
+    if not covered:
+        warn('[设计] 还没有 page-plan.md 的逐页方案 → 先定整册节奏，再逐页写页面任务、文案分工（copy_map.md 的 S 编号）、视觉主角、视线、图文关系，最后才写 book.yaml（references/adaptation.md）')
+    else:
+        miss = [k for k in range(1, total + 1) if k not in covered]
+        if miss: warn(f'[设计] page-plan.md 没有第 {"、".join(map(str, miss[:12]))} 页 → 先把这几页的方案写进 page-plan.md，再改 book.yaml')
+        thin = [k for k in sorted(covered) if k not in done and k <= total]
+        if thin and done: warn(f'[设计] page-plan.md 里第 {"、".join(map(str, thin[:12]))} 页只在总表里，还没有逐页小节（页面任务 / 文案分工 / 展示方案）')
 todo = []
 def find_todo(o, path):
     if isinstance(o, str) and o.strip() == 'TODO': todo.append(path)

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""plan.py — 动手排版之前的“素材盘点 + 待确认清单”。  用法：python3 plan.py <project_dir>
-读 new_project.sh 产出的 doc.md / images.md / photos/，写 <project_dir>/plan.md 并打印。
-它只做机械的事：数字数、数图、按清晰度分档、按内容形状给每段建议一个内容版式、估页数、
-找原文里的空白（____ / ¥ ___ / 待定）、重复段落、页码样式文字、缺的链接。
-错别字、事实、语气这些判断留给你（agent）通读时补充。拿到 plan.md 后：写 2–3 个方案发给用户，等用户选定再排版（SKILL.md 第 0 步）。
+"""plan.py — 动手排版之前的“素材盘点 + 文案清单”。  用法：python3 plan.py <project_dir>
+读 new_project.sh 产出的 doc.md / images.md / photos/，写：
+  plan.md       素材盘点：字数、图片分档、每段的形状和建议版式、页数估计、原文里的空白 / 重复 / 页码问题、要问用户的事
+  copy_map.md   文案清单：每段一个编号 S01…，标出位置（原第几页 / 哪一节）、类型猜测（标题、数据、日程、联系方式、待填空白……）、字数
+  page-plan.md  逐页方案的空骨架（只在还没有时生成；格式和写法见 references/adaptation.md）——写完它才写 book.yaml
+它只做机械的事；层级、成组、阅读顺序、错别字、事实这些判断留给你（agent）通读时补到 copy_map.md / page-plan.md 里。
 """
 import sys, os, re, glob, collections
 P = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else '.')
@@ -148,5 +149,50 @@ o.append('4. 视觉（第 2 轮用 directions.py 出三个方向的样张让用�
 o.append('5. 上面的原文问题：改还是照原文')
 o.append('6. 图片不够/不清晰时：用户补原图，还是 AI 补图（AI 图会标注）')
 o.append('7. 打印还是电子版；骑马钉要 4 的倍数页')
+
+# ---------------------------------------------------------------- 文案清单 copy_map.md（每段一个编号，逐页设计时按编号分配）
+def kind(l, t):
+    if l: return '标题'
+    if t.startswith('|'): return '表格'
+    if re.search(r'_{3,}|＿{2,}|[:：]\s*$|[¥￥]\s*(?=[\s_]|$)|（\s*）|待定|TBD', t): return '待填空白'
+    if re.search(r'@|微信|WeChat|电话|Tel|☎|www\.|https?://|\.com\b', t, re.I): return '联系方式'
+    if re.search(r'\b\d{1,2}[:：]\d{2}\b|Day\s*\d|第\s*[一二三四五六七八九十\d]+\s*天|\b\d{4}[./-]\d{1,2}|\d{1,2}\s*月\s*\d{1,2}\s*日', t, re.I): return '日程/日期'
+    if re.match(r'^([-*•▶✓]|\d+[.、)])\s*', t): return '列表项'
+    if re.search(r'[“「"].{6,}[”」"]', t): return '引语'
+    if re.search(r'\d', t) and count(t) < 30: return '数据'
+    return '短句' if count(t) < 30 else '段落'
+segs = []; where = '开头'; pgno = None
+for raw in md.splitlines():
+    s_ = raw.strip()
+    m = re.match(r'^<!--\s*第\s*(\d+)\s*([页节])', s_)
+    if m: pgno = f'原第 {m.group(1)} {m.group(2)}'; where = pgno; continue
+    if not s_ or s_.startswith('<!--') or re.fullmatch(r'\|[\s:|-]*\|', s_) or re.fullmatch(r'!\[[^\]]*\]\([^)]*\)|<img\b[^>]*>', s_): continue
+    h = re.match(r'^(#{1,3})\s+(.*)', s_); bold = re.fullmatch(r'\*\*(.+)\*\*', s_)
+    lv = ('H' if h and len(h.group(1)) == 1 else 'h') if h else ('h' if bold and len(bold.group(1)) < 40 else '')
+    t = plain(s_) if lv else re.sub(r'\*\*|__', '', s_)
+    t = re.sub(r'\\([_*\-.#\[\]()!+])', r'\1', t)   # Markdown 转义（\_ \*）还原成原文字符
+    if t.startswith('|'): t = '| ' + ' · '.join(c.strip() for c in t.strip('|').split('|'))   # 表格行：单元格用 · 隔开
+    if lv and not pgno: where = t[:20]
+    segs.append((where if not lv or pgno else t[:20], lv, t))
+cm = ['# 文案清单（plan.py 自动生成；类型是猜的，层级、成组、阅读顺序请对照原文改对）', '',
+      '写 page-plan.md 时，在页面总表里用 S 编号写“这一页放哪几段”；每个编号都要用到（原文一字不改，排不下就挪页，不删）。', '',
+      '| # | 位置 | 类型 | 字数 | 文案 |', '|---|---|---|---|---|']
+for k, (w, l, t) in enumerate(segs, 1):
+    tt = t[2:] if t.startswith('| ') else t
+    cm.append(f'| S{k:02d} | {w} | {kind(l, t)} | {count(tt)} | {tt.replace("|", "/")[:120]}{"…" if len(tt) > 120 else ""} |')
+open(os.path.join(P, 'copy_map.md'), 'w', encoding='utf-8').write('\n'.join(cm) + '\n')
+
+# ---------------------------------------------------------------- 写 plan.md；page-plan.md 只在没有时给一个骨架（不覆盖你写的方案）
+o.append(f'\n文案逐段编号见 copy_map.md（共 {len(segs)} 段 S01–S{len(segs):02d}）；page-plan.md 里用 S 编号写每页放哪几段（references/adaptation.md）。')
 open(os.path.join(P, 'plan.md'), 'w', encoding='utf-8').write('\n'.join(o) + '\n')
-print('\n'.join(o)); print(f'\n→ {P}/plan.md')
+PP = os.path.join(P, 'page-plan.md')
+if not os.path.exists(PP):
+    open(PP, 'w', encoding='utf-8').write(
+        '# 逐页方案 page-plan.md（先写完再写 book.yaml；格式与写法见 references/adaptation.md）\n\n'
+        '## 整册翻页节奏\n- 叙事弧与高点：〔封面、章节开篇、最打动人的亮点、结尾号召〕\n- 跨页：〔几组、放在哪、各自的任务；左页偶数页〕\n'
+        '- 密集 / 呼吸 / 锚点页怎么交替：〔〕\n- 配图：〔最好的照片给哪几页；横图 → 跨页，竖图 → 海报 / 侧条；一图一用〕\n- 字体分工：〔〕\n\n'
+        '## 页面总表\n| 页 | 文案（S 编号） | job | 视觉主角 | 版式 | 图 |\n|---|---|---|---|---|---|\n| 1 | 〔S01–S03〕 | cover | 〔照片 / 大字 / 数据〕 | 〔FULL〕 | 〔〕 |\n\n'
+        '## 第 1 页\n- 页面任务：〔读者看完要知道或做什么；只设一个主要焦点〕\n- 文案分工：〔主标题 / 栏目字 / 序号 / 导语 / 正文 / 数据 / 时间地点 / 行动信息〕\n'
+        '- 采用文案：〔S 编号；有改写列原句 → 采用句〕\n- 展示方案：〔视觉主角；视线 第一眼 → 第二眼 → 第三眼；字放在照片哪块安静区；版式由此推出 + 理由〕\n'
+        '- 留白与对齐：〔〕\n- 验收重点：〔〕\n')
+print('\n'.join(o)); print(f'\n→ {P}/plan.md · {P}/copy_map.md' + ('' if os.path.exists(PP) and 'S01–S03〕' not in open(PP, encoding='utf-8').read() else f' · {P}/page-plan.md（骨架）'))
