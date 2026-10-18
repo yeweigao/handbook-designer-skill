@@ -64,7 +64,7 @@ def side_cols(r, inner=True):                     # 一页的“里侧三栏 / �
 def rgba(c, a):
     c = c.lstrip('#'); return f'rgba({int(c[0:2], 16)},{int(c[2:4], 16)},{int(c[4:6], 16)},{a})'
 def MODE(): return G.get('COLOR_MODE', 'clash')
-def QUIET(): return G.get('STYLE') in ('swiss', 'geo', 'stijl') and MODE() == 'mono'   # 瑞士单色档 / 孟菲斯：白纸黑字 + 一个强调色，没有大色块、没有生成的底图
+def QUIET(): return G.get('STYLE') in ('swiss', 'geo', 'stijl') and MODE() == 'mono'   # 默认节制用色；显式surface仍可选实色纸面，不生成底图
 def NOART(): return QUIET() or G.get('STYLE') in ('stijl', 'geo')   # 不生成风格底图的风格（图片位没照片时是色块，不是插画）
 def BW(): return QUIET() and G.get('STYLE') == 'swiss' or G.get('STYLE') == 'stijl'   # 照片一律转黑白
 def tokens(sf):
