@@ -1,6 +1,6 @@
 ---
 # 决策记录：用户在第 0 步确认过的东西。run.sh 每次构建都拿它和 book.yaml 对一遍，不一致就停（防止排到一半改了用户没同意的设置）。
-# 只写已经确认的项；没确认的删掉这一行。要改：先和用户确认，再改这里并在“改动记录”记一笔，最后改 book.yaml。
+# 只写已经确认的项；没确认的删掉这一行。要改：先核已有授权，用户明确要求的直接记录；缺决定才询问，再改这里及 book.yaml。
 route: new            # new 新做 / quick 快速 / beautify 美化（文字冻结）/ reuse 沿用旧册 / revise 改版 / brand 建品牌包
 purpose: brochure     # workbook 任务册 / guide 指南 / brochure 宣传册
 kind: admissions      # 用途方法（purposes/）：admissions 招生简章 / study-trip 研学任务册 / parents 家长手册 / freshman 新生手册 / annual 年度回顾

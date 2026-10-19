@@ -33,6 +33,6 @@ info.ov.push(...JSON.parse(await p.evaluate(()=>document.body.dataset.cnqa||'[]'
 fs.writeFileSync(path.join(Q,'b3.json'),JSON.stringify(info.out));fs.writeFileSync(path.join(Q,'overflow.json'),JSON.stringify(info.ov));fs.writeFileSync(path.join(Q,'schema.json'),JSON.stringify({v:1,b3:1,overflow:1,sparse:1}));console.log('overflow',JSON.stringify(info.ov));
 const pages=await p.$$('.page');
 if(mode!='bg'){for(let i=0;i<pages.length;i++)fs.writeFileSync(path.join(Q,`pg${i}.png`),await pages[i].screenshot({type:'png'}));}
-await p.evaluate(()=>{const st=document.createElement('style');st.textContent='*:not(#hb_a):not(#hb_b){color:transparent!important;-webkit-text-fill-color:transparent!important;-webkit-text-stroke-color:transparent!important;border-color:transparent!important;text-shadow:none!important}.gt,.cdn,.cn-ino::after{background:none!important}';document.head.appendChild(st)});
+await p.evaluate(()=>{const st=document.createElement('style');st.textContent='*:not(#hb_a):not(#hb_b):not(.cn-brand-graphic):not(.cn-brand-graphic *){color:transparent!important;-webkit-text-fill-color:transparent!important;-webkit-text-stroke-color:transparent!important;border-color:transparent!important;text-shadow:none!important}.gt,.cdn,.cn-ino::after{background:none!important}';document.head.appendChild(st)});
 for(let i=0;i<pages.length;i++)fs.writeFileSync(path.join(Q,`bg${i}.png`),await pages[i].screenshot({type:'png'}));
 await b.close();process.exit(0)})().catch(e=>{const f=friendly(e);if(f)console.error(f);else console.error(e);process.exit(1)});

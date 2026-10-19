@@ -31,7 +31,8 @@ PY
 # PDF 书签（F09）：pdf.js 的 Chromium 打印不产生 outline，用 pikepdf 补。
 # 结构来源：plan.txt 的版式（FULL = 章节页）+ book.html 每页的标题元素（.cn-num 章节号 / .cn-disp 标题）。
 # 一级：封面、章节页、封底；二级：有标题的内容页。没有 pikepdf：WARN 后跳过、不拦导出（postflight 会断言 outline ≥ 1）。
-python3 - "$P/out/$N.pdf" "$P/plan.txt" "$P/book.html" <<'PY'
+add_bookmarks() {
+python3 - "$1" "$P/plan.txt" "$P/book.html" <<'PY'
 import sys, re, os, html as H
 pdf_path, plan_path, book_path = sys.argv[1:4]
 try:
@@ -45,9 +46,11 @@ for seg in re.split(r'(?=<section)', h):
     if not m: continue
     body = seg[:seg.find('</section>')] if '</section>' in seg else seg
     num = re.search(r'class="cn-a cn-num[^"]*"[^>]*>([^<]*)<', body)
+    chapter = re.search(r'data-chapter="([^"]+)"', body)
     disp = re.search(r'class="cn-disp[^"]*"[^>]*>(.*?)</div>', body, re.S)
+    if not disp: disp = re.search(r'class="cn-h cn-ttl[^"]*"[^>]*>(.*?)</div>', body, re.S)
     t = H.unescape(re.sub(r'<[^>]+>', ' ', disp.group(1))) if disp else ''
-    pages[int(m.group(1))] = (num.group(1).strip() if num else '', re.sub(r'\s+', ' ', t).strip())
+    pages[int(m.group(1))] = (H.unescape(chapter.group(1)) if chapter else num.group(1).strip() if num else '', re.sub(r'\s+', ' ', t).strip(), bool(chapter))
 lay = {}     # 成品页码 → 版式（跨页取起始页）
 if os.path.exists(plan_path):
     for l in open(plan_path, encoding='utf-8'):
@@ -58,13 +61,14 @@ ns = sorted(pages)
 if not ns: sys.exit(0)
 items = [(1, H.unescape(t0.group(1)).strip() if t0 else pages[ns[0]][1] or '封面', ns[0])]   # 一级：封面（用书名）
 for n in ns[1:]:
-    num, disp = pages[n]; L = lay.get(n, '')
-    if L == 'FULL': items.append((1, (num + ' · ' if num else '') + (disp or f'第 {n} 页'), n))   # 一级：章节页
-    elif n == ns[-1] and L == 'POSTER': items.append((1, disp or '封底', n))                     # 一级：封底
+    num, disp, chapter = pages[n]; L = lay.get(n, '')
+    if chapter or L == 'FULL': items.append((1, (num + ' · ' if num else '') + (disp or f'第 {n} 页'), n))   # 一级：章节页（合并到PAPER/跨页也保留）
+    elif n == ns[-1]: items.append((1, disp or '封底', n))                                    # 一级：封底
     elif disp: items.append((2, disp, n))                                                        # 二级：有标题的内容页
 pdf = pikepdf.open(pdf_path)
 try:
     with pdf.open_outline() as ol:
+        ol.root.clear()
         stack = [ol.root]
         for lv, title, pg in items:
             it = pikepdf.OutlineItem(title, pg - 1)   # pikepdf 用 0 基页码
@@ -75,12 +79,17 @@ try:
 except Exception as e:
     print(f'提示：PDF 书签补写失败（{type(e).__name__} {str(e)[:80]}），不影响导出')
 PY
+}
+add_bookmarks "$P/out/$N.pdf"
 python3 "$HB/standalone.py" "$P/book.html" "$P/out/$N.html"
 if grep -q 'data-canvas="xhs"' "$P/book.html"; then node "$HB/pngs.js" "$P" "$P/out/${N}_小红书" 1080; fi   # 小红书画布：每页一张 1080×1440 图
 if [ -z "$HB_NO_EDITABLE$DRAFT" ]; then   # 可编辑 PDF：字体完整嵌入常用字库（GB2312 6763 字），别人可以直接在 PDF 编辑器里改字
   if python3 -c "import pikepdf" 2>/dev/null; then
-    python3 "$HB/editable_pdf.py" "$P" "$P/out/${N}_可编辑.pdf" "$P/out/$N.pdf" \
-      || echo "提示：可编辑 PDF 生成失败（看上面的报错）；普通版 PDF 不受影响"
+    if python3 "$HB/editable_pdf.py" "$P" "$P/out/${N}_可编辑.pdf" "$P/out/$N.pdf"; then
+      add_bookmarks "$P/out/${N}_可编辑.pdf"
+    else
+      echo "提示：可编辑 PDF 生成失败（看上面的报错）；普通版 PDF 不受影响"
+    fi
   else
     echo "提示：未生成可编辑 PDF（需要 pikepdf：pip install pikepdf）"
   fi

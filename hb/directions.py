@@ -56,7 +56,7 @@ for d in dirs:
     sets = [s.replace(':', '=', 1) for s in kv.split(',') if s.strip()]
     out = os.path.join(P, '.dir', name); shutil.rmtree(out, ignore_errors=True)
     subprocess.run([sys.executable, os.path.join(HB, 'subset.py'), P, out, PAGES, '--src', src, '--lang', lang] + sets, check=True, stdout=subprocess.DEVNULL)
-    r = subprocess.run(['bash', os.path.join(HB, 'run.sh'), out], env=dict(os.environ, HB_NOLOCK='1'), capture_output=True, text=True)
+    r = subprocess.run(['bash', os.path.join(HB, 'run.sh'), out], env=dict(os.environ, HB_NOLOCK='1', HB_PROOF='1'), capture_output=True, text=True)
     gate = 'PASS' if 'GATE: PASS' in r.stdout else 'FAIL'
     if r.returncode and 'GATE' not in r.stdout: print(r.stdout[-1500:], r.stderr[-1500:]); sys.exit(f'方向 {name} 构建出错')
     pgs = sorted(glob.glob(os.path.join(out, '.qa', 'pg*.png')), key=lambda f: int(os.path.basename(f)[2:-4]))

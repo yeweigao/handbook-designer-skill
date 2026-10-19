@@ -50,7 +50,7 @@ SD=STYLES[STYLE]
 TH_=dict(INK='#17211C',G='#1D5A43',MUT='#3F4A44',GOLD='#F2C14E',OCH='#7E560E',PAPER='#FBFAF7'); TH_.update(SD['colors']); TH_=PAL.resolve(BK.get('colors') or (None if SD['colors'] else PAL.DEFAULT),TH_)   # 没写配色、风格也没自带配色 → 默认 klein（克莱因蓝 × 拿坡里黄）
 TH_['A'],TH_['B']=PAL.pair(TH_)   # 内容版式的两块撞色（角色：主色 primary、强调色 accent）
 COLOR_MODE,MODE_WHY=PAL.mode(TH_,BK.get('color_mode') if BK.get('color_mode') not in (None,'auto') else SD.get('mode'))   # 用色档位：clash 撞色 / accent 点缀 / mono 单色；没写时用风格的默认档（swiss → mono），再没有就按两色的色相差和对比度自动判断
-if SD.get('mode') and BK.get('color_mode') in (None,'auto'): MODE_WHY=f'{STYLE} 风格默认 {COLOR_MODE}（要大色块写 color_mode: clash）'
+if SD.get('mode') and BK.get('color_mode') in (None,'auto'): MODE_WHY=f'{STYLE} 风格默认 {COLOR_MODE}（单页主题色纸面写 surface: A；整册撞色写 color_mode: clash）'
 if STYLE=='swiss' and COLOR_MODE=='clash' and not BK.get('colors'):   # 瑞士撞色档没写配色 → 用默认撞色方案（风格自带的红 + 白撑不起撞色）
     TH_=PAL.resolve(PAL.DEFAULT,dict(INK='#17211C',G='#1D5A43',MUT='#3F4A44',GOLD='#F2C14E',OCH='#7E560E',PAPER='#FBFAF7')); TH_['A'],TH_['B']=PAL.pair(TH_)
 if STYLE=='stijl' and str(BK.get('look','classic')).lower()=='tone': TH_['A']=TH_['INK']   # 风格派无线：强调用墨色
@@ -242,9 +242,11 @@ def OUTLINE(text,size,stroke,color,track=0):
             f'<path d="{" ".join(paths)}" fill="none" stroke="{color}" stroke-width="{stroke}" stroke-linejoin="round"/></svg>')
 # 内容块（title、p、cards、figure …）由 flow.py 按 canon 的字号档和整行间距排（canon.blocks / flow.R）
 # ---------------------------------------------------------------- layouts
-PP=[]; MAP={}
-def page(n,html,img,side,bg,cls=''):
-    PP.append(f'<section class="page{cls}" id="p{n}" style="background:{bg}" data-n="{n}">{html}</section>')   # id：目录、PDF 里的页内链接跳到这里
+PP=[]; MAP={}; CHAPTERS=[]; BRAND_GRAPHICS={}
+def page(n,html,img,side,bg,cls='',chapter=None):
+    ch = f' data-chapter="{esc(str(chapter))}"' if chapter is not None else ''
+    if chapter is not None: CHAPTERS.append(str(chapter))
+    PP.append(f'<section class="page{cls}" id="p{n}" style="background:{bg}" data-n="{n}"{ch}>{html}</section>')   # id：目录、PDF 里的页内链接跳到这里
     if img: MAP[len(PP)-1]=dict(img=img,side=side)
 # 照片版式（POSTER / T / B / SL / SR / HOLE / PAPER / 跨页）也排在 6 栏网格上：见 flow.py
 
@@ -301,6 +303,12 @@ for i,p in enumerate(SPEC['pages']):
     plan.append(f'{n:02d}{"-%02d"%(n+1) if span==2 else "   "} {lay:14s} {"（内容版式 · 主底 "+SN.get(SURF_HIST[-1],SURF_HIST[-1])+"）" if lay in RECIPES else p.get("image","") or ("" if lay=="PAPER" else "（"+STYLE+" 底图）")}  {p.get("note","")}')
     n+=span; prev=lay
 total=n-1
+import brand_graphic
+ERR.extend(brand_graphic.validate_spreads(BRAND_GRAPHICS, W))
+if BK.get('binding') not in (None, 'saddle'): ERR.append('book.binding 目前支持 saddle（骑马钉）；其他装订方式不写此项')
+if BK.get('binding')=='saddle' and total%4 and not os.environ.get('HB_PROOF'): ERR.append(f'骑马钉总页数须为4的倍数（含封面封底），当前{total}页 → 先统筹合页/拆页，不自动塞空白')
+declared_chapters = [str(k) for k in BK.get('series', {}).get('chapters', {}).get('items', {})]
+if declared_chapters and CHAPTERS != declared_chapters and not os.environ.get('HB_PROOF'): ERR.append(f'章节顺序不完整：登记{declared_chapters}，实际{CHAPTERS} → 检查合页后的chapter与可见章标')
 CSS=open(os.path.join(HERE,'style.css'), encoding='utf-8').read()+open(os.path.join(HERE,'canon.css'), encoding='utf-8').read()+SD['css']+SD.get('ccss','')
 if not CJK: CSS+='.op,.lt p{text-align:left}.fo span:first-child{letter-spacing:.18em}.cn-tx{text-align:left}.cn-tx:not(.cn-t20):not(.cn-t28):not(.cn-t40) p{text-wrap:pretty}.cn-disp{letter-spacing:-.015em}'   # 西文：左对齐（两端对齐会撑出大空格）；不自动断词（窄栏要断用 <wbr> / 软连字符）；正文段落 text-wrap:pretty 收过短末行（Chromium 117+；导语 cn-t20 与大字号 display 不加）
 for k,v in dict(W=W,H=H-1,G=G,INK=INK,MUT=MUT,GOLD=GOLD,OCH=OCH,PAPER=PAPER).items(): CSS=CSS.replace('{'+k+'}',str(v))

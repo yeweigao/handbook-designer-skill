@@ -6,7 +6,7 @@
 1. 建项目、盘点（new.md §1）。
 2. 自己定沟通合同和方向：用途方法按原文判断；风格按照片情况选（有好照片 → photo，没有 → 按受众选无图风格）；配色默认 klein；有品牌包就用品牌包。
 3. 写 `brief.md`（route: quick），顶部设置照实写——后面改版时它就是“当时定的”。
-4. 写 book.yaml → `run.sh` 到 GATE PASS → 按 `references/review.md` 自己审一遍 → 导出。
-5. 回复开头写“按快速路线做的：〔用途、风格、配色、页数〕”，然后列出你替用户做的决定（空白怎么处理、疑似错误没改、哪些图是占位），让用户一次改。
+4. 按 `references/editorial-advisor.md` 审完整输入，完成 `page-plan.md`（`references/adaptation.md`），再写 book.yaml → `run.sh` 到 GATE PASS → 导出 → `workflows/visual-review.md`逐页审改/重导复核。快速路线省用户等待，不省语义组织与视觉审改。
+5. 回复开头写“按快速路线做的：〔用途、风格、配色、页数〕”，然后列出你替用户做的决定（空白怎么处理、疑似错误是否按授权修正、哪些图是占位），让用户一次改。
 
 不做的：方向样张、试排。用户看完说“换个风格 / 不对”时，转 `revise.md`。

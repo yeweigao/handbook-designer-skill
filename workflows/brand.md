@@ -21,4 +21,8 @@ bash $HB/new_brand.sh <名字> "<品牌显示名>" [logo.svg] [主色] [强调�
 - `contact`、`voice`、`dont`。
 - 重新出样张核对：`python3 $HB/directions.py <临时目录> "X=brand:<名字>" --title "<品牌显示名>"`，看 logo、配色、字体。
 
+## 可选：发展品牌图形语言
+
+需要强化全册品牌识别时，按references/style.md §7.1考虑logo衍生暗纹、角部构图、章节锚点或跨页超级图形。先写本册内容与源形的应用方案，再按references/blocks.md的brand_graphic落版；项目SVG放在项目photos/_assets/，与正式logo分开保留。该扩展逐项目、逐页显式启用，品牌包的配色/字体/logo默认仍照常使用。
+
 注意：仓库公开时，客户的品牌包可能不该提交。需要时把 `brands/<名字>/` 加进 .gitignore，只在本机用。

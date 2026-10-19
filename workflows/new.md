@@ -4,7 +4,7 @@
 
 ```
 建项目 → 盘点 → 第 1 轮：沟通合同 → 第 2 轮：三个方向样张 → 写 brief.md
-       → 编辑顾问 → page-plan → book.yaml → （16 页以上）试排 --proof → 全本 run.sh → 对照建议审稿 → 导出 → 交付
+       → 编辑顾问 → page-plan → book.yaml → （16 页以上）试排 --proof → 全本 run.sh → 导出 → 视觉总监审改/重导复核 → 交付
 ```
 
 ## 1 · 建项目、盘点
@@ -40,12 +40,12 @@ python3 $HB/directions.py $P "A=style:photo,colors:klein" "B=style:swiss,colors:
 # 有品牌包：其中一个方向写 brand:allas；还没写 book.yaml 时用模板的版式 + 真书名
 ```
 → `$P/.qa/directions.jpg`（每行一个方向：封面 | 章节页 + 卡片；样例 `references/gallery/directions_sample.jpg`）。三个方向要真的不同（风格 × 撞色 × 有无照片），不是同一套换颜色。
-发图给用户，每个方向一句话说明适合什么，推荐一个，等用户选。配色先从四组经典撞色里挑（klein / hermes / china-red / lemon-violet，style.md §3）。
+发图给用户，每个方向一句话说明适合什么，推荐一个，等用户选。无指定品牌或配色时再从经典配色推荐（style.md §3）；已有决定优先。风格名和配色分开标识，换配色不另造风格名；同一方向的照片处理也要说明，不能从“单色版面”推导用户同意黑白照片。样张应覆盖真实主图、信息密集页；脚本未选到时补样张或明确未覆盖，模板色块不算照片验证。
 
 ## 4 · 写 brief.md
 `cp <skill>/templates/brief.md $P/brief.md`，把两轮确认的东西写进去：顶部设置块（route、purpose、kind、brand、style、colors、langs、canvas、pages）+ 沟通合同 + 选中的方向 + 原文问题的处理。
 排版前读 `references/adaptation.md`，按内容角色选择信息块，并在 brief.md 记明本轮文案保留或允许改写的范围；已有明确授权不重复询问。
-从这一刻起，`run.sh` 每次都先跑 `lock.py`（决策锁纪律见 SKILL.md §2）：设置和 brief.md 不一致就停；要改设置先问用户、改 brief.md 再改 book.yaml。
+从这一刻起，`run.sh` 每次都先跑 `lock.py`；设置变更按 SKILL.md §2 的已有授权与决策记录处理。
 
 ## 5 · 写 book.yaml
 - 先按 `references/editorial-advisor.md` 调用顾问审核完整输入（逐页文案、页面去重、系列建议），已有授权不重复询问。
@@ -70,11 +70,12 @@ bash $HB/run.sh $P              # 最后一行 GATE: PASS / FAIL（双语是 ALL
 check_copy 的 `ORDER` 逐条确认是不是有意的，`EXTRA` 里的自创句删掉。
 
 ## 8 · 审稿
-按 `references/review.md` 逐页过（H 硬伤必改、S 软问题记下来一起说、“不要动”的别碰），结果写 `.qa/review.md`。双语再看 `.qa/compare_*.jpg`。24 页以上可以分组并行看（review.md 末尾）。
+先审构建图并对照编辑建议；下一步导出后执行 `workflows/visual-review.md` 的视觉总监逐页审改，标准见 `references/review.md`。双语再看 `.qa/compare_*.jpg`。
 
 ## 9 · 导出、交付
 ```bash
 bash $HB/export.sh $P/〔语言〕 〔文件名〕   # 门禁：必须是 GATE PASS 之后没改过的版本；只想先给人看 → 加 --draft
 ```
 → `out/`：PDF、可编辑 PDF、单文件 HTML、源文件 zip、拼版图（小红书画布另有每页 1080×1440 图片）；`.qa/postflight.md` 是导出自检。
+交付前完成 `workflows/visual-review.md`，将修改落实到源文件并复核新PDF，再更新审稿记录、预览与源文件包。
 交付清单和回复写法见 SKILL.md「交付」和 `references/delivery.md`。用户要在线改字：`workflows/edit-online.md`。

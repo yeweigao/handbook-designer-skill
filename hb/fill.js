@@ -224,7 +224,18 @@ function cnLinks(){// 网址、邮箱自动变成可点链接（HTML 和 PDF 里
  document.querySelectorAll('.page').forEach(pg=>{const w=document.createTreeWalker(pg,NodeFilter.SHOW_TEXT);const ns=[];let t;while(t=w.nextNode()){if(t.parentElement.closest('a,script,style,svg'))continue;re.lastIndex=0;if(re.test(t.textContent))ns.push(t)}
   ns.forEach(t=>{const f=document.createDocumentFragment();let last=0;const s=t.textContent;s.replace(re,(m,_,i)=>{f.append(s.slice(last,i));const a=document.createElement('a');a.className='hb-link';
    a.href=m.includes('@')&&!m.startsWith('http')?'mailto:'+m:(m.startsWith('http')?m:'https://'+m.replace(/[.,]$/,''));a.textContent=m;f.append(a);last=i+m.length;return m});f.append(s.slice(last));t.replaceWith(f)})})}
-function fill(){cnLinks();canon();sjStructure();fit();split();golden();fz();grow();document.querySelectorAll('.fill').forEach(e=>{e.innerHTML='';const n=Math.max(0,Math.floor(e.clientHeight/CN.L));e.innerHTML='<div class="cn-ln"></div>'.repeat(n)});document.body.dataset.ready=1}
+// Brand artwork is decorative and never changes layout. Protect final visible photo/QR/logo rectangles.
+function cnBrandGraphics(){document.querySelectorAll('.cn-brand-graphic').forEach(svg=>{
+ const pg=svg.closest('.page'),P=pg.getBoundingClientRect(),mask=svg.querySelector('mask');mask.querySelectorAll('[data-cut]').forEach(e=>e.remove());
+ if(svg.dataset.overImage==='1')return;
+ const zones=[...pg.querySelectorAll('.cn-zone')];
+ const sources=[...zones,...pg.querySelectorAll('img')].filter(e=>!zones.length||e.tagName!=='IMG'||e.closest('.cn-st'));
+ sources.forEach(e=>{let R=e.getBoundingClientRect(),a=e.parentElement;
+  let l=Math.max(R.left,P.left),t=Math.max(R.top,P.top),r=Math.min(R.right,P.right),b=Math.min(R.bottom,P.bottom);
+  while(a&&a!==pg){const s=getComputedStyle(a),q=a.getBoundingClientRect();if(s.overflowX!=='visible'){l=Math.max(l,q.left);r=Math.min(r,q.right)}if(s.overflowY!=='visible'){t=Math.max(t,q.top);b=Math.min(b,q.bottom)}a=a.parentElement}
+  if(r<=l||b<=t)return;const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  for(const [k,v] of Object.entries({x:l-P.left-1,y:t-P.top-1,width:r-l+2,height:b-t+2,fill:'black','data-cut':'1'}))rect.setAttribute(k,v);mask.appendChild(rect)})})}
+function fill(){cnLinks();canon();sjStructure();fit();split();golden();fz();grow();document.querySelectorAll('.fill').forEach(e=>{e.innerHTML='';const n=Math.max(0,Math.floor(e.clientHeight/CN.L));e.innerHTML='<div class="cn-ln"></div>'.repeat(n)});cnBrandGraphics();document.body.dataset.ready=1}
 // 网格透视：book.html#grid 打开时，内容版式页叠上 6 栏网格（红色栏、蓝色行线、版心框）
 function cnGrid(){if(location.hash!='#grid')return;document.querySelectorAll('.page').forEach((pg,i)=>{if(!pg.classList.contains('cn'))return;const r=(i+1)%2==1,L=r?CN.I:CN.O;let h='';const tw=6*CN.C+5*CN.G;
  for(let c=0;c<6;c++)h+=`<div style="position:absolute;left:${L+c*(CN.C+CN.G)}px;top:0;width:${CN.C}px;height:${CN.H}px;background:rgba(226,60,90,.10)"></div>`;

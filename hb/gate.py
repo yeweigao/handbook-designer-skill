@@ -21,7 +21,7 @@ def fp(P):
     return hsh.hexdigest()[:16]
 if cmd == 'write':
     os.makedirs(os.path.dirname(G), exist_ok=True)
-    json.dump(dict(result=sys.argv[3], at=time.strftime('%Y-%m-%d %H:%M:%S'), fp=fp(P), langs=sys.argv[4:]), open(G, 'w', encoding='utf-8'), ensure_ascii=False)
+    json.dump(dict(result=sys.argv[3], scope='proof' if os.environ.get('HB_PROOF') else 'full', at=time.strftime('%Y-%m-%d %H:%M:%S'), fp=fp(P), langs=sys.argv[4:]), open(G, 'w', encoding='utf-8'), ensure_ascii=False)
     sys.exit(0)
 if cmd == 'check':
     up = os.path.dirname(P); UG = os.path.join(up, '.qa', 'gate.json')
@@ -29,6 +29,8 @@ if cmd == 'check':
         P, G = up, UG   # 多语言子项目（<project>/en）：看上层的门禁
     if not os.path.exists(G): print('导出门禁：还没跑过 run.sh → 先 bash hb/run.sh ' + P); sys.exit(1)
     g = json.load(open(G, encoding='utf-8'))
+    if g.get('scope') == 'proof':
+        print('导出门禁：这是试排/方向样张，未核整册章序与装订页数 → 请构建完整项目后导出；样张只可用 --draft'); sys.exit(1)
     if g.get('result') != 'PASS': print(f'导出门禁：上一次构建（{g.get("at")}）是 GATE FAIL → 按 doctor 的提示改完、run.sh 通过后再导出；只想先给人看：加 --draft'); sys.exit(1)
     if g.get('fp') != fp(P): print(f'导出门禁：{g.get("at")} 构建通过之后，book.yaml / 原文 / 照片又改过 → 重新 bash hb/run.sh {P}，通过后再导出'); sys.exit(1)
     print(f'导出门禁：{g.get("at")} 构建通过，之后没有改动 ✓'); sys.exit(0)

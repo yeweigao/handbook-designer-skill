@@ -6,6 +6,8 @@
 
 组件控制样张：`references/gallery/timeline_axis.jpg`（连续五天时间轴）、`references/gallery/spread_bottom.jpg`（下部共享跨页图框；使用程序生成的控制图，无第三方照片）。
 
+章节语义：章节起页可写`chapter: '03'`（跨页写在对应`left/right`内）；FULL的`index`自动作为章号。它把章节传到PDF书签，不代替可见编号。若用`book.series.chapters.items`登记完整章节，引擎核对起页章号的顺序与完整性；合并后的章扉可复用`series_header`显示CHAPTER、03和章名。装订页数约束见delivery.md。
+
 ## 0. book 设置
 ```yaml
 book:
@@ -120,6 +122,8 @@ pages:
   ```
 - `timeline`的`style: axis`除了旧`[日期, 主题, 说明]`，也支持`{k: D1, t: Arrival, period: Evening, events: [Check-in, Dinner]}`。period为原文已知时段，events为活动清单；不为每项臆配钟点。普通竖向timeline可用第三字段为节点说明，不必用分隔符拼进主题。
 - `items`默认有序；无顺序清单用`style: bullet`（圆点）或`style: plain`（无标记但保留列表语义）。包含/不含等已由栏目分组、逐行可辨的短信息优先plain，避免再生成一排短横；不能自动设计成步骤。原稿Markdown的`-`是格式线索，不是要印出的文字。
+- 卡片`x`、栏目说明、`notes`注释等接受文字数组的字段，默认排成无标记语义列表；不能仅因输入是数组就补短横。需要圆点时用显式`items: …, style: bullet`块。
+  共用卡片块与CARDS版式的控制样张见 `references/gallery/card_lists.jpg`（虚构内容）。
 - `logos`在深色纸面上可写`frame: true`，整组保留白底承托；不把原logo反色、裁切或重画。改完仍需看实际图，确认原图含透明字/深色字时可读。
 - 系列组件控制预览：`references/gallery/series_header.jpg`；时间轴结构化活动预览：`references/gallery/timeline_axis.jpg`。均为自编控制文案，不含用户照片，不代表真实内容已通过审稿。
 - `figure` 加 `bleed: right | left | both` = 出血到页边；项目的 `book.image_bleed: both` 统一作用于整版心的 figure/gallery，图组接成出血照片带。栏内小图不自动越过旁边的正文，应重组页面或选择 T/SL 等接纸边版式。二维码、logo、图表用 `role: qr | logo | diagram` 保持完整。
@@ -179,3 +183,29 @@ pages:
 ## 6. yaml 做不到时
 - 单个特殊元素用 `{html: ...}` 块。
 - 引擎原理：`flow.py` 把每个照片版式拆成网格上的几块——照片 / 插画格、不透明的纸面格、文字区（`region`，块按整行排）；照片烘焙成整页底图（`hb.py bake`），`shot.js` 隐藏文字截背景 → `dark.py` 只在白字所在的行带做整宽渐进压暗（目标对比度 ×1.03）→ `qa.py` 用 95 分位亮度算对比度（< 18px 需 ≥ 4.5，大字 ≥ 3）；`fill.js` 在浏览器里把文字栈对齐到行线、按 layouts.md §0 的顺序让出空间、`fill` 按 28px 铺线，并做溢出 / 重叠 / 越界自检。新版式加在 `flow.py` 的 `LAYOUTS` 表里，只用 `region`、`paper`、`zone`、`C.box` 这些网格原语，不写像素坐标。
+
+
+## 品牌图形背景 brand_graphic
+
+可选装饰层，复用所有版式的emit，不改网格与文字流。决策流程见style.md §7.1。将可信、单色、纯几何SVG放在项目photos/中（随门禁指纹与源文件打包），不含脚本/图片/外部引用；引擎内联为矢量，单文件HTML和PDF保留。file为项目相对路径；试排/语言子项目可使用工具共享的book.photos目录，其他越界路径拒绝。
+
+```yaml
+book:
+  brand_graphic:
+    file: photos/_assets/symbol.svg
+    opacity: 0.05
+    variants:
+      junction: {view: [20, 30, 120, 140]} # 源SVG坐标焦点窗，仅定位/缩放完整母形
+pages:
+- layout: PAPER
+  brand_graphic:
+    variant: junction
+    frame: [0.55, 0.35, 0.8, 0.7] # 页面比例[x,y,w,h]，可超出纸边
+    angle: 90
+    meaning: 本页协作内容采用源符号交汇处 # 仅方案，不印出
+  body: [{title: Collaboration}]
+```
+
+每页显式选用，未写/false则不画；跨页写在left/right里。view默认源viewBox，frame默认整页，angle默认0；取色跟随本页纸面（浅底强调色，深底白/黑由既有对比色选择）。组透明度避免交叠处变浓，源SVG完整路径通过单一仿射矩阵等比放大/旋转/移动，不创建嵌套SVG裁窗；局部只由纸边或前景照片自然遮挡显现，不能切断母形。frame是定位参照，不是剪刀。cnBrandGraphics在最后实际布局后遮掉图片可见框，文字栈位于图形上方；只有经设计且实看过的图上应用才显式over_image:true。印刷共享超大图形时，偶数页写`spread: left`、下一奇数页写`spread: right`，两页使用完全相同的variant/view/frame/angle；frame改以整张2W×H面对页为参照。引擎在同一坐标系变换完整母形，右页只平移−W，旋转中心不另算；单双页不合会拒绝。仍须联合看PDF中缝，不能用两个独立局部冒充跨页。
+
+共享跨页除单双页外，还检查配对是否齐全及实际变换/透明度是否一致；只给一侧、角度/位置/透明度不合会拦构建。颜色按两张纸面分别取色，允许蓝纸白纹接白纸蓝纹。控制样张见`references/gallery/brand_graphic.jpg`（自编几何、纯色照片，无用户标志）。控制验证：hb/test_brand_graphic.py检查无重排、图片/跨页保护、纸面取色、实际PDF、非法资源与跨页拒绝，以及普通--proof入口/共享素材/正式导出隔离。

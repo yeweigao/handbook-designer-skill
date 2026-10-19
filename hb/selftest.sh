@@ -64,6 +64,7 @@ for cv in a5 xhs; do python3 "$HB/subset.py" "$R" "$T/$cv" 1,4,13 --src "$R/temp
   bash "$HB/run.sh" "$T/$cv" > "$T/$cv.log" 2>&1 && ok "画布 $cv" || bad "画布 $cv（日志 $T/$cv.log）"; done
 echo "6 · 图片与打印回归"
 python3 "$HB/test_photo_layout.py" && ok "固定页图片与正文" || bad "图片与打印回归"
+python3 "$HB/test_brand_graphic.py" && ok "品牌图形背景" || bad "品牌图形背景回归"
 if [ $FAIL = 0 ]; then
   echo "SELFTEST: PASS"
   if [ -n "$HB_SELFTEST_KEEP" ]; then echo "构建目录：$T"; else rm -rf "$T"; fi

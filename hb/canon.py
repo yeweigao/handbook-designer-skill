@@ -171,11 +171,11 @@ def para(t, cls='', m=0, cols=None, style='', flow=None):
     else: inner = f'<p>{T_(t)}</p>'
     return f'<div class="cn-tx {cls} m{m}"{reading(flow)} style="{W_(cols)}{style}">{inner}</div>'
 def lead(t, m=0, cols=None): return para(t, 'cn-t20 cn-snap', m, cols, flow='keep')
-def bullets(xs, m=0):
-    return f'<ul class="cn-li cn-tx m{m}">' + ''.join(f'<li>{T_(s)}</li>' for s in xs) + '</ul>' if xs else ''
-def TX(v, m=0):   # 说明：一段文字 / 列表 → 短横线条目
+def bullets(xs, m=0, style='plain'):
+    return f'<ul class="cn-li cn-list-{style} cn-tx m{m}">' + ''.join(f'<li>{T_(s)}</li>' for s in xs) + '</ul>' if xs else ''
+def TX(v, m=0):   # 信息列表保留ul/li语义，不自动添加短横或步骤编号
     if v in (None, '', []): return ''
-    return bullets(v, m) if isinstance(v, list) else para(v, m=m)
+    return bullets(v, m, style='plain') if isinstance(v, list) else para(v, m=m)
 def num(t, size=56, lh=None, cls='', deco=True, style=''):
     lh = lh or (size + 16 if size <= 80 else size)
     if size < 24: style = 'color:var(--acc);' + style   # 小号编号按小字的对比度要求取色
@@ -313,8 +313,10 @@ def emit(n, p, r, sf, body, dom, img=None, fsf=None, fspan=(1, 6), fo=True, side
     """一页：fsf / hsf = 页码 / 页眉所在的底（照片上用白字）；side = 跨页图片的哪一半（L / R，dark.py 用）"""
     bg = tokens(sf)['bg'] if sf != 'image' else ('#111111' if G.get('STYLE') != 'stijl' else __import__('stijl').seam())   # 照片页的缝：风格派按画法
     import stijl, geo
-    html = f'<div class="cn-v" style="display:contents;{vs("paper")}">{body}</div>' + stijl.accents(n, p, r, sf) + geo.accents(n, p, r, sf) + brand_logo(n, p, r, sf) + running(p, r, hsf or fsf or sf, hspan) + (folio(n, r, fsf or sf, fspan) if fo and p.get('folio', True) else '')
-    h.page(n, html, img, side, bg, f' cn sf-{sf}' + (' paper' if sf == 'paper' else ''))
+    import brand_graphic
+    graphic = brand_graphic.render(n, p, h.BK, h.PROJ, W, H, tokens(sf)['acc'], h.BRAND_GRAPHICS)
+    html = f'<div class="cn-v" style="display:contents;{vs("paper")}">{body}</div>' + graphic + stijl.accents(n, p, r, sf) + geo.accents(n, p, r, sf) + brand_logo(n, p, r, sf) + running(p, r, hsf or fsf or sf, hspan) + (folio(n, r, fsf or sf, fspan) if fo and p.get('folio', True) else '')
+    h.page(n, html, img, side, bg, f' cn sf-{sf}' + (' paper' if sf == 'paper' else '') + (' cn-brand-layered' if graphic else ''), chapter=p.get('chapter', p.get('index')))
     used(dom); h.SURF_HIST.append(dom); LIGHT_ART[0] = False
 def pg(n): return n % 2 == 1   # 单页（右手页）
 

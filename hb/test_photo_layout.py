@@ -4,6 +4,8 @@
 测试图为程序生成的纯色控制图，无第三方素材；不代替真实照片的主体裁切审稿。
 """
 import json
+import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -66,9 +68,10 @@ def main():
                   continuation=True, title='Fieldwork output')), dict(timeline=[dict(k='D1', t='Arrival',
                   period='Evening', events=['Check-in', 'Meal stop'])], style='axis'),
                   dict(items=['Meals', 'Insurance'], style='bullet'),
-                  dict(cards=[dict(t='Field visit', meta=['Old city', 'Morning'], x='Observation notes')], cols=1)])]
+                  dict(cards=[dict(t='Field visit', meta=['Old city', 'Morning'], x=['Observation notes', 'Draft clauses'])], cols=1)])]
         pages += [dict(layout='PAPER', surface=sf, body=[dict(title='Paper surface ' + sf),
                   dict(items=['Meals', 'Insurance'], style='plain')]) for sf in ('A', 'B', 'dark', 'paper')]
+        pages += [dict(layout='GRID', title='Navigation', toc=[['01', 'Workshop', 'Read the guide', '1']], notes=['Navigation note'])]
         spec = dict(book=dict(title='Photo layout regression', lang='en', style='swiss', duotone='off', image_bleed='both',
                     colors=dict(A='#002BA5', B='#F0F2F5', INK='#111111', PAPER='#FFFFFF', TINT='#F2F2F2'),
                     typesetting='editorial', fonts=dict(preset='sans', title=['playfair'], css=dict(title_w=500)),
@@ -88,7 +91,8 @@ const axes=[pages[16],pages[17]].map(pg=>{const a=pg.querySelector('.cn-timeaxis
 const spread=[pages[19],pages[20]].map(pg=>{const z=pg.querySelector('.cn-zone').getBoundingClientRect(),a=pg.getBoundingClientRect();return {top:z.top-a.top,height:z.height,source:pg.querySelector('img').getAttribute('src')}});
 const series=pages.slice(24,29).map(pg=>{const h=pg.querySelector('.cn-series-header'),num=h.querySelector('.cn-series-index'),title=h.querySelector('.cn-ttl');return {item:h.dataset.item,numberFamily:getComputedStyle(num).fontFamily,titleFamily:getComputedStyle(title).fontFamily,size:getComputedStyle(title).fontSize,weight:getComputedStyle(title).fontWeight}});
 const surfaces=pages.slice(30,34).map(pg=>({bg:getComputedStyle(pg).backgroundColor,fg:getComputedStyle(pg.querySelector('.cn-st')).color,footer:getComputedStyle(pg.querySelector('.cn-fo')).color,marker:getComputedStyle(pg.querySelector('ul li'),'::before').content,padding:getComputedStyle(pg.querySelector('ul li')).paddingLeft,text:pg.querySelector('ul').textContent}));
-return {surfaces,series,cardMeta:[...pages[29].querySelectorAll('.cn-cardmeta span')].map(e=>e.textContent),cardBody:pages[29].querySelector('.cn-card .cn-tx').textContent,bullet:pages[29].querySelector('ul.cn-li')?.textContent,continuation:pages[29].querySelector('.cn-series-cont').textContent,events:[...pages[29].querySelectorAll('.cn-axis-events li')].map(e=>e.textContent),period:pages[29].querySelector('.cn-axisperiod').textContent,bodyLeading:getComputedStyle(kept).lineHeight,leadSize:getComputedStyle(big).fontSize,figure:[r.width,r.height],bleed:[r.left-P.left,r.right-P.left],fullpage:[b.left-B.left,b.top-B.top,b.width,b.height],reading:!!pages[11].querySelector('.cn-tx.cn-cols2'),columns:!!pages[9].querySelector('.cn-cols2'),body:parseFloat(getComputedStyle(pages[9].querySelector('.cn-tx')).fontSize),introColumns:getComputedStyle(intro).columnCount,bigColumns:getComputedStyle(big).columnCount,keptColumns:getComputedStyle(kept).columnCount,forcedColumns:getComputedStyle(forced).columnCount,wrap:getComputedStyle(kept.querySelector('p')).textWrapStyle,axes,spread}});
+const note=pages[34].querySelector('.cn-notes li'),notes={text:note.textContent,marker:getComputedStyle(note,'::before').content,padding:getComputedStyle(note).paddingLeft};
+return {notes,surfaces,series,cardMeta:[...pages[29].querySelectorAll('.cn-cardmeta span')].map(e=>e.textContent),cardBody:pages[29].querySelector('.cn-card .cn-tx').textContent,cardMarkers:[...pages[29].querySelectorAll('.cn-card ul li')].map(e=>({marker:getComputedStyle(e,'::before').content,padding:getComputedStyle(e).paddingLeft})),bulletMarker:getComputedStyle(pages[29].querySelector('.cn-list-bullet li'),'::before').content,bullet:pages[29].querySelector('ul.cn-li')?.textContent,continuation:pages[29].querySelector('.cn-series-cont').textContent,events:[...pages[29].querySelectorAll('.cn-axis-events li')].map(e=>e.textContent),period:pages[29].querySelector('.cn-axisperiod').textContent,bodyLeading:getComputedStyle(kept).lineHeight,leadSize:getComputedStyle(big).fontSize,figure:[r.width,r.height],bleed:[r.left-P.left,r.right-P.left],fullpage:[b.left-B.left,b.top-B.top,b.width,b.height],reading:!!pages[11].querySelector('.cn-tx.cn-cols2'),columns:!!pages[9].querySelector('.cn-cols2'),body:parseFloat(getComputedStyle(pages[9].querySelector('.cn-tx')).fontSize),introColumns:getComputedStyle(intro).columnCount,bigColumns:getComputedStyle(big).columnCount,keptColumns:getComputedStyle(kept).columnCount,forcedColumns:getComputedStyle(forced).columnCount,wrap:getComputedStyle(kept.querySelector('p')).textWrapStyle,axes,spread}});
 require('fs').writeFileSync(process.argv[2]+'/probe.json',JSON.stringify(got));await b.close()})().catch(e=>{console.error(e);process.exit(1)});
 ''', encoding='utf-8')
         subprocess.run(['node', str(probe), str(project), str(hb)], check=True)
@@ -110,8 +114,11 @@ require('fs').writeFileSync(process.argv[2]+'/probe.json',JSON.stringify(got));a
         assert len(set(gray)) == 1 and 230 <= gray[0] < 255, got['surfaces']
         assert [s['fg'] for s in got['surfaces']] == ['rgb(255, 255, 255)', 'rgb(17, 17, 17)', 'rgb(255, 255, 255)', 'rgb(17, 17, 17)'], got['surfaces']
         assert all(s['marker'] == 'none' and s['padding'] == '0px' and s['text'] == 'MealsInsurance' for s in got['surfaces']), got['surfaces']
+        assert got['notes'] == dict(text='Navigation note', marker='none', padding='0px'), got['notes']
         assert got['surfaces'][0]['footer'] == got['surfaces'][2]['footer'] == 'rgba(255, 255, 255, 0.84)', got['surfaces']
-        assert got['cardMeta'] == ['Old city', 'Morning'] and got['cardBody'] == 'Observation notes', got
+        assert got['cardMeta'] == ['Old city', 'Morning'] and got['cardBody'] == 'Observation notesDraft clauses', got
+        assert len(got['cardMarkers']) == 2 and all(x['marker'] == 'none' and x['padding'] == '0px' for x in got['cardMarkers']), got
+        assert got['bulletMarker'] == '"•"', got
         ax, bx = got['axes']
         assert ax['width'] == bx['width'] and ax['columns'] == bx['columns'], got
         assert ax['dateFont'] == bx['dateFont'] > ax['bodyFont'] == bx['bodyFont'] == 16, got
@@ -143,7 +150,34 @@ require('fs').writeFileSync(process.argv[2]+'/probe.json',JSON.stringify(got));a
         (project / 'book.yaml').write_text(yaml.safe_dump(spec), encoding='utf-8')
         bad = subprocess.run(['python3', str(hb / 'hb.py'), str(project)], capture_output=True, text=True)
         assert bad.returncode != 0 and 'series_header' in bad.stdout + bad.stderr, '不存在的系列项未被拒绝'
-        print('PHOTO REGRESSION: PASS（PDF双图、出血、整页图版、正文/pretty、时间轴活动、连续跨页、五项系列/续页/非法引用、编辑排印、实色纸面/反白/无标记清单）')
+        from pypdf import PdfReader
+        chapters = {'01': 'Chapter one', '02': 'Chapter two', '03': 'Chapter three', '04': 'Chapter four'}
+        spec['book']['series']['chapters'] = dict(label='CHAPTER', items=chapters)
+        spec['book']['binding'] = 'saddle'
+        spec['pages'] = [dict(layout='FULL', title='Cover')]
+        for ch, title in chapters.items():
+            spec['pages'].append(dict(layout='PAPER', chapter=ch, body=[dict(series_header=dict(series='chapters', item=ch))]) if ch == '03' else dict(layout='FULL', index=ch, title=title))
+        spec['pages'] += [dict(layout='PAPER', body=[dict(title=t)]) for t in ('Information', 'Invitation', 'Register')]
+        (project / 'book.yaml').write_text(yaml.safe_dump(spec), encoding='utf-8')
+        subprocess.run(['bash', str(hb / 'run.sh'), str(project)], check=True, stdout=subprocess.DEVNULL)
+        html = (project / 'book.html').read_text(encoding='utf-8')
+        assert re.findall(r'data-chapter="([^"]+)"', html) == list(chapters), '合并章节缺少语义章标'
+        subprocess.run(['bash', str(hb / 'export.sh'), str(project), 'chapters'], check=True,
+                       stdout=subprocess.DEVNULL, env=dict(os.environ, HB_NO_EDITABLE=''))
+        for filename in ('chapters.pdf', 'chapters_可编辑.pdf'):
+            pdf = PdfReader(project / 'out' / filename)
+            got_chapters = [(x.title, pdf.get_destination_page_number(x) + 1) for x in pdf.outline if not isinstance(x, list) and re.match(r'^0[1-4] · ', x.title)]
+            assert got_chapters == [(k + ' · ' + v, i + 2) for i, (k, v) in enumerate(chapters.items())], (filename, got_chapters)
+        spec['pages'].pop()
+        (project / 'book.yaml').write_text(yaml.safe_dump(spec), encoding='utf-8')
+        bad = subprocess.run(['python3', str(hb / 'hb.py'), str(project)], capture_output=True, text=True)
+        assert bad.returncode != 0 and '骑马钉总页数' in bad.stdout + bad.stderr, '不合装订的页数未被拦截'
+        spec['pages'].append(dict(layout='PAPER', body=[dict(title='Register')]))
+        spec['pages'][3]['chapter'] = '02'
+        (project / 'book.yaml').write_text(yaml.safe_dump(spec), encoding='utf-8')
+        bad = subprocess.run(['python3', str(hb / 'hb.py'), str(project)], capture_output=True, text=True)
+        assert bad.returncode != 0 and '章节顺序不完整' in bad.stdout + bad.stderr, '章号丢失/重复未被拦截'
+        print('PHOTO REGRESSION: PASS（照片/排印/系列/清单、章节合页书签、骑马钉页数与章序门禁）')
 
 
 if __name__ == '__main__':

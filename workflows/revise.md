@@ -2,24 +2,25 @@
 
 ## 改版的规矩
 - 改版纪律见 SKILL.md §2「改版不丢已认可的东西」：每轮新建 `_v2`/`_v3`、`check_copy.py` 对照旧版、已认可的页不顺手大改。
-- 先看 `brief.md`：用户这次说的是不是推翻了当时确认的东西（风格、配色、页数、用途）？是 → 确认后改 brief.md 并记一笔；否 → 只改 book.yaml。
+- 先看 `brief.md`，把这次明确要求记录为新的决定；已有授权不重复确认。依反馈确定连带范围（`references/adaptation.md`），先更新方案，再改book.yaml。
 - 已经认可的页不顺手大改（`references/review.md`「不要动」）。
 - 用户指出文案和版面不合适时，按 `references/editorial-advisor.md` 审完整输入及同系列，再走 `references/adaptation.md` 的适配检查；不能只改被截图的页。
 - 先更新page-plan.md中的页面文案分工和设计方案，再修改book.yaml；同类问题一起检查栏目字、序号、主标题和时间地点的角色。
+- 修改后按 `workflows/visual-review.md` 审新PDF，关闭本轮问题及连带问题，再交付；不能只有建议、没有落实与复核。
 
 ## 常见反馈 → 改 book.yaml 的哪里
 | 用户说 | 改法 |
 |---|---|
 | 不够大气 / 太平 | 每 3–4 页插一页 FULL；有横图时章节开头换 SPREAD_P / SPREAD_OPENER |
-| 这一页太空 / [留白] | 加 `image`；和相邻页合并；换图多的版式（MIX / STAGGER / COLLAGE） |
-| 这一页太挤 / [溢出] | 拆成两页，用同一个版式（自动镜像）；条目多的换 GRID；去掉 intro / stats |
-| 太像模板 / 每页都一样 | 相邻页换不同版式；CARDS 换 STAGGER 或 TWO；加 COLLAGE、FULL 打断节奏（看 lint 的节奏条） |
+| 这一页太空 / [留白] | 先查页面是否有独立任务、主图角色与信息分组；再决定放大主图、调整构图或合页，避免用无关图片填空 |
+| 这一页太挤 / [溢出] | 先查分组/栏宽/可用版式；仍不足再拆页，同步目录和装订。不擅删 intro / stats 等独立信息 |
+| 太像模板 / 每页都一样 | 查整册视觉锚点与密度；在保持系列一致的前提下调整尺度、纸面或跨页，不为每页不同而打散时间轴和系列 |
 | 颜色单调 / 撞色不够 | 指定某页 `surface: A` / `B`；配色换另一组经典撞色（klein / hermes / china-red / lemon-violet） |
 | 色块太多 / 想素一点 | 几页写 `surface: paper`；换对比弱一点的配色（style.md §3）；FULL 写 `deco: false` |
 | 照片颜色不搭 / 发灰 | `book.duotone: all`；单张 `{src: a.jpg, duo: true}`；不要就 `duo: false` |
 | 照片到了 | 放进 photos/，把占位换成文件名，重跑（images.yaml 自动更新） |
 | 图片糊 / [低清] | 换原图；或从 FULL / 跨页挪到小图位 |
-| 换个风格 | 改 `book.style`（只改这一行）+ brief.md 记一笔；拿不准就先出 directions.py 样张 |
+| 换个风格 | 改 `book.style`并记录授权；联合复查字体、配色、照片处理和同系列，不以换一行就认定整册适配完成 |
 | 想换字体 | 按 style.md §2.2 改 `book.fonts`（只写要覆盖的角色），整册字体分工记进 page-plan.md；brief.md 的 fonts 行同步 |
 | 用我们的品牌 | `book.brand: <名字>`（brands/index.yaml）；没有品牌包 → `workflows/brand.md` |
 | 字看不清（照片上） | 改 focus / target，让字落在照片较暗、较简单的区域；换更简洁的图；换让字落在纸面上的版式（T/B 调 split、HOLE 换窗的位置） |

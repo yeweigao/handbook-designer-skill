@@ -4,6 +4,7 @@ body{--bs:16px;--lh:28px;--gut:32px;--s:1.1667}
 .page.cn.cn-tight{--s:1}.page.cn.cn-tight .cn-tb .cn-tr{padding:1px 0}.page.cn.cn-tight .cn-tl{margin-top:0!important}.page.cn.cn-tight .cn-ino{font-size:calc(1.5 * var(--lh))!important;line-height:calc(2 * var(--lh))!important}   /* 这一页放不下：辅助字号回到行距 24 时的比例（fill.js 自动加，正文字号不变） */
 .page.cn{font-size:var(--bs);line-height:var(--lh)}
 .cn-a{position:absolute}
+.cn-brand-layered .cn-st,.cn-brand-layered>.cn-fo,.cn-brand-layered>.cn-logo{z-index:2}
 .cn-st{color:var(--fg);font-family:var(--f-body);font-weight:var(--body-w);font-size:var(--bs);line-height:var(--lh)}
 .cn-series-grid{display:grid;gap:var(--gut);align-items:start}
 .cn-series-index{font-family:var(--f-label);font-weight:800;font-size:calc(72px * var(--s) / 1.1667);line-height:calc(3 * var(--lh));color:var(--num)}
@@ -27,7 +28,7 @@ body{--bs:16px;--lh:28px;--gut:32px;--s:1.1667}
 .cn-num{font-family:var(--f-title);font-weight:var(--title-w);font-feature-settings:"lnum" 1,"pnum" 1;line-height:1;color:var(--num);letter-spacing:-.01em;white-space:nowrap}
 .cn-top2{background:linear-gradient(var(--rule),var(--rule)) top/100% 2px no-repeat;padding-top:calc(.5 * var(--lh))}
 .cn-top1{background:linear-gradient(var(--line),var(--line)) top/100% 1px no-repeat;padding-top:calc(.5 * var(--lh))}
-.cn-li{list-style:none}.cn-li li{position:relative;padding-left:1.15em}.cn-li li::before{content:"–";position:absolute;left:0;color:var(--acc)}
+.cn-li{list-style:none}.cn-li li{position:relative;padding-left:1.15em}.cn-li li::before{content:"•";position:absolute;left:0;color:var(--acc)}
 .cn-list-bullet li::before{content:"•"}.cn-list-plain li{padding-left:0}.cn-list-plain li::before{content:none}
 .cn-q{border-left:3px solid var(--acc);padding-left:25px}
 .cn-qt{font-family:var(--f-accent);font-style:var(--accent-style);font-weight:500;font-size:calc(24px * var(--s));line-height:calc(1.5 * var(--lh));color:var(--hd)}
