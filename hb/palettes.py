@@ -2,7 +2,7 @@
 """配色方案（book.colors）与渐变标题（book.gradient / 块的 gradient）。
   python3 hb/palettes.py list            列出所有配色与渐变
   python3 hb/palettes.py check           检查每套配色的对比度（印刷小字要求）
-  python3 hb/palettes.py sheet <out.html> 生成色卡页（references/gallery/palettes.jpg 由它截图）
+  python3 hb/palettes.py sheet <out.html> 生成色卡页（dev/gallery/palettes.jpg 由它截图）
 
 配色只有 6 个键（INK G OCH GOLD MUT PAPER，含义见 references/style.md §3）。经典撞色里的“原色”往往太亮，
 直接做 10px 小字在纸上看不清——所以每套都拆成两种用法：原色放在 GOLD（深色底/底图上的大字与点缀、无图风格的大色块），

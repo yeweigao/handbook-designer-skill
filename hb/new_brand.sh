@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # 新建品牌包：bash hb/new_brand.sh <名字> "<品牌显示名>" [logo.svg] [A色] [B色]
-#   → brands/<名字>/brand.yaml（从 allas 的结构复制，改好名字、色值）+ logo.svg（没给 logo 就用 Comfortaa 生成文字标占位）
+#   → brands/<名字>/brand.yaml（从示例结构生成，改好名字、色值）+ logo.svg（没给 logo 就用 Comfortaa 生成文字标占位）
 #   → brands/index.yaml 加一条 → brands/<名字>/preview.jpg（封面 + 章节页 | 卡片 的样张）
 # 之后打开 brand.yaml 补：字体、页脚、封底联系方式、口吻、禁忌（workflows/brand.md）。
 set -eo pipefail
@@ -14,9 +14,9 @@ if [ -n "$LOGO" ]; then cp "$LOGO" "$D/logo.svg"; else python3 "$HB/wordmark.py"
 python3 - "$R" "$N" "$NAME" "$A" "$B" <<'PY'
 import sys, os, re, yaml
 R, N, NAME, A, B = sys.argv[1:]
-t = open(os.path.join(R, 'brands', 'allas', 'brand.yaml'), encoding='utf-8').read()
-t = re.sub(r'^# All As AI 品牌包.*?\n(?=name:)', f'# {NAME} 品牌包\n', t, flags=re.S)
-t = t.replace('All As AI', NAME).replace('Alpha International AI Edtech PTE LTD', '〔公司全称〕').replace('www.alphaedu.si', '〔网址〕')
+t = open(os.path.join(R, 'brands', 'acme', 'brand.yaml'), encoding='utf-8').read()
+t = re.sub(r'^# Acme Studio 示例品牌包.*?\n(?=name:)', f'# {NAME} 品牌包\n', t, flags=re.S)
+t = t.replace('Acme Studio', NAME).replace('Acme Education & Design Studio', '〔公司全称〕').replace('www.acme.example.com', '〔网址〕').replace('hello@acme.example.com', '〔邮箱〕')
 t = re.sub(r"primary: '#[0-9A-Fa-f]+'.*", f"primary: '{A}'           # 主色", t); t = re.sub(r"accent: '#[0-9A-Fa-f]+'  .*", f"accent: '{B}'            # 强调色", t)
 t = re.sub(r"    (secondary_bg|secondary_accent|MUT): '#[0-9A-Fa-f]+'.*\n", '', t)   # 其余角色由引擎推出（次级背景 = 背景混 7% 主色）；需要时按品牌规范加
 t = re.sub(r"body_text: '#[0-9A-Fa-f]+'.*", "body_text: '#17211C'         # 正文：深墨", t)

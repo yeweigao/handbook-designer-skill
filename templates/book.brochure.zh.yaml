@@ -2,11 +2,11 @@
 # book.brochure.zh.yaml —— 样例四：宣传册（8 页中文项目介绍，没有任何书写区）
 # purpose: brochure → 纸面内容默认顶部对齐；节奏 = 大图 + 关键数字 + 亮点卡片 + 图组 + 引语 + 报名方式/二维码
 # 用到的新块：stats 关键数字 · cards 亮点卡片 · gallery 图组 · figure 插图 · quote 引语 · qr 二维码
-# （模板里的照片文件名只是示例：换成你自己的照片放进 photos/，或先把 image 写成 placeholder 占位；效果见同名 .preview.jpg）
+# （模板里的照片文件名只是示例：换成自己的照片放进 photos/，或先把 image 写成 placeholder 占位；效果见 dev/previews/book.brochure.zh.preview.jpg）
 # ============================================================================
 book:
-  title: 清迈国际研学营 · 项目介绍
-  folio: 清迈国际研学营 · 2026
+  title: 山海自然探索营 · 项目介绍
+  folio: 山海自然探索营 · 2026
   purpose: brochure
   style: photo
   colors: campus
@@ -15,30 +15,30 @@ pages:
 - layout: POSTER
   image: aerial.jpg
   top:
-    - {display: 清迈国际研学营, size: 56}
-    - {en: Chiang Mai Global Study Camp 2026}
+    - {display: 山海自然探索营, size: 56}
+    - {en: Horizon Nature Discovery Camp 2026}
   bottom:
-    - {p: 五天四晚 · 兰纳文化 × 大象保育 × 大学实验室, weight: 700}
-    - {display: 2026 年 4 月 · 7–9 年级, size: 23, color: gold}
+    - {p: 五天四晚 · 海岸地质 × 森林生态 × 天文实验室, weight: 700}
+    - {display: 2026 年 7 月 · 7–9 年级, size: 23, color: gold}
   folio: false
 
 - layout: SPREAD_OPENER
-  image: pano_nimman.jpg
+  image: pano_camp.jpg
   right_layout: T
   left:
-    header: [Why Chiang Mai, 为什么是清迈]
+    header: [Why Horizon, 为什么走进山海]
     top:
-      - {display: 为什么是清迈, size: 47}
-      - {p: 一座古城、一片雨林、一所百年大学——课本里的世界在这里连成一片。, weight: 700}
+      - {display: 为什么走进山海, size: 47}
+      - {p: 一段海岸、一片云杉林、一座山谷天文台——课本里的自然法则在这里连成一片。, weight: 700}
     bottom:
-      - stats: [['12', 年研学经验], ['3000+', 名学员], ['40', 所合作学校], ['5', 天 4 晚]]
+      - stats: [['12', 年营地经验], ['3000+', 名营员], ['40', 所合作学校], ['5', 天 4 晚]]
         size: 47
   right:
     header: [Highlights, 项目亮点]
     on_photo:
       - {display: 项目亮点, size: 47}
     body:
-      - cards: [[兰纳文化, 走进古城寺庙与市集，跟当地老师学一堂兰纳手工课。], [大象保育, 在保育营了解亚洲象的生存现状，参与一次科学观察。], [大学实验室, 与清迈大学教授共同完成牛顿定律实验。], [森林徒步, 跟随向导走进雨林，记录三种以上本地动植物。]]
+      - cards: [[海岸地质, 走进潮间带与海蚀崖，跟随地质导师完成一次岩层采样与测绘。], [森林生态, 在自然保护站了解本土物种栖息地，参与一次红外相机监测记录。], [天文实验室, 与天文台研究员共同完成光谱观测与光学望远镜校准实验。], [山谷徒步, 跟随生态向导穿越云杉林步道，记录三种以上高山植物与昆虫。]]
         cols: 1
         num: true
 
@@ -50,11 +50,11 @@ pages:
       - {display: 五天行程, size: 56}
     body:
       - {kicker: Day by Day, mt: 0}
-      - kv: [[Day 1, 抵达清迈 · 古城夜市], [Day 2, 兰纳学校全天课程], [Day 3, 清迈大学实验室], [Day 4, 大象保育营], [Day 5, 森林徒步与返程]]
+      - kv: [[Day 1, 抵达营地 · 破冰与星空夜话], [Day 2, 海岸地质全天考察], [Day 3, 山谷天文台与光学实验室], [Day 4, 森林生态保护站监测], [Day 5, 云杉林步道徒步与返程]]
         kw: 70
-      - {p: 全程中英双语导师带队，每 8 名学员配 1 名带队老师。}
+      - {p: 全程中英双语导师带队，每 8 名营员配 1 名带队老师。}
       - figure: gift.jpg
-        caption: 与兰纳学校的同学交换礼物
+        caption: 营员亲手制作的植物标本卡与自然笔记
         h: 210
   right:
     header: [Highlights, 现场]
@@ -63,23 +63,23 @@ pages:
     body:
       - {kicker: 往届现场, mt: 0}
       - gallery: [lab.jpg, class.jpg]
-        captions: [清迈大学实验室, 兰纳学校课堂]
+        captions: [光学与天文实验室, 营地研讨课堂]
         h: 170
       - figure: market.jpg
-        caption: 古城周末市集
+        caption: 自然手作与标本工作坊
         h: 250
 
 - layout: HOLE
   image: eleye.jpg
   window: tr
-  header: [Voices, 学员说]
+  header: [Voices, 营员说]
   beside:
-    - {title: 学员说, kicker: Voices, size: 30}
+    - {title: 营员说, kicker: Voices, size: 30}
   body:
-    - quote: 这是我第一次真正理解课本上的生态系统——原来保护一头大象，需要一整片森林。
-      by: 2025 届学员 · 林同学
-    - quote: 孩子回来后主动查资料、写报告，这种变化比任何分数都珍贵。
-      by: 学员家长 · 陈女士
+    - quote: 这是我第一次真正理解课本上的生态系统——原来守护林间的一只林鹿，需要一整片健康的森林。
+      by: 2025 届营员 · 林同学
+    - quote: 孩子回来后主动查资料、整理观测报告，这种探究习惯比任何分数都珍贵。
+      by: 营员家长 · 陈女士
       mt: 26
 
 - layout: SL
@@ -87,14 +87,14 @@ pages:
   header: [How to Join, 报名方式]
   body:
     - {title: 报名方式, kicker: How to Join, size: 32}
-    - {step: 1, lead: 在线报名, text: 扫描封底二维码填写报名表，截止日期 2026 年 3 月 31 日。}
-    - {step: 2, lead: 线上面谈, text: 项目老师与学员进行 15 分钟视频交流，了解兴趣与期待。}
-    - {step: 3, lead: 行前说明会, text: 出发前两周召开家长说明会，发放研学手册与行李清单。}
+    - {step: 1, lead: 在线报名, text: 扫描封底二维码填写报名表，截止日期 2026 年 5 月 31 日。}
+    - {step: 2, lead: 线上面谈, text: 项目导师与营员进行 15 分钟视频交流，了解兴趣方向与探究期待。}
+    - {step: 3, lead: 行前说明会, text: 出发前两周召开家长说明会，发放探索手册与装备清单。}
     - {kicker: 费用说明}
-    - kv: [[项目费用, '人民币 16,800 元'], [包含, 机票、住宿、餐食、课程、保险], [不含, 护照办理与个人消费]]
+    - kv: [[项目费用, '人民币 9,800 元'], [包含, 营地住宿、餐食、课程、实验材料、保险], [不含, 往返大交通与个人装备消费]]
       kw: 80
     - {kicker: 常见问题}
-    - cards: [[需要什么英语水平？, 能进行简单日常交流即可，课程配有中英双语讲义。], [安全怎么保障？, 全程购买境外意外险，24 小时带队老师值守，每日向家长群报平安。], [饮食能照顾到过敏吗？, 报名表中填写过敏信息，餐食由营地统一安排替代菜品。]]
+    - cards: [[需要什么科学基础？, 对自然与科学有好奇心即可，课程配有中英双语实验讲义。], [安全怎么保障？, 全程购买营地意外险，24 小时带队老师与随队医护值守，每日向家长群播报。], [饮食能照顾到过敏吗？, 报名表中填写过敏信息，营地餐厅统一安排替代菜品。]]
       cols: 1
 
 - layout: POSTER
@@ -102,7 +102,7 @@ pages:
   header: [Contact, 联系我们]
   bottom:
     - {display: 一起出发, size: 47}
-    - kv: [[咨询电话, 0571-8800 1200], [电子邮箱, study@maple.example.com]]
+    - kv: [[咨询电话, 0571-8800 1200], [电子邮箱, camp@horizon.example.com]]
       kw: 80
     - qr: https://example.com/apply
       caption: 扫码在线报名

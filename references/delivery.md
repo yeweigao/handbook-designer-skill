@@ -31,13 +31,13 @@
 ### 推荐：一份 book.yaml 写两种语言，一次出两本
 ```yaml
 book:
-  title: {zh: 清迈国际研学营, en: Chiang Mai Global Study Camp}
+  title: {zh: 山海自然探索营, en: Horizon Nature Discovery Camp}
   langs: [zh, en]
 pages:
 - layout: CARDS
   title: {zh: 六个关键词, en: Six keywords}
   cards:
-    - [{zh: 兰纳文化, en: Lanna culture}, {zh: 走进古城寺庙与市集……, en: 'Explore old-city temples and markets, …'}]
+    - [{zh: 海岸地质, en: Coastal geology}, {zh: 走进潮间带与海蚀崖……, en: 'Explore tide pools and sea cliffs, …'}]
 ```
 - `bash hb/run.sh $P` 自动拆成 `$P/zh`、`$P/en` 两个子项目（照片目录链接回原项目），分别构建、分别跑完整 QA，最后一行 `ALL LANGS: GATE PASS / FAIL`；逐页对照图在 `$P/.qa/compare_*.jpg`。
 - 内容版式是为中英共用设计的：英文比中文长时，照片和色块变小、标题自动缩一档，版式不变。某种语言缺了某段文字 → 构建报错并指出位置。
@@ -77,7 +77,7 @@ bash hb/run.sh ${P}_en                                            # 照常 QA：
 | `xhs` | 3:4，导出 1080×1440 图片 | 6 栏 × 28 行，左右页边相同、单页 | 小红书 / 朋友圈图文 |
 - A5、小红书正文是 14px（印出来 10.5pt），小画布一页放的字只有 A4 的一半左右：同一份内容换小画布要重新分页（doctor 会报溢出，按提示拆页）。
 - 小画布只能用 8 种内容版式；照片版式（POSTER、T、SPREAD_* 等）只在 A4 上有。小红书画布不能用跨页。
-- 效果：`references/gallery/canvas_a5_xhs.jpg`（上 A5、下小红书，同一份内容）。
+- 效果：`dev/gallery/canvas_a5_xhs.jpg`（上 A5、下小红书，同一份内容）。
 - 小红书：`export.sh` 额外输出 `out/<名>_小红书/01.png …`（每页一张 1080×1440）。封面那张就是笔记封面，第一页的标题要短、字要大。
 
 ## 在线编辑页

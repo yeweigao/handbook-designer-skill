@@ -1,10 +1,10 @@
 # 进阶模式速查（book 设置 · 照片版式 layout · 内容块 block · 容量预算 · 图片）
 
-标准模式（8 种内容版式）见 layouts.md；这里是照片版式 + 自由内容块，用于任务册书写区、照片跨页和内容版式给不了的组合。两种模式可以混用。每个版式长什么样见 `references/gallery/<LAYOUT>.jpg`；完整可运行的样例见 `templates/`。
+标准模式（8 种内容版式）见 layouts.md；这里是照片版式 + 自由内容块，用于任务册书写区、照片跨页和内容版式给不了的组合。两种模式可以混用。每个版式长什么样见 `dev/gallery/<LAYOUT>.jpg`；完整可运行的样例见 `templates/`。
 
-**和内容版式是同一个引擎**（`hb/flow.py` + `hb/canon.py` + `hb/fill.js`）：同一张 6 栏 × 28px 行线的网格、同一套字号档、同一套行宽规则、同一个放不下时的处理顺序（layouts.md §0）。所以这里写的 px 数值（`h`、`size`、`mt`、`space`、`fill`、`kw`、`split`、`strip`、`body_top`、窗口 `size`）都**不是精确尺寸，会吸到最近的整行、整栏或字号档**——写个大概就行，表里的数是默认值。
+**和内容版式是同一个引擎**（`hb/flow.py` + `hb/canon.py` + `hb/fill.js`）：同一张 6 栏 × 28px 行线的网格、同一套行宽规则、同一个放不下时的处理顺序（layouts.md §0）。所以这里写的 px 数值（`h`、`size`、`mt`、`space`、`fill`、`kw`、`split`、`strip`、`body_top`、窗口 `size`）都**不是精确尺寸，会吸到最近的整行、整栏或字号档**——写个大概就行，表里的数是默认值。
 
-组件控制样张：`references/gallery/timeline_axis.jpg`（连续五天时间轴）、`references/gallery/spread_bottom.jpg`（下部共享跨页图框；使用程序生成的控制图，无第三方照片）。
+组件控制样张：`dev/gallery/timeline_axis.jpg`（连续五天时间轴）、`dev/gallery/spread_bottom.jpg`（下部共享跨页图框；使用程序生成的控制图，无第三方照片）。
 
 章节语义：章节起页可写`chapter: '03'`（跨页写在对应`left/right`内）；FULL的`index`自动作为章号。它把章节传到PDF书签，不代替可见编号。若用`book.series.chapters.items`登记完整章节，引擎核对起页章号的顺序与完整性；合并后的章扉可复用`series_header`显示CHAPTER、03和章名。装订页数约束见delivery.md。
 
@@ -123,9 +123,9 @@ pages:
 - `timeline`的`style: axis`除了旧`[日期, 主题, 说明]`，也支持`{k: D1, t: Arrival, period: Evening, events: [Check-in, Dinner]}`。period为原文已知时段，events为活动清单；不为每项臆配钟点。普通竖向timeline可用第三字段为节点说明，不必用分隔符拼进主题。
 - `items`默认有序；无顺序清单用`style: bullet`（圆点）或`style: plain`（无标记但保留列表语义）。包含/不含等已由栏目分组、逐行可辨的短信息优先plain，避免再生成一排短横；不能自动设计成步骤。原稿Markdown的`-`是格式线索，不是要印出的文字。
 - 卡片`x`、栏目说明、`notes`注释等接受文字数组的字段，默认排成无标记语义列表；不能仅因输入是数组就补短横。需要圆点时用显式`items: …, style: bullet`块。
-  共用卡片块与CARDS版式的控制样张见 `references/gallery/card_lists.jpg`（虚构内容）。
+  共用卡片块与CARDS版式的控制样张见 `dev/gallery/card_lists.jpg`（虚构内容）。
 - `logos`在深色纸面上可写`frame: true`，整组保留白底承托；不把原logo反色、裁切或重画。改完仍需看实际图，确认原图含透明字/深色字时可读。
-- 系列组件控制预览：`references/gallery/series_header.jpg`；时间轴结构化活动预览：`references/gallery/timeline_axis.jpg`。均为自编控制文案，不含用户照片，不代表真实内容已通过审稿。
+- 系列组件控制预览：`dev/gallery/series_header.jpg`；时间轴结构化活动预览：`dev/gallery/timeline_axis.jpg`。均为自编控制文案，不含用户照片，不代表真实内容已通过审稿。
 - `figure` 加 `bleed: right | left | both` = 出血到页边；项目的 `book.image_bleed: both` 统一作用于整版心的 figure/gallery，图组接成出血照片带。栏内小图不自动越过旁边的正文，应重组页面或选择 T/SL 等接纸边版式。二维码、logo、图表用 `role: qr | logo | diagram` 保持完整。
 - 独立 `PAPER` 图版只放 `{figure: poster.jpg, bleed: page}`，并写 `folio: false`，图片覆盖四边。正文/说明移到相邻页，不能追加在满页图下方。
 - `cards` 的两栏奇数条目可写 `balance: true`：末项横跨两栏，但标题和说明仍各占一个阅读栏，不把说明拉成整行。
@@ -208,4 +208,4 @@ pages:
 
 每页显式选用，未写/false则不画；跨页写在left/right里。view默认源viewBox，frame默认整页，angle默认0；取色跟随本页纸面（浅底强调色，深底白/黑由既有对比色选择）。组透明度避免交叠处变浓，源SVG完整路径通过单一仿射矩阵等比放大/旋转/移动，不创建嵌套SVG裁窗；局部只由纸边或前景照片自然遮挡显现，不能切断母形。frame是定位参照，不是剪刀。cnBrandGraphics在最后实际布局后遮掉图片可见框，文字栈位于图形上方；只有经设计且实看过的图上应用才显式over_image:true。印刷共享超大图形时，偶数页写`spread: left`、下一奇数页写`spread: right`，两页使用完全相同的variant/view/frame/angle；frame改以整张2W×H面对页为参照。引擎在同一坐标系变换完整母形，右页只平移−W，旋转中心不另算；单双页不合会拒绝。仍须联合看PDF中缝，不能用两个独立局部冒充跨页。
 
-共享跨页除单双页外，还检查配对是否齐全及实际变换/透明度是否一致；只给一侧、角度/位置/透明度不合会拦构建。颜色按两张纸面分别取色，允许蓝纸白纹接白纸蓝纹。控制样张见`references/gallery/brand_graphic.jpg`（自编几何、纯色照片，无用户标志）。控制验证：hb/test_brand_graphic.py检查无重排、图片/跨页保护、纸面取色、实际PDF、非法资源与跨页拒绝，以及普通--proof入口/共享素材/正式导出隔离。
+共享跨页除单双页外，还检查配对是否齐全及实际变换/透明度是否一致；只给一侧、角度/位置/透明度不合会拦构建。颜色按两张纸面分别取色，允许蓝纸白纹接白纸蓝纹。控制样张见`dev/gallery/brand_graphic.jpg`（自编几何、纯色照片，无用户标志）。控制验证：dev/tests/test_brand_graphic.py检查无重排、图片/跨页保护、纸面取色、实际PDF、非法资源与跨页拒绝，以及普通--proof入口/共享素材/正式导出隔离。

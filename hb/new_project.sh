@@ -17,6 +17,8 @@ if [ -z "$FORCE" ] && { [ -f "$P/book.yaml" ] || [ -f "$P/doc.md" ]; }; then
 [ -n "$2" ] && [ ! -f "$2" ] && { echo "找不到原文：$2"; exit 1; }
 [ -n "$3" ] && [ ! -d "$3" ] && { echo "找不到图片目录：$3"; exit 1; }
 mkdir -p "$P/photos"
+# 建项目时立即在后台静默预取推荐字体；未下完前排版引擎直接用系统自带衬线/无衬线字体顶上，零阻塞
+python3 "$HB/fonts.py" prefetch >/dev/null 2>&1 || true
 if [ -n "$3" ]; then
   find "$3" -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) -exec cp {} "$P/photos/" \;
   c=$(ls "$P/photos" | wc -l | tr -d ' '); echo "照片：$c 张"; [ "$c" -gt 0 ] || echo "警告：$3 里没有 jpg/png/webp 照片"

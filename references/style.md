@@ -11,7 +11,7 @@ book:
 ```
 每种风格自带一套默认字体和配色，只写 `style` 就能得到完整的效果；`fonts`、`colors` 写了才覆盖。
 
-效果图：`references/gallery/style_<风格>.jpg`（同一份 8 页内容排成 8 种无图风格）、`references/gallery/styles_overview.jpg`（11 种风格总览）、`references/gallery/palettes.jpg`（配色与渐变色卡）、`references/gallery/fonts.jpg`（字体样张）。
+效果图：`dev/gallery/style_<风格>.jpg`（同一份 8 页内容排成 8 种无图风格）、`dev/gallery/styles_overview.jpg`（11 种风格总览）、`dev/gallery/palettes.jpg`（配色与渐变色卡）、`dev/gallery/fonts.jpg`（字体样张）。
 
 ---
 
@@ -31,7 +31,7 @@ book:
 | `aurora` | 弥散玻璃（Aurora / Glassmorphism）：柔和弥散渐变、竖向柔光、磨砂玻璃卡片与胶囊标签、细白描边 | 科技/互联网公司入职手册、产品与活动指南、设计营、年轻化品牌 | 浅 | Geist + 思源黑体 Medium |
 | `nebula` | 深色星云：深墨夜色、紫色弥散光、粒子星点、细轨道环；纸面淡色弥散；玻璃卡片、渐变小标签、Comfortaa 圆润西文 | AI / 科技公司产品手册、发布会、投资人材料 | 深 | Comfortaa + 霞鹜新晰黑 |
 
-效果图：`references/gallery/style_stijl.jpg`（经典）· `style_stijl_tone.jpg`（无线）· `style_stijl_beat.jpg`（节奏）· `style_geo.jpg`（孟菲斯）。
+效果图：`dev/gallery/style_stijl.jpg`（经典）· `dev/gallery/style_stijl_tone.jpg`（无线）· `dev/gallery/style_stijl_beat.jpg`（节奏）· `dev/gallery/style_geo.jpg`（孟菲斯）。
 **风格派、孟菲斯、瑞士单色**不生成底图：图片位没照片时就是一块安静的色块，不写编号（这几种风格本来就用色块构图；风格派、瑞士单色的照片一律转黑白）。风格派的底层思想写在 `hb/stijl.py` 开头：线有层级（不是全画、也不是全不画），颜色是被线围出的格子、按内容角色给，阅读页内容为主——改它之前先读那段。
 
 **无图模式**：除 `photo`、`stijl`、`geo` 外，没写 `image` 的页会按风格**自动生成底图**放在照片的位置（每页不同、全书统一，颜色跟着 `book.colors` 走）。版式、跨页、QA 全部照常（与纸面的交界见 §1.1）。某页拿到合适的照片就写上 `image: xxx.jpg`，照片和底图可以混用（照片页的图上文字用白字）。
@@ -72,7 +72,7 @@ book:
 ## 2. 字体 book.fonts
 
 全部开源、可免费商用、可嵌入 PDF。构建时只截取本书用到的字嵌进 HTML/PDF（换电脑字形不变），并在项目 `fonts/LICENSES.txt` 附上许可。
-西文字体随 skill 附带；中文字体首次使用时自动下载（`python3 hb/fonts.py fetch` 可提前下载；`list` 查看状态）。下载不到时回退系统字体，构建不中断。
+所有中、西文字体均采用**系统自带衬线/无衬线字体先行顶上 + 后台静默下载推荐字体**（建项目或首次构建时自动在后台预取 `python3 hb/fonts.py prefetch`，当前构建直接使用系统苹方/宋体/楷体/SF Pro/Georgia/Didot 等对应衬线/无衬线字体秒出结果，零等待；待后台下载完成后自动切换为内嵌子集字体）。
 
 ### 2.1 四套方案
 | fonts | 标题（title） | 正文（body） | 气质 |
@@ -169,7 +169,7 @@ book:
 colors: klein                          # 方案名
 colors: {preset: klein, PAPER: '#FFFFFF'}   # 方案 + 单独改某个键
 ```
-`python3 hb/palettes.py list` 列出全部；色卡见 `references/gallery/palettes.jpg`。
+`python3 hb/palettes.py list` 列出全部；色卡见 `dev/gallery/palettes.jpg`。
 
 | colors | 配色 | 适合 |
 |---|---|---|
@@ -189,7 +189,7 @@ colors: {preset: klein, PAPER: '#FFFFFF'}   # 方案 + 单独改某个键
 | `lavender` | 薰衣草紫 × 雾粉 | 女性向、艺术疗愈、温柔低龄 |
 | `nature` `campus` `heritage` `ocean` `art` `corporate` `kids` | 按主题的强调色（只换 G/OCH/GOLD，纸色沿用风格） | photo 风格按内容主题换色：自然 / 校园 / 人文 / 海洋 / 艺术 / 企业 / 低幼 |
 
-**四组经典撞色（上表前四行）是内容版式的主力**：效果图 `references/gallery/palettes_overview.jpg`。没写 `book.colors`、风格也没自带配色（photo）时默认 `klein`；第 0 步出方案时先从这四组里推荐。每组有一对撞色 A / B：内容版式里的大色块用它们，A 色块上的字用 B、B 色块上的字用 A；其他方案没写 A / B 时 A = G、B = GOLD。自定义撞色：`colors: {preset: klein, A: '#…', B: '#…'}`（`palettes.py check` 会检查 A/B 之间对比 ≥ 3:1）。
+**四组经典撞色（上表前四行）是内容版式的主力**：效果图 `dev/gallery/palettes_overview.jpg`。没写 `book.colors`、风格也没自带配色（photo）时默认 `klein`；第 0 步出方案时先从这四组里推荐。每组有一对撞色 A / B：内容版式里的大色块用它们，A 色块上的字用 B、B 色块上的字用 A；其他方案没写 A / B 时 A = G、B = GOLD。自定义撞色：`colors: {preset: klein, A: '#…', B: '#…'}`（`palettes.py check` 会检查 A/B 之间对比 ≥ 3:1）。
 
 **撞色在印刷手册里怎么落地**：经典撞色的“原色”大多很亮（爱马仕橙、柠檬黄、蒂芙尼蓝），直接做 10px 小字在纸上看不清。所以每套方案都拆成两种用法——原色放在 GOLD（照片/深色底图上的大字、无图风格的大色块与点缀），纸面小字用同色相加深的 G/OCH。比如 `hermes` 的小标签是黑色、斜体强调是深橙，橙色本色出现在深色底图的大标题和瑞士风格的大圆上。
 所有方案都过了对比度检查（`python3 hb/palettes.py check`：G/OCH 对纸色 ≥ 5.5:1，GOLD 对 G ≥ 3:1）。
@@ -288,11 +288,10 @@ pages:
 
 ## 7. 品牌包（`book.brand`）
 机构自己的配色、字体、logo、页脚、封底联系方式、口吻和禁忌打成一个包：`brands/<名字>/brand.yaml` + `logo.svg`，在 `brands/index.yaml` 登记。
-- 书里写 `book.brand: allas`：品牌包 `book:` 下的 style / colors / fonts / folio 作为默认值，book.yaml 里写了的优先（某一本想换风格，只在 book.yaml 写 style）。
+- 书里写 `book.brand: acme`：品牌包 `book:` 下的 style / colors / fonts / folio 作为默认值，book.yaml 里写了的优先（某一本想换风格，只在 book.yaml 写 style）。
 - logo：默认放封面（1.5 倍大）和封底，左上角（左手页的字体海报封底放右上，避开“日”）；有页眉的页放右边；其他页写 `logo: true`，某页不要写 `logo: false`。单色 SVG（`mono: true`）自动跟着当页的字色变：深底白色、浅底品牌色。
 - 封底（最后一页）自动加品牌包的 `contact`；某本不要就在最后一页写 `contact: false`。
-- 现有品牌包：**allas**（All As AI）——点缀档：白纸 + 浅紫次级背景 #F4F1FF，电光靛蓝 #4B3BFF 做标题和数字，深墨 #1A1040 正文，深色星云（nebula）做封面、章节页，和官网一致；Comfortaa 圆润几何字体（标题、标签）；logo 目前是文字标占位（拿到官方单色 logo.svg 直接替换 brands/allas/logo.svg）。
-- 效果：`references/gallery/brand_allas.jpg`（allas 品牌包 + nebula 风格排的 20 页产品手册）。
+- 现有示例品牌包：**acme**（Acme Studio，虚构示例）——点缀档：白纸 + 浅底 #F4F1FF，电光靛蓝 #4B3BFF 做标题和数字，深墨 #1A1040 正文；Comfortaa 圆润几何字体（标题、标签）；单色矢量 `logo.svg`。
 - 新建：`workflows/brand.md`（`bash hb/new_brand.sh`）。
 
 
@@ -300,7 +299,7 @@ pages:
 
 这是现有视觉风格之上的可选品牌语言，适用于需要强化识别的品牌画册、项目手册和系列出版物。用户要求时启用；规划品牌方向时也可将它作为可选方案，依据brief及既有授权取舍。有合适的图形结构才采用，不要求每本册子或每页都有暗纹。正式logo承担识别，衍生图形承担构图、节奏与内容联系。
 
-**先读懂源形。** 查看实际标志，分清用户指定的图形符号、字标和组合标；已有明确指定时直接沿用。保留正式logo原件及品牌规范。优先使用原始矢量；清晰、简单的几何符号可依源图矢量重绘，但须对照比例、轴线、开口、线宽与交织连接，不把近似通用几何当成原标志。重绘资产作为项目衍生图形记录，不冒称官方文件。
+**先读懂源形（仅限用户自有或已获授权的品牌标志）。** 查看实际标志，分清用户指定的图形符号、字标和组合标；已有明确指定时直接沿用。保留正式logo原件及品牌规范。优先使用原始矢量；用户自有品牌的清晰几何符号可依源图矢量重绘，但须对照比例、轴线、开口、线宽与交织连接，不把近似通用几何当成原标志，也不得擅自重绘无授权的第三方商标。重绘资产作为项目衍生图形记录，不冒称官方文件。
 
 **让结构服务内容。** 从源符号的交汇、围合、平行、开口和方向等特征寻找本页构图关系。例如协作内容可呼应交汇，安全/支持可呼应围合，连续进程可呼应同向延伸；这些只是设计者针对本册的解释，不能声称是官方品牌寓意。先在page-plan写“内容任务→源形特征→构图→隐喻”，再决定角度与尺度。
 
@@ -337,7 +336,7 @@ pages:
 - **auto（默认）**：风格有默认档就用它（swiss → mono）；否则 两色对比 ≥ 3 且色相差 ≥ 45°（或其中一个接近黑白）→ clash；否则 accent。构建时打印判断理由（“用色 accent：同一色系（色相差 7°）…”）。
 
 **无照片页也要规划纸面节奏。** `PAPER`可写`surface: paper / A / B / dark`：依次为纸色、主题色、中性/次级浅底、正文深墨色。它们是实际整页纸面，正文、标签、细线、页眉页脚一起取对应色值；不是给白纸盖一张装饰图。主题色/深墨底按对比度选择白字或黑字，不能主观随便反白；小字需通过4.5:1门禁。无图的费用、报名、服务和封底可用色纸延续全册节奏，不必补无关插图，也不应因为默认mono而全部留白。QR和原logo须另核原图在深底上的完整性与可读性。
-四种纸面与无标记清单的控制样张见 `references/gallery/swiss_surfaces.jpg`（虚构文字，无用户素材）。
+四种纸面与无标记清单的控制样张见 `dev/gallery/swiss_surfaces.jpg`（虚构文字，无用户素材）。
 
 **用色比例检查**（`colorqa.py`，run.sh 自动跑）：按截图量整本的构成——浅底 / 主色块 / 强调色 / 深色 / 照片插画，参照 60-30-10。
 clash 档主色 + 强调色整块超过约 60%、accent 档主色整块超过 20%，或连续 3 页整页色块 → `[颜色过重]`，列出是哪几页（改法：那几页写 `surface: paper`，或换 accent 档）。只提示，不拦截。

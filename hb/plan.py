@@ -164,7 +164,7 @@ o.append('1. 沟通合同：读者、场景、读完要做的事、语气、必�
 o.append('2. 用途方法 book.kind：' + ' / '.join(f'{k} {v.get("zh", "")}' for k, v in _K.items()) + '（都不像就只写 purpose：任务册 workbook / 指南 guide / 宣传册 brochure——拿不准时问“读者需要在册子上写字吗？”）')
 if _B: o.append('   品牌包 book.brand：' + ' / '.join(f'{k}（{v.get("name", "")}）' for k, v in _B.items()) + '——原文或用户提到这个品牌就直接用')
 o.append('3. 语言：只做原文语言，还是中英两版（同一套版式、一份 yaml 出两本；翻译部分会单独标出）')
-o.append('4. 视觉（第 2 轮用 directions.py 出三个方向的样张让用户看图选）：有好照片 → photo；没有 → photo 撞色字体海报，或 1–2 种无图风格（references/gallery/style_*.jpg）。配色先推荐四组经典撞色：克莱因蓝 × 拿坡里黄（默认 klein）/ 爱马仕橙 × 乌漆嘛黑（hermes）/ 中国红 × 鱼肚白（china-red）/ 柠檬黄 × 帝王紫（lemon-violet），见 references/gallery/palettes_overview.jpg；有品牌色就用品牌色')
+o.append('4. 视觉（第 2 轮用 directions.py 出三个方向的样张让用户看图选）：有好照片 → photo；没有 → photo 撞色字体海报，或 1–2 种无图风格（dev/gallery/style_*.jpg）。配色先推荐四组经典撞色：克莱因蓝 × 拿坡里黄（默认 klein）/ 爱马仕橙 × 乌漆嘛黑（hermes）/ 中国红 × 鱼肚白（china-red）/ 柠檬黄 × 帝王紫（lemon-violet），见 dev/gallery/palettes_overview.jpg；有品牌色就用品牌色')
 o.append('5. 上面的原文问题：改还是照原文')
 o.append('6. 图片不够/不清晰时：用户补原图，还是 AI 补图（AI 图会标注）')
 o.append('7. 打印还是电子版；骑马钉要 4 的倍数页')

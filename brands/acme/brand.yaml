@@ -1,0 +1,44 @@
+# Acme Studio 示例品牌包（虚构品牌，演示 brands/<名字>/brand.yaml 的结构）
+# 新建正式品牌包：bash hb/new_brand.sh <名字> "<显示名>" [logo.svg] [主色] [强调色]
+name: Acme Studio
+owner: Acme Education & Design Studio
+site: www.acme.example.com
+
+# 默认 book 设置：book.yaml 里写了的优先（比如某本想换风格，只在 book.yaml 里写 style）
+book:
+  style: photo
+  folio: Acme Studio
+  color_mode: accent   # 点缀档：大面积白纸和浅色次级底，主色只做标题、数字、细线；深色留给封面和章节页
+  colors:              # 按角色写（palettes.py ROLES）：品牌色锁进对应角色
+    preset: klein
+    background: '#FFFFFF'        # 背景：白纸
+    secondary_bg: '#F4F1FF'      # 次级背景：浅底色
+    primary: '#4B3BFF'           # 主色：电光靛蓝（标题、大数字、封面 / 章节页整块）
+    accent: '#C6B8FF'            # 强调色：浅紫（深底上的点缀）
+    secondary_accent: '#7A2FE0'  # 次强调色：兰紫
+    body_text: '#1A1040'         # 正文：深墨
+    MUT: '#4B4372'
+  fonts:
+    preset: sans
+    title: [comfortaa, lxgw-neo-xihei, noto-sans-sc]
+    accent: [comfortaa, lxgw-neo-xihei, noto-sans-sc]
+    label: [comfortaa, lxgw-neo-xihei, noto-sans-sc]
+    css: {title_w: 700, accent_w: 700, label_case: none, label_track: .12em}
+
+logo:
+  file: logo.svg      # 单色 SVG：排版时自动换成当页的字色（深底白、浅底主色）
+  mono: true          # 彩色 logo 写 false，并另给 dark: logo-white.svg 用在深底 / 照片上
+  h: 24               # 在页面上的高度（px）；封面自动放大 1.5 倍
+  pages: [cover, back]   # 自动放在封面、封底；其他页写 logo: true
+
+# 封底自动加的联系方式（标记为装饰文字：原文核对不算 EXTRA，交付时列为“非原文元素”）
+contact:
+  - www.acme.example.com
+  - Acme Education & Design Studio · hello@acme.example.com
+
+# 品牌口吻（写方案、审稿时参考，不进排版）
+voice: 可信、具体、不夸张；先说读者得到什么，再说方法与细节。数字要有明确口径。
+dont:
+  - 不用“颠覆”“革命性”这类夸张词
+  - 不放未确认口径的对比数据
+  - 未获授权的人物照片不露正脸

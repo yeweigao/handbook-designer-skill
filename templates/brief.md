@@ -4,7 +4,7 @@
 route: new            # new 新做 / quick 快速 / beautify 美化（文字冻结）/ reuse 沿用旧册 / revise 改版 / brand 建品牌包
 purpose: brochure     # workbook 任务册 / guide 指南 / brochure 宣传册
 kind: admissions      # 用途方法（purposes/）：admissions 招生简章 / study-trip 研学任务册 / parents 家长手册 / freshman 新生手册 / annual 年度回顾
-brand: allas          # 品牌包（brands/）；没有品牌包就删掉这一行
+# brand: acme         # 可选：品牌包（brands/）；没有品牌包就删掉这一行
 style: photo          # photo / editorial / swiss / stijl 风格派 / geo 孟菲斯 / notebook / inkwash / papercut / riso / aurora / nebula
 look: classic         # 只有 style: stijl 用：classic 三原色 / tone 无线 / beat 节奏；其他风格删掉这一行
 colors: klein

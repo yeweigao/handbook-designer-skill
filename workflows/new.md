@@ -24,7 +24,7 @@ bash $HB/new_project.sh $P 原文.pptx 照片目录/   # → doc.md + plan.md + 
 我理解这本册子是这样的，你看对不对：
 | 读者 | 〔……〕 |  | 场景 | 〔……〕 |  | 读完要做的事 | 〔一个动作〕 |
 | 语气 | 〔……〕 |  | 必须出现 | 〔……〕 |  | 不能出现 | 〔……〕 |
-用途：〔招生简章 / 家长手册……〕，约 〔N〕 页（4 的倍数），〔印刷 / 电子版〕，〔中文 / 中英两版〕〔，品牌包 allas〕
+用途：〔招生简章 / 家长手册……〕，约 〔N〕 页（4 的倍数），〔印刷 / 电子版〕，〔中文 / 中英两版〕〔，品牌包 <名字>〕
 需要你确认
 1. 上面这张表对不对（改哪一格）
 2. 原文里的空白：〔逐条〕——给我数字，还是先留空？
@@ -38,9 +38,9 @@ bash $HB/new_project.sh $P 原文.pptx 照片目录/   # → doc.md + plan.md + 
 ```bash
 python3 $HB/directions.py $P "A=style:photo,colors:klein" "B=style:swiss,colors:hermes" "C=style:papercut,colors:china-red" \
         --title "〔书名〕" --kicker "〔小标签〕"
-# 有品牌包：其中一个方向写 brand:allas；还没写 book.yaml 时用模板的版式 + 真书名
+# 有品牌包：其中一个方向写 brand:<名字>；还没写 book.yaml 时用模板的版式 + 真书名
 ```
-→ `$P/.qa/directions.jpg`（每行一个方向：封面 | 章节页 + 卡片；样例 `references/gallery/directions_sample.jpg`）。三个方向要真的不同（风格 × 撞色 × 有无照片），不是同一套换颜色。
+→ `$P/.qa/directions.jpg`（每行一个方向：封面 | 章节页 + 卡片；样例 `dev/gallery/directions_sample.jpg`）。三个方向要真的不同（风格 × 撞色 × 有无照片），不是同一套换颜色。
 发图给用户，每个方向一句话说明适合什么，推荐一个，等用户选。无指定品牌或配色时再从经典配色推荐（style.md §3）；已有决定优先。风格名和配色分开标识，换配色不另造风格名；同一方向的照片处理也要说明，不能从“单色版面”推导用户同意黑白照片。样张应覆盖真实主图、信息密集页；脚本未选到时补样张或明确未覆盖，模板色块不算照片验证。
 
 ## 4 · 写 brief.md

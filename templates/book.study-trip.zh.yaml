@@ -1,13 +1,13 @@
 # ============================================================================
 # book.study-trip.zh.yaml —— 样例一：中文研学手册（16 页，覆盖 PAPER 以外全部 9 种版式和常用 block）
 # 用法：bash hb/new_project.sh demo 原文.docx 照片目录/ 后，参照本文件的结构写 demo/book.yaml
-# （模板里的照片文件名只是示例：换成你自己的照片放进 photos/，或先把 image 写成 placeholder 占位；效果见同名 .preview.jpg）
-# 这是“一本书”的样例，不是规则：页数、版式顺序、配色都应按你手上的原文重新决定。
+# （模板里的照片文件名只是示例：换成自己的照片放进 photos/，或先把 image 写成 placeholder 占位；效果见 dev/previews/book.study-trip.zh.preview.jpg）
+# 这是“一本书”的样例，不是规则：页数、版式顺序、配色都应按手上的原文重新决定。
 # 文字规则：所有文字从 doc.md 原样复制；只新增 field/box/table 里的提示小字、header、fig、英文小标签。
 # ============================================================================
 book:
-  title: 清迈五日闯关记 · 研学手册
-  folio: 清迈五日闯关记 · 研学手册      # 每页页脚左侧文字
+  title: 山海五日探索记 · 研学手册
+  folio: 山海五日探索记 · 研学手册      # 每页页脚左侧文字
   photos: photos                       # 图片目录（相对项目）
   # colors: {G: '#1D5A43', GOLD: '#F2C14E'}   # 可选：换配色，见 references/style.md
 
@@ -17,28 +17,28 @@ pages:
   image: aerial.jpg            # 竖图做单页
   focus: [0.5, 0.5]            # 图片的哪个点（0–1）对准 target
   top:
-    - {display: 清迈, size: 160}
-    - {display: 五日闯关记, size: 47}
-    - {display: ——从国际课堂到大象雨林, size: 23, mt: 16}
+    - {display: 山海, size: 160}
+    - {display: 五日探索记, size: 47}
+    - {display: ——从海岸岩层到山谷星空, size: 23, mt: 16}
   bottom:
     - {display: 研学手册, size: 33, color: gold}
-    - {p: 兰纳学校 × 清迈大学 × 大象保育营, weight: 700}
+    - {p: 海岸生态站 × 山谷天文台 × 云杉林保护区, weight: 700}
     - {blanks: [姓名, 班级], w: 180}           # 旧版就有的填写栏，不能丢
   folio: false
 
 # ---------- 02 致同学：POSTER + letter
 - layout: POSTER
   image: moat.jpg
-  header: [Foreword · 致同学, Chiang Mai 2026]
+  header: [Foreword · 致同学, Horizon Camp 2026]
   top:
     - {display: 亲爱的同学, size: 56}
-    - {en: A Letter Before Takeoff}
+    - {en: A Letter Before Departure}
   bottom:
     - letter:
-        - 当课本走出教室，当课堂延伸到雨林，这场清迈研学将带你走进真正的兰纳世界——不是游客式的走马观花，而是用手触摸、用脚丈量、用脑思考的五天探索。
+        - 当课本走出教室，当课堂延伸到山海之间，这场自然探索将带你走进真实的生态现场——不是走马观花的游览，而是用手触摸、用脚丈量、用脑思考的五天科学考察。
         - 愿你保持好奇，勇敢提问，在观察中思考，在实践中成长。
-    - {display: 清迈见。, size: 33, color: gold, mt: 26}
-  fig: Fig. 01 · 古城护城河的黄昏
+    - {display: 山海见。, size: 33, color: gold, mt: 26}
+  fig: Fig. 01 · 山谷溪流的黄昏
 
 # ---------- 03 目标 + 期待：HOLE（纸面开窗，窗在右上）
 - layout: HOLE
@@ -46,13 +46,13 @@ pages:
   window: tr                   # tr / tl / br / bl
   beside:                      # 窗旁边的窄栏
     - {title: 研学目标, kicker: Five Things to Bring Home}
-    - items: [在兰纳国际学校全天插班上课，提升跨文化沟通能力与英语表达自信, 在清迈大学实验室完成3个科学实验，掌握基本实验方法与科学探究思维, 深入大象保育营，理解野生动物保护的伦理与生态平衡]
+    - items: [在海岸生态站完成潮间带样方调查，掌握野外观察与数据记录方法, 在山谷天文台完成3个光学与力学实验，培养科学探究与建模思维, 深入云杉林自然保护区，理解生物多样性保护的伦理与生态平衡]
       style: big
   body:                        # 窗下方的整宽区域
     - {title: 我对本次研学的期待, kicker: Three Wishes, size: 28}
     - {step: 1, lead: 我最想完成的一件事, write: [{lines: 1}, {field: 为什么}]}
-    - {step: 2, lead: 我最想认识的人是, write: [{lines: 1}, {field: 想认识他/她的原因}]}
-    - {step: 3, lead: 我最想弄明白的问题是, write: [{lines: 1}, {field: 我打算怎么找答案}]}
+    - {step: 2, lead: 我最想请教的导师是, write: [{lines: 1}, {field: 想请教他/她的问题}]}
+    - {step: 3, lead: 我最想弄明白的自然现象是, write: [{lines: 1}, {field: 我打算怎么找答案}]}
 
 # ---------- 04–05 双海报跨页 SPREAD_P（必须从偶数页开始；横图）
 - layout: SPREAD_P
@@ -62,18 +62,18 @@ pages:
     header: [Itinerary · 研学行程总览, Five Days]
     top:
       - {display: 研学行程总览, size: 47}
-      - {p: 5天4晚　2026.10.26 — 10.30　清迈, weight: 700}
-      - kv: [[Day 1, 清迈接机 — 入住酒店 — 宁曼路散步 — 小组破冰], [Day 2, 兰纳学校全天研学 — 湄卡运河夜市], [Day 5, 帕拉寺僧侣步道徒步 — 前往机场]]
+      - {p: 5天4晚　2026.07.12 — 07.16　山海营地, weight: 700}
+      - kv: [[Day 1, 抵达营地 — 入住木屋 — 海岸步道漫步 — 小组破冰], [Day 2, 海岸生态站全天考察 — 星空观测夜话], [Day 5, 云杉林古道徒步 — 成果展与返程]]
         kw: 90
   right:
     header: [Code of Conduct, Before Departure]
     top:
       - {display: 研学安全文明公约, size: 47}
-      - items: [服从导师安排，不擅自离队，随身携带紧急联系卡, 尊重泰国当地习俗：进寺庙脱鞋、遮肩过膝、放低音量, 团结互助，主动用英语交流，积极完成团队任务]
+      - items: [服从导师安排，不擅自离队，随身携带紧急联系卡, 遵守无痕山林原则：不采摘野生植物、不投喂野生动物、带走全部垃圾, 团结互助，主动分工协作，认真完成每日观测记录]
         style: big
     bottom:
       - {sign: 我已阅读并承诺遵守, label: 签名}
-    fig: Fig. 02 · 清迈古城
+    fig: Fig. 02 · 海岸与山谷全景
 
 # ---------- 06 任务页：T（照片在上，纸面在下）
 - layout: T
@@ -82,13 +82,13 @@ pages:
   header: [Pre-Departure Missions, Whole Class]
   on_photo:                    # 照片上的白字（自动压暗）
     - {display: 出发前·全班共同任务, size: 33}
-    - {p: 以下任务由参加研学和未参加研学的同学共同完成。出发前两周启动，全班从下面4个任务中任选2个完成，让没出发的同学也成为这场研学的一部分。}
+    - {p: 以下任务由参加研学和未参加研学的同学共同完成。出发前两周启动，全班从下面4个任务中任选2个完成，让没出发的同学也成为这场探索的一部分。}
   body:
-    - {task: A, name: 任务A：「偏见对账」, sub: ——我们对清迈的3个刻板印象}
-    - {p: 出发前一周，全班投票选出大家对泰国/清迈最常见的3个刻板印象（比如“泰国很乱”“泰国很落后”“去泰国就是看寺庙”）。, lead: 全班一起做：}
-    - {items: [3条刻板印象 + 每条的验证结果（属实 / 不属实 / 部分属实）, 每条附1张实拍照片或1条数据来源], heading: 产出：《偏见验证报告》}
+    - {task: A, name: 任务A：「先入之见对账」, sub: ——我们对野外生态的3个常见误解}
+    - {p: 出发前一周，全班投票选出大家对海洋与森林生态最常见的3个假想（比如“潮间带生物不怕暴晒”“人工投喂能帮助野生动物”“森林越密物种越多”）。, lead: 全班一起做：}
+    - {items: [3条生态假想 + 每条的验证结果（属实 / 不属实 / 部分属实）, 每条附1张现场观测照片或1条数据来源], heading: 产出：《生态假设验证报告》}
     - {worksheet: 全班投票结果 · 正反证据}
-    - {table: ['', 刻板印象 · 票数, 正方证据, 反方证据], widths: 24px 1.2fr 1fr 1fr, rows: ['1', '2', '3'], lines: 3}
+    - {table: ['', 生态假想 · 票数, 支持证据, 反驳证据], widths: 24px 1.2fr 1fr 1fr, rows: ['1', '2', '3'], lines: 3}
 
 # ---------- 07 长任务单：SL（照片在左侧）
 - layout: SL
@@ -96,43 +96,43 @@ pages:
   focus: [0.52, 0.43]
   header: [Pre-Departure Mission · C, Debate]
   body:
-    - {task: C, name: 任务C：「大象保育大辩论」, sub: ——互动式还是保护式？}
-    - {p: 大象保育应该让游客近距离互动（喂食、洗澡、骑乘），这样才能让人们关心大象、支持保育。, lead: 正方：}
-    - {p: 大象保育应该是完全保护式的，不应该让游客接触，互动会伤害大象。, lead: 反方：}
+    - {task: C, name: 任务C：「生态保护区大辩论」, sub: ——开放体验还是严格封闭？}
+    - {p: 自然保护区应该适度开放公众科普体验（限量导览、生态观察），这样才能让更多人关心自然、支持保护。, lead: 正方：}
+    - {p: 自然保护区应该严格封闭管理，减少一切人类活动干扰，开放体验会破坏脆弱栖息地。, lead: 反方：}
     - {worksheet: 研学前的初始立场}
     - {choice: 我方立场（圈出）, options: [正方, 反方]}
     - {field: 论据 1}
     - {lines: 1}
-    - {field: 想带去大象营验证的疑问}
+    - {field: 想带去保护站验证的疑问}
     - {fill: 32}                 # 把剩余空间铺满书写线
 
 # ---------- 08–09 横向跨页 SPREAD_H（照片横贯上半部，左上大标题，右上信息向下对齐）
 - layout: SPREAD_H
-  image: pano_nimman.jpg
+  image: pano_camp.jpg
   focus: [0.6, 0.45]
   target: [834, 260]
   left:
-    header: [Day 1 · 01 / 05, 10.26 周一]
+    header: [Day 1 · 01 / 05, 07.12 周一]
     on_photo:
       - {display: Day 1, size: 120, color: gold}
       - {display: 落地即入场, size: 47}
-      - {p: 10.26 周一 ｜ 主题：初识清迈·破冰启航, weight: 700}
+      - {p: 07.12 周一 ｜ 主题：初识山海·破冰启航, weight: 700}
     body:
       - {kicker: Field Missions · 研学任务, mt: 0}
-      - {step: 1, lead: 小组破冰, text: 记录1位组员的名字、特点和他/她最期待的一件事, write: [{fields: [组员名字, 特点]}, {field: 他/她最期待的一件事}]}
-      - {step: 2, lead: 城市观察, text: 在宁曼路散步时，记录清迈与广州的3个不同点（建筑/街道/人/气味均可）, grow: true, write: [{table: ['', 清迈, 广州], widths: 24px 1fr 1fr, rows: ['1', '2', '3']}]}
+      - {step: 1, lead: 小组破冰, text: 记录1位组员的名字、特长和他/她最期待观测的物种, write: [{fields: [组员名字, 特长]}, {field: 他/她最期待观测的物种}]}
+      - {step: 2, lead: 环境观察, text: 在海岸步道散步时，记录海岸营地与城市社区的3个不同点（植被/地形/风向/声音均可）, grow: true, write: [{table: ['', 海岸营地, 城市社区], widths: 24px 1fr 1fr, rows: ['1', '2', '3']}]}
   right:
     header: [Day 1 · Field Missions, Itinerary & Key Facts]
     on_photo:                  # 向下对齐到照片底部，不顶到页面最上方
       - {kicker: Itinerary · 今日行程, mt: 0}
-      - {p: 清迈接机 → 入住酒店 → 宁曼路散步 → 小组破冰, weight: 700}
+      - {p: 抵达营地 → 入住木屋 → 海岸步道漫步 → 小组破冰, weight: 700}
       - {kicker: Key Facts · 核心知识点}
-      - items: [清迈：泰国第二大城市，兰纳王朝古都，位于泰国北部, 时差：清迈比北京慢1小时，几乎不用倒时差]
+      - items: [潮汐规律：受月球与太阳引力影响，每日出现两次高潮与两次低潮, 海岸微气候：海陆热力性质差异形成昼夜交替的海陆风]
     body:
-      - {step: 3, lead: 泰语入门, text: 学会3句泰语日常用语（你好/谢谢/再见），写下发音和意思, write: [{table: ['', 发音, 意思], widths: 54px 1fr 1fr, rows: [你好, 谢谢, 再见]}]}
+      - {step: 3, lead: 气象记录, text: 学会使用便携气象仪读取3项基础指标（气温/湿度/风速），写下读数和体感, write: [{table: ['', 实测读数, 体感描述], widths: 54px 1fr 1fr, rows: [气温, 湿度, 风速]}]}
       - {kicker: Q & A · 互动问答}
-      - {q: 1, text: 清迈为什么被称为“兰纳古都”？}
-      - {q: 2, text: 宁曼路为什么被称为“清迈最具艺术气息的街区”？}
+      - {q: 1, text: 为什么潮间带生物能适应每天两次干湿交替的极端环境？}
+      - {q: 2, text: 海岸防风林的树冠为什么大多向内陆方向倾斜？}
 
 # ---------- 10–11 开篇 + 任务 SPREAD_OPENER（右页 T：照片延伸到右页上部）
 - layout: SPREAD_OPENER
@@ -141,19 +141,19 @@ pages:
   focus: [0.35, 0.4]
   target: [635, 505]
   left:
-    header: [Day 3 · 03 / 05, 10.28 周三]
+    header: [Day 3 · 03 / 05, 07.14 周三]
     top:
       - {display: Day 3, size: 120, color: gold}
-      - {display: 大学与大象, size: 47}
+      - {display: 物理与星空, size: 47}
     bottom:
       - {kicker: Itinerary · 今日行程}
-      - {p: 上午：清迈大学实验室 ｜ 下午：湄登大象保育营 ｜ 晚上：兰纳舞蹈表演餐, weight: 700}
+      - {p: 上午：山谷光学与力学实验室 ｜ 下午：野生动物保护站 ｜ 晚上：天文台星空观测, weight: 700}
   right:
-    header: [Day 3 · Laboratory, Chiang Mai University]
+    header: [Day 3 · Laboratory, Valley Observatory]
     body_top: 300
     body:
-      - {title: 实验一：牛顿定律与气球车比赛, kicker: Experiment 01, size: 24}
-      - {step: 1, text: 记录你的气球车设计方案（气球数量/轮子材质/车身形状）, write: [{boxes: [设计草图], h: 120}]}
+      - {title: 实验一：牛顿定律与反冲小车比赛, kicker: Experiment 01, size: 24}
+      - {step: 1, text: 记录你的小车设计方案（动力气球数量/轮子材质/车身形状）, write: [{boxes: [设计草图], h: 120}]}
       - {step: 2, text: 比赛结果：你的车跑了多远？小组排名第几？, write: [{fields: [距离, 排名]}]}
       - {step: 3, text: 原理思考：为什么有的车跑得远？用牛顿第三定律解释原因, grow: true, write: [{fill: 64}]}
 
@@ -164,23 +164,23 @@ pages:
   focus: [0.55, 0.5]
   target: [714, 561]
   left:
-    header: [Day 5 · 05 / 05, 10.30 周五]
+    header: [Day 5 · 05 / 05, 07.16 周五]
     top:
       - {display: Day 5, size: 120, color: gold}
-      - {display: 走进森林, size: 47}
-      - {p: 10.30 周五 ｜ 主题：信仰与自然·研学收官, weight: 700}
+      - {display: 走进云杉林, size: 47}
+      - {p: 07.16 周五 ｜ 主题：森林与溪流·探索收官, weight: 700}
     bottom:
       - {kicker: Key Facts · 核心知识点}
-      - items: [帕拉寺步道：单程约1.5公里，30-45分钟，树上绑橙色僧袍布条当路标, 进殿礼仪：脱鞋、遮肩过膝、放低音量]
+      - items: [云杉林古道：单程约1.5公里，30-45分钟，沿途设有木质生态解说牌, 森林伦理：保持安静、不偏离木栈道、不惊扰林间鸟类]
   right:
-    header: [Day 5 · Field Missions, Wat Pha Lat]
+    header: [Day 5 · Field Missions, Spruce Trail]
     body:
       - {kicker: Field Missions · 研学任务, mt: 0}
-      - {step: 1, lead: 自然观察, text: 步道上记录你看到的3种植物或动物（画下来或拍照）, write: [{boxes: [1, 2, 3], h: 110}]}
-      - {step: 2, lead: 文化观察, text: 观察僧侣的生活状态，记录1个让你印象深刻的细节, write: [{lines: 2}]}
+      - {step: 1, lead: 自然观察, text: 步道上记录你看到的3种植物或昆虫（画下来或记录特征）, write: [{boxes: [1, 2, 3], h: 110}]}
+      - {step: 2, lead: 生态观察, text: 观察倒木上的苔藓与真菌群落，记录1个让你印象深刻的细节, write: [{lines: 2}]}
       - {kicker: Q & A · 互动问答}
-      - {q: 1, text: 为什么僧侣要在森林里修行？这和佛教的什么理念有关？}
-      - {q: 2, text: 橙色僧袍布条除了当路标，还有什么意义？}
+      - {q: 1, text: 为什么倒下的枯木被称为森林里的“护士木”？}
+      - {q: 2, text: 森林溪流两侧的植物叶片为什么大多有明显的滴水叶尖？}
 
 # ---------- 14 成果页：B（纸面在上，照片在下）
 - layout: B
@@ -202,17 +202,17 @@ pages:
   focus: [0.6, 0.4]
   header: [Pre-Departure Mission · B, Gift]
   body:
-    - {task: B, name: 任务B：「友谊交换包」, sub: ——送给异国同桌的礼物}
-    - {items: [1句中国谚语（中英泰三语对照，写在卡片上）, 1个迷你中国小礼物（如剪纸、中国结、书签等轻便物品）, 1个你想问外国同龄人的问题（写在卡片背面）], heading: 每个交换包包含：}
-    - {p: 带去学校，亲手送给同桌，记录对方的反应和回答，回来后分享给全班。, lead: 参加研学的同学：}
+    - {task: B, name: 任务B：「自然交换卡」, sub: ——送给伙伴的生态笔记礼盒}
+    - {items: [1句自然格言（中英对照，写在书签卡正面）, 1枚压制落叶或手绘植物图鉴卡（仅收集自然脱落叶片）, 1个你想和伙伴探讨的科学问题（写在卡片背面）], heading: 每个礼盒包含：}
+    - {p: 结营分享会上亲手送给搭档，记录对方的回答与感想，回来后展示给全班。, lead: 参加研学的同学：}
     - {worksheet: 卡片草稿}
-    - {boxes: [卡片正面 · 谚语, 卡片背面 · 问题], h: 150}
-    - {fields: [English, 泰语]}
+    - {boxes: [卡片正面 · 自然格言, 卡片背面 · 科学问题], h: 150}
+    - {fields: [English, 物种名称]}
     - {fill: 32}
 
 # ---------- 16 封底：POSTER
 - layout: POSTER
   image: g_wing.jpg
   bottom:
-    - {display: 清迈五日闯关记, size: 33}
+    - {display: 山海五日探索记, size: 33}
   folio: false

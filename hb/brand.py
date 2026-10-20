@@ -1,4 +1,4 @@
-"""品牌包（brands/<名字>/brand.yaml）：book.brand: allas → 默认配色、字体、页脚、logo、封底联系方式。
+"""品牌包（brands/<名字>/brand.yaml）：book.brand: acme → 默认配色、字体、页脚、logo、封底联系方式。
 hb.py / lock.py 调用 apply(book)：品牌包里 book: 下的设置作为默认值，book.yaml 里写了的优先。"""
 import os, re, yaml
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

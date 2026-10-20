@@ -25,7 +25,7 @@ description: 将 Word、PDF、PPT、Markdown 或文字材料做成多页手册�
 
 同时定两个东西（第 0 步就要知道，影响整本）：
 - **用途方法** `book.kind`：`purposes/index.yaml`——admissions 招生简章 / study-trip 研学任务册 / parents 家长手册 / freshman 新生手册 / annual 年度回顾。它给出读者、读完要做的事、封面钩子、页面角色词（每页 `job:` 用它开头）、必须有的页、审稿重点。都不像就不写 kind，只写 `book.purpose`（workbook 任务册 / guide 指南 / brochure 宣传册）。
-- **品牌包** `book.brand`：`brands/index.yaml`（现有 allas）。有就用；用户说“和官网 / VI 一致”而没有 → brand 路线。
+- **品牌包** `book.brand`：`brands/index.yaml`（含虚构示例 `acme`）。有对应品牌包就用；用户说“和官网 / VI 一致”而没有 → brand 路线。
 
 ## 2. 纪律（任何路线都适用）
 
@@ -70,7 +70,7 @@ bash $HB/run.sh $P [--proof]                            # 构建 + 全部检查 
 bash $HB/export.sh $P[/语言] [文件名] [--draft]           # PDF + 可编辑 PDF + HTML + 源文件 + 拼版图
 python3 $HB/edit_page.py $P[/语言]                      # 在线编辑页（发布、同步见 workflows/edit-online.md）
 bash $HB/new_brand.sh 名字 "显示名" [logo.svg] [主色] [强调色]   # 新品牌包
-bash $HB/selftest.sh [--quick]                          # 改了 skill 本身之后跑
+bash <skill目录>/dev/tests/selftest.sh [--quick]         # 改了 skill 本身之后跑（位于 dev/ 开发包）
 ```
 产出都在项目目录：`brief.md` 决定、`book.yaml` 排版、`.qa/` 检查结果（review_*.jpg 拼版、compare_*.jpg 中英对照、directions.jpg 方向样张、log.md 构建日志、lint.txt 页序、facts.txt 数字出处、postflight.md 导出自检）、`images.yaml` 图片清单（来源、授权、清晰度）、`out/` 交付物。
 
@@ -79,23 +79,22 @@ bash $HB/selftest.sh [--quick]                          # 改了 skill 本身之
 - [ ] `GATE: PASS`（双语 `ALL LANGS: GATE PASS`）；ORDER 逐条确认过；EXTRA 里没有自创句；`[无出处数字]` 清掉或说明
 - [ ] 已按 visual-review 工作流审改实际PDF，逐页/面对页覆盖与必改项复核记在 .qa/visual-review.md；整册节奏及系列、跨页一致
 - [ ] 印刷：images.yaml 里没有低于 150dpi 的图；没有占位色块、TODO、AI 配图占位
-- [ ] images.yaml 里第三方照片都写了 source / license
+- [ ] 版权与授权：images.yaml 里所有照片都核对了 source / license（原稿抽取照片也须提醒用户确认商用版权与人物肖像权）
 - [ ] 正式导出（不是 --draft）：PDF + 可编辑 PDF + 单文件 HTML + 源文件 zip + 拼版图；postflight 全 ✓
-- [ ] 回复：结论先行——页数、结构一句话、非原文元素、原文里待用户决定的问题、待复核的事实、印刷提示；附拼版图；需要时给在线编辑页
+- [ ] 回复：结论先行——页数、结构一句话、非原文元素、原文里待用户决定的问题、待复核的事实、版权与印刷提示；附拼版图；需要时给在线编辑页
 
 ## 5. 文件地图
 ```
 workflows/   new · quick · beautify · reuse · revise（反馈对照表、出错续跑表）· brand · research · edit-online
              visual-review（所有路线收尾：视觉总监逐页审改、重导复核）
 references/  layouts.md（8 种内容版式）· rhythms.md（页序模板）· review.md（审稿表）· style.md（皮肤、字体、配色、品牌包）
-             adaptation.md（文案角色与 page-plan）· editorial-advisor.md（落版前顾问审）· images.md（照片、资料里的图、AI 配图）
+             adaptation.md（文案角色与 page-plan）· editorial-advisor.md（落版前顾问审）· images.md（照片、版权授权、AI 配图）
              blocks.md（进阶：照片版式与内容块、书写区）· delivery.md（交付、印刷、多语言、画布）
-             maintenance.md（改 skill 本身的规矩）· gallery/（效果图）
-purposes/    5 种用途方法（页面角色、必需页、审稿重点）     brands/   品牌包（allas）
+purposes/    5 种用途方法（页面角色、必需页、审稿重点）     brands/   品牌包（示例 acme）
 templates/   brief.md（决策记录）· book.layouts.yaml（16 页中英双语，8 种版式全用到）· book.nophoto.zh.yaml（无图风格整本样例）
-             book.family-handbook.en.yaml（英文家长手册整本样例）· 其余样例 yaml + 预览图
-TODO.md / ROADMAP.md   已知问题与迭代计划（维护者看，不随执行加载；新增发现先记 TODO 再并入 ROADMAP）
+             book.family-handbook.en.yaml（英文家长手册样例）· book.brochure.zh.yaml（宣传册样例）· book.study-trip.zh.yaml（研学手册样例）
 hb/          引擎：run.sh 构建门禁 · hb.py + canon.py（内容版式）+ flow.py（照片版式、内容块）排版 · fill.js 浏览器里的网格、让位与自检 · lock / lint / facts / images / gate / postflight 检查
              directions / subset 样张 · edit_page + editor.js + sync_edits 在线编辑 · brand / wordmark / new_brand 品牌包 · reuse 沿用旧册
+dev/         仓库开发与预览资源（与纯 Skill 运行文件分离）：maintenance.md 维护规矩 · tests/ 自测与合成图脚本 · gallery/ 风格效果图 · previews/ 模板预览图 · audits/ 历史复盘与迭代计划
 ```
 进阶模式（任务册书写区、照片跨页、自由内容块）见 `references/blocks.md`；和内容版式是同一个引擎、同一张网格，只有 A4 画布支持。拿不准时用 8 种内容版式——版式更固定。

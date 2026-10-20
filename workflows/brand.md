@@ -5,14 +5,14 @@
 
 ## 用现成的
 `brands/index.yaml` 里列着有哪些。用户说“用我们的品牌 / 和官网一致”且有对应的包 → 直接用，方向样张里至少一个方向是品牌包。
-现有：**allas**（All As AI：点缀档，白纸 + 浅紫，电光靛蓝做标题和数字，深色星云做封面和章节页，Comfortaa 圆润几何字体，文字标 logo 占位）。
+现有示例：**acme**（Acme Studio：虚构示例品牌，演示点缀档配色——白纸 + 浅底，电光靛蓝做标题和数字，深色做封面和章节页，Comfortaa 圆润几何字体，单色矢量 logo）。
 
 ## 新建
 需要的材料（缺的问用户，或从官网 / 旧物料里取）：logo（单色 SVG 最好）、主色 + 强调色、字体（中文 / 西文）、公司全称、网址、地址 / 电话、口吻、禁忌。
 ```bash
 bash $HB/new_brand.sh <名字> "<品牌显示名>" [logo.svg] [主色] [强调色]
 ```
-→ `brands/<名字>/brand.yaml`（结构照 allas）、`logo.svg`（没给 logo 就用 Comfortaa 生成文字标占位：`hb/wordmark.py` 也能单独用，`--mark A` 加圆形字母标）、`preview.jpg` 样张、index.yaml 登记一条。
+→ `brands/<名字>/brand.yaml`（结构照 acme 示例）、`logo.svg`（没给 logo 就用 Comfortaa 生成文字标占位：`hb/wordmark.py` 也能单独用，`--mark A` 加圆形字母标）、`preview.jpg` 样张、index.yaml 登记一条。
 然后打开 brand.yaml 补全：
 - `book.colors`：按角色写（style.md §8）：至少 `primary` 主色、`accent` 强调色、`background`、`body_text`。
 - `color_mode`：品牌色几乎都该用 `accent`（点缀）——品牌色只做标题、数字、细线，大面积是白纸和浅色；只有品牌本身就是强烈撞色（如橙 × 黑）才用 `clash`。拿不准写 `auto`，构建时会打印判断理由。
@@ -25,4 +25,4 @@ bash $HB/new_brand.sh <名字> "<品牌显示名>" [logo.svg] [主色] [强调�
 
 需要强化全册品牌识别时，按references/style.md §7.1考虑logo衍生暗纹、角部构图、章节锚点或跨页超级图形。先写本册内容与源形的应用方案，再按references/blocks.md的brand_graphic落版；项目SVG放在项目photos/_assets/，与正式logo分开保留。该扩展逐项目、逐页显式启用，品牌包的配色/字体/logo默认仍照常使用。
 
-注意：仓库公开时，客户的品牌包可能不该提交。需要时把 `brands/<名字>/` 加进 .gitignore，只在本机用。
+注意：仓库公开或打包分发时，客户的真实品牌包不应提交入库（`.gitignore` 默认已忽略 `/brands/*`，仅保留 `acme` 虚构示例）。

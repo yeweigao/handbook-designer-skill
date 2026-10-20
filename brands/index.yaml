@@ -1,8 +1,8 @@
 # 品牌包索引：book.brand: <名字> 就会套用 brands/<名字>/brand.yaml 里的配色、字体、logo、页脚、封底联系方式。
 # 新建品牌包：workflows/brand.md（bash hb/new_brand.sh <名字>）。
-allas:
-  name: All As AI
-  zh: All As AI · 国际学校教育 AI（Alpha International AI Edtech）
-  use: 产品手册、招生与合作材料、学校方案书
-  colors: 点缀档（accent）：白纸 + 浅紫 #F4F1FF，电光靛蓝 #4B3BFF 做标题和数字，深色星云留给封面和章节页
-  logo: 文字标（Comfortaa 生成的占位，拿到正式 logo.svg 直接替换）
+acme:
+  name: Acme Studio
+  zh: Acme Studio · 虚构示例品牌（演示品牌包结构与默认点缀档配色）
+  use: 宣传册、产品手册、项目方案书示例
+  colors: 点缀档（accent）：白纸 + 浅底 #F4F1FF，电光靛蓝 #4B3BFF 做标题和数字，深色留给封面和章节页
+  logo: 单色矢量标志（logo.svg）
