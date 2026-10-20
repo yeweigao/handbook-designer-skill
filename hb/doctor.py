@@ -50,6 +50,10 @@ cc=os.path.join(Q,'copy.txt'); miss=None
 if os.path.exists(cc):
     m=re.search(r'MISSING (\d+)',open(cc,encoding='utf-8').read()); miss=int(m.group(1)) if m else None
     if miss: ok=False; nH+=1; print(f'[缺字] 原文有 {miss} 处没出现在成品里（见上面的 MISSING 列表）→ 从 doc.md 复制补回；表格的表头/行名丢了时检查 table 块写法')
+if os.path.exists(cc):   # 适配声明（adapt.yaml）：读不了是硬伤；没命中 / 前缀仍印在成品里只是提示
+    _ct0=open(cc,encoding='utf-8').read()
+    if 'ADAPT ERROR' in _ct0: ok=False; nH+=1; print('[适配声明有误] adapt.yaml 读不了或格式不对（原因见 .qa/copy.txt 的 ADAPT ERROR）→ 照 references/adaptation.md「按产物适配」的写法改')
+    for _w in re.findall(r'(?m)^ADAPT WARN: (.*)$',_ct0): tips.append('[适配声明] '+_w)
 # 美化路线（book.frozen: true）：文字冻结——顺序不能动、不能加正文；PPT / PDF 原文一页对一页
 import yaml as _y
 try:
@@ -59,6 +63,8 @@ if _bk.get('frozen') and os.path.exists(cc):
     ct=open(cc,encoding='utf-8').read()
     no=int((re.search(r'ORDER (\d+)',ct) or [0,0])[1]); ne=int((re.search(r'EXTRA (\d+)',ct) or [0,0])[1])
     if no or ne: ok=False; nH+=1; print(f'[改动了原文] 美化模式（book.frozen: true）文字冻结：ORDER {no}、EXTRA {ne} 都必须是 0 → 照原文顺序排；不在原文里的正文删掉（页眉、页脚、图注这类装饰不算）')
+    _ad=re.search(r'ADAPT strip (\d+) omit (\d+)',ct)
+    if _ad and (int(_ad.group(1)) or int(_ad.group(2))): ok=False; nH+=1; print('[改动了原文] 美化模式（book.frozen: true）不允许 adapt.yaml：剥前缀、省略段落也是改原文 → 删掉 adapt.yaml 里的条目；确实要适配产物，先问用户，改走 new 路线（去掉 frozen）')
     dm=os.path.join(P,'doc.md'); src_pages=len(re.findall(r'<!--\s*第\s*\d+\s*页',open(dm,encoding='utf-8').read())) if os.path.exists(dm) else 0
     pt=os.path.join(P,'plan.txt'); have=sum(2 if re.search(r'^\d+-\d+',l) else 1 for l in open(pt, encoding='utf-8').read().splitlines() if l.strip()) if os.path.exists(pt) else 0
     if src_pages and have!=src_pages: ok=False; nH+=1; print(f'[页数不对应] 美化模式一页对一页：原文 {src_pages} 页，成品 {have} 页 → 拆页、合页、删页都会退出美化模式；确实要改结构，先问用户，改走 new 路线（去掉 frozen）')

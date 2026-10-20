@@ -98,6 +98,25 @@ for k, v in tails.items():
     if v >= 2 and count(k) >= 4: issues.append(('同一内容出现在不同条目里', f'“{k[:60]}”（{v} 处）'))
 for l in lines:
     if re.search(r'(?<![\d.:])\b\d{1,3}\s*/\s*\d{1,3}\b(?![\d/])', l) and not re.search(r'\d{4}', l): issues.append(('页码样式文字', plain(l)[:60]))
+# 为 Word 排的原稿不等于为册子排的：编号标签（「亮点一：」）、内部备注、版本标记不该印给读者。
+# 这里只报候选；要不要去、怎么去，写进 adapt.yaml（check_copy 认账并出适配报告），见 references/adaptation.md「按产物适配」
+_ZH_STEM = r'亮点|特色|特点|优势|卖点|要点|理念|保障|价值|成果'   # 读者不需要看编号的标签；步骤/任务/练习/第N天 是读者要用的序号，不在其中
+_EN_STEM = r'Highlights?|Features?|Benefits?|Reasons?|Advantages?'
+_lab = collections.defaultdict(list)
+for l in lines:
+    _b = plain(l)
+    _m = re.match(rf'^({_ZH_STEM})\s*([一二三四五六七八九十百]+|\d{{1,2}})\s*[：:、.．]\s*\S', _b) or re.match(rf'^({_EN_STEM})\s*(\d{{1,2}})\s*[:：.\-–—]\s*\S', _b, re.I)
+    if _m: _lab[_m.group(1).lower()].append(_b[:24])
+for _s, _ls in _lab.items():
+    if len(_ls) >= 2:
+        _rx = rf"(?i)^{_s}\s*[0-9一二三四五六七八九十百]+\s*[:：.．、\-–—]\s*" if re.match(r'[a-z]', _s) else rf"^{_s}\s*[一二三四五六七八九十百\d]+\s*[：:、.．]\s*"
+        issues.append(('编号标签前缀', f'「{_ls[0]}…」等 {len(_ls)} 行是「{_s}+序号：标题」的写法；册子里序号多半没意义，只留冒号后的标题 → 确认后在 adapt.yaml 写 strip: match: \'{_rx}\'（任务册、指南里读者要照着做的步骤号别去）'))
+_NOTE = re.compile(r'^[（(【\[]?\s*(备注|批注|编辑备注|内部备注|审核意见|修改意见|设计说明|设计要求|排版要求|给设计师?|修订记录|版本记录|文档说明|撰写说明|写作说明|待办|TODO)\s*[）)】\]]?\s*[：:]|^[（(【\[]\s*(此处|这里)(插入|放|配|添加)|^(配图|插图|图片建议)\s*[：:]', re.I)
+for l in lines:
+    if _NOTE.search(plain(l)): issues.append(('疑似非读者内容', f'{plain(l)[:50]}（备注、批注或给设计的指示？确认后在 adapt.yaml 写 omit，成品里不印）'))
+for l in lines:
+    if l.startswith('#') and re.search(r'[（(【\[]\s*(?:(?:终稿|定稿|初稿|修订稿|审核稿|最终版|final)\s*(?:v\s?\d+(?:\.\d+)*)?|v\s?\d+(?:\.\d+)*)\s*[）)】\]]|[_\-\s]v\d+(?:\.\d+)*\s*$', plain(l), re.I):
+        issues.append(('标题带版本标记', f'{plain(l)[:50]}（Word 文件名式的标题？确认后在 adapt.yaml 写 strip: match: \'\\s*[（(【\\[][^）)】\\]]*(终稿|定稿|初稿|修订稿|审核稿|最终版|v\\d+)[^）)】\\]]*[）)】\\]]\\s*$\'，书名用不带标记的；或让用户给册子正式名称）'))
 _artf = os.path.join(P, '.qa', 'artifacts.txt')
 _arts = [l.strip().split('：', 1)[-1].strip() for l in open(_artf, encoding='utf-8')] if os.path.exists(_artf) else []
 _arts = [a for a in _arts if a and not a.startswith('#')]

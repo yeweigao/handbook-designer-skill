@@ -230,6 +230,7 @@ v20完整28页安排11组真实面对页背景，重点24–25费用/报名与26
 - [x] **F61 · 跨页双方参数冲突仍放行。** 用同一源图、左0度/右90度的合法输入复现GATE PASS；新增按实际物理页配对及有效矩阵/透明度一致检查，缺左/缺右/不同角度/位置/透明度均拒绝。v20完整重建仍PASS，book.yaml和渲染HTML逐字节不变。
 - [x] **F62 · 正常试排被整册约束与共享SVG拦住。** v20隔离副本--proof原先因5页非4倍数、章序不全、photos链接中的SVG越界而失败；现明确proof范围，支持已配置共享照片目录，仍拒任意越界SVG；样张门禁不能正式导出。新增入口级回归，同时验证相同残缺册在完整入口仍被拦。
 - [ ] **F63 · 方向样张的选页和展示仍错位。** 源页含SPREAD时directions的YAML项号不是subset的物理页号；v20中第7项是物理第8页多图，实际却取物理第7页海报。方向实跑4页GATE PASS，最终拼图仅前三页；不能据此称已展示多图/密集样张。当前待办与验收见ROADMAP。
+- [x] **F64 · 原稿被“一句不差”搬进册子。** 用户给的 Word / PPT 带着为文档排的脚手架：「亮点一：xxx」编号标签、备注批注、版本标记，原样印进宣传册；而 check_copy 把它们当必须出现的原文，想去掉就报 MISSING，只能靠改 doc.md 消告警（违反“不得仅改参照文本消除漏字告警”）。新增项目级 `adapt.yaml`（strip 去编号前缀 / omit 整行不印）：check_copy 认账并写 `.qa/adapt-report.md`，声明没命中、成品里仍印着前缀报 ADAPT WARN，写错报 ADAPT ERROR（doctor 硬伤）；plan.py 报【编号标签前缀】【疑似非读者内容】【标题带版本标记】候选（读者要用的步骤一 / Day 3、「标签：值」不报）；美化路线（frozen）不许带 adapt.yaml，doctor 拦；new_project.sh 自动留 doc.original.md 基线；SKILL.md §2 改为“原文为准、按产物适配”，细则归 adaptation.md「按产物适配」，new / beautify / revise 同步。回归 `hb/test_adapt.py`（已入 selftest）。未做：多来源（一份 PPT + 一份 Word + 一堆散照片）同时入项目、两份原稿冲突时以谁为准——待定，见 ROADMAP。
 
 另收敛quick/revise/new入口、授权记录、连带复核及实际PDF验收，精简SKILL发现描述；未把蓝白纸、Playfair/Inter或5%暗纹固化为通用默认。已记录语义采用落实、真实照片11风格覆盖和独立完整执行评测仍未关闭。复盘详见AUDIT-2026-10-19.md；本轮证据在外部测试根skill-retrospective-20261019/，完整selftest-final.log与文档quick自检均PASS。通用quick_validate仍因现有agent_created管理字段失败，未删除该字段掩盖兼容性问题。
 

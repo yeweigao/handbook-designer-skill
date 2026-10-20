@@ -9,7 +9,7 @@ bash $HB/new_project.sh $P 原文.pptx        # PPT：doc.md 里每页带 <!-- �
 1. 第 1 轮只确认三件事：风格方向（可以直接出 directions.py 样张）、要不要中英两版、印刷还是电子版。沟通合同不用填（内容是定的）。
 2. brief.md：`route: beautify`；book.yaml：`book.frozen: true`。
 3. 每一页原文 → book.yaml 里的一页，`note:` 写“原第 N 页”。版式按这一页的内容形状选（plan.md 的建议），文字逐段复制。
-4. `run.sh`：frozen 时 doctor 多三道门——`ORDER` 必须 0、`EXTRA` 必须 0（页眉页脚这类装饰不算）、页数必须等于原文页数（`[改动了原文]` / `[页数不对应]`）。
+4. `run.sh`：frozen 时 doctor 多三道门——`ORDER` 必须 0、`EXTRA` 必须 0（页眉页脚这类装饰不算）、页数必须等于原文页数（`[改动了原文]` / `[页数不对应]`）；也不许有 `adapt.yaml`（剥编号、省段落都是改原文）。
 5. 原文自身的问题（错别字、前后矛盾）照原样排，交付时列给用户；用户说改再改，改了就在 brief.md 记一笔。
 6. 导出后执行 `workflows/visual-review.md`，在冻结文案与一页对一页约束内逐页审改、重导复核。
 

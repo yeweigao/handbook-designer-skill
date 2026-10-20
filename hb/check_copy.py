@@ -8,7 +8,9 @@ EXTRA  ：成品里不在参照文本中的行 —— 自创句子要删。页�
          引擎标记为“装饰”的文字不列入 EXTRA，只计数。
 页码 artifacts（页脚「02 / 23」、居中短数字）不算正文：extract.py 识别后写进 .qa/artifacts.txt，
          不列入 MISSING / EXTRA（成品用手册自动页码）。
-中文与西文原文都支持（按句号/问号/叹号与换行切分）。"""
+中文与西文原文都支持（按句号/问号/叹号与换行切分）。
+ADAPT  ：项目里有 adapt.yaml 时，声明过的“去掉编号前缀 / 版本标记（strip）、整行不进册子（omit）”不算 MISSING，明细写进 .qa/adapt-report.md；
+         声明了却没命中、或声明去掉的文字仍印在成品里，输出 ADAPT WARN（写法见 references/adaptation.md「按产物适配」）。"""
 import sys,os,re,html
 P=os.path.abspath(sys.argv[1] if len(sys.argv)>1 else '.')
 REF=sys.argv[2] if len(sys.argv)>2 else os.path.join(P,'doc.md')
@@ -47,6 +49,49 @@ for _f in (os.path.join(P,'.qa','edits_applied.json'),os.path.join(os.path.dirna
             _o,_n=[re.sub(r'<br\s*/?>','\n',str(x)) for x in (_e['old'],_e['new'])]
             ref=ref.replace(_o,_n) if _o in ref else ref.replace(re.sub(r'\s+',' ',_o),_n)
     break
+# 版面适配声明（项目根目录 adapt.yaml；写法见 references/adaptation.md「按产物适配」）：
+#   strip：去掉匹配到的部分（编号前缀「亮点一：高端品质」→「高端品质」；标题末尾的「（终稿v3）」）；omit：整行不进册子（备注、批注、给设计的指示）。
+# 声明过的不算 MISSING，全部写进 .qa/adapt-report.md 交给用户确认；没声明的照旧报 MISSING。对照旧版 .html 时不套用。
+import collections
+ADAPT_S=[]; ADAPT_O=[]; ADAPT_W=[]
+_af=next((os.path.join(_d,'adapt.yaml') for _d in (P,os.path.dirname(P)) if os.path.exists(os.path.join(_d,'adapt.yaml'))),None) if not REF.endswith('.html') else None
+if _af:
+    import yaml as _y
+    try:
+        _A=_y.safe_load(open(_af,encoding='utf-8')) or {}
+        _sr=[(str(_e['match']),str(_e.get('why',''))) for _e in (_A.get('strip') or [])]
+        _or=[]
+        for _e in (_A.get('omit') or []):
+            if _e.get('match'): _or.append(('match',str(_e['match']),str(_e.get('why',''))))
+            else:
+                if len(norm(str(_e['text'])))<4: raise ValueError('omit 的 text 太短（'+str(_e['text'])+'），会误伤别的行：写长一点，或改用 match 正则')
+                _or.append(('text',str(_e['text']),str(_e.get('why',''))))
+        for _p in [x[0] for x in _sr]+[x[1] for x in _or if x[0]=='match']:
+            if not _p.strip(): raise ValueError('有一条正则是空的')
+            re.compile(_p)
+    except Exception as _ex:
+        print(f'ADAPT ERROR: {_af} 读不了或格式不对（{type(_ex).__name__}: {_ex}）→ strip 每条要有 match（正则），omit 每条要有 text 或 match'); sys.exit(1)
+    _hs=collections.Counter(); _ho=collections.Counter(); _out=[]
+    for _l in ref.split('\n'):
+        _m=re.match(r'^(\s*(?:#{1,3}\s+|[-*•▶✓]\s+|\d+[.、)]\s+)?(?:\*\*)?)(.*)$',_l); _lead,_body=_m.group(1),_m.group(2); _kb=norm(_body); _gone=False
+        for _i,(_kd,_pt,_w) in enumerate(_or):
+            if (_kd=='match' and re.match(_pt,_body)) or (_kd=='text' and _kb.startswith(norm(_pt))):
+                _ho[_i]+=1; ADAPT_O.append((_body.strip(),_w)); _gone=True; break
+        if _gone: continue
+        for _i,(_pt,_w) in enumerate(_sr):
+            _nb=re.sub(_pt,'',_body,count=1)   # 匹配到的部分被去掉：前缀用 ^ 开头，后缀（标题末尾的版本标记）用 $ 结尾；剥完为空的行不剥
+            if _nb!=_body and norm(_nb):
+                _hs[_i]+=1; ADAPT_S.append((_body.strip(),_nb.strip(),_w)); _l=_lead+_nb; break
+        _out.append(_l)
+    ref='\n'.join(_out)
+    for _i,(_pt,_w) in enumerate(_sr):
+        if not _hs[_i]: ADAPT_W.append(f'strip「{_pt}」没有命中任何一行 → 检查正则（行首的列表符号、# 和粗体已忽略；前缀要写 ^，后缀要写 $），或删掉这条')
+    for _i,(_kd,_pt,_w) in enumerate(_or):
+        if not _ho[_i]: ADAPT_W.append(f'omit「{_pt}」没有命中任何一行 → 检查写法（text 是行首文字，忽略标点空格；match 是行首正则），或删掉这条')
+    for _o,_n,_w in ADAPT_S:
+        if len(norm(_o))>=4 and norm(_o) in N: ADAPT_W.append(f'声明了去掉前缀，成品里却还印着「{_o[:30]}」→ 前缀不印，只留「{_n[:20]}」')
+    for _o,_w in ADAPT_O:
+        if len(norm(_o))>=6 and norm(_o) in N: ADAPT_W.append(f'声明了不进册子，成品里却还有「{_o[:30]}」→ 从 book.yaml 删掉这段，或从 adapt.yaml 去掉这条声明')
 CJK=len(re.findall(r'[一-鿿]',ref))>len(re.findall(r'[A-Za-z]',ref))/4   # 原文以中日韩文字为主？
 D=norm(re.sub(r'[•✓✗→▶☐｜]','',ref))
 segs=[]
@@ -85,4 +130,14 @@ for line in dict.fromkeys(l.strip() for l in book_deco_free.split('\n')):
 print(f'MISSING {len(miss)}（参照：{os.path.basename(REF)}）'); [print('  MISSING:',m) for m in miss]
 print(f'ORDER {len(order)}（顺序与参照文本不同；若是有意挪动请在回复里说明）'); [print(f'  ORDER: 第{p}页 {t}') for p,t in order[:40]]
 print(f'EXTRA {len(extra)}（不在参照文本中的正文行：自创句子必须删；另有 {n_deco} 处页眉/页脚/图注/小标签/填写提示未列出）'); [print('  EXTRA:',e) for e in extra[:80]]
+if _af:
+    print(f'ADAPT strip {len(ADAPT_S)} omit {len(ADAPT_O)}（按 adapt.yaml：去掉编号或版本标记 {len(ADAPT_S)} 行、未进册子 {len(ADAPT_O)} 行；明细 .qa/adapt-report.md，交付时列给用户）')
+    for _w in ADAPT_W: print('ADAPT WARN:',_w)
+    _q=os.path.join(P,'.qa'); os.makedirs(_q,exist_ok=True); _c=lambda s:str(s).replace('|','/').replace('\n',' ')
+    _rp=['# 适配报告（check_copy 自动生成，依据 adapt.yaml）','','交付时把这里列给用户；要放回的，删掉 adapt.yaml 里对应的条目再重建。','',
+         f'## 去掉的编号 / 标签 / 版本标记（{len(ADAPT_S)} 行）','','| 原文 | 成品采用 | 原因 |','|---|---|---|']
+    _rp+=[f'| {_c(a)} | {_c(b)} | {_c(w)} |' for a,b,w in ADAPT_S]
+    _rp+=['',f'## 未进册子的内容（{len(ADAPT_O)} 行）','','| 原文 | 原因 |','|---|---|']
+    _rp+=[f'| {_c(a)} | {_c(w)} |' for a,w in ADAPT_O]
+    open(os.path.join(_q,'adapt-report.md'),'w',encoding='utf-8').write('\n'.join(_rp)+'\n')
 sys.exit(1 if miss else 0)

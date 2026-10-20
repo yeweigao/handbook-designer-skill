@@ -36,6 +36,6 @@ elif [ -z "$2" ] && [ ! -f "$P/book.yaml" ]; then   # 没给原文 = 试跑样�
   cp "$HB/../templates/book.nophoto.zh.yaml" "$P/book.yaml"
   echo "（未提供原文：已放入无图样例 book.yaml，可直接 run.sh 试跑）"
 fi
-if [ -s "$P/doc.md" ]; then python3 "$HB/plan.py" "$P" >/dev/null && echo "素材盘点 → $P/plan.md · 文案清单 → $P/copy_map.md · 逐页方案骨架 → $P/page-plan.md"; fi
+if [ -s "$P/doc.md" ]; then [ -f "$P/doc.original.md" ] || cp "$P/doc.md" "$P/doc.original.md"; python3 "$HB/plan.py" "$P" >/dev/null && echo "素材盘点 → $P/plan.md · 文案清单 → $P/copy_map.md · 逐页方案骨架 → $P/page-plan.md"; fi
 echo "项目已建立：$P"
 echo "下一步（第 0 步）：读 plan.md 和 copy_map.md，通读原文，给用户写 2–3 个方案并等用户选定；选定后先写 page-plan.md（逐页方案，references/adaptation.md），再写 book.yaml，然后 bash $HB/run.sh $P"

@@ -26,7 +26,8 @@
 | 字看不清（照片上） | 改 focus / target，让字落在照片较暗、较简单的区域；换更简洁的图；换让字落在纸面上的版式（T/B 调 split、HOLE 换窗的位置） |
 | `[书写线收紧]` / `[字号收紧]` | 这一页内容偏多，引擎已经收了书写线或辅助字号；要原样的书写空间和字号就拆页（同一版式，自动镜像） |
 | 图被缩小了 | 页面放不下时插图会先按整行缩矮；想保留原高就把一部分文字挪到相邻页 |
-| 内容怎么变了 | 看 check_copy 的 MISSING / EXTRA；从 doc.md 重新复制；对照旧版恢复 |
+| 内容怎么变了 | 看 check_copy 的 MISSING / EXTRA 和 `.qa/adapt-report.md`；从 doc.md 重新复制；对照旧版恢复 |
+| 册子里多了不该印的字（「亮点一：」、备注）/ 某个标题被我们去掉了前缀想放回 | 改 `adapt.yaml`（加 / 删 strip、omit 条目），book.yaml 同步，重跑；规则见 adaptation.md「按产物适配」 |
 | 不要填写的地方 | `book.purpose: brochure`，删掉书写块 |
 | 要英文版 / 双语 | 文字写成 `{zh: …, en: …}` + `book.langs: [zh, en]`（layouts.md §2）；单语 yaml 用 `hb/i18n.py extract/apply` |
 | 要小一点的册子 / 发小红书 | `book.canvas: a5` / `xhs`（delivery.md「画布」）：内容要按小画布重新分页 |
