@@ -3,6 +3,19 @@
 // 顺序：大标题撑满栏宽 → 各块补齐到行距的整数倍 → 文字栈补齐 → 照片/色块按文字栈定位（data-y0 / data-y1）→ 按行平分 → 自检
 const CN={T:88,L:24,B:1000,W:794,H:1123,C:84,G:28,N:38,I:50,O:100};(()=>{const g=(document.body&&document.body.dataset.grid||'').split(',').map(Number);if(g.length==10)[CN.T,CN.L,CN.B,CN.W,CN.H,CN.C,CN.G,CN.N,CN.I,CN.O]=g})();   // 网格：hb.py 按画布写在 body data-grid
 function cnPg(e){return e.closest('.page')}
+// 字重跟随实际字级，标题收缩、换小画布与在线改字均走同一条规则。
+function cnTypeWeight(size){const base=parseFloat(getComputedStyle(document.body).getPropertyValue('--bs'))||16;
+ const r=size/base;if(document.body.dataset.typography==='light')return r>=4?(parseInt(getComputedStyle(document.body).getPropertyValue('--display-w'))||200):r>=2.75?250:r>=2?300:r>=1?400:r>=.875?500:600;return r>=4?900:r>=2?700:r>=1.25?600:r>=1?400:r>=.875?500:600}
+function cnTypeText(pg){const found=new Set(),w=document.createTreeWalker(pg,NodeFilter.SHOW_TEXT);let t;
+ while(t=w.nextNode()){const e=t.parentElement;if(t.textContent.trim()&&!e.closest('svg,script,style,.cn-brand-graphic')&&getComputedStyle(e).display!='none')found.add(e)}return [...found]}
+function cnWeight(e){const base=cnTypeWeight(parseFloat(getComputedStyle(e).fontSize));e.style.fontWeight=document.body.dataset.typography==='bold'&&e.closest('b,strong')?Math.min(900,base+200):base}
+function cnTypography(){document.querySelectorAll('.page').forEach(pg=>cnTypeText(pg).forEach(cnWeight))}
+function cnTypeQA(){if(document.body.dataset.typography!=='light')return [];const out=[];
+ document.querySelectorAll('.page').forEach((pg,i)=>{const groups=new Map();
+  cnTypeText(pg).forEach(e=>{const cs=getComputedStyle(e),s=+parseFloat(cs.fontSize).toFixed(2),w=parseFloat(cs.fontWeight);if(!s||!w)return;
+   const q=groups.get(s)||{min:1000,max:0,text:''};q.min=Math.min(q.min,w);q.max=Math.max(q.max,w);q.text=(e.textContent||'').trim().slice(0,18);groups.set(s,q)});
+  let larger=0;[...groups].sort((a,b)=>b[0]-a[0]).forEach(([s,q])=>{
+   if(q.min<larger||s<=20&&q.min<400)out.push([i+1,'cn-weight',0,`${s}px / ${q.min}：${q.text}`]);larger=Math.max(larger,q.max)})});return out}
 function cnR(e){const P=cnPg(e).getBoundingClientRect(),r=e.getBoundingClientRect();return{top:r.top-P.top,bottom:r.bottom-P.top,left:r.left-P.left,right:r.right-P.left,height:r.height,width:r.width}}
 function cnLines(e){   // 每一行的宽度（按竖直方向重叠归行：不同字体回退的字高度不同，不能按中线分组）
  const r=document.createRange();r.selectNodeContents(e);const L=[];
@@ -14,7 +27,7 @@ function cnFit(e){   // 大标题：量出最长一行，缩放到正好撑满�
  const hasBr=!!e.querySelector('br');
  const brN=hasBr?(e.innerText||'').split('\n').length:0;   // 作者显式断了几行，就必须渲染成几行（不允许某一作者行再折）
  const mx=+e.dataset.fit,mn=+(e.dataset.min||Math.min(mx,44)),maxl=hasBr?brN:+(e.dataset.lines||3);   // 显式断行时行数固定为作者行数，字号缩到每行都放得下为止
- const set=s=>{e.style.fontSize=s+'px';const q=CN.L/2;e.style.lineHeight=(Math.ceil(s*1.04/q)*q)+'px'};const longest=()=>Math.max(0,...cnLines(e));
+ const set=s=>{e.style.fontSize=s+'px';cnWeight(e);const q=CN.L/2;e.style.lineHeight=(Math.ceil(s*1.04/q)*q)+'px'};const longest=()=>Math.max(0,...cnLines(e));
  e.classList.remove('cn-wrap','cn-any');set(100);let s=Math.floor(Math.min(mx,100*w/Math.max(1,longest())));
  if(s<mx){e.classList.add('cn-wrap');let best=0;
   for(let t=mx;t>=Math.max(mn,Math.ceil(s*1.3));t-=2){set(t);if(longest()<=w+.5&&cnLines(e).length<=maxl){best=t;break}}
@@ -69,7 +82,7 @@ function cnCheck(){const out=[];const pages=[...document.querySelectorAll('.page
   sts.forEach(([s])=>{if(s.dataset.bad==null)return;[s.dataset.y0,s.dataset.y1].filter(Boolean).forEach(v=>(String(v).match(/[\w-]+(?=\.(top|bottom))/g)||[]).forEach(id=>{const t=document.getElementById(id);if(t&&t.classList.contains('cn-st'))t.dataset.bad=1}))});
   pg.querySelectorAll('.cn-row').forEach(rw=>{const R=rw.getBoundingClientRect();let mb=-1e9;cnText(rw).forEach(q=>mb=Math.max(mb,q.b));if(mb>R.bottom+2)out.push([pi(rw),'cn-row',Math.round(mb-R.bottom),tx(rw)])});
   pg.querySelectorAll('[data-minh]').forEach(b=>{const h=b.getBoundingClientRect().height;if(h<+b.dataset.minh-1)out.push([pi(b),'cn-small',Math.round(h),'']) });
-  pg.querySelectorAll('.cn-pic img').forEach(im=>{const r=im.getBoundingClientRect();if(r.height>0&&r.height<150)out.push([pi(im),'cn-imgarea',Math.round(r.height),(im.getAttribute('src')||'').split('/').pop()||'']) });   // 主图可见高度不足（F07/cn-imgarea：合照/主体被压成一条边）
+  pg.querySelectorAll('.cn-pic img').forEach(im=>{const r=im.getBoundingClientRect(),small=im.closest('[data-image-role="supporting"]'),min=small?Math.max(72,3*CN.L):150;if(r.height>0&&r.height<min)out.push([pi(im),'cn-imgarea',Math.round(r.height),(im.getAttribute('src')||'').split('/').pop()||'']) });   // 主图可见高度不足（F07/cn-imgarea：合照/主体被压成一条边）
   pg.querySelectorAll('[data-below]').forEach(f=>{const t=document.getElementById(f.dataset.below);if(!t)return;const R=cnText(t);if(!R.length)return;const d=Math.max(...R.map(q=>q.b))-(f.getBoundingClientRect().top-12);if(d>2)out.push([pi(f),'cn-band',Math.round(d),tx(t)])});   // 正文压进下方色带
   pg.querySelectorAll('[data-clear]').forEach(f=>{const t=document.getElementById(f.dataset.clear);if(!t)return;const d=f.getBoundingClientRect().bottom-(t.getBoundingClientRect().top-12);if(d>2)out.push([pi(f),'cn-in',Math.round(d),tx(t)])});
   if(!(pg.innerText||'').trim()&&!pg.querySelector('img'))out.push([pi(pg),'cn-over',0,'空白页（版面没排出来）']);
@@ -77,7 +90,7 @@ function cnCheck(){const out=[];const pages=[...document.querySelectorAll('.page
   pg.querySelectorAll(':scope > .cn-num.deco, :scope > .cn-v > .cn-num.deco').forEach(d=>{const g=cnGlyph(d);if(!g)return;let hit=0,who='';   // 装饰大字压到文字
    sts.forEach(([s,R])=>R.forEach(q=>{const w=Math.min(q.r,g.r)-Math.max(q.l,g.l),hh=Math.min(q.b,g.b)-Math.max(q.t,g.t);if(w>4&&hh>4&&hh>hit){hit=hh;who=tx(s)}}));
    if(hit)out.push([pi(d),'cn-deco',Math.round(hit),(d.innerText||'').trim()+' ↔ '+who])})});
- return out}
+ return out.concat(cnTypeQA())}
 function sjRail(pg,o){   // 节拍列：沿一条看不见的竖轴（ax）排小色块，色块从轴往页边长；o.dir=1 往右长、-1 往左长；o.t..o.b 是可用的高度
  const P=pg.getBoundingClientRect(),U=Math.round(CN.L/2),lk=o.lk,beat=lk==='beat',tone=lk==='tone',rnd=o.rnd,cs=o.cs;
  const sel=beat?'.cn-h,.cn-num,.cn-lab,.cn-disp,.cn-sub,.cn-tx p,.cn-li li,.cn-cap,.cn-qt':'.cn-h,.cn-num,.cn-disp';
@@ -160,7 +173,7 @@ function cnReading(){const en=!/^(zh|ja|ko)(-|$)/i.test(document.documentElement
   if(ps.length>1&&ps.every(p=>(p.textContent||'').replace(/\s/g,'').length<(en?120:100)))return;
   if((e.textContent||'').replace(/\s/g,'').length<(en?120:100))return;
   e.classList.add('cn-cols2');e.style.maxWidth='none'})}
-function cnLayout(){document.querySelectorAll('.page.cn .cn-snap').forEach(e=>cnSnap(e,false));
+function cnLayout(){cnTypography();document.querySelectorAll('.page.cn .cn-snap').forEach(e=>cnSnap(e,false));
  document.querySelectorAll('.page.cn .cn-st').forEach(e=>cnSnap(e,e.dataset.anchor=='bottom'));cnPlace()}
 function canon(){document.querySelectorAll('.page.cn [data-fit]').forEach(e=>{e.dataset.fit0=e.dataset.fit;cnFit(e)});cnReading();cnLayout();
  // 放不下（出版心 / 出色块 / 互压 / 条目行放不下 / 图被挤小）→ 这一页的大标题先缩小一档再排，最多 6 轮；标题也是“吸收体”
@@ -235,11 +248,27 @@ function cnBrandGraphics(){document.querySelectorAll('.cn-brand-graphic').forEac
   while(a&&a!==pg){const s=getComputedStyle(a),q=a.getBoundingClientRect();if(s.overflowX!=='visible'){l=Math.max(l,q.left);r=Math.min(r,q.right)}if(s.overflowY!=='visible'){t=Math.max(t,q.top);b=Math.min(b,q.bottom)}a=a.parentElement}
   if(r<=l||b<=t)return;const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
   for(const [k,v] of Object.entries({x:l-P.left-1,y:t-P.top-1,width:r-l+2,height:b-t+2,fill:'black','data-cut':'1'}))rect.setAttribute(k,v);mask.appendChild(rect)})})}
-function fill(){cnLinks();canon();sjStructure();fit();split();golden();fz();grow();document.querySelectorAll('.fill').forEach(e=>{e.innerHTML='';const n=Math.max(0,Math.floor(e.clientHeight/CN.L));e.innerHTML='<div class="cn-ln"></div>'.repeat(n)});cnBrandGraphics();document.body.dataset.ready=1}
+// 主题装饰留在阅读纸面，不能把已经到裁切边的摄影重新盖成带边框的图片。
+function cnPhotoDecor(){document.querySelectorAll('.page.cn').forEach(pg=>{
+ const P=pg.getBoundingClientRect(),photos=[...pg.querySelectorAll('.cn-pic,.cn-figi,.cn-ibox')].filter(e=>!e.closest('.deco')).map(e=>e.getBoundingClientRect());
+ pg.querySelectorAll('.geo-band,.sj-line,.sj-blk,.sj-rail,.sj-tick').forEach(e=>{
+  const D=e.getBoundingClientRect(),cuts=[];let path=`M0 0H${D.width}V${D.height}H0Z`;
+  photos.forEach(R=>{const l=Math.max(D.left,R.left,P.left)-D.left,t=Math.max(D.top,R.top,P.top)-D.top,r=Math.min(D.right,R.right,P.right)-D.left,b=Math.min(D.bottom,R.bottom,P.bottom)-D.top;
+   if(r>l&&b>t)cuts.push({l,t,r,b})});
+  // 先求矩形并集：嵌套或相交的图位不能在evenodd中相互抵消。
+  const xs=[...new Set(cuts.flatMap(c=>[c.l,c.r]))].sort((a,b)=>a-b);
+  for(let i=0;i<xs.length-1;i++){const l=xs[i],r=xs[i+1],ys=cuts.filter(c=>c.l<r&&c.r>l).map(c=>[c.t,c.b]).sort((a,b)=>a[0]-b[0]),merged=[];
+   ys.forEach(q=>{const last=merged[merged.length-1];if(last&&q[0]<=last[1])last[1]=Math.max(last[1],q[1]);else merged.push(q.slice())});
+   merged.forEach(([t,b])=>path+=`M${l} ${t}H${r}V${b}H${l}Z`)}
+  e.style.clipPath=cuts.length?`path(evenodd, "${path}")`:'';
+ })})}
+
+function fill(){cnLinks();canon();sjStructure();fit();split();golden();fz();grow();document.querySelectorAll('.fill').forEach(e=>{e.innerHTML='';const n=Math.max(0,Math.floor(e.clientHeight/CN.L));e.innerHTML='<div class="cn-ln"></div>'.repeat(n)});cnTypography();cnBrandGraphics();cnPhotoDecor();cnQA();document.body.dataset.ready=1}
 // 网格透视：book.html#grid 打开时，内容版式页叠上 6 栏网格（红色栏、蓝色行线、版心框）
 function cnGrid(){if(location.hash!='#grid')return;document.querySelectorAll('.page').forEach((pg,i)=>{if(!pg.classList.contains('cn'))return;const r=(i+1)%2==1,L=r?CN.I:CN.O;let h='';const tw=6*CN.C+5*CN.G;
  for(let c=0;c<6;c++)h+=`<div style="position:absolute;left:${L+c*(CN.C+CN.G)}px;top:0;width:${CN.C}px;height:${CN.H}px;background:rgba(226,60,90,.10)"></div>`;
  for(let l=0;l<=CN.N+1;l++)h+=`<div style="position:absolute;left:0;top:${CN.T+l*CN.L}px;width:${CN.W}px;border-top:.5px solid rgba(40,150,220,.4)"></div>`;
  h+=`<div style="position:absolute;left:${L}px;top:${CN.T}px;width:${tw}px;height:${CN.B-CN.T}px;outline:1.2px solid rgba(226,60,90,.9)"></div>`;
  const g=document.createElement('div');g.className='deco';g.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:99';g.innerHTML=h;pg.appendChild(g)})}
-document.fonts.ready.then(()=>setTimeout(()=>{fill();cnGrid()},50))</script>
+// 排印会在测量时切换字重，先载入本书注册的真实静态字重，避免回退字体测量后再跳字。
+document.fonts.ready.then(()=>Promise.all([...document.fonts].map(face=>face.load()))).then(()=>setTimeout(()=>{fill();cnGrid()},50))</script>

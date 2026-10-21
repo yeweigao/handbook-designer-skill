@@ -14,24 +14,36 @@ spec = yaml.safe_load(open(os.path.join(P, 'book.yaml'), encoding='utf-8')) or {
 B = spec.get('book') or {}; lang = str(B.get('lang', 'zh'))
 mp = json.load(open(os.path.join(P, 'map.json'), encoding='utf-8'))
 pidx = {i: list(range(n, n + span)) for i, n, span in mp.get('pidx', [])}
-SKIP = {'layout', 'image', 'images', 'img', 'src', 'focus', 'target', 'zoom', 'surface', 'mirror', 'variant', 'style', 'cols', 'count', 'deco', 'num', 'tone',
+SKIP = {'display_weight', 'bleed', 'typography', 'layout', 'image', 'images', 'img', 'src', 'focus', 'target', 'zoom', 'surface', 'mirror', 'variant', 'style', 'cols', 'count', 'deco', 'num', 'tone',
         'note', 'job', 'align', 'rhythm', 'index', 'toc', 'duo', 'folio', 'logo', 'contact', '_last', 'widths', 'columns', 'items_cols', 'fit', 'h', 'w', 'mt',
         'size', 'spacing', 'lh', 'stroke', 'frame', 'grow', 'split', 'window', 'colors', 'figure', 'logos', 'qr', 'gradient', 'html'}
 IMG = re.compile(r'\.(jpe?g|png|webp|svg|gif)$', re.I)
 def norm(s): return re.sub(r'[​\s]+', '', H.unescape(re.sub(r'<[^>]+>', '', str(s))))
 leaves = []
-def walk(o, path, pages):
+def walk(o, path, pages, key=None):
     if isinstance(o, dict):
         for k, v in o.items():
-            if k not in SKIP: walk(v, f'{path}.{k}', pages)
+            if key == 'series_header' and k in ('series', 'item'): continue
+            # sections[].note 已印在页上；只保留其他 note 的元数据语义。
+            if k not in SKIP or (k == 'note' and key == 'sections'):
+                walk(v, f'{path}.{k}', pages, k)
     elif isinstance(o, list):
-        for j, v in enumerate(o): walk(v, f'{path}[{j}]', pages)
+        for j, v in enumerate(o): walk(v, f'{path}[{j}]', pages, key)
     elif isinstance(o, (str, int, float)) and not isinstance(o, bool):
         s = str(o)
         if s.strip() and not IMG.search(s) and not s.startswith(('ai:', 'placeholder')) and len(norm(s)) >= 1:
             leaves.append(dict(path=path, pages=pages, text=s, norm=norm(s)))
 for i, p in enumerate(spec.get('pages') or []):
     walk(p, f'pages[{i}]', pidx.get(i, []))
+    # 共用篇名只在 book.series 保存一份；一次修改适用于首页与续页。
+    q = p.get('series_header') or {}
+    if p.get('layout') == 'READING' and q and not q.get('title'):
+        name, item = str(q.get('series', '')), str(q.get('item', ''))
+        title = ((B.get('series') or {}).get(name, {}).get('items') or {}).get(item)
+        path = f'book.series.{name}.items.{item}'
+        existing = next((leaf for leaf in leaves if leaf['path'] == path), None)
+        if existing: existing['pages'].extend(pidx.get(i, []))
+        elif title: walk(title, path, list(pidx.get(i, [])))
 imgs = {}
 for u in mp.get('use') or []:
     if u.get('img'): imgs[u['img']] = u['file']

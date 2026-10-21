@@ -1,0 +1,115 @@
+# 编辑型变奏样册。照片名由项目 photos/ 提供；开发自测会生成合成图。
+# 实际排版验证请准备真实摄影，不能把合成占位图当摄影导演能力的证明。
+book:
+  title: 把一片森林读慢一点
+  lang: zh
+  style: editorial
+  purpose: guide
+  color_mode: accent
+  duotone: off
+  colors:
+    primary: '#244C3C'
+    accent: '#B54932'
+    background: '#F7F4EB'
+    body_text: '#202C26'
+    MUT: '#46564B'
+  folio: FIELD NOTES · 阅读与观察
+pages:
+- layout: FULL
+  image: false
+  surface: A
+  deco: false
+  folio: false
+  job: cover · 建立慢观察的阅读邀请
+  kicker: FIELD NOTES / 自然观察手册
+  title: "把一片森林\n读慢一点"
+  sub: 从看见，到发现。
+  intro: 从一片叶子开始，练习描述、比较与提问。
+- layout: RHYTHM
+  job: read · 让读者区分看见和观察
+  rhythm: breathing
+  kicker: READING / 观察的起点
+  title: "先停下来，\n再往前走。"
+  intro: 不必急着叫出名字。先把眼前的事物，看得更具体一点。
+  text:
+  - 走进森林，我们很容易把眼前的一切统称为“绿色”。但同一条小路上，叶子的边缘、树皮的纹路和光落下的位置，都可能不同。观察从这些差异开始。
+  - 选一个让你愿意停留的细节。写下颜色、形状与位置，暂时放下“漂亮”“特别”这样的评价。让另一个人只读你的描述，也能找到它。
+  - 再退后一步，看它与周围的关系。同一片叶子，在背光与迎光时有什么变化？把问题留在记录旁边，带着它继续走。
+  quote: "看见细节，\n也给问题留一点位置。"
+- layout: MARGINALIA
+  job: explain · 用与段落关联的边注帮助进入正文
+  kicker: SECOND VOICE / 读懂自己的记录
+  title: "让记录\n多说一点。"
+  sections:
+  - t: 先描述，再解释
+    x: 记录“叶缘有缺口”，和写下“被昆虫吃过”，表达的不是同一件事。前者是看见的形状，后者是对原因的推测。把两种说法分开，之后才知道还需要寻找什么证据。
+    note_title: 观察提示
+    note: 可以用“我看见……”和“我猜想……”分别起句，提醒自己两者的区别。
+  - t: 留下回来的线索
+    x: 在文字旁边补一张简图，标出你站的位置与观察方向。下次经过时，再回到相近的视角。变化不一定很大，能够比较的记录，才会慢慢积累成发现。
+    note_title: 再看一次
+    note: 给尚未确定的细节留一个问号。旁注可以装下疑问，不必急着给出答案。
+  quote: "把不确定写下来，\n也是观察的一部分。"
+- layout: PLATE
+  job: observe · 由完整主体进入局部细节
+  rhythm: anchor
+  kicker: OBSERVATION PLATE / 从整体到局部
+  title: 一片叶子的线索
+  image: leaf-study.svg
+  caption: 叶片观察示意。编号对应右栏，示意图不用于物种鉴定。
+  annotations:
+  - {t: 轮廓, x: 顺着叶缘看一圈。边缘平滑，还是有可见的起伏？}
+  - {t: 纹路, x: 从中央向两侧观察。用简线记录纹路走向，不必描摹每一处。}
+  - {t: 连接, x: 看一看叶片与叶柄的连接处。画下你能直接看见的形状。}
+  text: 观察结束后，把视线放回整株植物。单独的细节很有趣，它与周围的关系也值得记录。
+- layout: SEQUENCE
+  job: look · 比较环境、层次与运动三种观看方向
+  rhythm: anchor
+  kicker: VISUAL SEQUENCE / 改变观看距离
+  title: "走近，也退后。"
+  items:
+  - img: forest-wide.jpg
+    k: SCENE / 环境
+    t: 先找到位置
+    x: 让画面交代你站在哪里，主体与周围有什么关系。
+  - img: forest-detail.jpg
+    k: CONTEXT / 延伸
+    t: 看远处的层次
+    x: 比较近处与远处的颜色，记录视线如何向前延伸。
+  - img: forest-return.jpg
+    k: MOTION / 流动
+    t: 寻找变化的方向
+    x: 顺着水流的方向看，试着用线条记录画面里的运动。
+- layout: GRID
+  job: act · 把阅读变成一次实际观察
+  surface: paper
+  kicker: YOUR TURN / 现在轮到你
+  title: 带走一个好问题
+  timeline:
+  - [停下来, 找到一个愿意多看一眼的对象]
+  - [写下来, 记录看见的形状与位置]
+  - [画下来, 用简图补充文字说不清的关系]
+  - [问一问, 写下还没有答案的问题]
+  notes:
+  - 记录可以简短，但要能帮助自己在之后回想现场。
+  - 不必为了完成页面而编造观察结果。
+- layout: RHYTHM
+  job: reflect · 用安静的一页回收整册主题
+  rhythm: breathing
+  surface: dark
+  kicker: REFLECTION / 再读一次
+  title: "你带回来的，\n不止是答案。"
+  intro: 回看自己的记录，找出那个仍然想继续追问的问题。
+  text:
+  - 一次观察可能让你更确定，也可能让你发现之前没有注意到的复杂。把这些变化写下来，它们同样是学习留下的痕迹。
+  - 下一次出发，带上这张记录。回到熟悉的地方，看看问题有没有变，看看自己有没有看见新的细节。
+  quote: "好奇心，\n值得被认真保存。"
+- layout: FULL
+  image: false
+  surface: B
+  deco: false
+  folio: false
+  job: back · 给读者一个离开页面后的行动
+  kicker: UNTIL NEXT TIME / 下一次观察
+  title: "合上手册，\n继续看。"
+  intro: 带着你的问题，回到真实的世界。

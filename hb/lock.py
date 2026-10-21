@@ -34,7 +34,7 @@ def brief_line(k):
     q = re.search(r'(?m)^\s*' + re.escape(k) + r'\s*:', BLK)
     return t[:BLK0 + q.start()].count('\n') + 1 if q else 0
 DEF = dict(purpose='workbook', style='photo', canvas='a4', color_mode='auto', look='classic')
-for k in ('purpose', 'kind', 'brand', 'style', 'look', 'colors', 'color_mode', 'fonts', 'canvas', 'langs'):
+for k in ('purpose', 'kind', 'brand', 'style', 'look', 'colors', 'color_mode', 'typography', 'display_weight', 'fonts', 'canvas', 'langs'):
     if k not in lock: continue
     if unconfirmed(lock[k]):
         unfirm.append((brief_line(k), k, lock[k])); continue
@@ -53,6 +53,8 @@ for k in ('purpose', 'kind', 'brand', 'style', 'look', 'colors', 'color_mode', '
         if have is None: continue          # 写了具体色值（品牌色）：不比
     else:
         have = norm(B.get(k, DEF.get(k)))
+        if k == 'display_weight' and have is None: have = '200' if (B.get('typography') or ('light' if B.get('style') == 'swiss' else 'bold')) == 'light' else '900'
+        if k == 'typography' and have is None: have = 'light' if B.get('style') == 'swiss' else 'bold'
         if k == 'color_mode' and have == 'auto' and B.get('style') == 'swiss': have = 'mono'   # 瑞士风格默认单色档
     if k == 'brand' and want and have is None: have = None
     if want != have: bad.append((k, want, have))

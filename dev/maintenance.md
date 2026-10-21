@@ -9,6 +9,7 @@
 | 纪律（原文搬运、先确认、门禁…） | SKILL.md §2 | workflows 引用，不重复解释 |
 | 某条路线的步骤 | workflows/<路线>.md | SKILL.md 只放一行指路 |
 | 版式写法、空位、限制 | references/layouts.md（内容版式）、references/blocks.md（照片版式、内容块） | — |
+| Grid / Layout / Theme / Brand / Project 分工、编辑变奏与阅读节奏 | references/composition.md | 路线文档只引用 |
 | 网格、字号档、行宽、放不下时的让位顺序 | 引擎：hb/canon.py（网格常数）、hb/flow.py（块 → 字号档、吸到整行）、hb/fill.js canon()（让位顺序）；文字说明在 references/layouts.md §0 | 其他文档写“见 layouts.md §0” |
 | 皮肤、字体、配色、颜色角色与用色档位、品牌包结构 | references/style.md（§8 颜色角色）、hb/palettes.py（角色映射、档位判断）、brands/acme/brand.yaml（结构样例） | — |
 | 用途方法的页面角色、审稿重点 | purposes/<kind>.yaml | references/review.md 只引用 |
@@ -22,9 +23,9 @@
 - **纯 Skill 运行时目录**：`SKILL.md`、`workflows/`、`references/`、`templates/`（仅 `.yaml` 与 `brief.md`）、`purposes/`、`brands/`（仅 `index.yaml` 与虚构示例 `acme`）、`hb/`（仅排版与门禁运行脚本）。
 - **`dev/` 开发与预览资源**（打包分发纯 Skill 时可排除）：
   - `dev/maintenance.md`：本维护规矩
-  - `dev/tests/`：`selftest.sh`、`make_test_photos.py`、`test_adapt.py`、`test_brand_graphic.py`、`test_photo_layout.py`
+  - `dev/tests/`：`selftest.sh`、`make_test_photos.py`、`test_adapt.py`、`test_brand_graphic.py`、`test_photo_layout.py`、`test_editorial_layout.py`、`test_editorial_content.py`、`test_reading_layout.py`、`test_swiss_type.py`、`test_image_bleed.py`
   - `dev/gallery/`：各风格与版式控制效果图
-  - `dev/previews/`：5 套模板的拼版预览图（使用无版权 CC0 合成插画生成）
+  - `dev/previews/`：模板的拼版预览图（使用合成插画及原创示意图生成）
   - `dev/sample_photos/`：无版权 CC0 模板样张配图
   - `dev/fonts/`：离线回归测试用的开源西文字体包（运行时通过 `hb/fonts.py` 按需下载，纯 Skill 包无需附带）
   - `dev/audits/`：历史复盘、审计报告与迭代计划（`TODO.md`、`ROADMAP.md`、`AUDIT-*.md`）
@@ -55,5 +56,5 @@ bash dev/tests/selftest.sh          # 编译、yaml、文档引用、SKILL.md �
 - 新路线 → workflows/<名字>.md + SKILL.md 路线表一行
 - 新用途 → purposes/<名字>.yaml + purposes/index.yaml 一行（selftest 查 order 里的角色都有定义）
 - 新品牌 → `bash hb/new_brand.sh`（自动登记 brands/index.yaml）
-- 新版式 → 内容版式：canon.py 一个函数 + RECIPES + layouts.md 一节 + book.layouts.yaml 里用一次 + 效果图；照片版式：flow.py 一个函数 + LAYOUTS + blocks.md 表里一行
+- 新版式 → 内容版式：canon.py 组合共用网格原语 + RECIPES + layouts.md 一节 + 模板用例 + 效果图；基础版式用 book.layouts.yaml，编辑变奏用 book.editorial.zh.yaml，连续阅读用 book.reading.yaml。照片版式：flow.py 一个函数 + LAYOUTS + blocks.md 表里一行
 - 新检查 → 脚本 + doctor 的提示（带改法）+ `dev/tests/` 下一个能触发它的测试

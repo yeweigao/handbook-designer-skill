@@ -39,7 +39,7 @@ def main(P, out, ref=None):
                 mm = re.match(r'HBSubset(.+?)(\d{3})$', str(o.BaseFont).split('+', 1)[-1].lstrip('/'))
                 if mm and mm.group(2): only.setdefault(mm.group(1), set()).add(int(mm.group(2)))
     if not only: only = None
-    css, roles, miss = F.build_css(BK.get('fonts', style['fonts']), used + common_charset(), E, cjk, fmt='ttf', only=only)
+    css, roles, miss = F.build_css(F.for_style(BK.get('fonts'), str(BK.get('style', 'photo')), BK.get('typography'), BK.get('display_weight')), used + common_charset(), E, cjk, fmt='ttf', only=only)
     m = re.search(r'<style>(.*?):root\{[^}]*\}', html, re.S)          # 替换开头的 @font-face + :root 变量
     html = html[:m.start(1)] + css + html[m.end():]
     open(os.path.join(E, 'book.html'), 'w', encoding='utf-8').write(html)

@@ -82,7 +82,9 @@ def render_boxes(html):
                 if h is not None:
                     if a.get('data-y0') is not None or a.get('data-y1') is not None: dyn = True   # 让位盒：高由锚点算
                     else: ch = h
-            if gtc is None and 'grid-template-columns' in st: gtc, gtc_at, gappx = st, i, _px(st, 'column-gap')
+            if gtc is None:
+                columns = re.search(r'(?:^|;)\s*grid-template-columns\s*:\s*([^;]+)', st)
+                if columns: gtc, gtc_at, gappx = columns.group(1), i, _px(st, 'column-gap')
             if cw is not None and ch is not None and gtc is not None: break
         if gtc is not None and cw is not None and gtc_at < cw_at:   # grid 在宽容器内侧 → 宽按单元格折算
             cells = _cells(gtc)

@@ -11,11 +11,14 @@ cache = {}
 def img(m):
     p = os.path.join(base, m.group(1))
     if p not in cache:
-        im = Image.open(p); alpha = im.mode in ('RGBA', 'LA', 'P') and p.lower().endswith('.png')   # 透明图（logo、抠图）保留 PNG
-        im = im.convert('RGBA' if alpha else 'RGB')
-        if im.width > 1600: im = im.resize((1600, round(im.height*1600/im.width)), Image.LANCZOS)
-        b = io.BytesIO(); im.save(b, 'PNG', optimize=True) if alpha else im.save(b, 'JPEG', quality=80, optimize=True)
-        cache[p] = ('data:image/png;base64,' if alpha else 'data:image/jpeg;base64,') + base64.b64encode(b.getvalue()).decode()
+        if p.lower().endswith('.svg'):
+            cache[p] = 'data:image/svg+xml;base64,' + base64.b64encode(open(p, 'rb').read()).decode()
+        else:
+            im = Image.open(p); alpha = im.mode in ('RGBA', 'LA', 'P') and p.lower().endswith('.png')   # 透明图（logo、抠图）保留 PNG
+            im = im.convert('RGBA' if alpha else 'RGB')
+            if im.width > 1600: im = im.resize((1600, round(im.height*1600/im.width)), Image.LANCZOS)
+            b = io.BytesIO(); im.save(b, 'PNG', optimize=True) if alpha else im.save(b, 'JPEG', quality=80, optimize=True)
+            cache[p] = ('data:image/png;base64,' if alpha else 'data:image/jpeg;base64,') + base64.b64encode(b.getvalue()).decode()
     return f'src="{cache[p]}"'
 MIME = {'.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf', '.otf': 'font/otf'}
 def font(m):

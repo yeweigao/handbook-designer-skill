@@ -4,7 +4,7 @@
   python3 hb/fonts.py list                      # 列出所有字体、字体方案与本机状态
   python3 hb/fonts.py prefetch [方案或字体id …] # 后台非阻塞下载推荐字体（立即返回，不卡主流程）
   python3 hb/fonts.py fetch [方案或字体id …]    # 前台同步下载字体到缓存（默认下载全部方案用到的字体）
-  python3 hb/fonts.py fetch hand                # 只下载“手写”方案需要的字体
+  python3 hb/fonts.py fetch inter               # 显式扩展无衬线字体
 
 核心策略（零阻塞排版）：
 1. 系统字体先行顶上：排版无非是衬线（Serif）、无衬线（Sans）、手写楷体（Hand/Kai）和窄体标签（Condensed）的组合。
@@ -74,6 +74,9 @@ FONTS = {
   'inter':           dict(name='Inter', zh='现代无衬线（界面与正文）', file='Inter-VF.ttf', w=(100, 900), mb=1,
                           urls=[GF + 'inter/Inter%5Bopsz,wght%5D.ttf', GFJ + 'inter/Inter%5Bopsz,wght%5D.ttf'],
                           sys=['Inter', '-apple-system', 'BlinkMacSystemFont', 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', 'Arial']),
+  'jetbrains-mono': dict(name='JetBrains Mono', zh='等宽元数据与小标签', file='JetBrainsMono-VF.ttf', w=(100, 800), mb=1,
+                          urls=[GF + 'jetbrainsmono/JetBrainsMono%5Bwght%5D.ttf', GFJ + 'jetbrainsmono/JetBrainsMono%5Bwght%5D.ttf'],
+                          sys=['JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas']),
   'geist':           dict(name='Geist', zh='当代几何无衬线（Vercel 出品，弥散/科技感标题与正文）', file='Geist-VF.ttf', w=(100, 900), mb=1,
                           urls=[GF + 'geist/Geist%5Bwght%5D.ttf', GFJ + 'geist/Geist%5Bwght%5D.ttf'],
                           sys=['Geist', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Helvetica Neue', 'Arial']),
@@ -134,21 +137,42 @@ FONTS = {
 # 字体方案：四个角色 title（标题/大字）· body（正文）· label（小标签/页眉/表头）· accent（编号/英文副题/任务字母）
 # 每个角色是一串字体：西文字体在前（只含拉丁字），中文字体在后（补中文）。
 PRESETS = {
-  'magazine': dict(zh='杂志混排（默认）：思源宋体粗标题 + 霞鹜新晰黑正文 + 窄体小标签', title=['playfair', 'noto-serif-sc'],
-                   body=['lxgw-neo-xihei', 'noto-sans-sc'], label=['oswald', 'lxgw-neo-xihei', 'noto-sans-sc'], accent=['playfair-italic', 'noto-serif-sc'],
-                   css=dict(title_w=900, accent_style='italic', label_case='uppercase', label_track='.26em', label_scale=1)),
-  'serif':    dict(zh='经典衬线：霞鹜新致宋 + Source Serif 4，书卷气、适合长文', title=['playfair', 'lxgw-neo-zhisong', 'noto-serif-sc'],
-                   body=['source-serif-4', 'lxgw-neo-zhisong', 'noto-serif-sc'], label=['source-serif-4', 'lxgw-neo-zhisong'],
-                   accent=['source-serif-4-italic', 'lxgw-neo-zhisong'],
-                   css=dict(title_w=500, accent_style='italic', label_case='uppercase', label_track='.22em', label_scale=1.1, body_w=400)),
-  'sans':     dict(zh='现代无衬线：思源黑体粗标题 + 霞鹜新晰黑正文 + Inter，干净理性', title=['inter', 'noto-sans-sc'],
-                   body=['inter', 'lxgw-neo-xihei', 'noto-sans-sc'], label=['inter', 'lxgw-neo-xihei', 'noto-sans-sc'], accent=['inter', 'noto-sans-sc'],
-                   css=dict(title_w=900, accent_style='normal', label_case='uppercase', label_track='.2em', label_scale=1, accent_w=800)),
-  'hand':     dict(zh='手写亲和：霞鹜文楷 + Caveat，温暖、适合学生和亲子', title=['caveat', 'lxgw-wenkai'], body=['lxgw-wenkai'],
-                   label=['caveat', 'lxgw-wenkai'], accent=['caveat', 'lxgw-wenkai'],
-                   css=dict(title_w=700, accent_style='normal', label_case='none', label_track='.06em', label_scale=1.35, accent_w=700)),
+  'magazine': dict(zh='思源混排：宋体标题、黑体正文', title=['noto-serif-sc'],
+                   body=['noto-sans-sc'], label=['noto-sans-sc'], accent=['noto-serif-sc'],
+                   css=dict(title_w=900, body_w=400, accent_style='normal', label_case='uppercase', label_track='.12em', label_scale=1, accent_w=500)),
+  'swiss': dict(zh='思源黑体：共享粗细排印', title=['noto-sans-sc'], body=['noto-sans-sc'],
+                label=['noto-sans-sc'], accent=['noto-sans-sc'],
+                css=dict(title_w=200, body_w=400, accent_style='normal', label_case='uppercase', label_track='.12em', label_scale=1, accent_w=300)),
+  'sans': dict(zh='思源黑体', title=['noto-sans-sc'], body=['noto-sans-sc'], label=['noto-sans-sc'], accent=['noto-sans-sc'],
+               css=dict(title_w=900, body_w=400, accent_style='normal', label_case='uppercase', label_track='.12em', label_scale=1, accent_w=500)),
+  'serif': dict(zh='思源宋体', title=['noto-serif-sc'], body=['noto-serif-sc'], label=['noto-sans-sc'], accent=['noto-serif-sc'],
+                css=dict(title_w=900, body_w=400, accent_style='normal', label_case='uppercase', label_track='.12em', label_scale=1, accent_w=500)),
 }
+
 ROLES = ('title', 'body', 'label', 'accent')
+
+def typography(style, mode=None):
+    mode = mode or ('light' if style == 'swiss' else 'bold')
+    if mode not in ('bold', 'light'): raise SystemExit('ERROR: book.typography 可选 bold（厚重型）/ light（轻盈型）')
+    return mode
+
+def for_style(spec, style, mode=None, display_weight=None):
+    """同一份字体配置用于屏幕、普通 PDF 和可编辑 PDF。"""
+    from styles import STYLES
+    spec = spec or STYLES[style]['fonts']
+    out = dict(preset=spec) if isinstance(spec, str) else dict(spec)
+    mode = typography(style, mode)
+    weight = 200 if mode == 'light' else 900
+    if display_weight is not None:
+        if mode != 'light' or str(display_weight) not in ('100', '200'):
+            raise SystemExit('ERROR: book.display_weight 可在 typography: light 时选 100 / 200；正文不随之变细')
+        weight = int(display_weight)
+    out['css'] = dict(out.get('css', {}), weight_scale=mode, display_w=weight, title_w=weight, body_w=400)
+    if mode == 'light':
+        roles, _ = resolve(out)
+        bad = [f for f in roles['title'] if FONTS[f]['w'][0] > weight]
+        if bad: raise SystemExit('ERROR: 标题字体不支持真实' + str(weight) + '字重：' + ', '.join(bad) + ' → 100可用noto-sans-sc / inter；思源宋体或Source Serif 4最低200')
+    return out
 
 
 def path_of(fid):
@@ -241,13 +265,12 @@ def prefetch_bg(want=None):
 
 
 def resolve(spec, cjk=True):
-    """spec: 方案名或 {preset: hand, title: [...], ...}。返回 {role: [font ids]} 与 css 参数。"""
+    """spec: 方案名或 {preset: serif, title: [...], ...}。返回 {role: [font ids]} 与 css 参数。"""
     spec = spec or 'magazine'
     if isinstance(spec, str): spec = {'preset': spec}
     pre = PRESETS.get(spec.get('preset', 'magazine'))
     if pre is None: raise SystemExit(f"ERROR: 未知字体方案 {spec.get('preset')}，可选 {list(PRESETS)}")
     roles = {r: list(pre[r]) for r in ROLES}
-    if not cjk and roles['body'][0] in ('lxgw-neo-xihei', 'noto-sans-sc'): roles['body'] = ['inter'] + roles['body']   # 西文书：正文用 Inter
     for r in ROLES:
         if r in spec:
             v = spec[r]; v = [v] if isinstance(v, str) else list(v)
@@ -259,7 +282,7 @@ def resolve(spec, cjk=True):
             if FONTS[x].get('pair') and FONTS[x]['pair'] not in ids: ids.insert(ids.index(x) + 1, FONTS[x]['pair'])
     return roles, dict(pre['css'], **spec.get('css', {}))
 
-WEIGHTS = (400, 500, 600, 700, 800, 900)
+WEIGHTS = (100, 200, 250, 300, 400, 500, 600, 700, 800, 900)
 
 
 def _subset(src, outs, text, fid, flavor=None):
@@ -301,7 +324,7 @@ def build_css(spec, text, proj, cjk=True, log=print, fmt=None, only=None):
     roles, css = resolve(spec, cjk)
     od = os.path.join(proj, 'fonts'); os.makedirs(od, exist_ok=True)
     text = ''.join(sorted(set(text + ''.join(chr(c) for c in range(32, 127)) + '·—–“”‘’…、，。：；！？（）《》「」『』【】0123456789')))
-    key = hashlib.md5((text + 'v2').encode()).hexdigest()[:10]
+    key = hashlib.md5((text + 'v3-' + str(css.get('weight_scale', 'standard')) + ('-100' if css.get('display_w') == 100 else '')).encode()).hexdigest()[:10]
     faces = []; files = {}; missing = []
     want = list(dict.fromkeys(f for ids in roles.values() for f in ids))
     want += [FONTS[f]['bold'] for f in want if FONTS[f].get('bold') and FONTS[f]['bold'] not in want]   # 只有常规体的字体：粗体借用搭档
@@ -318,7 +341,7 @@ def build_css(spec, text, proj, cjk=True, log=print, fmt=None, only=None):
         lo, hi = FONTS[fid]['w']
         from fontTools.ttLib import TTFont
         var = 'fvar' in TTFont(src, lazy=True)   # 可变字体 → 按字重实例化
-        ws = [w for w in WEIGHTS if lo <= w <= hi] if var else [None]
+        ws = [w for w in WEIGHTS if lo <= w <= hi and (w >= 400 or css.get('weight_scale') == 'light' and (w >= 200 or css.get('display_w') == 100))] if var else [None]
         if var and not ws: ws = [lo]
         if var and only is not None: ws = [w for w in ws if w in only.get(fid, set())] or ws[:1]
         outs = {w: os.path.join(od, f'hb-{fid}-{w or "x"}-{key}.{ext}') for w in ws}
@@ -363,7 +386,7 @@ def build_css(spec, text, proj, cjk=True, log=print, fmt=None, only=None):
         return ','.join(out + [generic])
     v = {'--f-title': stack(roles['title'], 'serif'), '--f-body': stack(roles['body'], 'sans-serif'),
          '--f-label': stack(roles['label'], 'sans-serif'), '--f-accent': stack(roles['accent'], 'serif'),
-         '--title-w': css.get('title_w', 900), '--body-w': css.get('body_w', 400), '--accent-style': css.get('accent_style', 'italic'),
+         '--display-w': css.get('display_w', css.get('title_w', 900)), '--title-w': css.get('title_w', 900), '--body-w': css.get('body_w', 400), '--accent-style': css.get('accent_style', 'italic'),
          '--accent-w': css.get('accent_w', 700), '--label-case': css.get('label_case', 'uppercase'),
          '--label-track': css.get('label_track', '.26em'), '--label-scale': css.get('label_scale', 1)}
     return ''.join(faces) + ':root{' + ';'.join(f'{k}:{x}' for k, x in v.items()) + '}', roles, missing

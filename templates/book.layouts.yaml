@@ -6,9 +6,9 @@
 #   只要一种语言：删掉 langs，直接写文字即可（也可以只保留 zh: 那一半）。
 #   英文里有逗号、冒号、问号时整段加单引号：en: 'Five days, four nights'
 # 照片：FULL / ONE / MIX 写 image: 文件名；STAGGER / TWO 的条目写 img: 文件名；COLLAGE 写 images: [...]。
-#   不写照片时，照片风格（photo）排成撞色色块 + 编号占位；无图风格（papercut 等）自动生成风格插画。
+#   不写照片时，Photo 缺图为占位；Swiss / Editorial 使用安静纸面；正式图片位须准备实际素材。
 #   照片发灰发白（褪色、过曝）会自动做成 A/B 双色调；book.duotone: all 全部做、off 都不做。
-# 配色：不写 colors 时默认 klein（克莱因蓝 × 拿坡里黄）；经典撞色还有 hermes / china-red / lemon-violet。
+# 配色：不写 colors 时沿用当前风格默认配色；不提供撞色模式。
 # ============================================================================
 book:
   title: {zh: 山海自然探索营 · 项目介绍, en: Horizon Nature Discovery Camp}
@@ -18,7 +18,7 @@ book:
   langs: [zh, en]
 
 pages:
-- layout: FULL                      # 封面：照片 + 一块出血撞色色块，书名压在里面
+- layout: FULL                      # 封面：照片 + 自然压暗的图像文字区，书名压在里面
   kicker: {zh: Horizon Nature Discovery Camp, en: Discovery camp · 2026}
   title: {zh: "山海\n自然探索营", en: "Horizon\nNature Camp"}
   en: {zh: 五天四晚 · 2026 年 7 月, en: 'Five days, four nights · July 2026'}

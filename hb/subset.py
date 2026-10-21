@@ -2,7 +2,7 @@
 """从一本书里取几页另建一个小项目（试排样张、方向对比都用它）。
   python3 subset.py <project> <out_dir> proof            # 封面 + 前两个跨页（第 1–5 页）
   python3 subset.py <project> <out_dir> 1,4-7            # 指定成品页码（跨页版式算两页）
-  python3 subset.py <project> <out_dir> 1-3 style=swiss colors=hermes --lang zh   # 顺便改 book 里的设置、只取一种语言（方向样张）
+  python3 subset.py <project> <out_dir> 1-3 style=swiss colors=swiss --lang zh   # 顺便改 book 里的设置、只取一种语言（方向样张）
 源 yaml：<project>/book.yaml；没有时用 --src <文件>。照片 / AI 图目录链接回原项目；不带 doc.md（样张不做原文核对）。"""
 import sys, os, yaml, re
 args = sys.argv[1:]; SRC = None; LANG = None

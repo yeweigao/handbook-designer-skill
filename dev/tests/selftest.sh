@@ -53,6 +53,8 @@ BAD=$(grep -nE '(^|[^A-Za-z0-9_.])open\(' "$HB"/*.py 2>/dev/null | grep -v 'enco
 grep -q 'hyphens:auto' "$HB/hb.py" && bad "hb.py 又出现 hyphens:auto（西文断词已关闭，见 dev/audits/ROADMAP.md P1-9）" || ok "西文不断词（hyphens:auto 已关闭）"
 [ "$1" = "--quick" ] && { [ $FAIL = 0 ] && echo "SELFTEST: PASS（quick）" || echo "SELFTEST: FAIL"; exit $FAIL; }
 echo "5 · 构建回归"
+# 临时目录中的浏览器探针也要使用与 run.sh 相同的依赖和浏览器解析。
+source "$HB/env.sh"
 mkdir -p "$T"
 for y in "$R"/templates/book.*.yaml; do n=$(basename "$y" .yaml); mkdir -p "$T/$n"; cp "$y" "$T/$n/book.yaml"
   python3 "$TESTS/make_test_photos.py" "$T/$n" "$T/$n/book.yaml" >/dev/null 2>&1 || { echo "  ✗ $n：合成测试照片生成失败"; FAIL=1; continue; }   # 照片模板用 CC0 合成图补齐引用，不再跳过（F53/照片回归）
@@ -66,7 +68,7 @@ PY
 bash "$HB/run.sh" "$T/brand" > "$T/brand.log" 2>&1 && ok "品牌包 acme（中英）" || bad "品牌包 acme（日志 $T/brand.log）"
 python3 "$HB/subset.py" "$R" "$T/swiss" 1,5,9,10 --src "$R/templates/book.layouts.yaml" --lang zh style=swiss >/dev/null
 bash "$HB/run.sh" "$T/swiss" > "$T/swiss.log" 2>&1 && ok "瑞士单色档" || bad "瑞士单色档（日志 $T/swiss.log）"
-for st in stijl geo editorial notebook inkwash papercut riso aurora nebula; do python3 "$HB/subset.py" "$R" "$T/$st" 1,4,5,6,9,10 --src "$R/templates/book.layouts.yaml" --lang en style=$st >/dev/null
+for st in photo swiss editorial stijl geo; do python3 "$HB/subset.py" "$R" "$T/$st" 1,4,5,6,9,10 --src "$R/templates/book.layouts.yaml" --lang en style=$st >/dev/null
   bash "$HB/run.sh" "$T/$st" > "$T/$st.log" 2>&1 && ok "风格 ${st}" || bad "风格 ${st}（日志 $T/$st.log）"; done
 python3 "$HB/subset.py" "$R" "$T/stijl_beat" 1,4,5,6,9,16 --src "$R/templates/book.layouts.yaml" --lang zh style=stijl look=beat >/dev/null
 bash "$HB/run.sh" "$T/stijl_beat" > "$T/stijl_beat.log" 2>&1 && ok "风格派节奏画法" || bad "风格派节奏画法（日志 $T/stijl_beat.log）"
@@ -76,6 +78,11 @@ echo "6 · 图片与打印回归"
 python3 "$TESTS/test_photo_layout.py" && ok "固定页图片与正文" || bad "图片与打印回归"
 python3 "$TESTS/test_brand_graphic.py" && ok "品牌图形背景" || bad "品牌图形背景回归"
 python3 "$TESTS/test_adapt.py" && ok "版面适配声明" || bad "品牌图形背景回归"
+python3 "$TESTS/test_editorial_layout.py" && ok "编辑网格与实际 PDF" || bad "编辑网格回归"
+python3 "$TESTS/test_editorial_content.py" && ok "旁注翻译、编辑与原文核对" || bad "旁注内容链路回归"
+python3 "$TESTS/test_image_bleed.py" && ok "共享摄影出血、多图与100字重" || bad "摄影共享结构回归"
+python3 "$TESTS/test_swiss_type.py" && ok "共享字重与五风格约束" || bad "精简风格回归"
+python3 "$TESTS/test_reading_layout.py" && ok "双语续读与图片开场" || bad "连续阅读回归"
 if [ $FAIL = 0 ]; then
   echo "SELFTEST: PASS"
   if [ -n "$HB_SELFTEST_KEEP" ]; then echo "构建目录：$T"; else rm -rf "$T"; fi

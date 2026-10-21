@@ -15,12 +15,12 @@ book:
   folio: 页脚左侧文字         # 默认 = title
   photos: photos             # 图片目录（相对项目目录）
   purpose: workbook          # workbook 任务册（有书写区）/ guide 指南（以读为主）/ brochure 宣传册（无书写区）
-  style: photo               # 视觉风格：photo（默认）/ editorial / swiss / stijl / geo / notebook / inkwash / papercut / riso / aurora / nebula，见 style.md
-  fonts: magazine            # 字体方案：magazine / serif / sans / hand，或按角色指定，见 style.md
+  style: photo               # 视觉风格：photo（默认）/ swiss / editorial / stijl / geo，见 style.md
+  typography: bold          # bold 厚重 / light 轻盈，五种主题共享
+  fonts: magazine            # 字体方案：magazine / swiss，或按角色覆盖，或按角色指定，见 style.md
   lang: zh                   # zh / ja / ko = 中日韩排版；en / fr / … = 西文排版（收紧字距、左对齐、正文用西文字体）
   scale: 2                   # 图片烘焙倍率：2 ≈ 190dpi（屏幕/打样），3 ≈ 290dpi（交印刷厂，构建更慢）
-  colors: klein              # 可选：配色方案名（见 style.md §3），或颜色键 {G: '#1D5A43', GOLD: …}，或 {preset: klein, G: '#…'}
-  gradient: spotlight        # 可选：大标题（display / title）用渐变色，见 style.md §4；默认不开
+  colors: nature              # 可选：配色方案名（见 style.md §3），或颜色键 {G: '#1D5A43', GOLD: …}，或 {preset: nature, G: '#…'}
 pages:
   - {layout: ..., ...}
 ```
@@ -57,7 +57,7 @@ pages:
 
 | block | 写法 | 说明 |
 |---|---|---|
-| 系列页头 | `{series_header: {series: highlights, item: '01'}}` | 栏目、序号、主标题共用一个组件；标题从book.series登记读取，不在单页覆盖。续页加continuation: true，可另给title说明本页任务 |
+| 系列页头 | `{series_header: {series: highlights, item: '01'}}` | 栏目、序号、主标题共用一个组件；标题从book.series登记读取，不在单页覆盖。续页加continuation: true，可另给title说明本页任务；compact: true 为侧栏排法，READING 自动使用（layouts.md §8） |
 | 大字 | `{display: 标题, size: 56, color: gold, stroke: 1.2, gradient: energy}` | 海报标题、单元编号（Day 1 / Unit 3 / 第一章）。size 吸到 23 · 33 · 47 · 56 · 72 · 96 · 120 · 160（和网格字号同一套档） |
 | 标题 | `{title: 页标题, kicker: Small Label, sub: 斜体副题, size: 34}` | 纸面上的页标题：默认 47px 档；size ≤ 30 → 33px 档，≥ 52 → 展示大字 |
 | 英文副题 | `{en: A Letter Before Takeoff}` | 斜体 |

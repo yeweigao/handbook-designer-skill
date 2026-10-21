@@ -16,7 +16,7 @@ from i18n_pick import first_lang
 spec = first_lang(spec)
 B = spec.get('book') or {}; pages = spec.get('pages') or []
 SPAN2 = {'SPREAD_P', 'SPREAD_H', 'SPREAD_OPENER'}
-ANCHOR = {'FULL', 'POSTER', 'COLLAGE'} | SPAN2
+ANCHOR = {'FULL', 'POSTER', 'COLLAGE', 'PLATE', 'SEQUENCE', 'PHOTO_OPEN', 'MASONRY', 'CONTACT'} | SPAN2
 CJK = re.compile(r'[㐀-鿿]')
 def size(o):
     if isinstance(o, str): return len(CJK.findall(o)) + len(re.findall(r'[A-Za-z]+', o)) * 0.6
@@ -52,8 +52,8 @@ if nojob: warn(f'[job] {len(nojob)} 页没写 job:（第 {"、".join(map(str, no
 for r in must:
     if r not in jobs: warn(f'[缺页] {K.get("name", kind)} 需要一页 {r}（{roles[r].get("zh", "")}），book.yaml 里没有 job: {r}')
 if pages:
-    if pages[0].get('layout') not in ('FULL', 'POSTER'): warn('[封面] 第 1 页不是 FULL / POSTER：封面要一张图或一个大标题，读者第一眼决定翻不翻')
-    if len(pages) > 3 and pages[-1].get('layout') not in ('FULL', 'POSTER'): warn('[封底] 最后一页不是 FULL / POSTER：封底放联系方式、二维码、下一步动作')
+    if pages[0].get('layout') not in ('FULL', 'POSTER', 'PHOTO_OPEN') and not (pages[0].get('layout') == 'PAPER' and str(pages[0].get('job','')).startswith('cover')): warn('[封面] 第 1 页不是 FULL / POSTER / PHOTO_OPEN：封面要一张图或一个大标题，读者第一眼决定翻不翻')
+    if len(pages) > 3 and pages[-1].get('layout') not in ('FULL', 'POSTER') and not (pages[-1].get('layout') == 'PAPER' and str(pages[-1].get('job','')).startswith('back')): warn('[封底] 最后一页不是 FULL / POSTER：封底放联系方式、二维码、下一步动作')
 run = 0; since = 0; same = 1
 for k, (pn, lay, rh) in enumerate(seq):
     run = run + 1 if rh == 'dense' else 0
@@ -61,7 +61,7 @@ for k, (pn, lay, rh) in enumerate(seq):
     same = same + 1 if k and lay == seq[k - 1][1] else 1
     if run == 4: warn(f'[节奏] 第{pn - 3}–{pn}页连续 4 页密集（{"、".join(s[1] for s in seq[k - 3:k + 1])}）→ 中间插一页 FULL / COLLAGE，或把一页换成 ONE / MIX')
     if since == 7: warn(f'[节奏] 第{pn - 6}–{pn}页 7 页没有锚点页 → 插一页 FULL（章节页）或 COLLAGE')
-    if same == 3: warn(f'[节奏] 第{pn - 2}–{pn}页连续 3 页都是 {lay} → 换一种版式（CARDS ↔ STAGGER / TWO / GRID）')
+    if same == 3 and lay not in ('READING', 'PAPER'): warn(f'[节奏] 第{pn - 2}–{pn}页连续 3 页都是 {lay} → 换一种版式（CARDS ↔ STAGGER / TWO / GRID）')
 # ---------------------------------------------------------------- 设计先行：page-plan.md 覆盖每一页（references/adaptation.md）
 PL = os.path.join(P, 'page-plan.md')
 if pages and not B.get('frozen') and os.path.basename(P) != '.proof':

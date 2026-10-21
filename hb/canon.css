@@ -105,3 +105,19 @@ b.cn-lead{color:var(--acc);font-weight:700}
 .cn-task{display:flex;align-items:baseline;gap:calc(var(--gut) / 2)}
 .cn-paper{z-index:0}
 .cn-cardn{font-family:var(--f-title);font-feature-settings:"lnum" 1;color:var(--acc);margin-right:.5em}
+
+/* 编辑型变奏：六栏对齐不变，行高交给内容。容器整体进入原有测量/溢出门禁。 */
+.cn-ed-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));column-gap:var(--gut);align-items:start;break-inside:avoid}
+.cn-ed-cell{min-width:0}.cn-ed-cell .cn-tx{max-width:60ch;text-align:left}
+.cn-ed-rule{height:1px;background:var(--rule)}
+.cn-ed-note{background:linear-gradient(var(--acc),var(--acc)) top left/calc(2 * var(--lh)) 2px no-repeat;padding-top:var(--lh)}
+.cn-ed-note+.cn-ed-note{margin-top:var(--lh)}
+.cn-ed-note .cn-tx{color:var(--mut);text-align:left}
+.cn-ed-note .cn-lab{letter-spacing:.08em}
+.cn-ed-pause{padding-left:calc(2 * var(--lh));max-width:90%}
+.cn-ed-pause .cn-qt{font-size:calc(32px * var(--s));line-height:calc(2 * var(--lh))}
+.cn-ed-figure{margin:0;break-inside:avoid}
+.cn-ed-figure .cn-cap{letter-spacing:.03em;white-space:normal}
+.cn-masonry-legend .cn-cap{letter-spacing:0;white-space:normal}
+.cn-reading .cn-ttl{overflow-wrap:anywhere;text-wrap:pretty}
+.cn-reading .cn-series-header .cn-lab{margin-bottom:var(--lh)}

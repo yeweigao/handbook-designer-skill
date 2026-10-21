@@ -27,8 +27,9 @@ for o in ov:
     elif o[1]=='cn-row': print(f'[溢出] 第{pg}页 一行条目放不下（“{o[3]}…”多出 {o[2]}px）→ 条目文字太长：每条说明 ≤32 字 / 20 个英文词（book.body: 14 时 ≤40 字 / 25 词），或减少条目、拆页')
     elif o[1]=='cn-imgarea':   # 主图可见面积不足（fill.js 报）：真事故，拦门禁
         d=f'（{o[3]}）' if o[3] else ''
-        print(f'[图太小] 第{pg}页 主图可见面积不足{d} → 减少该页文字/拆页，或换图多的版式（MIX / STAGGER）；不要删原文')
+        print(f'[图太小] 第{pg}页 图片低于该角色的可见尺寸下限{d} → 减少该页文字/拆页，或换图多的版式（MIX / STAGGER）；不要删原文')
     elif o[1]=='cn-deco': print(f'[重叠] 第{pg}页 装饰大字压到了文字（{o[3]}，{o[2]}px）→ 缩短标题；或写 count: false / deco: false 去掉大字；或换镜像 mirror: true')
+    elif o[1]=='cn-weight': print(f'[字重阶梯] 第{pg}页 {o[3]} → light排印遵循大字轻、小字稳；移除局部 font-weight 覆盖，正文/小字至少 400')
     else: print(f'[出界] 第{pg}页 “{o[2]}” 超出页面 → 缩短该行/换行，或减小 display 的 size')
 pgs={}
 for l in fails: pgs.setdefault(int(l.split()[0][1:]),[]).append(l)

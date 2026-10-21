@@ -20,7 +20,9 @@ else: data = json.load(open(F, encoding='utf-8'))
 edits = data if isinstance(data, list) else data.get('edits', [])
 images = [] if isinstance(data, list) else data.get('images', [])
 edits = [e for e in edits if e.get('status') != 'synced' and e.get('path')]
-def keys(path): return [int(k) if k.isdigit() else k for k in re.findall(r'[^.\[\]]+', path)]
+def keys(path):
+    # 方括号表示列表下标；点号后的 '01' 仍是系列条目的字符串键。
+    return [key if key else int(index) for key, index in re.findall(r'(?:^|\.)([^.\[\]]+)|\[(\d+)\]', path)]
 def get(o, ks):
     for k in ks: o = o[k]
     return o

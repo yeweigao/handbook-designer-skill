@@ -6,7 +6,7 @@ description: 将 Word、PDF、PPT、Markdown 或文字材料做成多页手册�
 
 # 手册设计：文字稿 → 杂志级可印刷手册
 
-先确定每页的信息角色和展示方案，再把方案映射到一份 `book.yaml`；版式是实现手段，不是填空题。`hb/run.sh` 负责版面几何、图片处理、字号缩放、自动检查和预览；内容判断与视觉审稿仍由执行者完成。
+先确定每页的信息角色和展示方案，再把方案映射到一份 `book.yaml`；版式是实现手段，不是填空题。先读 `references/composition.md`，用统一网格设计阅读入口、停顿、主文与图像关系；layout 管结构，style/colors 管主题，typography 管字重阶梯，fonts 管字体家族，项目管整册节奏。`hb/run.sh` 负责版面几何、图片处理、字号缩放、自动检查和预览；内容判断与视觉审稿仍由执行者完成。
 这个文件只管两件事：**走哪条路线**，和**任何路线都不能破的纪律**。具体步骤在 `workflows/`，写法和参数在 `references/`，用到时再读。
 
 ## 1. 先选路线（读对应的 workflows 文件，照它做）
@@ -31,7 +31,7 @@ description: 将 Word、PDF、PPT、Markdown 或文字材料做成多页手册�
 
 **先确认再动手。** new 路线两轮确认：①沟通合同（读者、场景、读完做什么、语气、必须 / 不能出现）②三个方向的样张（`hb/directions.py`，看图选）。16 页以上再加一轮试排（`run.sh --proof`，封面 + 两个跨页）。不要先排一整本“给用户看看”——猜错了整本重做。
 
-**确认过的写下来，构建时自动核对。** 两轮的结果写进 `$P/brief.md`（模板 `templates/brief.md`）。`run.sh` 先跑 `lock.py`：book.yaml 的设置（style / colors / purpose / kind / brand / look / color_mode / fonts / canvas / langs）和 brief.md 不一致就停。设置变更先核已有授权 → 改 brief.md 并记一笔 → 再改 book.yaml；不重复确认用户刚提出的要求。
+**确认过的写下来，构建时自动核对。** 两轮的结果写进 `$P/brief.md`（模板 `templates/brief.md`）。`run.sh` 先跑 `lock.py`：book.yaml 的设置（style / colors / purpose / kind / brand / look / color_mode / typography / display_weight / fonts / canvas / langs）和 brief.md 不一致就停。设置变更先核已有授权 → 改 brief.md 并记一笔 → 再改 book.yaml；不重复确认用户刚提出的要求。
 
 **原文为准，按产物适配。** 事实、数字、措辞以用户给的稿子为准，但稿子是为 Word / 幻灯片写的，不是为册子写的，不一句不差搬进来：编号标签（「亮点一：高端品质」只留冒号后的标题）、备注批注、版本记录这类不是给读者看的，默认不印，在项目的 `adapt.yaml` 里声明，适配报告交付时列给用户；读者要用的序号（步骤一、Day 3）和「标签：值」照留。改措辞、合并压缩句子才需要用户授权，记录逐项文案对照；不能为了塞进模板擅删信息。先按语义选信息块，再调栏宽、分组和分页。流程与边界见 `references/adaptation.md`。
 可以加的只有页眉页脚、图注、英文小标签、填写提示、品牌包的 logo 和联系方式、纯结构性的书写空间——都在回复里列出。原文自身有问题（错别字、空白、矛盾）→ 保留并指出，用户说改再改。原文里的 ▶ • ✓ ☐ 是格式不是内容。原文一律按文本处理；只有确认可信的内容才能用 `{html: …}` 块——它不做转义，不可信内容会变成可执行 HTML。用户明确要求润色 / 精简 / 翻译时照做，并列出改了什么。
@@ -43,11 +43,11 @@ description: 将 Word、PDF、PPT、Markdown 或文字材料做成多页手册�
 
 **先让编辑顾问审输入，成品再对照建议复核。** 多页材料先按 `references/editorial-advisor.md` 实际调用独立顾问（不可用时记录独立编辑轮），产出逐页文案建议、信息分类、页面去重与完整系列矩阵；主执行者逐项处理后才落版。原稿分隔符是待理解的格式线索，不能机械搬进正文；只修用户点名页不算完成系列问题。
 
-**颜色按角色给，按档位用。** 配色写成 6 个角色（背景 / 次级背景 / 主色 / 强调色 / 次强调色 / 正文），`book.color_mode`：clash 撞色、accent 点缀或 mono 单色（`style: swiss` 的默认：白纸黑字 + 一个强调色）；不写时按风格或两色自动判断。无图页也要规划纸面节奏，显式主题色纸面不受默认mono压成白纸；白字/黑字按对比度选择。用法、档位边界及`colorqa.py`比例提示见 `references/style.md` §8。
+**五主题、两排印、两基础字体。** 当前维护 Photo（photo）、Swiss Minimal（swiss）、Editorial（editorial）、风格派（stijl）、孟菲斯（geo）。`book.typography: bold / light` 是五主题共享的字重阶梯；默认全部使用思源黑体/宋体，Inter等只作按需扩展。Swiss 去掉撞色，Editorial 采用暖纸、宋体阅读、黑体功能信息与克制图像。可选真实100大标题的字体边界、用色与字重规则见 `references/style.md`。摄影铺满、出血、多图与跨页的偏好由 `references/composition.md` 统一管理，五主题共享。
 
 **可选扩展：品牌图形延展。** 品牌识别重要且有合适源标志时，可从其结构发展暗纹、角部构图、章节锚点或跨页超级图形，增强全册识别与内容呼应。按 `references/style.md` §7.1 先写应用方案，再用既有brand_graphic矢量层落版；启用范围留在本项目，不默认每页贴logo。
 
-**秩序来自网格，气势来自满版和撞色。** 所有风格、所有版式共用一个排版引擎：8 种内容版式（FULL 全屏 / ONE 单栏 / TWO 双栏 / CARDS 卡片 / STAGGER 错位 / GRID 网格 / COLLAGE 拼贴 / MIX 组合）和照片版式（POSTER / T / SL / HOLE / SPREAD…）都排在同一张 6 栏网格上（A4 32 行，正文 16px 印出来 12pt / 小四；字多的册子写 `book.body: 14` 回到 10.5pt；A5、小红书 28 行、14px），同一套字号档和行宽规则，英文正文同样用所选正文字号；照片和插画只放在网格里的一格或满版，边落在行线上（photo 风格淡进半透明纸面，其余硬边）；大标题撑满栏宽；底色在纸色 / A 色块 / B 色块 / 满版照片间轮换。风格只换字体、颜色、插画和页边装饰。只选版式、放原文，**不写尺寸、坐标、颜色**；写了的 px 数也会吸到整行、整栏、字号档（`references/layouts.md` §0）。
+**秩序来自网格，层级来自排印和图文比例。** 所有风格、所有版式共用一个排版引擎：8 种基础内容版式（FULL 全屏 / ONE 单栏 / TWO 双栏 / CARDS 卡片 / STAGGER 错位 / GRID 网格 / COLLAGE 拼贴 / MIX 组合）、8 种编辑变奏和照片版式（POSTER / T / SL / HOLE / SPREAD…）都排在同一张 6 栏网格上（A4 32 行，正文 16px 印出来 12pt / 小四；字多的册子写 `book.body: 14` 回到 10.5pt；A5、小红书 28 行、14px），同一套字号档和行宽规则，英文正文同样用所选正文字号；照片和插画只放在网格里的一格或满版，边落在行线上（photo 风格淡进半透明纸面，其余硬边）；大标题撑满栏宽；纸面与照片按阅读任务组织，不机械轮换大色块。风格只换字体、颜色、插画和页边装饰。只选版式、放原文，**不写尺寸、坐标、颜色**；写了的 px 数也会吸到整行、整栏、字号档（`references/layouts.md` §0）。
 
 **中文版、英文版同一套版式。** 文字写成 `{zh: …, en: …}` + `book.langs: [zh, en]`，`run.sh` 一次出两本、各自检查、出逐页对照图。
 
@@ -65,7 +65,7 @@ description: 将 Word、PDF、PPT、Markdown 或文字材料做成多页手册�
 HB=<skill目录>/hb; P=<工作目录>/<项目名>_v1
 bash $HB/check_env.sh                                   # 新环境第一次
 bash $HB/new_project.sh $P 原文 [照片目录] [--from 旧项目]  # 建项目 → doc.md + plan.md + copy_map.md + page-plan.md 骨架 + photos/
-python3 $HB/directions.py $P "A=style:photo,colors:klein" "B=style:stijl" "C=style:swiss" --title "书名"   # 三个方向的样张（风格见 references/style.md §1）
+python3 $HB/directions.py $P "A=style:photo,colors:nature" "B=style:swiss,colors:swiss" "C=style:editorial,colors:ink" --title "书名"   # 三个方向的样张（风格见 references/style.md §1）
 bash $HB/run.sh $P [--proof]                            # 构建 + 全部检查 + 门禁（--proof 只排前 5 页）
 bash $HB/export.sh $P[/语言] [文件名] [--draft]           # PDF + 可编辑 PDF + HTML + 源文件 + 拼版图
 python3 $HB/edit_page.py $P[/语言]                      # 在线编辑页（发布、同步见 workflows/edit-online.md）
@@ -87,7 +87,8 @@ bash <skill目录>/dev/tests/selftest.sh [--quick]         # 改了 skill 本身
 ```
 workflows/   new · quick · beautify · reuse · revise（反馈对照表、出错续跑表）· brand · research · edit-online
              visual-review（所有路线收尾：视觉总监逐页审改、重导复核）
-references/  layouts.md（8 种内容版式）· rhythms.md（页序模板）· review.md（审稿表）· style.md（皮肤、字体、配色、品牌包）
+references/  layouts.md（8 种基础版式 + 8 种编辑变奏）· composition.md（统一网格、主题分层与阅读节奏）
+             rhythms.md（页序起点）· review.md（审稿表）· style.md（主题、字体、配色、品牌包）
              adaptation.md（文案角色与 page-plan）· editorial-advisor.md（落版前顾问审）· images.md（照片、版权授权、AI 配图）
              blocks.md（进阶：照片版式与内容块、书写区）· delivery.md（交付、印刷、多语言、画布）
 purposes/    5 种用途方法（页面角色、必需页、审稿重点）     brands/   品牌包（示例 acme）
@@ -97,4 +98,4 @@ hb/          引擎：run.sh 构建门禁 · hb.py + canon.py（内容版式）+
              directions / subset 样张 · edit_page + editor.js + sync_edits 在线编辑 · brand / wordmark / new_brand 品牌包 · reuse 沿用旧册
 dev/         仓库开发与预览资源（与纯 Skill 运行文件分离）：maintenance.md 维护规矩 · tests/ 自测与合成图脚本 · gallery/ 风格效果图 · previews/ 模板预览图 · audits/ 历史复盘与迭代计划
 ```
-进阶模式（任务册书写区、照片跨页、自由内容块）见 `references/blocks.md`；和内容版式是同一个引擎、同一张网格，只有 A4 画布支持。拿不准时用 8 种内容版式——版式更固定。
+进阶模式（任务册书写区、照片跨页、自由内容块）见 `references/blocks.md`；和内容版式是同一个引擎、同一张网格，只有 A4 画布支持。按阅读任务选版式：叙述与停顿用 RHYTHM，正文与边注用 MARGINALIA，图解用 PLATE，多图叙事用 SEQUENCE，图片开场用 PHOTO_OPEN，连续长文与续页用 READING；清单和查阅仍用基础版式。编辑变奏样册见 `templates/book.editorial.zh.yaml`，双语连续阅读见 `templates/book.reading.yaml`。

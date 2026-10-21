@@ -9,21 +9,16 @@ book:
   style: photo
   folio: Acme Studio
   color_mode: accent   # 点缀档：大面积白纸和浅色次级底，主色只做标题、数字、细线；深色留给封面和章节页
-  colors:              # 按角色写（palettes.py ROLES）：品牌色锁进对应角色
-    preset: klein
-    background: '#FFFFFF'        # 背景：白纸
-    secondary_bg: '#F4F1FF'      # 次级背景：浅底色
-    primary: '#4B3BFF'           # 主色：电光靛蓝（标题、大数字、封面 / 章节页整块）
-    accent: '#C6B8FF'            # 强调色：浅紫（深底上的点缀）
-    secondary_accent: '#7A2FE0'  # 次强调色：兰紫
-    body_text: '#1A1040'         # 正文：深墨
-    MUT: '#4B4372'
-  fonts:
-    preset: sans
-    title: [comfortaa, lxgw-neo-xihei, noto-sans-sc]
-    accent: [comfortaa, lxgw-neo-xihei, noto-sans-sc]
-    label: [comfortaa, lxgw-neo-xihei, noto-sans-sc]
-    css: {title_w: 700, accent_w: 700, label_case: none, label_track: .12em}
+  colors:
+    preset: campus
+    background: '#FBFAF7'
+    secondary_bg: '#F0F1EF'
+    primary: '#253C4C'
+    accent: '#E4C68B'
+    secondary_accent: '#665644'
+    body_text: '#202B32'
+    MUT: '#4B575E'
+  fonts: magazine
 
 logo:
   file: logo.svg      # 单色 SVG：排版时自动换成当页的字色（深底白、浅底主色）

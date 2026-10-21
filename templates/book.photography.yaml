@@ -1,0 +1,78 @@
+# 八个物理页：摄影图位铺满，主摄影区延伸至裁切边；结构可与五主题组合。
+# 素材由项目准备；自测使用合成图。短图注应与实际照片一一对应。
+book:
+  title: 景观的尺度
+  style: photo
+  purpose: guide
+  lang: zh
+  duotone: 'off'
+  folio: LANDSCAPE / 结构样张
+pages:
+- layout: PHOTO_OPEN
+  job: cover · 场景先进入视野
+  image: woodland.jpg
+  kicker: LANDSCAPE / 摄影开场
+  title: 看见一处风景
+  caption: 林地环境图片。各页照片用于构图演示，并非同一地点的连续记录。
+  intro: 先看环境，再读解释。摄影区延伸到页边，文字留在清楚的阅读区。
+- layout: MASONRY
+  job: anchor · 六种景观的并置
+  kicker: SIX VIEWS / 六图
+  title: 不同景别，同一秩序
+  items:
+  - {img: woodland.jpg, caption: 林地光影}
+  - {img: autumn.jpg, caption: 秋林}
+  - {img: waterfall.jpg, caption: 林间瀑布}
+  - {img: dunes.jpg, caption: 日落沙丘}
+  - {img: lake.jpg, caption: 山湖}
+  - {img: horizon.jpg, caption: 海上日出}
+- layout: CONTACT
+  job: anchor · 主图与伴随图建立尺度
+  kicker: CONTACT SHEET / 图像索引
+  title: 从全景，到不同视角
+  image: ocean.jpg
+  caption: 海面全景；下方为不同地点的景观索引。
+  items:
+  - {img: woodland.jpg, caption: 林地光影}
+  - {img: autumn.jpg, caption: 秋林}
+  - {img: waterfall.jpg, caption: 林间瀑布}
+  - {img: dunes.jpg, caption: 日落沙丘}
+  - {img: lake.jpg, caption: 山湖}
+  - {img: horizon.jpg, caption: 海上日出}
+- layout: B
+  job: dense · 阅读区与下方宽景
+  image: lake.jpg
+  photo_rows: 16
+  body:
+  - {kicker: BOTTOM PHOTO / 底部出血}
+  - {display: 给风景留出宽度, size: 56}
+  - {p: 文字在上方展开，照片在下方铺到左右及底部裁切边。图片的比例由主体与页面任务共同决定。}
+- layout: SR
+  job: dense · 全高侧图与短文
+  image: dunes.jpg
+  strip: 360
+  body:
+  - {kicker: SIDE PHOTO / 全高侧图}
+  - {display: 让方向，成为构图, size: 47}
+  - {p: 竖向照片保留自己的走势。正文与主图各有清楚的位置，宽窄变化形成阅读节奏。}
+- layout: SPREAD_H
+  job: anchor · 连续跨页全景
+  image: ocean.jpg
+  body_top: 548
+  left:
+    body:
+    - {kicker: PANORAMA / 全景左页}
+    - {display: 同一幅照片，, size: 56}
+    - {p: 左右两页共用一次缩放与裁切。重要主体与文字避开中缝。}
+  right:
+    body:
+    - {kicker: PANORAMA / 全景右页}
+    - {display: 延续同一个视野。, size: 56}
+    - {p: 这是一张连续图片的两半。查看合页时，核对水平线、明暗与主体的连续性。}
+- layout: PAPER
+  job: back · 留下明确的结束
+  rhythm: breathing
+  body:
+  - {kicker: UNTIL NEXT TIME / 下次再看}
+  - {display: 保留秩序，也保留变化。, size: 56}
+  - {p: 标题、正文、照片和图注各司其职。主题决定气质，共享的结构决定读者如何进入画面。}

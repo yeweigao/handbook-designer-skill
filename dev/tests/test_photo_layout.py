@@ -9,6 +9,7 @@ import re
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 
 from PIL import Image
@@ -77,7 +78,7 @@ def main():
         pages += [dict(layout='GRID', title='Navigation', toc=[['01', 'Workshop', 'Read the guide', '1']], notes=['Navigation note'])]
         spec = dict(book=dict(title='Photo layout regression', lang='en', style='swiss', duotone='off', image_bleed='both',
                     colors=dict(A='#002BA5', B='#F0F2F5', INK='#111111', PAPER='#FFFFFF', TINT='#F2F2F2'),
-                    typesetting='editorial', fonts=dict(preset='sans', title=['playfair'], css=dict(title_w=500)),
+                    typesetting='editorial', typography='bold', fonts=dict(preset='sans', title=['playfair'], css=dict(title_w=500)),
                     series=dict(experiences=dict(label='EXPERIENCE', items=titles))), pages=pages)
         (project / 'book.yaml').write_text(yaml.safe_dump(spec), encoding='utf-8')
         subprocess.run(['python3', str(hb / 'hb.py'), str(project)], check=True, stdout=subprocess.DEVNULL)
@@ -108,7 +109,7 @@ require('fs').writeFileSync(process.argv[2]+'/probe.json',JSON.stringify(got));a
         assert got['bodyLeading'] == '24px' and got['leadSize'] == '20px', got
         assert [s['item'] for s in got['series']] == ['01', '02', '03', '04', '05'], got
         assert len({(s['size'], s['weight'], s['titleFamily'], s['numberFamily']) for s in got['series']}) == 1, got
-        assert 'HB-playfair' in got['series'][0]['titleFamily'] and 'HB-inter' in got['series'][0]['numberFamily'], got
+        assert 'HB-playfair' in got['series'][0]['titleFamily'] and 'HB-noto-sans-sc' in got['series'][0]['numberFamily'], got
         assert '03' in got['continuation'] and 'Fieldwork output' in got['continuation'], got
         assert got['events'] == ['Check-in', 'Meal stop'] and got['period'] == 'Evening', got
         assert got['bullet'] == 'MealsInsurance', got

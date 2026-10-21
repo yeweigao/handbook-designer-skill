@@ -1,0 +1,123 @@
+# 原创连续阅读样册；中文与英文按完整段落显式分成首页、续页。
+# 照片由项目 photos/ 提供；开发自测用合成图，仅用于验证布局。
+book:
+  title: {zh: 留在现场的问题, en: "Questions from the field"}
+  langs: [zh, en]
+  style: editorial
+  purpose: guide
+  color_mode: accent
+  duotone: off
+  colors:
+    primary: '#244C3C'
+    accent: '#B54932'
+    background: '#F7F4EB'
+    body_text: '#202C26'
+    MUT: '#46564B'
+  folio: {zh: FIELD NOTES · 留在现场的问题, en: "FIELD NOTES · Questions from the field"}
+  series:
+    essays:
+      label: {zh: 观察笔记, en: "FIELD ESSAY"}
+      items:
+        '01': {zh: 把看见的写具体, en: "Write what you see"}
+        '02': {zh: 带着问题再回来, en: "Return with a question"}
+pages:
+- layout: PHOTO_OPEN
+  job: cover · 图片邀请读者走进现场
+  kicker: {zh: FIELD NOTES / 观察从停留开始, en: "FIELD NOTES / An invitation to notice"}
+  title: {zh: '留在现场的
+
+      问题', en: 'Questions
+
+      from the field'}
+  image: forest-wide.jpg
+  caption: {zh: 林间光影，作为进入观察的情境图片。, en: "Woodland light. A scene to begin an observation."}
+  intro: {zh: 不必一次看懂整片森林。找一个细节，给它一点时间。, en: "Begin with one detail. Give it time before naming what it means."}
+- layout: READING
+  job: read · 第一篇首页，用正文作为入口
+  series_header: {series: essays, item: '01'}
+  intro: {zh: 记录的第一步，是让另一个人读完，也能找到你看见的东西。, en: "A useful description lets someone else find what you noticed."}
+  notes:
+  - {zh: 本页练习：位置、形状、差异。下一页再讨论解释。, en: "On this page, describe position, shape and difference. Interpretation comes next."}
+  text:
+  - zh: 走进一片树林，最先进入眼睛的往往是整体：一条小路、一片绿色、几处亮光。这些印象能唤起记忆，却很难帮助别人找到某个具体对象。试着在熟悉的词后面多停一会儿。“一片叶子”在哪里？它靠近地面，还是挂在与你视线相齐的枝条上？把观察的位置写出来，文字就开始有了可以返回的坐标。
+    en: "On entering a wood, we often notice the whole scene first: a path, a mass of green, a few patches of light. These impressions may bring back a memory, but they rarely help someone find a particular object. Pause after a familiar word. Where is the leaf? Is it near the ground or on a branch at eye level? Recording its position gives your description a place to return to."
+  - zh: 接着描述一个可以指认的特征。与其写“叶子很特别”，不如沿着边缘看一圈，再把看到的起伏、缺口或卷曲写下来。这里的目标不是堆积形容词，而是选择最有辨识度的细节。如果两片叶子的颜色相近，就比较轮廓；如果轮廓也相近，就记录大小和朝向。每加一句，都想一想它是否真的帮助读者分辨。
+    en: "Next, describe a feature you can point to. Instead of calling the leaf unusual, follow its edge and record a notch, a curve or a fold. The aim is to choose a distinguishing detail. If two leaves have similar colours, compare their outlines. If the outlines are similar too, record their size and direction. Ask whether each added sentence helps a reader tell them apart."
+  - zh: 一张小图可以补充文字不擅长表达的关系。先画主体的大致轮廓，再用一两条线标出它与枝条、石头或路边的距离。图画不需要像照片一样完整，能够说明关系就有用。把画图时犹豫的位置留空，或者添一个问号；不要为了让页面显得完整，把没有看清的部分凭想象补齐。这样的空白也保存了观察的边界。
+    en: "A small sketch can show relationships that are difficult to put into words. Draw a rough outline, then add a line or two to locate the object beside a branch, stone or path. A sketch is useful when it explains a relationship. Leave uncertain parts blank or add a question mark. Resist filling them from imagination just to finish the page: a blank can preserve the limits of what you saw."
+- layout: READING
+  job: read · 同一篇续页，保留篇名与栏目身份
+  series_header: {series: essays, item: '01', continuation: true}
+  notes:
+  - {zh: 用两种起句区分记录：“我看见……”与“我猜想……”。, en: "Try two openings in your notes: “I can see…” and “I suspect…”."}
+  - {zh: 合上这一页前，圈出一个仍然需要证据的判断。, en: "Before turning the page, circle one interpretation that still needs evidence."}
+  text:
+  - zh: 写下“叶缘有一个缺口”，与写下“叶子被昆虫吃过”，并不是同一种记录。前一句描述眼前的形状，后一句解释形状可能怎样形成。解释让人兴奋，也容易比证据跑得更快。先把两种句子分开，再看看现场还有没有支持推测的线索。没有找到线索时，可以把解释保留为问题，让之后的观察有一个明确的方向。
+    en: "“There is a notch in the edge” and “an insect ate this leaf” are different kinds of record. One describes a shape; the other proposes how it formed. An explanation can be exciting enough to outrun the evidence. Separate the two statements, then look for something that supports the idea. If you find nothing, keep the explanation as a question to guide a later visit."
+  - zh: 同伴的描述有时会让你发现自己忽略了什么。交换记录之前，先各自完成一小段，不急着统一答案。请对方只凭你的文字找到对象，再听听他在哪里停住、在哪里误解。找不到并不意味着观察失败，它可能提醒你补充位置，也可能说明某个词太笼统。把对方的问题记在旁边，修改那句真正影响理解的话。
+    en: "Another person's description may reveal something you missed. Write a short passage independently before comparing notes. Ask your partner to find the object using your words alone, and notice where they hesitate or misunderstand. Difficulty finding it may suggest a missing location or an overly broad word. Keep their question beside the record and revise the sentence that affected their understanding."
+  - zh: 最后，回到对象旁边，把描述再读一遍。看看哪些句子仍能对应现场，哪些只是当时的印象。如果光线已经变化，就注明记录的条件，而不是把前后的差异悄悄抹掉。一份好的观察记录不需要表现得无所不知。它应当让人看清你见到了什么、怎样见到，以及哪些地方还没有确定；这些信息，会成为下一次观察真正可用的起点。
+    en: "Finally, return to the object and read the description again. Which sentences still match the scene, and which express an earlier impression? If the light has changed, record the conditions instead of quietly removing the difference. A useful observation shows what you saw, how you saw it and what remains uncertain. These details make the record a practical starting point for another visit."
+- layout: PLATE
+  job: observe · 长文之间停下来，把方法应用到一个主体
+  kicker: {zh: LOOK CLOSER / 把视线放近一点, en: "LOOK CLOSER / From words to a subject"}
+  title: {zh: 一片叶子的线索, en: "Read a leaf"}
+  image: leaf-study.svg
+  caption: {zh: 原创结构示意；编号对应右栏，不用于物种鉴定。, en: "Original structural illustration. Numbers refer to the notes; this is not a species identification guide."}
+  annotations:
+  - t: {zh: 轮廓, en: "Outline"}
+    x: {zh: 沿边缘看一圈，记录可以直接看见的起伏。, en: "Follow the edge. Record the curves you can actually see."}
+  - t: {zh: 纹路, en: "Pattern"}
+    x: {zh: 从中央向外看，用简线记录纹路的方向。, en: "Look outwards from the centre. Sketch the direction of the veins."}
+  - t: {zh: 连接, en: "Connection"}
+    x: {zh: 看叶片与叶柄怎样相接，暂时保留解释。, en: "Observe where blade and stalk meet. Leave the explanation open."}
+- layout: PHOTO_OPEN
+  job: open · 换一个现场，进入第二篇
+  kicker: {zh: RETURN / 变化留下了什么, en: "RETURN / What changes leave behind"}
+  title: {zh: '再来一次，
+
+      会看见什么？', en: 'What will
+
+      you notice next?'}
+  image: forest-return.jpg
+  caption: {zh: 水流情境图片。与前页林景并非同一地点的连续记录。, en: "Moving water. This photograph and the woodland view show different places."}
+  intro: {zh: 回到熟悉的位置，让上一次留下的问题带你继续看。, en: "Return to a familiar position. Let an earlier question guide your next look."}
+- layout: READING
+  job: read · 第二篇首页，给重复观察一个可执行的方法
+  series_header: {series: essays, item: '02'}
+  intro: {zh: 回访的价值，不只在于发现变化，也在于弄清怎样进行比较。, en: "A return visit is a chance to make a careful comparison."}
+  notes:
+  - {zh: 带回现场：上一份记录、一张定位简图、一个尚未回答的问题。, en: "Bring your earlier notes, a sketch of the position and one unanswered question."}
+  text:
+  - zh: 下一次来到同一条小路，不妨先收起相机，拿出上一次的记录。沿着文字和简图寻找原来的观察位置，看看这些线索是否足够清楚。站位稍有移动，前后遮挡的关系就可能改变；距离不同，某些细节也会忽然显得突出。先尽量回到相近的视角，再决定哪些变化值得进一步记录，比较才有共同的起点。
+    en: "On your next visit to the path, put the camera away for a moment and open the earlier record. Use the description and sketch to find the original position. Are the clues clear enough? A small shift can change what overlaps what; a different distance can make a detail seem more prominent. Find a similar viewpoint before deciding which differences deserve a closer look."
+  - zh: 比较时，先挑一个问题，不必同时追踪所有细节。你可能想看一处缺口是否扩大，也可能想知道某个方向的光照是否仍然明显。把问题写在页面上方，再分别记录这次看到的情况和上次留下的描述。不要只写“变多了”或“差不多”，补充可以比较的形状、位置或数量，并说明自己这次能看清的范围。
+    en: "Choose one question instead of trying to follow every detail at once. Perhaps you want to see whether a notch has widened or whether light still falls from one direction. Write the question above the new observation and compare it with the earlier description. Replace “more” or “about the same” with a shape, position or count, and record the limits of what you can see."
+  - zh: 如果没有发现明显变化，也值得留下记录。稳定的现象让你知道什么在这段时间里保持相近，也能帮助你检视问题是否太宽泛。不要为了让回访显得有成果，就把微小差别夸大成确定的结论。可以写下“在今天的观察条件下，没有看到明显变化”，再注明条件。这句话有边界，也为之后不同条件下的观察留出了空间。
+    en: "No obvious change is also worth recording. A stable feature tells you what remained similar during the interval and may help you refine a broad question. Avoid exaggerating a small difference to make the visit feel productive. You can write, “Under today's viewing conditions, I noticed no clear change,” then describe those conditions. The statement has limits and leaves room for a different observation later."
+- layout: READING
+  job: read · 第二篇续页，从比较过渡到新的问题
+  series_header: {series: essays, item: '02', continuation: true}
+  notes:
+  - {zh: 复看时问自己：变化来自对象，还是来自观察条件？, en: "Ask whether a difference belongs to the object or to the conditions of observation."}
+  - {zh: 留给下一次的，不必是大问题，只要能回到现场继续看。, en: "Your next question can be small. It only needs to give you a reason to look again."}
+  text:
+  - zh: 两份记录出现差异时，先检查比较的条件。时间、光线、观察方向和距离，都可能影响你看见的样子。你不需要把户外观察变成一套复杂实验，但要知道哪些条件没有保持一致。把这些条件放在描述旁边，可以避免把所有差别都归结为对象本身的变化，也能让后来阅读记录的人理解你的判断从哪里来。
+    en: "When two records differ, first check the conditions. Time, light, direction and distance may all affect what you see. Outdoor observation need not become a complicated experiment, but you should know which conditions changed. Keeping these notes beside the description helps you avoid attributing every difference to the object itself. It also lets another reader understand how you reached your interpretation."
+  - zh: 有时，回访最有价值的结果是问题变得更具体。最初的“这棵树为什么这样”，可能慢慢变成“这一侧的叶子是否总是更早受到光照”。新的问法缩小了范围，也告诉你下次应该站在哪里、留意什么。把旧问题保留下来，在旁边写上新的问法。问题改变的过程，也能显示你的观察怎样逐渐从印象走向可以追踪的细节。
+    en: "Sometimes the most useful result is a more precise question. “Why does this tree look like this?” may become “Does this side receive light earlier?” The narrower question suggests where to stand and what to watch for next time. Keep the original wording and write the new version beside it. The change shows how your attention moved from a general impression towards a detail you can follow."
+  - zh: 离开前，选出一个愿意继续追踪的问题，把下一步写成一个小动作：回到同一位置、重新描一遍轮廓，或者请同伴独立描述。动作越具体，下次越容易开始。合上手册之后，不必急着把这次经历概括成一个漂亮的答案。真正值得带走的，可能是一个有依据的疑问，以及一份能帮助你再次进入现场的记录。
+    en: "Before leaving, choose a question you would like to follow and turn the next step into a small action: return to the same position, draw the outline again or ask a partner to describe it independently. A concrete action makes it easier to begin. You may leave with a well-grounded question and a record that helps you find your way back. That is enough to keep the observation going."
+- layout: FULL
+  job: back · 把读者送回真实现场
+  image: false
+  surface: A
+  deco: false
+  folio: false
+  kicker: {zh: TAKE IT OUTSIDE / 带到现场去, en: "TAKE IT OUTSIDE / A next step"}
+  title: {zh: '留一个问题，
+
+      下次再来。', en: 'Leave a question.
+
+      Come back to it.'}
+  intro: {zh: 找到一个对象，写一段具体的描述，把还没有看清的地方留给下一次。, en: "Choose one subject. Write a precise description. Leave what you cannot yet see for another visit."}

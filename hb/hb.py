@@ -38,23 +38,28 @@ _b=SPEC.get('book') or {}
 _l=str(_b.get('lang') or (_b.get('langs') or ['zh'])[0]); SPEC=_pick(SPEC,_l); SPEC.setdefault('book',{})['lang']=_l
 import brand as BRAND_
 BK,BRAND=BRAND_.apply(SPEC.get('book',{})); SPEC['book']=BK   # book.brand：品牌包的配色、字体、页脚、logo 作为默认值
-if SPEC.get('pages') and len(SPEC['pages'])>3 and SPEC['pages'][-1].get('layout') in ('FULL','POSTER'): SPEC['pages'][-1]=dict(SPEC['pages'][-1],_last=True)   # 封底（品牌包在这里放 logo + 联系方式）
+if SPEC.get('pages') and len(SPEC['pages'])>3 and (SPEC['pages'][-1].get('layout') in ('FULL','POSTER') or SPEC['pages'][-1].get('layout')=='PAPER' and str(SPEC['pages'][-1].get('job','')).startswith('back')): SPEC['pages'][-1]=dict(SPEC['pages'][-1],_last=True)   # 封底（品牌包在这里放 logo + 联系方式）
 import canon as CN
-CANVAS=str(BK.get('canvas','a4')); W,H=CN.setup(CANVAS,int(BK['body']) if str(BK.get('body','')).isdigit() else BK.get('body'))   # 画布：a4（默认）/ a5 / xhs（小红书 3:4）；非 A4 只能用 8 个内容版式
+CANVAS=str(BK.get('canvas','a4')); W,H=CN.setup(CANVAS,int(BK['body']) if str(BK.get('body','')).isdigit() else BK.get('body'))   # 画布：a4（默认）/ a5 / xhs（小红书 3:4）；非 A4 使用已登记的内容版式
 SRC=os.path.join(PROJ,BK.get('photos','photos'))
 STYLE=str(BK.get('style','photo'))
 PURPOSE=str(BK.get('purpose','workbook'))   # workbook 任务册（有书写区）/ guide 指南须知（以阅读为主）/ brochure 宣传册（不要书写区）
 if PURPOSE not in ('workbook','guide','brochure'): sys.exit(f'ERROR: book.purpose 可选 workbook / guide / brochure，当前 {PURPOSE}')
 if STYLE not in STYLES: sys.exit(f'ERROR: 未知 style {STYLE}，可选 {list(STYLES)}')
 SD=STYLES[STYLE]
-TH_=dict(INK='#17211C',G='#1D5A43',MUT='#3F4A44',GOLD='#F2C14E',OCH='#7E560E',PAPER='#FBFAF7'); TH_.update(SD['colors']); TH_=PAL.resolve(BK.get('colors') or (None if SD['colors'] else PAL.DEFAULT),TH_)   # 没写配色、风格也没自带配色 → 默认 klein（克莱因蓝 × 拿坡里黄）
+TH_=dict(INK='#17211C',G='#1D5A43',MUT='#3F4A44',GOLD='#F2C14E',OCH='#7E560E',PAPER='#FBFAF7'); TH_.update(SD['colors']); TH_=PAL.resolve(BK.get('colors') or (None if SD['colors'] else PAL.DEFAULT),TH_)   # 没写配色、风格也没自带配色 → 默认 nature
 TH_['A'],TH_['B']=PAL.pair(TH_)   # 内容版式的两块撞色（角色：主色 primary、强调色 accent）
-COLOR_MODE,MODE_WHY=PAL.mode(TH_,BK.get('color_mode') if BK.get('color_mode') not in (None,'auto') else SD.get('mode'))   # 用色档位：clash 撞色 / accent 点缀 / mono 单色；没写时用风格的默认档（swiss → mono），再没有就按两色的色相差和对比度自动判断
-if SD.get('mode') and BK.get('color_mode') in (None,'auto'): MODE_WHY=f'{STYLE} 风格默认 {COLOR_MODE}（单页主题色纸面写 surface: A；整册撞色写 color_mode: clash）'
-if STYLE=='swiss' and COLOR_MODE=='clash' and not BK.get('colors'):   # 瑞士撞色档没写配色 → 用默认撞色方案（风格自带的红 + 白撑不起撞色）
-    TH_=PAL.resolve(PAL.DEFAULT,dict(INK='#17211C',G='#1D5A43',MUT='#3F4A44',GOLD='#F2C14E',OCH='#7E560E',PAPER='#FBFAF7')); TH_['A'],TH_['B']=PAL.pair(TH_)
-if STYLE=='stijl' and str(BK.get('look','classic')).lower()=='tone': TH_['A']=TH_['INK']   # 风格派无线：强调用墨色
-if STYLE=='stijl' and str(BK.get('look','classic')).lower()!='tone': TH_['TINT']=TH_['PAPER']   # 风格派：次级背景就是纸色，分区靠粗线
+COLOR_MODE,MODE_WHY=PAL.mode(TH_,BK.get('color_mode') if BK.get('color_mode') not in (None,'auto') else SD.get('mode'))   # 用色档位：accent 点缀 / mono 单色；没写时沿用主题默认（swiss → mono）
+if SD.get('mode') and BK.get('color_mode') in (None,'auto'): MODE_WHY=f'{STYLE} 风格默认 {COLOR_MODE}'
+if STYLE=='swiss':
+    if COLOR_MODE != 'mono': sys.exit('ERROR: Swiss Minimal 使用 color_mode: mono；保留一个强调色，不使用点缀双配色或撞色')
+    TH_.update(OCH=TH_['A'], GOLD='#FFFFFF', B='#FFFFFF', TINT=PAL.mix(TH_['PAPER'],TH_['INK'],.055))
+    def _has_gradient(o):
+        if isinstance(o,dict): return any((k=='gradient' and bool(v) and v!='none') or _has_gradient(v) for k,v in o.items())
+        return isinstance(o,list) and any(_has_gradient(v) for v in o)
+    if _has_gradient(SPEC): sys.exit('ERROR: Swiss Minimal 不使用渐变字；请移除 gradient，用单一强调色')
+if STYLE=='stijl' and str(BK.get('look','classic')).lower()=='tone': TH_['A']=TH_['INK']
+if STYLE=='stijl' and str(BK.get('look','classic')).lower()!='tone': TH_['TINT']=TH_['PAPER']
 if COLOR_MODE=='mono' and not TH_.get('TINT'): TH_['TINT']=PAL.mix(TH_['PAPER'],TH_['INK'],.055)   # 单色：次级背景是中性浅灰
 if COLOR_MODE!='clash' and not TH_.get('TINT'): TH_['TINT']=PAL.mix(TH_['PAPER'],TH_['A'],.07)
 INK,G,MUT,GOLD,OCH,PAPER=[TH_[k] for k in ('INK','G','MUT','GOLD','OCH','PAPER')]
@@ -64,7 +69,9 @@ os.makedirs(os.path.join(PROJ,'img'),exist_ok=True)
 wash.A=BK.get('paper',0.9)   # 纸面不透明度：0.86 通透 … 0.94 更易读（照片繁杂时调高）
 wash.S=BK.get('scale',2)     # 图片烘焙倍率：2≈190dpi（屏幕/打样），3≈290dpi（交印刷厂）
 LANG=str(BK.get('lang','zh')); CJK=LANG.split('-')[0].lower() in ('zh','ja','ko')
-FROLES_PRE=FONTS_.resolve(BK.get('fonts',SD['fonts']),CJK)[0]   # 描边大字转路径时要用到标题字体
+TYPOGRAPHY=FONTS_.typography(STYLE,BK.get('typography'))
+FONT_SPEC=FONTS_.for_style(BK.get('fonts'),STYLE,TYPOGRAPHY,BK.get('display_weight'))
+FROLES_PRE=FONTS_.resolve(FONT_SPEC,CJK)[0]   # 描边大字转路径时要用到标题字体
 def sp(v): return v if CJK else round(float(v)*0.15,3)   # 西文不需要中文那样的宽字距
 COLON='：' if CJK else ': '
 def lab(s): return esc(str(s).rstrip('：: '))+COLON   # 标签后自动加冒号（原文已带冒号也不会重复）
@@ -275,7 +282,7 @@ import canon as CN
 CN.init(globals())
 RECIPES=CN.RECIPES
 import flow
-LAY=dict(flow.LAYOUTS)   # 照片版式（flow.py）和 8 个内容版式（canon.py）共用一个网格、一套字号
+LAY=dict(flow.LAYOUTS)   # 照片版式（flow.py）和内容版式（canon.py）共用一个网格、一套字号
 LAY.update({k:(f,1) for k,f in RECIPES.items()})
 # ---------------------------------------------------------------- build
 n=1; prev=None; plan=[]; PIDX=[]   # PIDX：yaml 里第 i 个页面 → 成品第几页（在线编辑、图片清单用）
@@ -290,7 +297,7 @@ for i,p in enumerate(SPEC['pages']):
     if span==2 and n%2==1: ERR.append(f'{lay} 从第{n}页开始，跨页左页必须是偶数页 → 在它前面增/减一页，或把前面的内容挪动')
     RECIPE_PREV[1]=RECIPE_PREV[1]+1 if lay==RECIPE_PREV[0] else 0; RECIPE_PREV[0]=lay; PCUR[0]=p
     if lay==prev and span==1 and lay in ('ONE','TWO','CARDS','STAGGER','COLLAGE','MIX'): print(f'提示：第{n}页与上一页同为 {lay}，已自动换镜像变体（不想要就写 mirror: false）')
-    elif lay==prev and span==1 and lay not in ('POSTER','FULL'): print(f'提示：第{n}页与上一页版式相同（{lay}），建议换一种')
+    elif lay==prev and span==1 and lay not in ('POSTER','FULL','READING','PAPER'): print(f'提示：第{n}页与上一页版式相同（{lay}），建议换一种')
     if STYLE=='photo' and str(p.get('image','')).startswith('placeholder'): print(f'提示：第{n}页用的是占位底图（{p["image"]}），拿到照片后把 image 换成文件名即可')
     CURN=n
     try: fn(n,p)
@@ -314,15 +321,15 @@ if not CJK: CSS+='.op,.lt p{text-align:left}.fo span:first-child{letter-spacing:
 for k,v in dict(W=W,H=H-1,G=G,INK=INK,MUT=MUT,GOLD=GOLD,OCH=OCH,PAPER=PAPER).items(): CSS=CSS.replace('{'+k+'}',str(v))
 # 字体：按本书实际用到的字裁切嵌入（见 fonts.py）
 TEXT=_h.unescape(re.sub(r'<[^>]+>','',''.join(PP)))+str(BK.get('title',''))
-FCSS,FROLES,FMISS=FONTS_.build_css(BK.get('fonts',SD['fonts']),TEXT,PROJ,CJK)
+FCSS,FROLES,FMISS=FONTS_.build_css(FONT_SPEC,TEXT,PROJ,CJK)
 CSS=FCSS+CSS
 JS=open(os.path.join(HERE,'fill.js'), encoding='utf-8').read()
 TYPESETTING=BK.get('typesetting', 'grid')
 if TYPESETTING not in ('grid', 'editorial') or (TYPESETTING == 'editorial' and CJK):
     raise SystemExit('ERROR: book.typesetting 可选 grid（默认）或 editorial（西文编辑式排印）')
-open(os.path.join(PROJ,'book.html'),'w',encoding='utf-8').write(f'<!doctype html><html lang="{LANG}"><head><meta charset="utf-8"><title>{esc(BK.get("title","Handbook"))}</title><style>{CSS}</style></head><body class="st-{STYLE} m-{COLOR_MODE} ty-{TYPESETTING}" style="--bs:{CN.BS}px;--lh:{CN.LH}px;--gut:{CN.GUT}px;--s:{CN.S:.4f}" data-grid="{CN.TOP},{CN.LH},{CN.y(CN.LAST)},{W},{H},{CN.COL},{CN.GUT},{CN.LAST},{CN.IN},{CN.OUT}" data-canvas="{CANVAS}">{"".join(PP)}{JS}</body></html>')
+open(os.path.join(PROJ,'book.html'),'w',encoding='utf-8').write(f'<!doctype html><html lang="{LANG}"><head><meta charset="utf-8"><title>{esc(BK.get("title","Handbook"))}</title><style>{CSS}</style></head><body class="st-{STYLE} m-{COLOR_MODE} ty-{TYPESETTING}" style="--bs:{CN.BS}px;--lh:{CN.LH}px;--gut:{CN.GUT}px;--s:{CN.S:.4f}" data-typography="{TYPOGRAPHY}" data-grid="{CN.TOP},{CN.LH},{CN.y(CN.LAST)},{W},{H},{CN.COL},{CN.GUT},{CN.LAST},{CN.IN},{CN.OUT}" data-canvas="{CANVAS}">{"".join(PP)}{JS}</body></html>')
 os.makedirs(os.path.join(PROJ,'.qa'),exist_ok=True); json.dump(dict(slots=AISLOTS,scale=wash.S,colors=TH_,style=STYLE),open(os.path.join(PROJ,'.qa','ai_slots.json'),'w', encoding='utf-8'),ensure_ascii=False)
-json.dump(dict(map=MAP,imgs=IMGS,local=LOCAL,clip=CLIP,paper=PAPER,flat=FLAT,use=USE,pidx=PIDX,W=W,H=H,canvas=CANVAS,color_mode=COLOR_MODE),open(os.path.join(PROJ,'map.json'),'w', encoding='utf-8'))
+json.dump(dict(map=MAP,imgs=IMGS,local=LOCAL,clip=CLIP,paper=PAPER,flat=FLAT,use=USE,pidx=PIDX,W=W,H=H,canvas=CANVAS,color_mode=COLOR_MODE,typography=TYPOGRAPHY),open(os.path.join(PROJ,'map.json'),'w', encoding='utf-8'))
 _used=set(re.findall(r'img/(slot_[0-9a-f]+\.jpg)',''.join(PP)))
 for _f in os.listdir(os.path.join(PROJ,'img')):   # 删掉不再用到的旧图位缓存，免得源文件 zip 越来越大
     if _f.startswith('slot_') and _f not in _used: os.remove(os.path.join(PROJ,'img',_f))
@@ -332,7 +339,7 @@ if os.path.isdir(_ad):
         if _f.startswith('bake_') and _f not in {f'bake_{k}.jpg' for k in BAKE_USED}: os.remove(os.path.join(_ad,_f))
 for nm in IMGS: shutil.copy(os.path.join(PROJ,'img',nm.replace('.jpg','_base.jpg')),os.path.join(PROJ,'img',nm))
 open(os.path.join(PROJ,'plan.txt'),'w', encoding='utf-8').write('\n'.join(plan)+'\n')
-print('\n'.join(plan)); print(f'用色 {COLOR_MODE}：{MODE_WHY}'); print(f'风格 {STYLE} · 字体 ' + ' / '.join(f'{r}:{"+".join(v)}' for r,v in FROLES.items()))
+print('\n'.join(plan)); print(f'用色 {COLOR_MODE}：{MODE_WHY}'); print(f'风格 {STYLE} · 排印 {TYPOGRAPHY} · 字体 ' + ' / '.join(f'{r}:{"+".join(v)}' for r,v in FROLES.items()))
 print(f'== {total} 页', '（骑马钉需 4 的倍数，当前余 %d）'%(total%4) if total%4 else '（4 的倍数 ✓）')
 if WARN:
     _w = list(dict.fromkeys(WARN)); print('\n'.join('注意：' + w for w in _w))

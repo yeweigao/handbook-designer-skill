@@ -45,13 +45,19 @@
     const pages = {}; $$('.page').forEach(p => pages[p.dataset.n] = p);
     let hit = 0;
     E.leaves.forEach(L => {
+      // 中央篇名在首页、续页各出现一次；它们共享同一个编辑源字段。
+      const groups = L.path.startsWith('book.series.') ? L.pages.map(n => [n]) : [L.pages];
+      let matched = false;
+      groups.forEach(group => {
       const cands = [];
-      L.pages.forEach(n => { const pg = pages[n]; if (pg) cands.push(...$$('*', pg).filter(e => !e.closest('svg,script,style,.hb-badge') && !e.dataset.src)); });
+      group.forEach(n => { const pg = pages[n]; if (pg) cands.push(...$$('*', pg).filter(e => !e.closest('svg,script,style,.hb-badge') && !e.dataset.src)); });
       const ln = L.norm.toLowerCase(); let best = null, bd = 1e9;
       cands.forEach(e => { if (norm(txt(e)) !== ln) return; const d = e.getElementsByTagName('*').length; if (d < bd) { bd = d; best = e; } });
       if (!best) cands.forEach(e => {   // 引擎加了前缀 / 后缀的（“— 署名”、编号）：只认没有子元素、多出不超过 4 个字的
         if (e.children.length) return; const t = norm(txt(e)); if (t.length > ln.length + 4 || !t.includes(ln)) return; if (!best || t.length < norm(txt(best)).length) best = e; });
-      if (best) { best.dataset.src = L.path; best.dataset.old = txt(best); best.dataset.orig = L.text; best.dataset.pre = txt(best).indexOf(L.text) > 0 ? txt(best).slice(0, txt(best).indexOf(L.text)) : ''; hit++; }
+      if (best) { best.dataset.src = L.path; best.dataset.old = txt(best); best.dataset.orig = L.text; best.dataset.pre = txt(best).indexOf(L.text) > 0 ? txt(best).slice(0, txt(best).indexOf(L.text)) : ''; matched = true; }
+      });
+      if (matched) hit++;
     });
     $$('img').forEach(im => { const f = E.imgs[(im.getAttribute('data-name') || '')]; if (f) im.dataset.file = f; });
     return hit;
@@ -60,7 +66,7 @@
   // ---------------------------------------------------------------- 重排 + 检查
   function relayout() {
     $$('[data-fit0]').forEach(e => { e.dataset.fit = e.dataset.fit0; e.removeAttribute('data-cnw'); e.style.fontSize = ''; });
-    try { if (typeof canon === 'function') canon(); if (typeof cnQA === 'function') cnQA(); } catch (err) { console.log('[hb] relayout', err); }
+    try { if (typeof canon === 'function') canon(); if (typeof cnPhotoDecor === 'function') cnPhotoDecor(); if (typeof cnQA === 'function') cnQA(); } catch (err) { console.log('[hb] relayout', err); }
     $$('.hb-badge').forEach(b => b.remove()); $$('.page.hb-bad').forEach(p => p.classList.remove('hb-bad'));
     let qa = []; try { qa = JSON.parse(document.body.dataset.cnqa || '[]'); } catch (e) { }
     const KIND = { 'cn-over': '文字超出版心', 'cn-in': '标题超出色块', 'cn-collide': '文字互相压住', 'cn-row': '条目放不下', 'cn-small': '图片被挤太小', 'cn-fit': '标题太长', 'cn-deco': '大字压到文字' };
@@ -79,6 +85,7 @@
     const id = sid(E.lang + '__' + row.path);
     if (db) { try { await db.collection('edits').doc(id).set(row); } catch (e) { st('保存失败：' + (e.code || e.message), true); return; } }
     else local.edits[id] = row;
+    applyRow(row);
     const bad = relayout(); report(bad);
   }
   function report(bad) {
@@ -125,9 +132,14 @@
   // ---------------------------------------------------------------- 启动
   function applyRow(r) {
     if (r.lang !== E.lang || r.status === 'synced') return false;
-    const el = $(`[data-src="${CSS.escape(r.path)}"]`); if (!el || el === document.activeElement) return false;
-    if (norm(txt(el)) === norm((el.dataset.pre || '') + r.new)) { el.classList.add('hb-changed'); return false; }
-    el.innerText = (el.dataset.pre || '') + r.new; el.dataset.old = txt(el); el.classList.add('hb-changed'); return true;
+    let changed = false;
+    $$(`[data-src="${CSS.escape(r.path)}"]`).forEach(el => {
+      if (el === document.activeElement) return;
+      el.classList.toggle('hb-changed', norm(r.new) !== norm(el.dataset.orig));
+      if (norm(txt(el)) === norm((el.dataset.pre || '') + r.new)) return;
+      el.innerText = (el.dataset.pre || '') + r.new; el.dataset.old = txt(el); changed = true;
+    });
+    return changed;
   }
   function applyImg(r) {
     if (r.lang !== E.lang || r.status === 'synced') return;

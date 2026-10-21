@@ -15,7 +15,7 @@ bash $HB/new_brand.sh <名字> "<品牌显示名>" [logo.svg] [主色] [强调�
 → `brands/<名字>/brand.yaml`（结构照 acme 示例）、`logo.svg`（没给 logo 就用 Comfortaa 生成文字标占位：`hb/wordmark.py` 也能单独用，`--mark A` 加圆形字母标）、`preview.jpg` 样张、index.yaml 登记一条。
 然后打开 brand.yaml 补全：
 - `book.colors`：按角色写（style.md §8）：至少 `primary` 主色、`accent` 强调色、`background`、`body_text`。
-- `color_mode`：品牌色几乎都该用 `accent`（点缀）——品牌色只做标题、数字、细线，大面积是白纸和浅色；只有品牌本身就是强烈撞色（如橙 × 黑）才用 `clash`。拿不准写 `auto`，构建时会打印判断理由。
+- `color_mode`：使用 `accent`（克制点缀）或 `mono`（单色）；`auto` 沿用主题默认。品牌色可用于标题、数字与细线，主要阅读纸面保持清楚。Swiss 固定 mono，配色规则见 references/style.md。
 - `book.fonts`：从 `python3 hb/fonts.py list` 里选；品牌字体不在列表里且是开源授权 → 放进 hb/fonts 并在 fonts.py 登记；商用授权字体不要嵌入，选最接近的开源字体并告诉用户。
 - `logo`：`mono: true`（单色，自动跟着当页字色变）；彩色 logo 写 `mono: false` 并给 `dark:` 深底版本。
 - `contact`、`voice`、`dont`。

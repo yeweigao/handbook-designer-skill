@@ -126,6 +126,13 @@ def B(b, ctx):
             raise ValueError(f'series_header 找不到 book.series.{name}.items.{item}')
         title = series['items'][item]
         attrs = f' data-series="{h.esc(name)}" data-item="{h.esc(item)}"'
+        if q.get('compact'):
+            if q.get('title') and not q.get('continuation'):
+                raise ValueError('系列首页标题统一从 book.series 读取，不在单页覆盖')
+            suffix = (' · 续读' if h.CJK else ' · CONTINUED') if q.get('continuation') else ''
+            label = f'{series["label"]} {item}{suffix}'
+            return (f'<div class="cn-series-header cn-series-compact"{attrs}>' + C.lab(label)
+                    + f'<div class="cn-h cn-ttl cn-t28">{T(q.get("title", title))}</div></div>')
         if q.get('continuation'):
             label = f'{series["label"]} {item} · CONTINUED'
             return (f'<div class="cn-series-header cn-series-cont"{attrs}>' + C.lab(label)

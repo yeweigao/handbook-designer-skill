@@ -4,5 +4,4 @@ __pycache__/
 node_modules/
 /.workbuddy
 /brands/*
-!/brands/index.yaml
-!/brands/acme/
+/dev/proofs/

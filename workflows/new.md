@@ -36,31 +36,31 @@ bash $HB/new_project.sh $P 原文.pptx 照片目录/   # → doc.md + plan.md + 
 
 ## 3 · 第 2 轮：三个方向的样张（让用户看图选，而不是读文字选）
 ```bash
-python3 $HB/directions.py $P "A=style:photo,colors:klein" "B=style:swiss,colors:hermes" "C=style:papercut,colors:china-red" \
+python3 $HB/directions.py $P "A=style:photo,colors:nature" "B=style:swiss,colors:swiss" "C=style:editorial,colors:ink" \
         --title "〔书名〕" --kicker "〔小标签〕"
 # 有品牌包：其中一个方向写 brand:<名字>；还没写 book.yaml 时用模板的版式 + 真书名
 ```
-→ `$P/.qa/directions.jpg`（每行一个方向：封面 | 章节页 + 卡片；样例 `dev/gallery/directions_sample.jpg`）。三个方向要真的不同（风格 × 撞色 × 有无照片），不是同一套换颜色。
-发图给用户，每个方向一句话说明适合什么，推荐一个，等用户选。无指定品牌或配色时再从经典配色推荐（style.md §3）；已有决定优先。风格名和配色分开标识，换配色不另造风格名；同一方向的照片处理也要说明，不能从“单色版面”推导用户同意黑白照片。样张应覆盖真实主图、信息密集页；脚本未选到时补样张或明确未覆盖，模板色块不算照片验证。
+→ `$P/.qa/directions.jpg`（每行一个方向：封面 | 章节页 + 卡片；样例 `dev/gallery/directions_sample.jpg`）。三个方向要真的不同（字体层级、图文关系与视觉语言），不是同一套换颜色。
+发图给用户，每个方向一句话说明适合什么，推荐一个，等用户选。无指定品牌或配色时再从当前克制配色推荐（style.md §3）；已有决定优先。风格名和配色分开标识，换配色不另造风格名；同一方向的照片处理也要说明，不能从“单色版面”推导用户同意黑白照片。样张应覆盖真实主图、信息密集页；脚本未选到时补样张或明确未覆盖，模板色块不算照片验证。
 
 ## 4 · 写 brief.md
-`cp <skill>/templates/brief.md $P/brief.md`，把两轮确认的东西写进去：顶部设置块（route、purpose、kind、brand、style、colors、langs、canvas、pages）+ 沟通合同 + 选中的方向 + 原文问题的处理。
+`cp <skill>/templates/brief.md $P/brief.md`，把两轮确认的东西写进去：顶部设置块（route、purpose、kind、brand、style、colors、typography、fonts、langs、canvas、pages）+ 沟通合同 + 选中的方向 + 原文问题的处理。
 排版前读 `references/adaptation.md`，按内容角色选择信息块，并在 brief.md 记明本轮文案保留或允许改写的范围；已有明确授权不重复询问。
 从这一刻起，`run.sh` 每次都先跑 `lock.py`；设置变更按 SKILL.md §2 的已有授权与决策记录处理。
 
 ## 5 · 写 book.yaml
 - 先按 `references/editorial-advisor.md` 调用顾问审核完整输入（逐页文案、页面去重、系列建议），已有授权不重复询问。
 - 先完成 `page-plan.md`（格式见 `references/adaptation.md`）：逐页采用文案、角色层级、展示与阅读顺序；再执行以下映射，不直接从原稿大字猜title。
-- 先排页序：按 `purposes/<kind>.yaml` 的 order 和 roles，每页写 `job: 角色词 · 一句话`（如 `job: apply · 报名三步 + 截止日期`），再给每页选版式（`references/layouts.md`），最后填字。
+- 先排页序：按 `purposes/<kind>.yaml` 的 order 和 roles 起步，每页写 `job: 角色词 · 一句话`，按 `references/composition.md` 设计阅读速度与图文关系，再选版式（`references/layouts.md`），最后填字。真实样张应包含阅读变奏、图像页和密集查阅页，不能只看封面配色。
 - 文字一律从 `doc.md` 复制，不凭记忆重写；中英两版写成 `{zh: …, en: …}` + `book.langs: [zh, en]`。
-- 完整样例 `templates/book.layouts.yaml`。
+- 基础版式见 `templates/book.layouts.yaml`；克制的 Editorial 栏目编排见 `templates/book.editorial.zh.yaml`，连贯长文与续页见 `templates/book.reading.yaml`。共享的出血和多图结构见 `templates/book.photography.yaml`；主题、排印与字体的选择见 references/style.md。
 - `python3 $HB/lint.py $P`（run.sh 也会跑）：job 有没有、必需的页有没有、节奏条 ■▤□ 有没有起伏。
 
 ## 6 · 试排（16 页以上必须做）
 ```bash
 bash $HB/run.sh $P --proof      # 只排第 1–5 页（封面 + 两个跨页）→ $P/.proof/.qa/review_*.jpg
 ```
-发给用户看字号、撞色、照片处理对不对。用户的意见记进 brief.md 第 3 节，再排全本。小于 16 页可以跳过，直接全本。
+发给用户看字号、字重、用色、照片处理对不对。用户的意见记进 brief.md 第 3 节，再排全本。小于 16 页可以跳过，直接全本。
 
 ## 7 · 全本构建、改到 GATE PASS
 ```bash

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """方向样张（第 0 步第二轮）：同一份内容按 2–3 个方向各排一个封面 + 一个跨页，拼成一张对比图给用户选。
-  python3 directions.py <project> "A=style:photo,colors:klein" "B=style:swiss,colors:hermes" "C=style:papercut,colors:china-red"
+  python3 directions.py <project> "A=style:photo,colors:nature" "B=style:swiss,colors:swiss" "C=style:editorial,colors:ink"
   可选：--title "书名" --sub "副题" --kicker "小标签"   （还没有 book.yaml 时，用模板的版式换上真实书名）
 内容来源：<project>/book.yaml 的第 1–3 页；没有 book.yaml 时用 templates/book.layouts.yaml 的封面 + 第 4–5 页（章节页 | 卡片）。
 方向里能写的键：style、colors、fonts、brand、duotone，以及任何 book: 设置（逗号分隔，冒号赋值）。
@@ -36,7 +36,7 @@ if not TEMPLATE:   # 方向样张必须验证真实图片（至少一个主图�
     except Exception as _e:
         print(f'提示：方向样张选页失败（{_e}），回退 1-3')
 if TEMPLATE:
-    PAGES = '1,4-5'   # 模板：封面 + 章节页 | 卡片（撞色最能看出方向）
+    PAGES = '1,4-5'   # 模板：封面 + 章节页 | 卡片（对比字体层级与图文组织）
     t = yaml.safe_load(open(os.path.join(ROOT, 'templates', 'book.layouts.yaml'), encoding='utf-8'))
     if opt:
         p0 = t['pages'][0]

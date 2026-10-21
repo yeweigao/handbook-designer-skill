@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""canon.py —— 8 个内容版式（FULL ONE TWO CARDS STAGGER GRID COLLAGE MIX）共用的网格。由 hb.py 调用，yaml 写法见 references/layouts.md。
+"""canon.py —— 基础内容版式与编辑变奏共用的网格。由 hb.py 调用，yaml 写法见 references/layouts.md。
 
 一、网格：所有尺寸都从正文字号推出来
   A4 = 794 × 1123（1:√2）。正文 16px（印出来 12pt，小四），行距 28px。
@@ -65,7 +65,7 @@ def rgba(c, a):
     c = c.lstrip('#'); return f'rgba({int(c[0:2], 16)},{int(c[2:4], 16)},{int(c[4:6], 16)},{a})'
 def MODE(): return G.get('COLOR_MODE', 'clash')
 def QUIET(): return G.get('STYLE') in ('swiss', 'geo', 'stijl') and MODE() == 'mono'   # 默认节制用色；显式surface仍可选实色纸面，不生成底图
-def NOART(): return QUIET() or G.get('STYLE') in ('stijl', 'geo')   # 不生成风格底图的风格（图片位没照片时是色块，不是插画）
+def NOART(): return QUIET() or G.get('STYLE') in ('editorial', 'stijl', 'geo')   # 不以自动气氛插画填充无图页
 def BW(): return QUIET() and G.get('STYLE') == 'swiss' or G.get('STYLE') == 'stijl'   # 照片一律转黑白
 def tokens(sf):
     if sf in ('D', 'S', 'X') and G.get('STYLE') == 'stijl':   # 风格派的三原色格（stijl.py）
@@ -391,10 +391,7 @@ def FULL(n, p):
     if chapter:
         pos = f'right:{round(-48 * K)}px' if r else f'left:{round(-48 * K)}px'
         body += f'<div class="cn-a cn-num deco"{h.DECO} style="{pos};top:{y(0) - round(60 * K * ixs / 480)}px;font-size:{round(ixs * K)}px;line-height:{round(ixs * K)}px;color:{t["num"]};letter-spacing:-.04em">{T(str(p["index"]))}</div>'
-    elif p.get('deco', True) is not False and QUIET() and G.get('STYLE') == 'swiss':   # 瑞士单色：切口一侧一个强调色圆点（压出页边）；风格派的页角构成在 stijl.accents
-        d = wd(1, 2)
-        body += f'<div class="cn-a deco" style="{"left" if r else "right"}:{W - round(d * .7)}px;top:{y(L(2))}px;width:{d}px;height:{d}px;border-radius:50%;background:{h.TH_["A"]}"></div>'
-    elif p.get('deco', True) is not False:
+    elif p.get('deco', True) is not False and G.get('STYLE') not in ('swiss', 'editorial'):
         body += f'<div class="cn-a deco" style="{"left" if r else "right"}:{W - D + round(90 * K)}px;top:{round(-90 * K)}px;width:{D}px;height:{D}px;border-radius:50%;background:{o["bg"]}"></div>'
         p = dict(p, header=None)   # 切口上角是一轮“日”：海报页不放页眉（页眉会压在圆上看不见）
     geo_ = G.get('STYLE') == 'geo'
@@ -479,7 +476,7 @@ def CARDS(n, p):
         body += stack(1, hc, r, hd, top=0, sf=sf, id_=H_, inside=sid(n, 'f'))
         return emit(n, p, r, 'paper', body, sf)
     body = big + stack(1, 6, r, [f'<div class="{gcls}" style="{grid}">{cells}</div>'], bot=LAST, sf=sf, id_=C_)   # 整页撞色
-    body += stack(1, hc, r, hd, top=0, sf=sf, id_=H_)
+    body += stack(1, hc, r, hd, top=0, sf=sf, id_=H_, y1=f'{C_}.top-1')
     emit(n, p, r, sf, body, sf)
 
 # ---------------------------------------------------------------- STAGGER 错位：2–4 组图文，棋盘式交替
@@ -497,9 +494,14 @@ def STAGGER(n, p):
         iw, tw = (W - cut, cut) if flip else (cut, W - cut)
         tl = 14 if not flip else (x(1, r)); tr = (W - xe(6, r)) if not flip else 14
         import stijl
-        txt = (num(f'{i + 1:02d}', 56, 72, cls='cn-ino', style=stijl.bar(i)) if p.get('num', True) is not False else '') + lab(it.get('k'), deco=False) + f'<div class="cn-h cn-t28 cn-snap">{T_(it.get("t", ""))}</div>' + TX(it.get('x')) + TX(it.get('items'))
+        compact = len(its) >= 3
+        number = num(f'{i + 1:02d}', round(28 * S) if compact else 56, LH if compact else 72,
+                     cls='cn-entry-index' if compact else 'cn-ino', style=stijl.bar(i)) if p.get('num', True) is not False else ''
+        heading = 'cn-t20' if compact else 'cn-t28'
+        txt = number + lab(it.get('k'), deco=False) + f'<div class="cn-h {heading} cn-snap">{T_(it.get("t", ""))}</div>' + TX(it.get('x')) + TX(it.get('items'))
         im = f'<div class="cn-ibox" data-minh="96">{pic(it.get("img"), iw, 300, i + 1, other(sf) if sf != "paper" else "A")}</div>'
-        cell = f'<div class="cn-cell" style="background:{tokens(sf)["bg"]};{vs(sf)}padding:{LH}px {tr}px {LH}px {tl}px"><div class="cn-snap" style="width:{wd(1, 3)}px">{txt}</div></div>'
+        pad = LH // 2 if compact else LH
+        cell = f'<div class="cn-cell" style="background:{tokens(sf)["bg"]};{vs(sf)}padding:{pad}px {tr}px {pad}px {tl}px"><div class="cn-snap" style="width:{wd(1, 3)}px">{txt}</div></div>'
         rows.append(f'<div class="cn-row" style="display:grid;grid-template-columns:{iw if not flip else tw}px {tw if not flip else iw}px">{im if not flip else cell}{cell if not flip else im}</div>')
     body += f'<div class="cn-a cn-rows" data-rows="1" data-gap="0" data-y0="{H_}.bottom+2" style="left:0;width:{W}px;top:{y(L(8))}px;height:{y(LAST) - y(L(8))}px">{"".join(rows)}</div>'
     emit(n, p, r, 'paper', body, dom)
@@ -666,7 +668,7 @@ def GRID(n, p):
     vs_ = [('full', 'A'), ('paper', 'paper'), ('full', 'B')] if not v else [('paper', 'paper'), ('full', 'A'), ('full', 'B')]
     name, sf = choose('GRID', p, vs_)
     notes_band = (name == 'paper' or QUIET()) and 'notes' in keys and not v   # 单色档没有整页色块：备注总是放进底部浅灰色带
-    secs = [f'<div class="cn-sec cn-snap m2">{sec_html(k, p, r)}</div>' for k in keys if not (notes_band and k == 'notes')]
+    secs = [f'<div class="cn-sec cn-snap m2" data-g="2">{sec_html(k, p, r)}</div>' for k in keys if not (notes_band and k == 'notes')]
     main = head(p, 80, 6, 44, icols=6, intro=TOC_DEG[0] < 3) + secs   # 目录放不下时最后才去页头导语（TOC_DEG 3 档）
     body = ''
     if notes_band:   # 纸面 + 底部一条撞色色带装备注
@@ -746,4 +748,203 @@ def MIX(n, p):
     body += stack(*tc, r, head(p, 80, 3, 40, icols=3) + [secs], top=0, id_=H_)
     emit(n, p, r, 'paper', body, 'image', fspan=tc)
 
-RECIPES = {'FULL': FULL, 'ONE': ONE, 'TWO': TWO, 'CARDS': CARDS, 'STAGGER': STAGGER, 'GRID': GRID, 'COLLAGE': COLLAGE, 'MIX': MIX}
+# ------------------------------------------------ 编辑型变奏：沿用六栏，内部 CSS Grid 自然流动。
+# 结构只决定跨栏和阅读顺序；颜色、字体仍由 tokens / styles / fonts 接管。
+def editorial_grid(cells, gap=1):
+    """cells: (起栏, 占栏数, HTML, 起点错开行数)。不锁行高，不按字数截断。"""
+    out = []
+    for start, span, content, offset in cells:
+        out.append(f'<div class="cn-ed-cell" style="grid-column:{start}/span {span};padding-top:{offset * LH}px">{content}</div>')
+    return f'<div class="cn-ed-grid" style="row-gap:{gap * LH}px">{"".join(out)}</div>'
+
+def editorial_surface(p):
+    sf = SURF_ALIAS.get(str(p.get('surface', 'paper')).lower())
+    if sf not in ('paper', 'A', 'B', 'dark'):
+        raise ValueError('编辑阅读版式 surface 可选 paper / A / B / dark')
+    return sf
+
+def editorial_head(p, size=80):
+    return [lab(p.get('kicker'), deco=False),
+            '<div class="cn-ed-rule"></div>',
+            disp(p.get('title'), round(size * K), 6, round(40 * K), m=1),
+            sub(p.get('sub') or p.get('en'), m=1)]
+
+def editorial_page(n, p, kids, sf=None):
+    sf = sf or editorial_surface(p)
+    body = stack(1, 6, pg(n), kids, top=0, sf=sf, cls='cn-editorial', id_=sid(n, 'editorial'))
+    return emit(n, p, pg(n), sf, body, sf)
+
+def editorial_quote(p):
+    if not p.get('quote'): return ''
+    return (f'<div class="cn-ed-pause cn-snap m2"><div class="cn-qt">{T_(p["quote"])}</div>'
+            + (lab(p.get('by'), m=1, deco=False) if p.get('by') else '') + '</div>')
+
+def RHYTHM(n, p):
+    """侧导语 → 主要论述 → 跨栏停顿 → 错位双栏续读；适合有明确论述的短文章。"""
+    text = listify(p.get('text'))
+    kids = editorial_head(p, 96)
+    opening = editorial_grid([(1, 2, para(p.get('intro'), flow='keep'), 0),
+                              (3, 4, para(text[:1], flow='keep'), 1)])
+    kids += [f'<div class="m2">{opening}</div>', editorial_quote(p)]
+    if len(text) > 1:
+        # 每个段落保持完整，Grid 按内容决定下一行高度，不把一个句子切去下一栏。
+        cells = [(1 if i % 2 == 0 else 4, 3, para(t, flow='keep'), i % 2)
+                 for i, t in enumerate(text[1:])]
+        kids += [f'<div class="m2">{editorial_grid(cells)}</div>']
+    return editorial_page(n, p, kids)
+
+def MARGINALIA(n, p):
+    """4+2 主文与旁注一一成组；旁注再长也不会掉到下一段旁边。"""
+    sections = listify(p.get('sections'))
+    if not sections: raise ValueError('MARGINALIA 需要 sections: [{t, x, note_title, note}]')
+    kids = editorial_head(p)
+    if p.get('intro'): kids.append(lead(p['intro'], 1, 4))
+    for i, s in enumerate(sections):
+        if not isinstance(s, dict): raise ValueError('MARGINALIA 的每个 section 需要 x 正文，可加 t / note_title / note')
+        main = (f'<div class="cn-h cn-t20 cn-snap">{T_(s["t"])}</div>' if s.get('t') else '') + para(s.get('x'), m=1 if s.get('t') else 0, flow='keep')
+        note = (lab(s.get('note_title'), deco=False) + para(s.get('note'), flow='keep'))
+        aside = f'<aside class="cn-ed-note">{note}</aside>' if note else ''
+        kids.append(f'<div class="m2">{editorial_grid([(1, 4, main, 0), (5, 2, aside, 1)])}</div>')
+        if i == 0: kids.append(editorial_quote(p))
+    return editorial_page(n, p, kids)
+
+def editorial_figure(v, span, rows, caption=None, bleed=(0, 0, 0), role='primary'):
+    """有内容的图像才入图版：SVG 原样嵌入；缺图不替换成编号/随机底纹。"""
+    src = v.get('src') if isinstance(v, dict) else v
+    if str(src).startswith('ai:'):
+        resolved = h.ai_file(src)
+        v = dict(v, src=resolved) if isinstance(v, dict) else resolved
+        src = resolved
+    if not isinstance(src, str) or not src.strip() or not has_photo(v):
+        raise ValueError('PLATE / SEQUENCE / PHOTO_OPEN / MASONRY / CONTACT 需要实际 image / img 文件；先准备内容相关的图片或 SVG，不能用占位底纹')
+    left, right, top = bleed
+    width, height = wd(1, span) + left + right, rows * LH + top
+    im = pic(v, width, height, label=False)
+    # 文本仍在六轨版心；摄影区可独立延伸至裁切边，图注跟着所属figure。
+    outer = f' style="position:relative;padding-top:{rows * LH}px"' if top else ''
+    image_style = (f'position:absolute;top:{-top}px;' if top else 'position:relative;')
+    image_style += f'left:{-left}px;width:{width}px;height:{height}px'
+    tag = ' data-bleed="edge"' if any(bleed) else ''
+    return (f'<figure class="cn-ed-figure" data-image-role="{role}"{outer}{tag}><div class="cn-pic" style="{image_style}">{im}</div>'
+            + (f'<figcaption class="cn-cap m1">{T_(caption)}</figcaption>' if caption else '') + '</figure>')
+
+def photo_bleed(n, p):
+    mode = p.get('bleed', 'edge')
+    if mode not in ('edge', 'inset'): raise ValueError('摄影布局 bleed 可选 edge（到裁切边）/ inset（明确的版心内构图）')
+    return (x(1, pg(n)), W - xe(6, pg(n))) if mode == 'edge' else (0, 0)
+
+def PLATE(n, p):
+    """主图与编号解读：观察图 / 标本 / 器物 / 示意图；图文两侧各自自然流动。"""
+    sf = editorial_surface(p)
+    v = p.get('image')
+    v = dict(v) if isinstance(v, dict) else dict(src=v)
+    v.setdefault('fit', 'contain')
+    v.setdefault('duo', False)   # 图解颜色可能承载含义；主题不自动把它改成双色。
+    notes = []
+    for i, a in enumerate(listify(p.get('annotations'))):
+        a = IT(a)
+        notes.append(f'<div class="cn-ed-note cn-snap">{lab(a.get("k", f"{i + 1:02d}"), deco=False)}'
+                     + f'<div class="cn-h">{T_(a.get("t", ""))}</div>' + para(a.get('x'), flow='keep') + '</div>')
+    figure = editorial_figure(v, 4, L(19), p.get('caption'))
+    grid = editorial_grid([(1, 4, figure, 0), (5, 2, ''.join(notes), 1)])
+    kids = editorial_head(p) + ([lead(p['intro'], 1, 4)] if p.get('intro') else [])
+    kids += [f'<div class="m2">{grid}</div>', para(p.get('text'), m=2, cols=4, flow='keep')]
+    return editorial_page(n, p, kids, sf)
+
+def SEQUENCE(n, p):
+    """一个主体、两个细节：非等分多图，图注保持与图像绑定。"""
+    items = [IT(it) for it in listify(p.get('items'))]
+    if len(items) != 3: raise ValueError('SEQUENCE 需要 3 个 items，每个含 img，可加 k / t / x；按主场景、细节、延伸编排')
+    def text(it):
+        return lab(it.get('k'), deco=False) + (f'<div class="cn-h cn-t20 cn-snap">{T_(it["t"])}</div>' if it.get('t') else '') + para(it.get('x'), m=1, flow='keep')
+    first = editorial_grid([(1, 4, editorial_figure(items[0].get('img'), 4, L(11)), 0),
+                            (5, 2, text(items[0]), 1)])
+    second = editorial_grid([
+        (1, 3, editorial_figure(items[1].get('img'), 3, L(8)) + text(items[1]), 0),
+        (4, 3, editorial_figure(items[2].get('img'), 3, L(8)) + text(items[2]), 1)])
+    return editorial_page(n, p, editorial_head(p, 64) + [f'<div class="m2">{first}</div>', f'<div class="m1">{second}</div>'])
+
+def PHOTO_OPEN(n, p):
+    """先看图片，再读标题：六栏主图，下接四栏标题和两栏短导语。"""
+    left, right = photo_bleed(n, p)
+    figure = editorial_figure(p.get('image'), 6, L(16), p.get('caption'), (left, right, TOP if left or right else 0))
+    title = lab(p.get('kicker'), deco=False) + disp(p.get('title'), round(64 * K), 4, round(32 * K))
+    title += sub(p.get('sub') or p.get('en'), m=1)
+    opening = editorial_grid([(1, 4, title, 0), (5, 2, para(p.get('intro'), flow='keep'), 1)])
+    kids = [figure, f'<div class="m1">{opening}</div>', para(p.get('text'), m=1, cols=4, flow='keep')]
+    return editorial_page(n, p, kids)
+
+def MASONRY(n, p):
+    """六轨合并为三条独立图流：照片先行、接缝错开、下沿收齐，标题与索引在后。"""
+    items = [IT(it) for it in listify(p.get('items'))]
+    if len(items) != 6: raise ValueError('MASONRY 需要6个items，每个含img与可选caption；不以重复填图补数量')
+    left, right = photo_bleed(n, p)
+    cells, captions = [], []
+    top = TOP if left or right else 0
+    rows = L(28)
+    gap = LH / 4
+    extend = (GUT - gap) / 2
+    # 图流共享上下边界，内部接缝不共享行线；外侧跨出页边距，内沿仍落在六轨上。
+    for col, first in enumerate((L(10), L(17), L(7))):
+        parts = []
+        notes = []
+        for row, height in enumerate((first, rows - first - gap / LH)):
+            i = col * 2 + row
+            it = items[i]
+            ident = sid(n, 'photo_%s' % (i + 1))
+            figure = editorial_figure(it.get('img'), 2, height, None,
+                                      (left if col == 0 else extend, right if col == 2 else extend, top if row == 0 else 0), role='supporting')
+            # 索引在共同的阅读区；关联保留到单张图，不让六条图注切断图流。
+            parts.append(f'<div class="cn-masonry-item" role="group" aria-describedby="{ident}" style="margin-top:{gap if row else 0}px">{figure}</div>')
+            notes.append(f'<div class="cn-cap" id="{ident}"><span{h.DECO} aria-hidden="true">{i + 1:02d}</span> {T_(it.get("caption") or "")}</div>')
+        cells.append((1 + col * 2, 2, ''.join(parts), 0))
+        captions.append((1 + col * 2, 2, ''.join(notes), 0))
+    kids = [f'<div class="cn-masonry">{editorial_grid(cells)}</div>',
+            lab(p.get('kicker'), m=1, deco=False),
+            disp(p.get('title'), round(56 * K), 6, round(32 * K)),
+            sub(p.get('sub') or p.get('en')),
+            f'<div class="cn-masonry-legend m1">{editorial_grid(captions)}</div>']
+    return editorial_page(n, p, kids)
+
+def CONTACT(n, p):
+    """大幅场景照片加两行六图索引；尺度、序列与图注共同建立阅读路径。"""
+    items = [IT(it) for it in listify(p.get('items'))]
+    if len(items) != 6: raise ValueError('CONTACT 需要image主图和6个含img的items')
+    left, right = photo_bleed(n, p)
+    hero = editorial_figure(p.get('image'), 6, max(7, L(8)), p.get('caption'), (left, right, 0))
+    cells = []
+    for i, it in enumerate(items):
+        col = i % 3
+        figure = editorial_figure(it.get('img'), 2, L(5), it.get('caption'),
+                                  (left if col == 0 else 0, right if col == 2 else 0, 0), role='supporting')
+        cells.append((1 + col * 2, 2, figure, 0))
+    return editorial_page(n, p, editorial_head(p, 56) + [f'<div class="m1">{hero}</div>',
+                                f'<div class="m1">{editorial_grid(cells)}</div>'])
+
+def READING(n, p):
+    """正文先进入视野，篇名与提示居侧栏；每个 YAML 页面保存明确的段落边界。"""
+    if not p.get('text'): raise ValueError('READING 需要 text 段落列表；按完整段落分配续页，不把空页当续页')
+    import flow
+    sf = editorial_surface(p)
+    series = p.get('series_header')
+    if series:
+        if p.get('title'): raise ValueError('READING 使用 series_header 时标题从 book.series 读取；续页小题写在 series_header.title')
+        if series.get('continuation') and not os.environ.get('HB_PROOF'):
+            current = next((i for i, page in enumerate(h.SPEC['pages']) if page is p), 0)
+            key = (series.get('series'), str(series.get('item')))
+            prior = [page.get('series_header') or {} for page in h.SPEC['pages'][:current] if page.get('layout') == 'READING']
+            if not any((s.get('series'), str(s.get('item'))) == key and not s.get('continuation') for s in prior):
+                raise ValueError('READING 续页前缺同一 series/item 的首页；先安排首页，再标 continuation: true')
+        identity = flow.B({'series_header': dict(series, compact=True)}, {'w': wd(1, 2), 'sf': sf})
+    else:
+        if not p.get('title'): raise ValueError('READING 需要 title 或已登记的 series_header')
+        identity = lab(p.get('kicker'), deco=False) + f'<div class="cn-h cn-ttl cn-t28">{T_(p["title"])}</div>'
+    side = identity + ''.join(f'<div class="cn-ed-note m2">{para(note, flow="keep")}</div>' for note in listify(p.get('notes')))
+    main = (lead(p['intro']) if p.get('intro') else '') + para(p.get('text'), m=1 if p.get('intro') else 0, flow='keep')
+    offset = 1 if series and series.get('continuation') else L(3)
+    grid = editorial_grid([(1, 2, side, offset), (3, 4, main, 0)])
+    return editorial_page(n, p, [f'<div class="cn-reading">{grid}</div>'], sf)
+
+RECIPES = {'FULL': FULL, 'ONE': ONE, 'TWO': TWO, 'CARDS': CARDS, 'STAGGER': STAGGER, 'GRID': GRID, 'COLLAGE': COLLAGE, 'MIX': MIX,
+           'RHYTHM': RHYTHM, 'MARGINALIA': MARGINALIA, 'PLATE': PLATE, 'SEQUENCE': SEQUENCE,
+           'PHOTO_OPEN': PHOTO_OPEN, 'READING': READING, 'MASONRY': MASONRY, 'CONTACT': CONTACT}

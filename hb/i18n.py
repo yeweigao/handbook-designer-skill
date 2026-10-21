@@ -9,9 +9,10 @@
    手动拆：python3 i18n.py split <project>/book.yaml   → <project>/<lang>/book.yaml（photos 链接回原项目）
 翻译要求：信达雅，意思不增不减；保留 <b> <br> 等内联标签；英文通常比中文长 30–60%，溢出时按 doctor 提示调 size / 挪内容。"""
 import sys, os, json, yaml
-SKIP = {'layout','image','window','widths','color','style','right_layout','photos','note','html','colors','lang','fonts','align','folio_style','gradient','figure','gallery','qr','fit','focus','frame','purpose','tone'}
+SKIP = {'display_weight', 'bleed', 'typography', 'layout','image','images','img','src','surface','window','widths','color','style','right_layout','photos','note','html','colors','lang','fonts','align','folio_style','gradient','figure','gallery','qr','fit','focus','frame','purpose','tone'}
 def walk(o, fn, key=None):
-    if isinstance(o, dict): return {k: (v if k in SKIP or (k in ('cols',) and isinstance(v, str)) else walk(v, fn, k)) for k, v in o.items()}
+    # 页面 note 是制作备注；sections[].note 是 MARGINALIA 的可见旁注。
+    if isinstance(o, dict): return {k: (v if (k in SKIP and not (k == 'note' and key == 'sections')) or (key == 'series_header' and k in ('series', 'item')) or (k in ('cols',) and isinstance(v, str)) else walk(v, fn, k)) for k, v in o.items()}
     if isinstance(o, list): return [walk(x, fn, key) for x in o]
     if isinstance(o, str) and o.strip(): return fn(o)
     return o

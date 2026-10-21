@@ -1,17 +1,11 @@
 # ============================================================================
 # book.nophoto.zh.yaml —— 样例三：无图模式（8 页中文新生手册，一张照片都不用）
-# 只改 book.style 就能换成 8 种风格之一：editorial / swiss / notebook / inkwash / papercut / riso / aurora / nebula
-# 没写 image 的页会按风格自动生成底图；拿到照片后给某页写上 image 即可（照片与底图可以混用）。
+# 当前风格保留 photo / swiss / editorial / stijl / geo；无图稿优先 swiss 或 editorial。
 # 试跑：bash hb/new_project.sh demo_np && cp templates/book.nophoto.zh.yaml demo_np/book.yaml && bash hb/run.sh demo_np
-# 各风格效果：dev/gallery/style_<风格>.jpg
-# ============================================================================
 book:
   title: 枫林学校 · 新生入学手册
   folio: 枫林学校 · 新生入学手册
-  style: notebook            # 换成 editorial / swiss / inkwash / papercut / riso / aurora 试试
-  # fonts: hand              # 可选：覆盖风格默认字体（magazine / serif / sans / hand），见 references/style.md
-  # colors: klein            # 可选：经典配色方案名（klein / hermes / china-red / bauhaus / morandi …），或 {G: '#2E6E8E'}
-  # gradient: spotlight      # 可选：大标题渐变色
+  style: editorial
 
 pages:
 - layout: POSTER

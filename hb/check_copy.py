@@ -18,7 +18,7 @@ STRIP=r'[｜→•✓✗▶☐\s—·\-–：:，,。.！!？?；;（）()“”
 def txt(s,drop_deco=False):
     s=re.sub(r'<style.*?</style>|<script.*?</script>|<title>.*?</title>','',s,flags=re.S)
     if drop_deco: s=re.sub(r'<(\w+)[^>]*data-deco[^>]*>.*?</\1>','',s,flags=re.S)
-    s=re.sub(r'<br\s*/?>','\n',s); s=re.sub(r'</(p|div|span|section|li|td|th|h\d)>','\n',s); s=re.sub(r'<[^>]+>','',s); return html.unescape(s).replace('\u200b','')
+    s=re.sub(r'<br\s*/?>','\n',s); s=re.sub(r'</(p|div|span|section|li|td|th|figcaption|h\d)>','\n',s); s=re.sub(r'<[^>]+>','',s); return html.unescape(s).replace('\u200b','')
 norm=lambda s:re.sub(STRIP,'',s).lower()
 raw=open(os.path.join(P,'book.html'),encoding='utf-8').read()
 pages=re.findall(r'<section class="page[^"]*"[^>]*data-n="(\d+)"[^>]*>(.*?)</section>',raw,flags=re.S)

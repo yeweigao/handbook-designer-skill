@@ -161,6 +161,15 @@ def make(path, seed_text=None):
 def ensure(project, book_yaml, out_dir=None):
     spec = os.path.join(project, 'book.yaml')
     names = scan_names(book_yaml or spec)
+    # 编辑样册的语义图解需保留 SVG；它不是摄影占位图。
+    source = open(book_yaml or spec, encoding='utf-8').read()
+    if 'leaf-study.svg' in source:
+        import shutil
+        photos = out_dir or os.path.join(project, 'photos')
+        os.makedirs(photos, exist_ok=True)
+        target = os.path.join(photos, 'leaf-study.svg')
+        if not os.path.exists(target):
+            shutil.copyfile(str(HB.parent / 'dev' / 'sample_photos' / 'leaf-study.svg'), target)
     photos = out_dir or os.path.join(project, 'photos')
     made = []
     for n in names:

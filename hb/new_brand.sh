@@ -20,7 +20,7 @@ t = t.replace('Acme Studio', NAME).replace('Acme Education & Design Studio', '�
 t = re.sub(r"primary: '#[0-9A-Fa-f]+'.*", f"primary: '{A}'           # 主色", t); t = re.sub(r"accent: '#[0-9A-Fa-f]+'  .*", f"accent: '{B}'            # 强调色", t)
 t = re.sub(r"    (secondary_bg|secondary_accent|MUT): '#[0-9A-Fa-f]+'.*\n", '', t)   # 其余角色由引擎推出（次级背景 = 背景混 7% 主色）；需要时按品牌规范加
 t = re.sub(r"body_text: '#[0-9A-Fa-f]+'.*", "body_text: '#17211C'         # 正文：深墨", t)
-t = re.sub(r"  color_mode: \w+.*", "  color_mode: auto     # auto：主色和强调色是撞色就 clash，同色系 / 对比不够就 accent（点缀）", t)
+t = re.sub(r"  color_mode: \w+.*", "  color_mode: auto     # auto：沿用风格默认；accent 点缀或 mono 单色", t)
 t = re.sub(r'voice:.*', 'voice: 〔品牌口吻一句话〕', t); t = re.sub(r'dont:\n(  - .*\n)+', 'dont:\n  - 〔禁忌〕\n', t)
 open(os.path.join(R, 'brands', N, 'brand.yaml'), 'w', encoding='utf-8').write(t)
 idx = os.path.join(R, 'brands', 'index.yaml')
