@@ -28,7 +28,7 @@
   - `dev/previews/`：模板的拼版预览图（使用合成插画及原创示意图生成）
   - `dev/sample_photos/`：无版权 CC0 模板样张配图
   - `dev/fonts/`：离线回归测试用的开源西文字体包（运行时通过 `hb/fonts.py` 按需下载，纯 Skill 包无需附带）
-  - `dev/audits/`：历史复盘、审计报告与迭代计划（`TODO.md`、`ROADMAP.md`、`AUDIT-*.md`）
+  - `dev/audits/`：历史复盘、审计报告与迭代计划（`TODO.md`、`ROADMAP.md`、`AUDIT-*.md`）；**`IDEAL-FORM.md` 是这个 skill 的理想形态（参照系）——每次改 skill 前先对照它，问一句「这次改动是更接近还是更远」**
 
 ## 从实测反馈迭代
 
@@ -49,7 +49,7 @@ bash dev/tests/selftest.sh          # 编译、yaml、文档引用、SKILL.md �
 - 改了检查（doctor / lint / fill.js 的 cnCheck）：先用一个会触发它的例子确认它报得出来，再确认所有模板仍然 PASS。
 - Python 保持 3.10 能跑：f-string 里不要嵌套同种引号；不用 3.11+ 才有的语法。
 - 引擎代码不写死页面尺寸：用 canon 的 W / H / COL / LAST 和 `L()`、`K`（画布换成 A5 / 小红书也能排）。
-- **一个引擎**：照片版式（flow.py）和内容版式（canon.py）用同一套网格原语（`stack` / `region` / `box` / `field` / `pic`），块统一由 `flow.B()` 渲染。不要为某个风格另写一套块的排法——风格只改字体、颜色、插画、页边装饰（styles.py / art.py / stijl.py / geo.py）。
+- **一个引擎**：照片版式（flow.py）和内容版式（canon.py）用同一套网格原语（`stack` / `region` / `box` / `field` / `pic`），块统一由 `flow.B()` 渲染。不要为某个风格另写一套块的排法——风格只改字体、颜色、插画、页边装饰（styles.py / art.py / stijl.py）。
 - 新的 px 参数一律吸到整行（`flow.lines` / `nrows`）、整栏（`ncols`）或字号档（`dsize`）；会挤占空间的东西给它一个让位的标记（图 `data-fh`/`data-fmin`、间距 `data-g`、书写线 `data-x`），fill.js 会按顺序收。
 
 ## 新增东西放哪

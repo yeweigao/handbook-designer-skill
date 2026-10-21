@@ -5,11 +5,11 @@ route: new            # new 新做 / quick 快速 / beautify 美化（文字冻�
 purpose: brochure     # workbook 任务册 / guide 指南 / brochure 宣传册
 kind: admissions      # 用途方法（purposes/）：admissions 招生简章 / study-trip 研学任务册 / parents 家长手册 / freshman 新生手册 / annual 年度回顾
 # brand: acme         # 可选：品牌包（brands/）；没有品牌包就删掉这一行
-style: photo          # Photo / Swiss Minimal（swiss）/ Editorial / 风格派（stijl）/ 孟菲斯（geo）
+style: photo          # Photo / Swiss Minimal（swiss）/ Editorial / 风格派（stijl）
 # look: classic       # 仅 style: stijl：classic / tone / beat
 colors: nature
 # display_weight: 100 # 可选：light排印的大字；标题字体必须有真实100
-# typography: bold    # 五主题共享：bold 厚重 / light 轻盈
+# typography: bold    # 四主题共享：bold 厚重 / light 轻盈
 # fonts: {preset: sans}   # 可选：只锁你写了的字体角色；整册字体分工记进 page-plan.md
 color_mode: auto      # auto / accent 克制点缀 / mono 单色；Swiss 必须 mono
 langs: [zh, en]

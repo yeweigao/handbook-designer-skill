@@ -1,11 +1,20 @@
-"""当前维护五种视觉风格。布局共用 canon / flow，字体角色与字重策略由同一引擎实现。"""
+"""当前维护四种视觉风格。布局共用 canon / flow，字体角色与字重策略由同一引擎实现。"""
 STYLES = {
     'photo': dict(
-        zh='Photo · 纪实摄影杂志：真实摄影、衬线标题、无衬线正文、清晰元数据',
+        zh='Photo · 国家地理纪实杂志：满版出血摄影、渐融纸面过渡、传奇黄框眉标、高对比衬线标题与黑体正文',
         edge='soft', tone='dark', fonts='magazine', mode='accent',
-        colors=dict(G='#24523E', OCH='#685022', GOLD='#E4B93D', INK='#18251F', MUT='#4A574F', PAPER='#FAF8F1'),
+        colors=dict(G='#22306E', OCH='#3F7062', GOLD='#F2C14E', INK='#151B2E', MUT='#5A6275', PAPER='#F4F1EA'),
         css='',
-        ccss='.st-photo .cn-qt{font-style:normal}.st-photo .cn-h{font-weight:600}'),
+        ccss=('.st-photo .cn-qt{font-style:italic}'
+              '.st-photo .cn-h{font-weight:700}'
+              '.st-photo .cn-lab{letter-spacing:.22em;display:inline-flex;align-items:center;gap:8px}'
+              '.st-photo .cn-lab::before{content:"";display:inline-block;width:9px;height:14px;border:2.5px solid #F2C14E;flex-shrink:0}'
+              '.st-photo .cn-ed-rule-strong{height:3px;background:linear-gradient(90deg,#F2C14E 0 72px,var(--hd) 72px 100%)}'
+              '.st-photo .cn-ed-rule-accent{height:4px;width:72px;background:#F2C14E}'
+              '.st-photo .cn-ed-note{background:linear-gradient(#F2C14E,#F2C14E) top left/48px 3px no-repeat;padding-top:calc(.75 * var(--lh))}'
+              '.st-photo .cn-q{border-left:4px solid #F2C14E;padding-left:20px}'
+              '.st-photo .cn-fo{border-top:1px solid var(--line);padding-top:4px}'
+              '.st-photo .page.sf-image::after{content:"";position:absolute;left:50px;top:0;width:56px;height:6px;background:#F2C14E;z-index:5;pointer-events:none}')),
     'swiss': dict(
         zh='Swiss Minimal · 瑞士极简：中性纸面、一个强调色、无衬线、大字轻小字稳',
         edge='hard', tone='dark', fonts='swiss', mode='mono',
@@ -30,7 +39,7 @@ STYLES = {
               '.st-editorial .cn-h{font-weight:600}.st-editorial .cn-h.cn-ttl{font-weight:700}')),
 }
 
-# 保留两种有明确图形语法的风格；它们与 Swiss Minimal 分别维护。
+# 保留有明确图形语法的风格派；与 Swiss Minimal 分别维护。
 STYLES.update({'stijl': {'edge': 'hard',
            'zh': '风格派（蒙德里安）：先分空间、再放内容、最后上颜色。线有层级——主结构（标题区、图与字、页脚）一两条粗线、条目之间细线、其余靠对齐；颜色就是粗线围出的格子，按角色：红 = '
                  '主角区、蓝 = 图片区 / 窄条、黄 = 页码日期小格。封面、封底、章节页是一整幅构成，阅读页只有两三条主线和几小格颜色。三种画法 book.look：classic 粗黑线 + '
@@ -56,18 +65,4 @@ STYLES.update({'stijl': {'edge': 'hard',
                    '.sj-ix{font-size:260px;line-height:.86;margin:12px 0 '
                    '28px;letter-spacing:-.02em}.st-stijl .cn-field{z-index:0}.st-stijl '
                    '.cn-st{z-index:2}.st-stijl .cn-fo{z-index:2}',
-           'css': ''},
- 'geo': {'edge': 'hard',
-         'zh': '孟菲斯 / '
-               '几何拼块：拼块由网格算出来（四分之一圆、半圆、同心弧、条纹、三角、星……），只在页边——封面封底底边一条、章节页切口下角一团、其他页切口一列；正文区永远是纸色，字只写在纸上。适合低龄、营地、活动、文创、亲子手册',
-         'tone': 'light',
-         'fonts': 'sans',
-         'mode': 'mono',
-         'colors': {'G': '#2D63C8',
-                    'GOLD': '#F5CF3F',
-                    'OCH': '#E9572B',
-                    'INK': '#16181D',
-                    'MUT': '#4A4F58',
-                    'PAPER': '#FFFFFF'},
-         'ccss': '.geo-band{position:absolute;z-index:3;pointer-events:none}',
-         'css': ''}})
+           'css': ''}})

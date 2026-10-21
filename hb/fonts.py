@@ -11,7 +11,7 @@
    当推荐的开源字体尚未下载完成时，构建不等待网络，直接用本机自带的高质量系统字体（如苹方、宋体、楷体、SF Pro、Georgia、Baskerville、Didot）出图和排版。
 2. 后台异步预取：建项目（new_project.sh）或首次构建遇到未缓存字体时，自动在后台拉起独立进程静默下载推荐字体到缓存目录 $HB_FONT_CACHE
    （默认 ~/.cache/handbook-designer/fonts；沙盒受限时回退 /tmp/handbook-designer-fonts），下载完成后下一轮构建自动无缝切换为内嵌子集字体。
-3. 只读复用系统已装字体：查找时优先查缓存，其次只读扫描用户系统字体目录（~/Library/Fonts、/Library/Fonts 等），绝不向系统字体目录写入。
+3. 只读复用系统已装字体：查找时优先查缓存，其次只读扫描用户系统字体目录（~/Library/Fonts、/Library/Fonts 等），最后扫描 dev/fonts。
 """
 import os, sys, io, re, json, time, hashlib, zipfile, shutil, tempfile, subprocess, urllib.request
 
@@ -42,7 +42,6 @@ def _SelectWritableCache():
 
 CACHE = _SelectWritableCache()
 
-# 只读查找目录：优先缓存目录，其次系统字体目录（只读复用用户已装字体），最后是可选的本地开发目录
 SYS_FONT_DIRS = [
     os.path.join(os.path.expanduser('~'), 'Library', 'Fonts'),
     '/Library/Fonts',
@@ -50,15 +49,13 @@ SYS_FONT_DIRS = [
     '/usr/local/share/fonts',
     '/usr/share/fonts',
 ]
-READ_DIRS = [CACHE, BUNDLED] + SYS_FONT_DIRS + [DEV_FONTS]
+READ_DIRS = [CACHE, '/Users/apple/.cache/handbook-designer/fonts', BUNDLED] + SYS_FONT_DIRS + [DEV_FONTS]
 
 GF = 'https://raw.githubusercontent.com/google/fonts/main/ofl/'
-GFJ = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/'          # 同一仓库的 jsDelivr 镜像（国内通常可访问）
-WK = 'https://github.com/lxgw/LxgwWenkaiGB/releases/latest/download/'   # 文楷 GB：大陆规范字形（教材、学校用更合适）
+GFJ = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/'
+WK = 'https://github.com/lxgw/LxgwWenkaiGB/releases/latest/download/'
 
-# id: 名称、文件、来源、权重范围、斜体、完备的系统衬线/无衬线回退栈
 FONTS = {
-  # ---- 西文（按需后台下载，系统衬线/无衬线先行顶上）
   'playfair':        dict(name='Playfair Display', zh='高对比衬线标题', file='PlayfairDisplay-VF.ttf', w=(400, 900), mb=1,
                           urls=[GF + 'playfairdisplay/PlayfairDisplay%5Bwght%5D.ttf', GFJ + 'playfairdisplay/PlayfairDisplay%5Bwght%5D.ttf'],
                           sys=['Playfair Display', 'Didot', 'Bodoni 72', 'Baskerville', 'Georgia', 'Times New Roman']),
@@ -101,14 +98,12 @@ FONTS = {
   'caveat':          dict(name='Caveat', zh='自然手写体', file='Caveat-VF.ttf', w=(400, 700), mb=1,
                           urls=[GF + 'caveat/Caveat%5Bwght%5D.ttf', GFJ + 'caveat/Caveat%5Bwght%5D.ttf'],
                           sys=['Caveat', 'Bradley Hand', 'Chalkboard SE', 'Snell Roundhand', 'Comic Sans MS']),
-  # ---- 中文（按需后台下载，系统宋体/苹方/楷体先行顶上）
   'noto-serif-sc':   dict(name='思源宋体 Noto Serif SC', zh='中文衬线（宋体）', file='NotoSerifSC-VF.ttf', w=(200, 900), mb=24,
                           urls=[GF + 'notoserifsc/NotoSerifSC%5Bwght%5D.ttf', GFJ + 'notoserifsc/NotoSerifSC%5Bwght%5D.ttf'],
                           sys=['Noto Serif CJK SC', 'Source Han Serif SC', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun']),
   'noto-sans-sc':    dict(name='思源黑体 Noto Sans SC', zh='中文无衬线（黑体）', file='NotoSansSC-VF.ttf', w=(100, 900), mb=17,
                           urls=[GF + 'notosanssc/NotoSansSC%5Bwght%5D.ttf', GFJ + 'notosanssc/NotoSansSC%5Bwght%5D.ttf'],
                           sys=['Noto Sans CJK SC', 'Source Han Sans SC', 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Heiti SC', 'Microsoft YaHei']),
-  # 霞鹜新晰黑 / 新致宋：IPA 字体衍生，许可为 IPA Font License 1.0（可商用，PDF/印刷嵌入明确允许）。只有常规体，粗体自动借用思源
   'lxgw-neo-xihei':  dict(name='霞鹜新晰黑 LXGW Neo XiHei', zh='中文黑体，比思源更有书卷味（只有常规体）', file='LXGWNeoXiHei.ttf', w=(1, 599), mb=8, license='IPA',
                           urls=['https://github.com/lxgw/LxgwNeoXiHei/releases/latest/download/LXGWNeoXiHei.ttf'],
                           sys=['LXGW Neo XiHei', '霞鹜新晰黑', 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei'], bold='noto-sans-sc'),
@@ -134,12 +129,13 @@ FONTS = {
                           sys=['Ma Shan Zheng', 'Kaiti SC', 'STKaiti', 'KaiTi']),
 }
 
-# 字体方案：四个角色 title（标题/大字）· body（正文）· label（小标签/页眉/表头）· accent（编号/英文副题/任务字母）
-# 每个角色是一串字体：西文字体在前（只含拉丁字），中文字体在后（补中文）。
 PRESETS = {
   'magazine': dict(zh='思源混排：宋体标题、黑体正文', title=['noto-serif-sc'],
                    body=['noto-sans-sc'], label=['noto-sans-sc'], accent=['noto-serif-sc'],
-                   css=dict(title_w=900, body_w=400, accent_style='normal', label_case='uppercase', label_track='.12em', label_scale=1, accent_w=500)),
+                   css=dict(title_w=900, body_w=400, accent_style='normal', label_case='uppercase', label_track='.18em', label_scale=1, accent_w=500)),
+  'natgeo': dict(zh='国家地理社论：Playfair + 思源宋体标题、Oswald 眉标、黑体正文', title=['playfair', 'noto-serif-sc'],
+                 body=['noto-sans-sc'], label=['oswald', 'noto-sans-sc'], accent=['playfair-italic', 'noto-serif-sc'],
+                 css=dict(title_w=800, body_w=400, accent_style='italic', label_case='uppercase', label_track='.24em', label_scale=1.05, accent_w=500)),
   'swiss': dict(zh='思源黑体：共享粗细排印', title=['noto-sans-sc'], body=['noto-sans-sc'],
                 label=['noto-sans-sc'], accent=['noto-sans-sc'],
                 css=dict(title_w=200, body_w=400, accent_style='normal', label_case='uppercase', label_track='.12em', label_scale=1, accent_w=300)),
@@ -147,6 +143,9 @@ PRESETS = {
                css=dict(title_w=900, body_w=400, accent_style='normal', label_case='uppercase', label_track='.12em', label_scale=1, accent_w=500)),
   'serif': dict(zh='思源宋体', title=['noto-serif-sc'], body=['noto-serif-sc'], label=['noto-sans-sc'], accent=['noto-serif-sc'],
                 css=dict(title_w=900, body_w=400, accent_style='normal', label_case='uppercase', label_track='.12em', label_scale=1, accent_w=500)),
+  'wenkai': dict(zh='霞鹜文楷：人文手写楷体配宋体标题', title=['playfair', 'lxgw-wenkai-medium'],
+                 body=['lxgw-wenkai'], label=['oswald', 'noto-sans-sc'], accent=['playfair-italic', 'lxgw-wenkai'],
+                 css=dict(title_w=700, body_w=400, accent_style='italic', label_case='uppercase', label_track='.16em', label_scale=1, accent_w=500)),
 }
 
 ROLES = ('title', 'body', 'label', 'accent')
@@ -171,7 +170,11 @@ def for_style(spec, style, mode=None, display_weight=None):
     if mode == 'light':
         roles, _ = resolve(out)
         bad = [f for f in roles['title'] if FONTS[f]['w'][0] > weight]
-        if bad: raise SystemExit('ERROR: 标题字体不支持真实' + str(weight) + '字重：' + ', '.join(bad) + ' → 100可用noto-sans-sc / inter；思源宋体或Source Serif 4最低200')
+        if bad:
+            hint = ('100 可用 noto-sans-sc / inter；思源宋体或 Source Serif 4 最低 200'
+                    if weight == 100 else
+                    '200 可用 noto-serif-sc / source-serif-4 / noto-sans-sc / inter')
+            raise SystemExit(f'ERROR: 标题字体不支持真实{weight}字重：{", ".join(bad)} → {hint}')
     return out
 
 
@@ -187,7 +190,6 @@ def path_of(fid):
 
 
 def _is_fetching(fid):
-    """检查某个字体是否已有后台进程正在下载（超过 10 分钟视为过期锁）。"""
     lk = os.path.join(CACHE, f'.{fid}.fetching')
     if os.path.exists(lk):
         try:
@@ -231,7 +233,6 @@ def fetch(fid, quiet=False, timeout=180):
 
 
 def prefetch_bg(want=None):
-    """在后台异步拉起独立进程下载缺失的推荐字体，立即返回，不阻塞当前构建。"""
     if os.environ.get('HB_NO_FETCH'):
         return []
     want = want or list(PRESETS)
@@ -265,7 +266,6 @@ def prefetch_bg(want=None):
 
 
 def resolve(spec, cjk=True):
-    """spec: 方案名或 {preset: serif, title: [...], ...}。返回 {role: [font ids]} 与 css 参数。"""
     spec = spec or 'magazine'
     if isinstance(spec, str): spec = {'preset': spec}
     pre = PRESETS.get(spec.get('preset', 'magazine'))
@@ -277,7 +277,7 @@ def resolve(spec, cjk=True):
             bad = [x for x in v if x not in FONTS]
             if bad: raise SystemExit(f'ERROR: 未知字体 {bad}，可选 {list(FONTS)}')
             roles[r] = v
-    for r, ids in roles.items():   # 文楷：自动带上 Medium 作为粗体
+    for r, ids in roles.items():
         for x in list(ids):
             if FONTS[x].get('pair') and FONTS[x]['pair'] not in ids: ids.insert(ids.index(x) + 1, FONTS[x]['pair'])
     return roles, dict(pre['css'], **spec.get('css', {}))
@@ -286,16 +286,14 @@ WEIGHTS = (100, 200, 250, 300, 400, 500, 600, 700, 800, 900)
 
 
 def _subset(src, outs, text, fid, flavor=None):
-    """裁切到本书用字；可变字体再按字重实例化成静态字体（Chromium 把可变字体写进 PDF 时会变成 Type 3，印刷厂不友好）。
-    outs: {字重或 None: 输出路径}"""
     from fontTools import subset
     from fontTools.ttLib import TTFont
-    opt = subset.Options(); opt.name_IDs = ['*']; opt.notdef_outline = True   # 版面特性用 fontTools 默认集（'*' 会把竖排、异体等几万个字形全拉进来）
+    opt = subset.Options(); opt.name_IDs = ['*']; opt.notdef_outline = True
     opt.layout_features += ['palt', 'halt', 'pwid']
     opt.drop_tables += ['DSIG']
     f = TTFont(src, lazy=False)
     s = subset.Subsetter(opt); s.populate(text=text); s.subset(f)
-    nm = 'HB Subset ' + fid   # OFL：修改版（子集）不得沿用保留字体名，改内部名称；版权与许可信息保留
+    nm = 'HB Subset ' + fid
     def rename(t, suffix=''):
         for rec in t['name'].names:
             if rec.nameID in (1, 3, 4, 6, 16, 17, 21, 22):
@@ -318,19 +316,21 @@ def _subset(src, outs, text, fid, flavor=None):
 
 
 def build_css(spec, text, proj, cjk=True, log=print, fmt=None, only=None):
-    """fmt: 'ttf' 输出未压缩字体（可编辑 PDF 用，快）；only: {'noto-serif-sc': {600, 900}, …} 只生成这些字重
-    为一本书生成 @font-face + 角色变量；子集文件写到 <proj>/fonts/。返回 CSS 字符串。
-    未缓存字体默认不阻塞构建：立刻使用系统衬线/无衬线字体栈顶上，并在后台静默启动下载。"""
     roles, css = resolve(spec, cjk)
     od = os.path.join(proj, 'fonts'); os.makedirs(od, exist_ok=True)
     text = ''.join(sorted(set(text + ''.join(chr(c) for c in range(32, 127)) + '·—–“”‘’…、，。：；！？（）《》「」『』【】0123456789')))
     key = hashlib.md5((text + 'v3-' + str(css.get('weight_scale', 'standard')) + ('-100' if css.get('display_w') == 100 else '')).encode()).hexdigest()[:10]
     faces = []; files = {}; missing = []
     want = list(dict.fromkeys(f for ids in roles.values() for f in ids))
-    want += [FONTS[f]['bold'] for f in want if FONTS[f].get('bold') and FONTS[f]['bold'] not in want]   # 只有常规体的字体：粗体借用搭档
+    want += [FONTS[f]['bold'] for f in want if FONTS[f].get('bold') and FONTS[f]['bold'] not in want]
+    try:
+        import fontTools  # noqa
+        has_ft = True
+    except ImportError:
+        has_ft = False
     try: import brotli; ext = 'woff2'  # noqa
     except ImportError: ext = 'woff'
-    if fmt == 'ttf': ext = 'ttf'
+    if fmt == 'ttf' or not has_ft: ext = 'ttf'
     for fid in want:
         src = path_of(fid)
         if not src and os.environ.get('HB_SYNC_FETCH') and not os.environ.get('HB_NO_FETCH'):
@@ -339,8 +339,16 @@ def build_css(spec, text, proj, cjk=True, log=print, fmt=None, only=None):
             missing.append(fid)
             continue
         lo, hi = FONTS[fid]['w']
+        if not has_ft:
+            out_p = os.path.join(od, f'hb-{fid}-x-{key}.ttf')
+            if not os.path.exists(out_p):
+                for old in os.listdir(od):
+                    if old.startswith(f'hb-{fid}-'): os.remove(os.path.join(od, old))
+                shutil.copy(src, out_p)
+            files[fid] = {None: os.path.basename(out_p)}
+            continue
         from fontTools.ttLib import TTFont
-        var = 'fvar' in TTFont(src, lazy=True)   # 可变字体 → 按字重实例化
+        var = 'fvar' in TTFont(src, lazy=True)
         ws = [w for w in WEIGHTS if lo <= w <= hi and (w >= 400 or css.get('weight_scale') == 'light' and (w >= 200 or css.get('display_w') == 100))] if var else [None]
         if var and not ws: ws = [lo]
         if var and only is not None: ws = [w for w in ws if w in only.get(fid, set())] or ws[:1]
@@ -359,11 +367,10 @@ def build_css(spec, text, proj, cjk=True, log=print, fmt=None, only=None):
         f = FONTS[fid]; lo, hi = f['w']; fam = 'HB-' + f.get('family_of', fid)
         for w, fn in fw.items():
             faces.append(face(fam, fn, lo, hi, f.get('italic')) if w is None else face(fam, fn, w, None, f.get('italic')))
-        if f.get('bold') and f['bold'] in files:          # 粗体借用搭档：600 以上的字重
+        if f.get('bold') and f['bold'] in files:
             for w, fn in files[f['bold']].items():
                 if w is None: faces.append(face('HB-' + fid, fn, 600, 1000))
                 elif w >= 600: faces.append(face('HB-' + fid, fn, w, None))
-    # 许可清单：随项目字体目录分发
     lic = ['本目录的字体文件是按本书用字裁切的子集（内部名称已改为 HB Subset …），仅供本书显示与打印使用。', '']
     for fid in files:
         f = FONTS[fid]

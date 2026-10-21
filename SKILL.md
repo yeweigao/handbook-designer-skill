@@ -43,7 +43,7 @@ description: 将 Word、PDF、PPT、Markdown 或文字材料做成多页手册�
 
 **先让编辑顾问审输入，成品再对照建议复核。** 多页材料先按 `references/editorial-advisor.md` 实际调用独立顾问（不可用时记录独立编辑轮），产出逐页文案建议、信息分类、页面去重与完整系列矩阵；主执行者逐项处理后才落版。原稿分隔符是待理解的格式线索，不能机械搬进正文；只修用户点名页不算完成系列问题。
 
-**五主题、两排印、两基础字体。** 当前维护 Photo（photo）、Swiss Minimal（swiss）、Editorial（editorial）、风格派（stijl）、孟菲斯（geo）。`book.typography: bold / light` 是五主题共享的字重阶梯；默认全部使用思源黑体/宋体，Inter等只作按需扩展。Swiss 去掉撞色，Editorial 采用暖纸、宋体阅读、黑体功能信息与克制图像。可选真实100大标题的字体边界、用色与字重规则见 `references/style.md`。摄影铺满、出血、多图与跨页的偏好由 `references/composition.md` 统一管理，五主题共享。
+**四主题、两排印、两基础字体。** 当前维护 Photo（photo）、Swiss Minimal（swiss）、Editorial（editorial）、风格派（stijl）。`book.typography: bold / light` 是四主题共享的字重阶梯；默认全部使用思源黑体/宋体，Inter等只作按需扩展。Swiss 去掉撞色，Editorial 采用暖纸、宋体阅读、黑体功能信息与克制图像。可选真实100大标题的字体边界、用色与字重规则见 `references/style.md`。摄影铺满、出血、多图与跨页的偏好由 `references/composition.md` 统一管理，四主题共享。
 
 **可选扩展：品牌图形延展。** 品牌识别重要且有合适源标志时，可从其结构发展暗纹、角部构图、章节锚点或跨页超级图形，增强全册识别与内容呼应。按 `references/style.md` §7.1 先写应用方案，再用既有brand_graphic矢量层落版；启用范围留在本项目，不默认每页贴logo。
 

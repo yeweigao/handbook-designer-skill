@@ -48,7 +48,7 @@ await p.pdf({path:process.argv[2]+'/proof.pdf',preferCSSPageSize:true,printBackg
         def measure():
             subprocess.run(['node', str(probe), str(p), str(HB)], check=True)
             return json.loads((p / 'probe.json').read_text(encoding='utf-8'))
-        for style in ('photo', 'swiss', 'editorial', 'stijl', 'geo'):
+        for style in ('photo', 'swiss', 'editorial', 'stijl'):
             spec['book']['style'] = style
             build(p, spec); got = measure(); assert not got['qa'], (style, got['qa'])
             assert [len(pg['images']) for pg in got['pages']] == [1, 6, 7]
@@ -106,13 +106,13 @@ await p.pdf({path:process.argv[2]+'/proof.pdf',preferCSSPageSize:true,printBackg
             bad['pages'][0]['items']=copy.deepcopy(items);bad['pages'][0]['items'][0]['img']='art'
             assert build(p,bad,expect=False).returncode != 0
         # Printed edge pixels also expose theme ornament covering a geometrically correct image.
-        for style in ('swiss','stijl','geo'):
+        for style in ('swiss','stijl'):
             spec['book']['style']=style;build(p,spec);measure()
             subprocess.run(['pdftoppm','-f','1','-l','1','-scale-to','1123','-png',str(p/'proof.pdf'),str(p/'print')],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
             im=Image.open(p/'print-1.png').convert('RGB')
             for xy in [(2,2),(im.width-3,2),(2,200),(im.width-3,200)]:
                 r,g,b=im.getpixel(xy);assert r>150 and g<80 and b<80,(style,'Photo covered by frame/ornament',xy,(r,g,b))
-    print('BLEED: PASS — five themes, full trim, six-photo rhythm, captions, actual PDF, real 100 and unsupported-font rejection')
+    print('BLEED: PASS — four themes, full trim, six-photo rhythm, captions, actual PDF, real 100 and unsupported-font rejection')
 
 
 if __name__=='__main__':main()

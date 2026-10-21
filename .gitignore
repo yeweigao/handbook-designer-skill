@@ -5,3 +5,4 @@ node_modules/
 /.workbuddy
 /brands/*
 /dev/proofs/
+/.venv

@@ -15,8 +15,8 @@ book:
   folio: 页脚左侧文字         # 默认 = title
   photos: photos             # 图片目录（相对项目目录）
   purpose: workbook          # workbook 任务册（有书写区）/ guide 指南（以读为主）/ brochure 宣传册（无书写区）
-  style: photo               # 视觉风格：photo（默认）/ swiss / editorial / stijl / geo，见 style.md
-  typography: bold          # bold 厚重 / light 轻盈，五种主题共享
+  style: photo               # 视觉风格：photo（默认）/ swiss / editorial / stijl，见 style.md
+  typography: bold          # bold 厚重 / light 轻盈，四种主题共享
   fonts: magazine            # 字体方案：magazine / swiss，或按角色覆盖，或按角色指定，见 style.md
   lang: zh                   # zh / ja / ko = 中日韩排版；en / fr / … = 西文排版（收紧字距、左对齐、正文用西文字体）
   scale: 2                   # 图片烘焙倍率：2 ≈ 190dpi（屏幕/打样），3 ≈ 290dpi（交印刷厂，构建更慢）
@@ -27,7 +27,7 @@ pages:
 `paper: 0.9`：photo 风格里照片淡进的半透明纸面有多不透明（0.86 通透 … 0.94 更易读）；`edge: hard` 改成不透明纸面 + 硬边。其他风格的纸面一律不透明、和画面硬边相接。
 
 ## 1. 版式 layout（每页一个；跨页类占 2 页，必须从**偶数页**开始）
-除 PAPER 外，各版式都有一个“图片位”：photo 风格必须写 `image`（或 `image: placeholder` 占位）；无图风格不写 `image` 就在这一格里画风格插画（瑞士、孟菲斯、风格派是一块安静的色块）。
+除 PAPER 外，各版式都有一个“图片位”：photo 风格必须写 `image`（或 `image: placeholder` 占位）；无图风格不写 `image` 就在这一格里画风格插画（瑞士、风格派是一块安静的色块）。
 
 | layout | 页数 | 必填 | 可选参数 | 文字区 | 适合 |
 |---|---|---|---|---|---|

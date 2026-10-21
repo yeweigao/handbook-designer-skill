@@ -65,7 +65,7 @@ fs.writeFileSync(process.argv[2]+'/probe.json',JSON.stringify({got,bad,fixed}));
             outlines.append(repr(pen.value))
         assert len(set(outlines)) == 4, 'Low weights were mapped to one regular outline'
         # Theme and type scale are independent: every maintained theme accepts both profiles.
-        for style in ('photo', 'swiss', 'editorial', 'stijl', 'geo'):
+        for style in ('photo', 'swiss', 'editorial', 'stijl'):
             for mode in ('bold', 'light'):
                 variant = copy.deepcopy(spec); variant['book'].update(style=style, typography=mode)
                 build(p, variant)
@@ -74,13 +74,13 @@ fs.writeFileSync(process.argv[2]+'/probe.json',JSON.stringify({got,bad,fixed}));
                 assert not current['qa'] and current['liveqa'] == current['qa'] and current['loaded'], (style, mode, current['qa'], current['liveqa'])
                 assert current['cases'] == ([900, 700, 700, 400, 500, 600] if mode == 'bold' else [c[2] for c in cases])
                 assert all(any(f.name.startswith('hb-'+fid+'-') for fid in ('noto-sans-sc','noto-serif-sc')) for f in (p / 'fonts').glob('hb-*')), 'Optional Inter loaded in the default font setup'
-        for style in ('notebook', 'inkwash', 'papercut', 'riso', 'aurora', 'nebula'):
+        for style in ('geo', 'notebook', 'inkwash', 'papercut', 'riso', 'aurora', 'nebula'):
             bad = copy.deepcopy(spec); bad['book']['style'] = style
             assert build(p, bad, expect=False).returncode != 0, 'Retired style remained selectable'
         for setting in (dict(color_mode='clash'), dict(color_mode='accent'), dict(gradient='brand')):
             bad = copy.deepcopy(spec); bad['book'].update(setting)
             assert build(p, bad, expect=False).returncode != 0, 'Swiss accepted multiple-color or gradient mode'
-    print('SHARED TYPE: PASS — five themes × two profiles, Source Han defaults, real low-weight outlines, fit-aware hierarchy, readable body, negative gate, retired themes rejected')
+    print('SHARED TYPE: PASS — four themes × two profiles, Source Han defaults, real low-weight outlines, fit-aware hierarchy, readable body, negative gate, retired themes rejected')
 
 
 if __name__ == '__main__':

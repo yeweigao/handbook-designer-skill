@@ -3,6 +3,7 @@
 import sys
 
 PALETTES = {
+    'natgeo': dict(zh='国家地理纪实', use='Photo，深海蓝墨、传奇黄框与暖白画布', colors=dict(G='#22306E', OCH='#3F7062', GOLD='#F2C14E', INK='#151B2E', MUT='#5A6275', PAPER='#F4F1EA')),
     'nature': dict(zh='自然纪实', use='Photo，自然与户外', colors=dict(G='#24523E', OCH='#685022', GOLD='#E4B93D', INK='#18251F', MUT='#4A574F', PAPER='#FAF8F1')),
     'campus': dict(zh='学院墨蓝', use='Photo / Editorial，校园与指南', colors=dict(G='#253C4C', OCH='#665644', GOLD='#E4C68B', INK='#202B32', MUT='#4B575E', PAPER='#FBFAF7')),
     'ink': dict(zh='纸与墨', use='Editorial，连续阅读', colors=dict(G='#303A39', OCH='#665C50', GOLD='#DBD4C5', INK='#202625', MUT='#515957', PAPER='#F8F7F2')),

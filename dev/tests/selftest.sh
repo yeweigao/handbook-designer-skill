@@ -68,7 +68,7 @@ PY
 bash "$HB/run.sh" "$T/brand" > "$T/brand.log" 2>&1 && ok "品牌包 acme（中英）" || bad "品牌包 acme（日志 $T/brand.log）"
 python3 "$HB/subset.py" "$R" "$T/swiss" 1,5,9,10 --src "$R/templates/book.layouts.yaml" --lang zh style=swiss >/dev/null
 bash "$HB/run.sh" "$T/swiss" > "$T/swiss.log" 2>&1 && ok "瑞士单色档" || bad "瑞士单色档（日志 $T/swiss.log）"
-for st in photo swiss editorial stijl geo; do python3 "$HB/subset.py" "$R" "$T/$st" 1,4,5,6,9,10 --src "$R/templates/book.layouts.yaml" --lang en style=$st >/dev/null
+for st in photo swiss editorial stijl; do python3 "$HB/subset.py" "$R" "$T/$st" 1,4,5,6,9,10 --src "$R/templates/book.layouts.yaml" --lang en style=$st >/dev/null
   bash "$HB/run.sh" "$T/$st" > "$T/$st.log" 2>&1 && ok "风格 ${st}" || bad "风格 ${st}（日志 $T/$st.log）"; done
 python3 "$HB/subset.py" "$R" "$T/stijl_beat" 1,4,5,6,9,16 --src "$R/templates/book.layouts.yaml" --lang zh style=stijl look=beat >/dev/null
 bash "$HB/run.sh" "$T/stijl_beat" > "$T/stijl_beat.log" 2>&1 && ok "风格派节奏画法" || bad "风格派节奏画法（日志 $T/stijl_beat.log）"
@@ -81,7 +81,7 @@ python3 "$TESTS/test_adapt.py" && ok "版面适配声明" || bad "品牌图形�
 python3 "$TESTS/test_editorial_layout.py" && ok "编辑网格与实际 PDF" || bad "编辑网格回归"
 python3 "$TESTS/test_editorial_content.py" && ok "旁注翻译、编辑与原文核对" || bad "旁注内容链路回归"
 python3 "$TESTS/test_image_bleed.py" && ok "共享摄影出血、多图与100字重" || bad "摄影共享结构回归"
-python3 "$TESTS/test_swiss_type.py" && ok "共享字重与五风格约束" || bad "精简风格回归"
+python3 "$TESTS/test_swiss_type.py" && ok "共享字重与四风格约束" || bad "精简风格回归"
 python3 "$TESTS/test_reading_layout.py" && ok "双语续读与图片开场" || bad "连续阅读回归"
 if [ $FAIL = 0 ]; then
   echo "SELFTEST: PASS"

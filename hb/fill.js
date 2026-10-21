@@ -5,7 +5,11 @@ const CN={T:88,L:24,B:1000,W:794,H:1123,C:84,G:28,N:38,I:50,O:100};(()=>{const g
 function cnPg(e){return e.closest('.page')}
 // 字重跟随实际字级，标题收缩、换小画布与在线改字均走同一条规则。
 function cnTypeWeight(size){const base=parseFloat(getComputedStyle(document.body).getPropertyValue('--bs'))||16;
- const r=size/base;if(document.body.dataset.typography==='light')return r>=4?(parseInt(getComputedStyle(document.body).getPropertyValue('--display-w'))||200):r>=2.75?250:r>=2?300:r>=1?400:r>=.875?500:600;return r>=4?900:r>=2?700:r>=1.25?600:r>=1?400:r>=.875?500:600}
+ const r=size/base,ov=window.__hbWeightMode;
+ if(ov==='semi')return r>=2.4?700:r>=1.6?600:r>=1.15?500:r>=1?400:600;
+ if(ov==='thin')return r>=2.4?100:r>=1.75?200:r>=1.2?300:r>=1?400:r>=.875?500:600;
+ if(ov==='light'||document.body.dataset.typography==='light')return r>=2.4?(parseInt(getComputedStyle(document.body).getPropertyValue('--display-w'))||200):r>=1.75?250:r>=1.2?300:r>=1?400:r>=.875?500:600;
+ return r>=2.4?900:r>=1.6?700:r>=1.15?600:r>=1?400:r>=.875?500:600}
 function cnTypeText(pg){const found=new Set(),w=document.createTreeWalker(pg,NodeFilter.SHOW_TEXT);let t;
  while(t=w.nextNode()){const e=t.parentElement;if(t.textContent.trim()&&!e.closest('svg,script,style,.cn-brand-graphic')&&getComputedStyle(e).display!='none')found.add(e)}return [...found]}
 function cnWeight(e){const base=cnTypeWeight(parseFloat(getComputedStyle(e).fontSize));e.style.fontWeight=document.body.dataset.typography==='bold'&&e.closest('b,strong')?Math.min(900,base+200):base}
@@ -251,7 +255,7 @@ function cnBrandGraphics(){document.querySelectorAll('.cn-brand-graphic').forEac
 // 主题装饰留在阅读纸面，不能把已经到裁切边的摄影重新盖成带边框的图片。
 function cnPhotoDecor(){document.querySelectorAll('.page.cn').forEach(pg=>{
  const P=pg.getBoundingClientRect(),photos=[...pg.querySelectorAll('.cn-pic,.cn-figi,.cn-ibox')].filter(e=>!e.closest('.deco')).map(e=>e.getBoundingClientRect());
- pg.querySelectorAll('.geo-band,.sj-line,.sj-blk,.sj-rail,.sj-tick').forEach(e=>{
+ pg.querySelectorAll('.sj-line,.sj-blk,.sj-rail,.sj-tick').forEach(e=>{
   const D=e.getBoundingClientRect(),cuts=[];let path=`M0 0H${D.width}V${D.height}H0Z`;
   photos.forEach(R=>{const l=Math.max(D.left,R.left,P.left)-D.left,t=Math.max(D.top,R.top,P.top)-D.top,r=Math.min(D.right,R.right,P.right)-D.left,b=Math.min(D.bottom,R.bottom,P.bottom)-D.top;
    if(r>l&&b>t)cuts.push({l,t,r,b})});
@@ -263,12 +267,231 @@ function cnPhotoDecor(){document.querySelectorAll('.page.cn').forEach(pg=>{
   e.style.clipPath=cuts.length?`path(evenodd, "${path}")`:'';
  })})}
 
-function fill(){cnLinks();canon();sjStructure();fit();split();golden();fz();grow();document.querySelectorAll('.fill').forEach(e=>{e.innerHTML='';const n=Math.max(0,Math.floor(e.clientHeight/CN.L));e.innerHTML='<div class="cn-ln"></div>'.repeat(n)});cnTypography();cnBrandGraphics();cnPhotoDecor();cnQA();document.body.dataset.ready=1}
+function cnFitNums(){
+ document.querySelectorAll('.page.cn .cn-stats .cn-num').forEach(e=>{
+  const cell=e.parentElement;if(!cell)return;
+  if(!e.dataset.origFs)e.dataset.origFs=parseFloat(e.style.fontSize)||38;
+  const maxW=Math.max(48,cell.clientWidth-8);
+  let s=parseFloat(e.dataset.origFs);e.style.fontSize=s+'px';e.style.lineHeight=(s+6)+'px';
+  while(e.scrollWidth>maxW&&s>16){s-=2;e.style.fontSize=s+'px';e.style.lineHeight=(s+6)+'px'}
+ });
+}
+function fill(){cnLinks();canon();cnFitNums();sjStructure();fit();split();golden();fz();grow();document.querySelectorAll('.fill').forEach(e=>{e.innerHTML='';const n=Math.max(0,Math.floor(e.clientHeight/CN.L));e.innerHTML='<div class="cn-ln"></div>'.repeat(n)});cnTypography();cnBrandGraphics();cnPhotoDecor();cnQA();document.body.dataset.ready=1;hbNotifyParent()}
 // 网格透视：book.html#grid 打开时，内容版式页叠上 6 栏网格（红色栏、蓝色行线、版心框）
 function cnGrid(){if(location.hash!='#grid')return;document.querySelectorAll('.page').forEach((pg,i)=>{if(!pg.classList.contains('cn'))return;const r=(i+1)%2==1,L=r?CN.I:CN.O;let h='';const tw=6*CN.C+5*CN.G;
  for(let c=0;c<6;c++)h+=`<div style="position:absolute;left:${L+c*(CN.C+CN.G)}px;top:0;width:${CN.C}px;height:${CN.H}px;background:rgba(226,60,90,.10)"></div>`;
  for(let l=0;l<=CN.N+1;l++)h+=`<div style="position:absolute;left:0;top:${CN.T+l*CN.L}px;width:${CN.W}px;border-top:.5px solid rgba(40,150,220,.4)"></div>`;
  h+=`<div style="position:absolute;left:${L}px;top:${CN.T}px;width:${tw}px;height:${CN.B-CN.T}px;outline:1.2px solid rgba(226,60,90,.9)"></div>`;
  const g=document.createElement('div');g.className='deco';g.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:99';g.innerHTML=h;pg.appendChild(g)})}
+
+// ================= Live Studio Engine (支持 file:// 跨源 postMessage 实时切换字体、字重、字号、配色、缩放与双页跨页视图) =================
+const HB_STUDIO_FONTS={
+ natgeo:{title:"'HB-playfair','Playfair Display','HB-noto-serif-sc','Noto Serif CJK SC','Source Han Serif SC','Songti SC',serif",body:"'HB-noto-sans-sc','PingFang SC','Hiragino Sans GB',-apple-system,sans-serif",label:"'HB-oswald','Oswald','DIN Condensed','Avenir Next Condensed','PingFang SC',sans-serif",accent:"'HB-playfair-italic','Playfair Display','HB-noto-serif-sc','Songti SC',serif",track:"0.24em"},
+ editorial:{title:"'Source Serif 4','Baskerville','HB-noto-serif-sc','Noto Serif CJK SC','Source Han Serif SC','Songti SC',serif",body:"'Source Serif 4','Georgia','HB-noto-serif-sc','Songti SC',serif",label:"'Inter',-apple-system,'SF Pro Text','PingFang SC',sans-serif",accent:"'Source Serif 4','Baskerville','HB-noto-serif-sc','Songti SC',serif",track:"0.14em"},
+ swiss:{title:"'Inter',-apple-system,'SF Pro Display','Helvetica Neue','HB-noto-sans-sc','PingFang SC',sans-serif",body:"'Inter',-apple-system,'SF Pro Text','Helvetica Neue','HB-noto-sans-sc','PingFang SC',sans-serif",label:"'Inter','Helvetica Neue','PingFang SC',sans-serif",accent:"'Inter','Helvetica Neue','PingFang SC',sans-serif",track:"0.12em"},
+ wenkai:{title:"'HB-playfair','Playfair Display','LXGW WenKai GB','Kaiti SC','STKaiti',serif",body:"'LXGW WenKai GB','Kaiti SC','STKaiti',serif",label:"'HB-oswald','Oswald','PingFang SC',sans-serif",accent:"'Playfair Display','Kaiti SC','STKaiti',serif",track:"0.16em"},
+ poster:{title:"'HB-oswald','Oswald','Smiley Sans','Avenir Next Condensed','PingFang SC',sans-serif",body:"'HB-noto-sans-sc','PingFang SC',-apple-system,sans-serif",label:"'HB-oswald','Oswald','DIN Condensed','PingFang SC',sans-serif",accent:"'HB-oswald','Oswald','PingFang SC',sans-serif",track:"0.22em"}
+};
+const HB_STUDIO_PALETTES={
+ natgeo:{paper:'#F4F1EA',ink:'#151B2E',hd:'#22306E',acc:'#3F7062',num:'#22306E',lab:'#22306E',mut:'#5A6275',rule:'#151B2E',line:'rgba(21,27,46,0.22)',gold:'#F2C14E',portal:true},
+ nature:{paper:'#FAF8F1',ink:'#18251F',hd:'#24523E',acc:'#685022',num:'#24523E',lab:'#24523E',mut:'#4A574F',rule:'#18251F',line:'rgba(24,37,31,0.22)',gold:'#E4B93D',portal:true},
+ campus:{paper:'#FBFAF7',ink:'#202B32',hd:'#1F3A5F',acc:'#665644',num:'#1F3A5F',lab:'#1F3A5F',mut:'#4B575E',rule:'#202B32',line:'rgba(32,43,50,0.22)',gold:'#C89B3C',portal:false},
+ ink:{paper:'#FDFCF3',ink:'#292720',hd:'#292720',acc:'#625B4D',num:'#292720',lab:'#292720',mut:'#514E46',rule:'#292720',line:'rgba(41,39,32,0.22)',gold:'#D8D0BA',portal:false},
+ swiss:{paper:'#FAFAF8',ink:'#151515',hd:'#151515',acc:'#A32F25',num:'#A32F25',lab:'#A32F25',mut:'#50504D',rule:'#151515',line:'rgba(21,21,21,0.22)',gold:'#A32F25',portal:false}
+};
+let HB_STUDIO_STATE={font:'default',weight:null,scale:1,palette:null,gridXRay:false,spreadView:false,zoom:'100'};
+function hbNotifyParent(){
+ if(window.parent===window)return;
+ const pages=[...document.querySelectorAll('.page')];
+ const pills=pages.map((pg,i)=>{
+  const k=pg.querySelector('.cn-lab')?.textContent?.trim()?.split('·')[0]?.trim()||'';
+  return {n:i+1,label:`P${String(i+1).padStart(2,'0')}${k?' · '+k.slice(0,14):''}`};
+ });
+ const qa=(typeof cnCheck==='function'?cnCheck():[]).filter(q=>q[1]==='cn-over'||q[1]==='cn-collide');
+ window.parent.postMessage({type:'hb-studio-status',pageCount:pages.length,overCount:qa.length,pills},'*');
+}
+function hbApplyStudioState(st){
+ HB_STUDIO_STATE=Object.assign(HB_STUDIO_STATE,st||{});
+ let el=document.getElementById('hb-live-studio-css');
+ if(!el){el=document.createElement('style');el.id='hb-live-studio-css';document.head.appendChild(el)}
+ const S=HB_STUDIO_STATE;
+ const vw=window.innerWidth||1200;
+ let z=1;
+ if(S.zoom==='fit'){
+  const targetW=S.spreadView?(CN.W*2+80):(CN.W+80);
+  z=Math.min(1.08,Math.max(0.45,(vw-48)/targetW));
+ }else{
+  z=(parseFloat(S.zoom)||100)/100;
+ }
+ let css=`
+  html { background: #141821 !important; }
+  body {
+   background: #141821 !important;
+   margin: 0 auto !important;
+   padding: 28px 24px 64px !important;
+   zoom: ${z.toFixed(3)};
+   display: ${S.spreadView?'grid':'flex'} !important;
+   ${S.spreadView
+     ? `grid-template-columns: ${CN.W}px ${CN.W}px; justify-content: center; column-gap: 0px; row-gap: 36px;`
+     : `flex-direction: column; align-items: center; gap: 28px;`}
+  }
+  .page {
+   margin: 0 !important;
+   flex-shrink: 0;
+   box-shadow: 0 18px 46px rgba(0,0,0,0.46) !important;
+   transition: box-shadow 0.2s ease;
+  }
+ `;
+ if(S.spreadView){
+  // 封面（第1页）与封底（偶数末页）单独成行居中显示，内页成对跨页并带书脊中缝阴影
+  css+=`
+   .page:first-of-type {
+    grid-column: 1 / -1 !important;
+    justify-self: center !important;
+    box-shadow: 0 22px 54px rgba(0,0,0,0.55) !important;
+   }
+   .page:last-of-type:nth-of-type(even) {
+    grid-column: 1 / -1 !important;
+    justify-self: center !important;
+    box-shadow: 0 22px 54px rgba(0,0,0,0.55) !important;
+   }
+   .page:nth-of-type(even):not(:last-of-type) {
+    justify-self: end !important;
+    box-shadow: -14px 18px 42px rgba(0,0,0,0.45), inset -16px 0 24px -14px rgba(0,0,0,0.32) !important;
+    border-right: 1px solid rgba(0,0,0,0.18);
+   }
+   .page:nth-of-type(odd):not(:first-of-type) {
+    justify-self: start !important;
+    box-shadow: 14px 18px 42px rgba(0,0,0,0.45), inset 16px 0 24px -14px rgba(0,0,0,0.32) !important;
+   }
+  `;
+ }
+ if(S.font&&S.font!=='default'&&HB_STUDIO_FONTS[S.font]){
+  const f=HB_STUDIO_FONTS[S.font];
+  document.documentElement.style.setProperty('--f-title',f.title);
+  document.documentElement.style.setProperty('--f-body',f.body);
+  document.documentElement.style.setProperty('--f-label',f.label);
+  document.documentElement.style.setProperty('--f-accent',f.accent);
+  document.documentElement.style.setProperty('--label-track',f.track);
+  css+=`
+   :root, body, .page, .cn-st {
+    --f-title: ${f.title} !important;
+    --f-body: ${f.body} !important;
+    --f-label: ${f.label} !important;
+    --f-accent: ${f.accent} !important;
+    --label-track: ${f.track} !important;
+   }
+   .page .cn-disp, .page .cn-h, .page .cn-num { font-family: ${f.title} !important; }
+   .page .cn-tx, .page .cn-tx p, .page .cn-li li { font-family: ${f.body} !important; }
+   .page .cn-lab, .page .cn-cap, .page .cn-fo, .page .cn-th { font-family: ${f.label} !important; }
+   .page .cn-sub, .page .cn-qt { font-family: ${f.accent} !important; }
+  `;
+ }else if(S.font==='default'){
+  ['--f-title','--f-body','--f-label','--f-accent','--label-track'].forEach(k=>document.documentElement.style.removeProperty(k));
+ }
+ const wMap={
+  bold:{disp:900,h:700,sub:600,body:400,lab:600,mode:'bold'},
+  semi:{disp:700,h:600,sub:500,body:400,lab:600,mode:'bold'},
+  light:{disp:200,h:250,sub:300,body:400,lab:500,mode:'light'},
+  thin:{disp:100,h:200,sub:300,body:400,lab:500,mode:'light'}
+ }[S.weight];
+ window.__hbWeightMode=S.weight||null;
+ if(wMap){
+  document.body.dataset.typography=wMap.mode;
+  document.body.style.setProperty('--display-w',String(wMap.disp));
+  document.body.style.setProperty('--title-w',String(wMap.disp));
+  // 当处于 Light/Thin 阶梯且未选择特定字体时，中文标题自动纳入 PingFang SC 以呈现真实的 100/200/300 极细与轻盈字重梯度
+  if((S.weight==='light'||S.weight==='thin')&&(!S.font||S.font==='default')){
+   css+=`:root, body, .page, .cn-st { --f-title: 'HB-playfair','Playfair Display','HB-noto-serif-sc','PingFang SC','Heiti SC',sans-serif !important; }`;
+  }
+ }
+ if(S.palette&&HB_STUDIO_PALETTES[S.palette]){
+  const p=HB_STUDIO_PALETTES[S.palette];
+  document.querySelectorAll('.page.paper, .page.sf-paper').forEach(pg=>{
+   pg.style.background=p.paper;
+   pg.querySelectorAll('.cn-st, .cn-v').forEach(stEl=>{
+    stEl.style.setProperty('--fg',p.ink);
+    stEl.style.setProperty('--hd',p.hd);
+    stEl.style.setProperty('--acc',p.acc);
+    stEl.style.setProperty('--num',p.num);
+    stEl.style.setProperty('--lab',p.lab);
+    stEl.style.setProperty('--mut',p.mut);
+    stEl.style.setProperty('--rule',p.rule);
+    stEl.style.setProperty('--line',p.line);
+   });
+   pg.querySelectorAll('.cn-wash-down, .cn-wash-side').forEach(wEl=>{
+    wEl.style.setProperty('--page-bg',p.paper);
+   });
+  });
+  css+=`
+   .page.paper .cn-lab::before, .page.sf-paper .cn-lab::before {
+    ${p.portal?`content:"";display:inline-block;width:9px;height:14px;border:2.5px solid ${p.gold};margin-right:6px;`:`display:none !important;`}
+   }
+  `;
+ }
+ if(S.gridXRay){
+  css+=`
+   .page::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 999 !important;
+    pointer-events: none !important;
+    background-image:
+     repeating-linear-gradient(180deg, rgba(242,193,78,0.22) 0 1px, transparent 1px 28px),
+     linear-gradient(90deg,
+      transparent 0 50px,
+      rgba(56,189,248,0.14) 50px 130px, transparent 130px 162px,
+      rgba(56,189,248,0.14) 162px 242px, transparent 242px 274px,
+      rgba(56,189,248,0.14) 274px 354px, transparent 354px 386px,
+      rgba(56,189,248,0.14) 386px 466px, transparent 466px 498px,
+      rgba(56,189,248,0.14) 498px 578px, transparent 578px 610px,
+      rgba(56,189,248,0.14) 610px 690px, transparent 690px 100%) !important;
+    background-position: 0 88px, 0 0 !important;
+   }
+  `;
+ }
+ el.textContent=css;
+ // 重新拟合并测量标题与大数字
+ document.querySelectorAll('.page.cn [data-fit]').forEach(e=>{
+  const baseFit=+(e.dataset.fit0||e.dataset.fit||44);
+  e.dataset.fit=Math.round(baseFit*(parseFloat(S.scale)||1));
+  cnFit(e);
+ });
+ // 让 cnTypography() 按每个元素的实际像素字号（fontSize）动态赋予阶梯字重：大字>=38px、中字26-37px、导语18-25px、正文16px、眉标<=14px 各司其职
+ cnTypography();
+ cnFitNums();
+ cnLayout();
+ cnQA();
+ hbNotifyParent();
+}
+window.addEventListener('message',e=>{
+ const d=e.data;if(!d||typeof d!=='object')return;
+ if(d.type==='hb-studio')hbApplyStudioState(d.state);
+ else if(d.type==='hb-scroll-page'){
+  const pg=document.querySelectorAll('.page')[d.index||0];
+  if(pg)pg.scrollIntoView({behavior:'smooth',block:'start'});
+ }
+});
+window.addEventListener('resize',()=>{if(HB_STUDIO_STATE.zoom==='fit')hbApplyStudioState({})});
 // 排印会在测量时切换字重，先载入本书注册的真实静态字重，避免回退字体测量后再跳字。
-document.fonts.ready.then(()=>Promise.all([...document.fonts].map(face=>face.load()))).then(()=>setTimeout(()=>{fill();cnGrid()},50))</script>
+document.fonts.ready.then(()=>Promise.all([...document.fonts].map(face=>face.load()))).then(()=>setTimeout(()=>{fill();cnGrid();if(window.parent!==window)hbApplyStudioState({})},50))</script>
+window.addEventListener("message", (e) => {
+  const d = e && e.data;
+  if (!d || typeof d !== "object") return;
+  if (d.type === "hb-glass") {
+    document.querySelectorAll(".page.cn").forEach(p => {
+      if (!d.glass || d.glass === "liquid") p.removeAttribute("data-glass");
+      else p.setAttribute("data-glass", d.glass);
+    });
+  }
+});
+if (window.self !== window.top) {
+  document.documentElement.classList.add("in-iframe");
+  if (document.body) document.body.classList.add("in-iframe");
+  window.addEventListener("DOMContentLoaded", () => {
+    if (document.body) document.body.classList.add("in-iframe");
+    const b = document.getElementById("bar");
+    if (b) b.style.display = "none";
+  });
+}

@@ -70,5 +70,5 @@ if _bk.get('frozen') and os.path.exists(cc):
     pt=os.path.join(P,'plan.txt'); have=sum(2 if re.search(r'^\d+-\d+',l) else 1 for l in open(pt, encoding='utf-8').read().splitlines() if l.strip()) if os.path.exists(pt) else 0
     if src_pages and have!=src_pages: ok=False; nH+=1; print(f'[页数不对应] 美化模式一页对一页：原文 {src_pages} 页，成品 {have} 页 → 拆页、合页、删页都会退出美化模式；确实要改结构，先问用户，改走 new 路线（去掉 frozen）')
 for t in tips: print(t)   # 提示级（cn-fit / cn-small ≥120px / 留白）：不算失败，只是提示
-if ok: print('GATE: PASS —— 溢出 0、重叠 0、对比度 FAIL 0' + ('、MISSING 0' if miss==0 else '（没有 doc.md，未做原文核对）') + f'、提示 {len(tips)} 条。这只是自动检查，接下来逐页看 .qa/review_*.jpg')
+if ok: print('GATE: PASS —— 溢出 0、重叠 0、对比度不达标 0' + ('、MISSING 0' if miss==0 else '（没有 doc.md，未做原文核对）') + f'、提示 {len(tips)} 条。这只是自动检查，接下来逐页看 .qa/review_*.jpg')
 else: print(f'GATE: FAIL —— 硬伤 {nH} 处、提示 {len(tips)} 条 → 按上面的提示改 book.yaml 后重跑'); sys.exit(1)

@@ -45,7 +45,8 @@ await p.evaluate(()=>{document.querySelectorAll('.cn-brand-graphic').forEach(e=>
 if(JSON.stringify(before)!==JSON.stringify(after)||!photo.equals(photoAfter)||cuts.length!==4||cuts[0].color!=='rgb(0, 43, 165)'||cuts[3].color!=='rgb(255, 255, 255)'||cuts.some(e=>e.opacity!=='0.05')||cuts.slice(0,3).some(e=>!e.cuts))throw Error(JSON.stringify({before,after,cuts}));
 fs.writeFileSync(process.argv[2]+'/probe.json',JSON.stringify({textGeometryUnchanged:true,photoPixelsIdentical:true,cuts}));await b.close()})().catch(e=>{console.error(e);process.exit(1)});
 ''', encoding='utf-8')
-        subprocess.run(['node', str(probe), str(p)], check=True)
+        subprocess.run(['node', str(probe), str(p)], check=True,
+                       env={**os.environ, 'NODE_PATH': str(hb / 'node_modules')})   # 探针在临时目录：playwright 从 hb/node_modules 解析
         subprocess.run(['node', str(hb / 'pdf.js'), str(p), str(p / 'control.pdf')], check=True, stdout=subprocess.DEVNULL)
         subprocess.run(['pdftoppm', '-f', '4', '-l', '4', '-scale-to', '1123', '-png', str(p / 'control.pdf'), str(p / 'page')], check=True)
         pixels = np.array(Image.open(p / 'page-4.png').convert('RGB'))

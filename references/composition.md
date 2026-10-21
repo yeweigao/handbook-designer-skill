@@ -13,7 +13,7 @@
 | Brand 品牌 | 真实标识、身份色、字体要求、经过核对的品牌母形 | 无依据的象征含义 |
 | Project 项目 | 实际内容、图片、页序、主次、每页阅读速度 | 用缺乏内容依据的装饰填空 |
 
-配置分工：`book.style / colors` 管视觉主题，`book.typography: bold / light` 管共享字重阶梯，`book.fonts` 管字体角色，`book.brand` 管身份要求。两套排印与五种主题可组合，基础字体统一为思源黑体/宋体。正文留在 HTML，SVG 可作为语义图解嵌入；不把整页文字画进 SVG。
+配置分工：`book.style / colors` 管视觉主题，`book.typography: bold / light` 管共享字重阶梯，`book.fonts` 管字体角色，`book.brand` 管身份要求。两套排印与四种主题可组合，基础字体统一为思源黑体/宋体。正文留在 HTML，SVG 可作为语义图解嵌入；不把整页文字画进 SVG。
 
 ## 六栏是一组对齐轴
 
@@ -42,7 +42,7 @@
 
 ## 跨主题共享的摄影偏好
 
-本 skill 的摄影默认偏好是：照片以 cover 铺满图位，主摄影区优先延伸到裁切边；不因为选了 Swiss、Editorial、风格派或孟菲斯，就给每张照片套统一的白框、小卡片或圆角。书卷感由文字、栏目、比例与节奏建立，摄影出血也可以克制。留白用于阅读和分组，不机械地包围每一张照片。页边几何与结构装饰也应避开照片，不能把出血摄影重新盖成带边框的图；共用引擎在最终位置上保护摄影区。
+本 skill 的摄影默认偏好是：照片以 cover 铺满图位，主摄影区优先延伸到裁切边；不因为选了 Swiss、Editorial 或风格派，就给每张照片套统一的白框、小卡片或圆角。书卷感由文字、栏目、比例与节奏建立，摄影出血也可以克制。留白用于阅读和分组，不机械地包围每一张照片。页边几何与结构装饰也应避开照片，不能把出血摄影重新盖成带边框的图；共用引擎在最终位置上保护摄影区。
 
 “铺满图位”与“整页照片”分别判断：前者避免图位内部空边，后者由页面任务决定。摄影区可在上、下、侧边或连续跨页；短简报仍可用中小幅照片。依据实际主体选择比例和 focus，不拉伸人物或风景。图解、标本、地图、标识和二维码按完整可读的内容资产处理，用 PLATE / contain，不为铺满裁掉信息。
 
@@ -81,7 +81,7 @@ MASONRY 借鉴 a4-editorial 的六图摄影页：图片先形成约三分之二�
 
 连续阅读样例：`templates/book.reading.yaml`，两篇原创观察文章、中文与英文各 8 页。它验证段落顺序、正文尺寸、共用篇名和明确的续页分配；不代表任意长文已具备自动分页能力。系列写法由 layouts.md §8 统一说明。
 
-开发预览：`dev/gallery/editorial_same_copy.jpg` 比较同一文案的旧布局与新布局；`dev/gallery/editorial_grid.jpg` 展示四种页面处理；`dev/gallery/styles_overview.jpg` 展示当前保留的五种主题，`dev/gallery/typography_profiles.jpg` 比较同主题的两套共享排印。合成图构建预览为 `dev/previews/book.editorial.zh.preview.jpg`。
+开发预览：`dev/gallery/editorial_same_copy.jpg` 比较同一文案的旧布局与新布局；`dev/gallery/editorial_grid.jpg` 展示四种页面处理；`dev/gallery/styles_overview.jpg` 展示当前保留的四种主题，`dev/gallery/typography_profiles.jpg` 比较同主题的两套共享排印。合成图构建预览为 `dev/previews/book.editorial.zh.preview.jpg`。
 
 第二轮预览：`dev/gallery/editorial_reading.jpg` 展示实际 PDF 中的双语首页与续页，`dev/gallery/editorial_opening.jpg` 用合成素材展示图片开场结构，`dev/previews/book.reading.preview.jpg` 展示整册。
 

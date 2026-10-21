@@ -16,5 +16,5 @@ for b in B:
     cr=(max(Lt,Lb)+.05)/(min(Lt,Lb)+.05)
     need=3 if (b['fs']>=24 or (b['fs']>=18.66 and b.get('fw',400)>=700)) else 4.5   # WCAG AA：大字=24px，或 18.66px 粗体
     if cr<need: bad+=1; print(f"p{i+1} {cr:4.1f} fs{b['fs']:.0f} {b['t']}")
-print('FAIL',bad,'of',len(B),'（文字/背景颜色对比，按 WCAG AA 阈值；不等于完整无障碍检查）')
+print('FAIL' if bad else 'PASS',bad,'of',len(B),'（文字/背景颜色对比，按 WCAG AA 阈值；不等于完整无障碍检查）')
 import sys; sys.exit(1 if bad else 0)

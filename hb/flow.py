@@ -382,7 +382,7 @@ def F(p): return tuple(p.get('focus', [.5, .5]))
 def light_art(v): return (not C.has_photo(v)) and h.SD['tone'] != 'dark'
 def bake_page(n, p, v, box, target=None, name=None, mask=None, bake_box=None):
     """照片烘焙成整页底图（图上有字时用：dark.py 会在字下面渐进压暗）；box 是照片露出来的区域（0–1），风格插画在这个区域里构图。
-    瑞士单色、风格派、孟菲斯没有插画：没给照片时这一格是浅灰色块 + 淡灰编号（返回的 name 是 None）"""
+    瑞士单色、风格派没有插画：没给照片时这一格是浅灰色块 + 淡灰编号（返回的 name 是 None）"""
     if not C.has_photo(v) and C.NOART():
         C.LIGHT_ART[0] = False
         x0, y0, x1, y1 = box[0] * C.W, box[1] * C.H, box[2] * C.W, box[3] * C.H
@@ -535,7 +535,7 @@ def HOLE(n, p):
 # ---------------------------------------------------------------- 跨页：一张横图烘焙成两页宽，两页各排各的文字栈
 def spread_bake(n, p, box, mask=None, bake_box=None):
     """横图烘焙成两页宽的底图；box 是照片露出来的区域（0–1，按两页宽算）。
-    瑞士 / 孟菲斯 / 风格派没给照片：两页各一块安静的色块（name 是 None）"""
+    瑞士 / 风格派没给照片：两页各一块安静的色块（name 是 None）"""
     if not C.has_photo(p.get('image')) and C.NOART():
         C.LIGHT_ART[0] = False
         def half(off):

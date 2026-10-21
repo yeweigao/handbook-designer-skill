@@ -80,6 +80,14 @@ if pages and not B.get('frozen') and os.path.basename(P) != '.proof':
         if miss: warn(f'[设计] page-plan.md 没有第 {"、".join(map(str, miss[:12]))} 页 → 先把这几页的方案写进 page-plan.md，再改 book.yaml')
         thin = [k for k in sorted(covered) if k not in done and k <= total]
         if thin and done: warn(f'[设计] page-plan.md 里第 {"、".join(map(str, thin[:12]))} 页只在总表里，还没有逐页小节（页面任务 / 文案分工 / 展示方案）')
+# YAML 里没加引号的冒号会把整段变成映射，页面上直接印出 {...}
+pn = 1
+for p in pages:
+    badk = [k for k in ('text', 'notes', 'intro', 'quote', 'by', 'caption', 'sub')
+            if isinstance(p.get(k), dict) or (isinstance(p.get(k), list) and any(isinstance(v, dict) for v in p[k]))]
+    if badk:
+        warn(f'[文案] 第{pn}页 {"、".join(badk)} 里有 YAML 映射（多半是段落中的冒号没加引号）→ 用单引号包住整段，否则页面会印出 {{...}}')
+    pn += 2 if p.get('layout') in SPAN2 else 1
 todo = []
 def find_todo(o, path):
     if isinstance(o, str) and o.strip() == 'TODO': todo.append(path)

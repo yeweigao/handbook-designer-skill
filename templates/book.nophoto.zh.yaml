@@ -1,6 +1,6 @@
 # ============================================================================
 # book.nophoto.zh.yaml —— 样例三：无图模式（8 页中文新生手册，一张照片都不用）
-# 当前风格保留 photo / swiss / editorial / stijl / geo；无图稿优先 swiss 或 editorial。
+# 当前风格保留 photo / swiss / editorial / stijl；无图稿优先 swiss 或 editorial。
 # 试跑：bash hb/new_project.sh demo_np && cp templates/book.nophoto.zh.yaml demo_np/book.yaml && bash hb/run.sh demo_np
 book:
   title: 枫林学校 · 新生入学手册
