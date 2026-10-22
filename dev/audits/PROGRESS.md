@@ -12,7 +12,7 @@
 | S4 最终 PDF 检查与验收绑定 | 完成 | 2026-10-22 | 21b4f2b |
 | S5 内容提取与原文覆盖 | 完成 | 2026-10-22 | 98e4938 |
 | S6 长文续页工具 | 完成 | 2026-10-22 | cb102a6 |
-| S7 家族与真实样册（Folio CSS 扩展） | 完成 | 2026-10-22 | a190408 + bb57494 + 本次 S7 补验收提交 |
+| S7 家族与真实样册（Folio CSS 扩展） | 完成 | 2026-10-23 | f8be1a6 + 本次 S7 视觉与组件扩展提交 |
 | S8 导出与离线交付 | 完成 | 2026-10-22 | ce515da |
 | S9 Folio 联动 | 完成 | 2026-10-22 | c2cff36（Folio 162a616） |
 | S10 Skill 文档与旧引擎退役 | 完成 | 2026-10-22 | 本提交（S10:） |
@@ -477,3 +477,49 @@
 - 边界：Node22/Python3.10实际运行、其他浏览器、纸样、Acrobat改字仍unverified；8页样册不代替独立人工校准。原S7两册未重写。完整证据摘要见 `dev/folio-css/verification.md`。
 - 下一步：按原计划S11审计视觉资产，再做S12独立生成与人工校准；Folio CSS已可用于新项目。
 - 提交：本条所在`S7:`提交（见git log）。
+
+### S7 · Folio 视觉表现力修订 · 进行中 · 2026-10-22
+
+- 用户不接受八页样册只验证基础组合，要求按实际宣传画册与印刷排版能力重新审视展示，必要时修改CSS。目标是一册有叙事、节奏与视觉张力的16页编辑样刊，并在展示页明确每个案例调用的共享能力。
+- 归属维持Folio CSS扩展范围；保留原八页最终构建与导出作为对比证据。先做版面与能力缺口审查，再按真实页面需要扩展CSS；不以页数、类数量或技术通过代替设计判断。
+
+- 2026-10-23 用户追加：行程节奏、timeline、企业数据图表与五力等分析框架；独立增加9页企业与行程样册，同一Folio底层。四类SVG图表有原始JSON及数学测试；覆盖清单明确未支持项。原16页编辑样刊修订继续执行。
+
+### S7 · Folio 视觉修订与信息组件扩展 · 完成 · 2026-10-23
+
+- 用户要求：原八页不足以代表画册排版能力；继续修订展示和CSS，并覆盖行程节奏、timeline、企业数据图表、五力等分析框架。本次据此扩展，未新增依赖。
+- 实现：
+  - Folio 1.1.0增加有界二维行网格/跨度、图框填满、镜像外侧出血、连续双栏、真实400宋体、1.5阅读行距、透明反白与显式照片渐变；通用图框通过变量与出血槽位正确组合。
+  - 编辑样刊由8页重写为16页；新增9页企业与行程样册。旧八页构建bebe29aa0866及旧导出保留，原Campus两册冻结不动。
+  - 24个组件与16组布局展示：多日行程、时长比例带、横纵timeline、并行泳道、指标与目标对照、五力、矩阵、简化价值链、能力证据；四类定量图表由标准库Python生成。JSON、HTML配方、适用范围和未覆盖项均公开。
+  - `hb/core/charts.py`提供独立SVG及SVG几何+HTML标签两种输出；书页使用后者接受完整原生文字审计，没有修改检查器来放过SVG未验证项。
+- 归属：Folio共享CSS、家族metadata/说明、展示生成/界面/覆盖文档、两本当前样册、独立charts工具与测试、进度和架构说明。追加范围已写入IMPLEMENTATION-STEPS.md。
+- 可复制命令：
+  ```sh
+  python3 dev/build-folio-css.py --check
+  python3 dev/tests/core/test_charts.py
+  export HB_CHROMIUM='/Users/apple/Library/Caches/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-mac-arm64/chrome-headless-shell'
+  export PYTHONPATH=/tmp/hb-editorial-test-deps
+  node --test dev/tests/core/family-css.test.mjs dev/tests/core/family-css-extended.test.mjs
+  node hb/core/cli.mjs check dev/samples/native/folio-system
+  node hb/core/cli.mjs check dev/samples/native/folio-business
+  node hb/core/cli.mjs verify dev/samples/native/folio-system
+  node hb/core/cli.mjs verify dev/samples/native/folio-business
+  python3 dev/folio-css/update-preview.py 66661d362fca
+  python3 dev/folio-css/update-preview.py 4a143ad5c0c7 --project folio-business
+  node hb/core/cli.mjs export dev/samples/native/folio-system --name folio-system-v1.1
+  node hb/core/cli.mjs export dev/samples/native/folio-business --name folio-business-v1.1
+  bash dev/tests/selftest.sh --quick
+  ```
+- 实测结果：
+  - 浏览器11/11、数学/输入验证11/11、生成一致性pass；40张网页预览无横向内容溢出，所有图片解码成功，390px页面无横向滚动。
+  - 编辑样刊`66661d362fca`：16页；企业册`4a143ad5c0c7`：9页。render/measure/postflight/raster/coverage全pass，硬项fail/unverified=0。
+  - 25页最终PDF逐页与11对面对页复核；最后构建与实际已看版本栅格逐字节一致，`evidence/raster-hashes.json`绑定。审稿为制作执行者复核，不计S12，不评优秀。
+  - 两册正式/可编辑PDF、离线HTML、作者源包均实际导出：PDF哈希匹配、字体扩充后逐页一致、离线无外部请求且打印一致、干净源包同构建同栅格。`evidence/delivery.json`留证据。
+  - quick pass（34份活跃文档、15个Python测试及语法），日志`hb-native-selftest.ThPVWq`。完整既有core全套未重跑，不把quick的浏览器unverified误写为通过。
+- 修订依据：全页查看发现并修正正文中途字体不一致、目录顺序、取景主体贴边、时间带标签错位；技术检查发现并修正出血槽位被图框覆盖、第三系列低对比度和全角空格字体回退。详见两册审稿及展示verification.md。
+- 契约变更：无。四个预存运行时/契约改动及未跟踪docs/family-css.md逐字节保持，不纳入提交；output/未触碰。本轮验证基于当前工作区，不宣称只含本提交的干净checkout已经完整验收。
+- 新增依赖：无；所有字体/照片本地复用。实际环境Node24.9.0/Python3.13.3/Playwright1.64.1/显式Chromium149.0.7827.55。
+- 边界：图表是有限类输入的构造工具，无自动避让、地图、桑基、关键路径或统计区间；覆盖清单明确标出。企业数字为示例，五力不虚构行业结论。未做纸样、其他浏览器、Node22/Python3.10实际运行或独立用户评分。
+- 下一步：S11视觉资产审计、S12独立生成与人工校准仍待开展；本轮交付不冒充这两步完成。
+- 提交：本记录所在的S7提交（见git log）。

@@ -728,3 +728,6 @@ dialog pre {
     scroll-behavior:auto;
   }
 }
+
+/* Additional publishing tasks share the same restrained catalogue surface. */
+#component-options{flex-wrap:wrap}.specimen-label{margin:48px 0 18px;font-size:18px}#chart-data{margin:24px 0}#dialog-data{white-space:pre-wrap;overflow-wrap:anywhere} .hero-aside figure img{object-fit:cover}

@@ -1,0 +1,67 @@
+{
+  "contract": 1,
+  "title": "从判断到行动 · Folio 企业与行程样册",
+  "entry": "book.html",
+  "styles": [
+    "design.css",
+    "book.css"
+  ],
+  "languages": [
+    "zh-CN"
+  ],
+  "default_language": "zh-CN",
+  "canvas": {
+    "trim_mm": [
+      210,
+      297
+    ],
+    "bleed_mm": 3,
+    "safe_mm": 8
+  },
+  "binding": "digital",
+  "first_page": "right",
+  "content_mode": "carry",
+  "fonts": [
+    {
+      "family": "Noto Serif SC",
+      "file": "assets/fonts/NotoSerifSC-400.ttf",
+      "weight": "400",
+      "style": "normal"
+    },
+    {
+      "family": "Noto Serif SC",
+      "file": "assets/fonts/NotoSerifSC-700.ttf",
+      "weight": "700",
+      "style": "normal"
+    },
+    {
+      "family": "Noto Sans SC",
+      "file": "assets/fonts/NotoSansSC-400.ttf",
+      "weight": "400",
+      "style": "normal"
+    },
+    {
+      "family": "Noto Sans SC",
+      "file": "assets/fonts/NotoSansSC-700.ttf",
+      "weight": "700",
+      "style": "normal"
+    },
+    {
+      "family": "Inter",
+      "file": "assets/fonts/Inter-400.ttf",
+      "weight": "400",
+      "style": "normal"
+    },
+    {
+      "family": "Inter",
+      "file": "assets/fonts/Inter-600.ttf",
+      "weight": "600",
+      "style": "normal"
+    }
+  ],
+  "family": {
+    "name": "folio",
+    "version": "1.1.0",
+    "sha256": "8ccfe635bc4d9794c24bde794a4184935cb98e75ad29973afcfadc90ed79ae2e"
+  }
+}

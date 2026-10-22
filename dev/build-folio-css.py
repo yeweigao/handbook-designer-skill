@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Assemble Folio's plain CSS and file://-usable catalog; standard library only."""
 import argparse
+import html
+import importlib.util
 import json
 from pathlib import Path
 
@@ -18,6 +20,22 @@ def outputs():
             raise ValueError(f"{name}: distribution must be standalone; fonts belong to project.json")
         css += f"\n/* ── {name} ── */\n{source.rstrip()}\n"
     catalog = json.loads((ROOT / "dev/folio-css/catalog.json").read_text(encoding="utf-8"))
+    catalog["version"] = json.loads((ROOT / "families/folio/family.json").read_text())["version"]
+    catalog["components"] += json.loads((ROOT / "dev/folio-css/business-recipes.json").read_text())["components"]
+    module_spec = importlib.util.spec_from_file_location("folio_charts", ROOT / "hb/core/charts.py")
+    charts = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(charts)
+    for example in json.loads((ROOT / "dev/folio-css/chart-examples.json").read_text())["examples"]:
+        svg = charts.render_figure(example["spec"])
+        catalog["components"].append({
+            "id": example["id"], "title": example["title"], "category": "charts",
+            "description": example["description"],
+            "grammar": "Python 标准库计算几何 → SVG 图形与可编辑 HTML 标签；Folio 颜色与字体变量控制视觉。",
+            "classes": ["fl-caption", "fl-mt-2"],
+            "limits": "默认 640px 宽；缩小时重新生成并检查最终字号。数据、单位、时期、来源必须齐全。示例值不能当作真实业绩。",
+            "data": example["spec"],
+            "html": '<figure>' + svg + '<figcaption class="fl-caption fl-mt-2">' + html.escape(example["caption"]) + '</figcaption></figure>',
+        })
     ids = []
     for section in ("layouts", "components"):
         for entry in catalog[section]:

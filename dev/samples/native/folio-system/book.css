@@ -1,8 +1,6 @@
-/* Folio specimen: only compositions specific to these eight pages.
-   Typography, surfaces, grids, spacing, image ratios and crops come from design.css. */
-.fsp-table { border-collapse: collapse; table-layout: fixed; }
-.fsp-table th, .fsp-table td { text-align: left; vertical-align: top; }
-.fsp-table th:first-child { width: 18%; }
-.fsp-table th:not(:first-child), .fsp-table td { padding-left: var(--fl-space-3); }
-.fsp-panorama { --fl-panorama-top: 76mm; --fl-panorama-height: 150mm; }
-.fsp-panorama-note { max-width: 34ic; }
+/* Editorial compositions; shared rules remain in frozen design.css. */
+.cover-image img{width:100%;height:100%;object-fit:cover}.cover-title{font-size:100px;line-height:1.12;margin-top:35px}.cover-colophon{position:absolute;bottom:0}.editorial-quote{margin:42px 0 35px 22%!important}.detail-strip{height:210px;aspect-ratio:auto}.panorama-note{position:absolute;top:242mm;max-width:34em}.crop-grid{height:820px}.sequence-grid{height:790px}.afterword{margin:120px 0 100px!important}.back-title{margin:140px 0 170px!important}.record-table{width:100%;border-collapse:collapse}.record-table th,.record-table td{padding:22px 16px 22px 0;border-top:1px solid var(--fl-stroke);width:50%}.fl-l-chronology{padding:0;list-style:none}
+
+.fl-number + h2,.fl-number + p{margin-top:14px}
+
+.page[data-page-id="p11"] .fl-folio{color:var(--fl-on-dark)}

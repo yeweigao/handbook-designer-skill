@@ -1,7 +1,7 @@
 {
   "contract": 1,
   "name": "folio",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "Folio · 印刷 CSS",
   "description": "一套可组合的印刷 CSS：共享色彩、字体、六/十二栏网格、节奏与图像规则，配可选布局及原子组合示例；适合文字、摄影和混合内容。",
   "fonts": [
@@ -9,10 +9,11 @@
       "family": "Noto Serif SC",
       "source": "NotoSerifSC-VF.ttf",
       "weights": [
+        400,
         700
       ],
       "license": "noto-serif-sc-OFL.txt",
-      "role": "display"
+      "role": "display, reading"
     },
     {
       "family": "Noto Sans SC",

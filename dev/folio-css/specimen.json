@@ -1,8 +1,8 @@
 {
-  "build_id": "bebe29aa0866",
-  "pdf_sha256": "ca384f81c8149e2d60ea7603d4a5ac656813369c79d579d32da1e663f98551ad",
-  "page_count": 8,
-  "family_css_sha256": "745ba92b976dbe8cee06de40ae0220fcc81907b590c1e11affb0d49039a7a4c7",
+  "build_id": "66661d362fca",
+  "pdf_sha256": "875a926adb8bef81f89f36f3f86d717db86d58cef3d785542e74ebcd4fab1dc0",
+  "page_count": 16,
+  "family_css_sha256": "8ccfe635bc4d9794c24bde794a4184935cb98e75ad29973afcfadc90ed79ae2e",
   "preview": "../samples/native/folio-system/preview.html",
   "source": "../samples/native/folio-system/book.html"
 }

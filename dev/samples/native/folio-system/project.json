@@ -24,6 +24,12 @@
   "fonts": [
     {
       "family": "Noto Serif SC",
+      "file": "assets/fonts/NotoSerifSC-400.ttf",
+      "weight": "400",
+      "style": "normal"
+    },
+    {
+      "family": "Noto Serif SC",
       "file": "assets/fonts/NotoSerifSC-700.ttf",
       "weight": "700",
       "style": "normal"
@@ -56,6 +62,6 @@
   "family": {
     "name": "folio",
     "version": "1.0.0",
-    "sha256": "745ba92b976dbe8cee06de40ae0220fcc81907b590c1e11affb0d49039a7a4c7"
+    "sha256": "8ccfe635bc4d9794c24bde794a4184935cb98e75ad29973afcfadc90ed79ae2e"
   }
 }

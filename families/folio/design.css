@@ -2,7 +2,7 @@
    Edit the source modules listed below; projects freeze a copy of this file. */
 
 /* ── families/folio/tokens.css ── */
-/* Folio 1.0.0 · shared print design tokens.
+/* Folio 1.1.0 · shared print design tokens.
    Edit these source modules, then regenerate design.css with dev/build-folio-css.py.
    CSS px are physical print sizes; changing paper dimensions does not scale type. */
 :root {
@@ -17,12 +17,17 @@
   --fl-on-dark-accent: #B7CCFF;
   --fl-line: #B7BEC6;
   --fl-line-dark: #78869E;
+  --fl-scrim-color: rgb(8 18 30 / .88);
+  --fl-scrim-stop: 72%;
 
   --fl-font-display: "Noto Serif SC", serif;
+  --fl-font-reading: "Noto Serif SC", serif;
   --fl-font-body: "Noto Sans SC", sans-serif;
   --fl-font-label: "Inter", "Noto Sans SC", sans-serif;
   --fl-font-number: "Inter", "Noto Sans SC", sans-serif;
   --fl-weight-display: 700;
+  --fl-weight-reading: 400;
+  --fl-weight-reading-strong: 700;
   --fl-weight-body: 400;
   --fl-weight-body-strong: 700;
   --fl-weight-label: 400;
@@ -39,6 +44,7 @@
   --fl-size-display: 64px;
   --fl-size-hero: 112px;
   --fl-leading-body: 1.75;
+  --fl-leading-reading: 1.5;
   --fl-leading-lead: 1.6;
   --fl-leading-tight: 1.25;
   --fl-leading-display: 1.12;
@@ -261,6 +267,7 @@
 :where(.fl-l-bleed-bottom,
 .fl-l-bleed-side) { position: absolute; inset: 0; }
 :where(.fl-l-bleed-bottom > .fl-l-photo) {
+  --fl-frame-position: absolute; --fl-ratio: auto;
   position: absolute; left: 0; right: 0; bottom: 0;
   height: var(--fl-image-height, 42%);
   aspect-ratio: auto;
@@ -268,10 +275,39 @@
 :where(.fl-l-bleed-bottom > .fl-l-copy) { bottom: calc(var(--fl-image-height, 42%) + var(--fl-space-3)); }
 :where(.fl-l-bleed-side > .fl-l-photo) {
   position: absolute; top: 0; right: 0; bottom: 0;
-  width: var(--fl-image-width, 43%);
+  --fl-frame-position: absolute; --fl-frame-width: var(--fl-image-width, 43%); --fl-ratio: auto; width: var(--fl-image-width, 43%);
   aspect-ratio: auto;
 }
 :where(.fl-l-bleed-side > .fl-l-copy) { right: calc(var(--fl-image-width, 43%) + var(--fl-space-3)); }
+
+/* The same side-bleed relationship, mirrored toward the outside of a book.
+   Default first page is right; an explicit data-side overrides page parity.
+   .fl-l-copy still uses .fl-area, so the inner edge keeps its safety margin. */
+:where(.fl-l-bleed-outer) {
+  position: absolute; inset: 0;
+  --fl-side-photo-left: auto;
+  --fl-side-photo-right: 0px;
+  --fl-side-copy-left: calc(var(--bleed, 0px) + max(var(--safe-left, 0px), var(--fl-page-left, var(--fl-margin-inner))));
+  --fl-side-copy-right: calc(var(--fl-image-width, 43%) + var(--fl-space-3));
+}
+:where(.page:nth-of-type(even), .page[data-side="left"]) :where(.fl-l-bleed-outer) {
+  --fl-side-photo-left: 0px;
+  --fl-side-photo-right: auto;
+  --fl-side-copy-left: calc(var(--fl-image-width, 43%) + var(--fl-space-3));
+  --fl-side-copy-right: calc(var(--bleed, 0px) + max(var(--safe-right, 0px), var(--fl-page-right, var(--fl-margin-inner))));
+}
+:where(.page[data-side="right"]) :where(.fl-l-bleed-outer) {
+  --fl-side-photo-left: auto;
+  --fl-side-photo-right: 0px;
+  --fl-side-copy-left: calc(var(--bleed, 0px) + max(var(--safe-left, 0px), var(--fl-page-left, var(--fl-margin-inner))));
+  --fl-side-copy-right: calc(var(--fl-image-width, 43%) + var(--fl-space-3));
+}
+:where(.fl-l-bleed-outer > .fl-l-photo) {
+  position: absolute; top: 0; bottom: 0;
+  left: var(--fl-side-photo-left); right: var(--fl-side-photo-right);
+  --fl-frame-position: absolute; --fl-frame-width: var(--fl-image-width, 43%); --fl-ratio: auto; width: var(--fl-image-width, 43%); aspect-ratio: auto;
+}
+:where(.fl-l-bleed-outer > .fl-l-copy) { left: var(--fl-side-copy-left); right: var(--fl-side-copy-right); }
 
 /* Deliberate overlap, not an automatic contrast treatment. The photograph and
    text are separate grid layers; text remains in normal flow and can grow.
@@ -347,6 +383,13 @@
   --fl-text-accent: var(--fl-on-dark); --fl-stroke: var(--fl-on-dark-muted);
   background: var(--fl-accent); color: var(--fl-text);
 }
+/* Foreground roles only, for a photograph or another authored dark background.
+   This neither paints a plate nor guarantees contrast; inspect the actual image. */
+.fl-tone-inverse {
+  --fl-text: var(--fl-on-dark); --fl-text-muted: var(--fl-on-dark-muted);
+  --fl-text-accent: var(--fl-on-dark-accent); --fl-stroke: var(--fl-line-dark);
+  color: var(--fl-text);
+}
 
 /* Semantic type recipes: independent font/size/weight/leading atoms follow.
    No recipe draws a border or fills a box. Keep data-role in the HTML. */
@@ -392,6 +435,7 @@
 /* Font role and weight are separate: only real generated weights are requested.
    Display regular/strong both map to 700; number both map to 600. */
 .fl-font-display { --fl-current-weight: var(--fl-weight-display); --fl-current-strong: var(--fl-weight-display); font-family: var(--fl-font-display); font-weight: var(--fl-current-weight); }
+.fl-font-reading { --fl-current-weight: var(--fl-weight-reading); --fl-current-strong: var(--fl-weight-reading-strong); font-family: var(--fl-font-reading); font-weight: var(--fl-current-weight); }
 .fl-font-body { --fl-current-weight: var(--fl-weight-body); --fl-current-strong: var(--fl-weight-body-strong); font-family: var(--fl-font-body); font-weight: var(--fl-current-weight); }
 .fl-font-label { --fl-current-weight: var(--fl-weight-label); --fl-current-strong: var(--fl-weight-label-strong); font-family: var(--fl-font-label); font-weight: var(--fl-current-weight); }
 .fl-font-number { --fl-current-weight: var(--fl-weight-number); --fl-current-strong: var(--fl-weight-number); font-family: var(--fl-font-number); font-weight: var(--fl-current-weight); }
@@ -407,6 +451,7 @@
 .fl-weight-regular { font-weight: var(--fl-current-weight, var(--fl-weight-body)); }
 .fl-weight-strong { font-weight: var(--fl-current-strong, var(--fl-weight-body-strong)); }
 .fl-leading-body { line-height: var(--fl-leading-body); }
+.fl-leading-reading { line-height: var(--fl-leading-reading); }
 .fl-leading-lead { line-height: var(--fl-leading-lead); }
 .fl-leading-tight { line-height: var(--fl-leading-tight); }
 .fl-leading-display { line-height: var(--fl-leading-display); }
@@ -424,6 +469,14 @@
 .fl-measure { max-inline-size: var(--fl-measure); }
 /* Prose is continuous text: child paragraphs retain their natural height. */
 .fl-prose > p + p { margin-top: var(--fl-space-2); }
+/* One continuous DOM flow, balanced between two columns. Without a fixed height
+   the block grows with its text. A bounded column field may create extra columns:
+   never hide them; inspect reading order and page overflow after every edit. */
+.fl-prose-columns-2 { column-count: 2; column-gap: var(--fl-gutter); column-fill: balance; }
+.fl-prose-columns-2 :where(p) { orphans: 2; widows: 2; }
+/* Indented subsequent paragraphs are an alternative to paragraph gaps.
+   Keep the opening flush left; this treatment follows Chinese prose conventions. */
+.fl-prose-indent > p + p { margin-top: 0; text-indent: 2ic; }
 
 /* Grid/Flex: no default spans on children and no inherited page templates. */
 .fl-grid { display: grid; column-gap: var(--fl-gutter); row-gap: var(--fl-space-3); }
@@ -435,6 +488,12 @@
 .fl-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .fl-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 .fl-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+/* Equal modular rows require an explicitly bounded grid block size. Overflow
+   remains visible and audited; tracks never shrink the text that occupies them. */
+.fl-rows-2 { grid-template-rows: repeat(2, minmax(0, 1fr)); }
+.fl-rows-3 { grid-template-rows: repeat(3, minmax(0, 1fr)); }
+.fl-rows-4 { grid-template-rows: repeat(4, minmax(0, 1fr)); }
+.fl-rows-6 { grid-template-rows: repeat(6, minmax(0, 1fr)); }
 .fl-span-1 { grid-column-end: span 1; }
 .fl-span-2 { grid-column-end: span 2; }
 .fl-span-3 { grid-column-end: span 3; }
@@ -466,6 +525,13 @@
 .fl-row-start-4 { grid-row-start: 4; }
 .fl-row-start-5 { grid-row-start: 5; }
 .fl-row-start-6 { grid-row-start: 6; }
+.fl-row-span-1 { grid-row-end: span 1; }
+.fl-row-span-2 { grid-row-end: span 2; }
+.fl-row-span-3 { grid-row-end: span 3; }
+.fl-row-span-4 { grid-row-end: span 4; }
+.fl-row-span-5 { grid-row-end: span 5; }
+.fl-row-span-6 { grid-row-end: span 6; }
+.fl-row-span-full { grid-row: 1 / -1; }
 .fl-flex { display: flex; }
 .fl-flex-col { flex-direction: column; }
 .fl-wrap { flex-wrap: wrap; }
@@ -480,6 +546,10 @@
 .fl-self-center { align-self: center; }
 .fl-self-end { align-self: end; }
 .fl-self-stretch { align-self: stretch; }
+.fl-justify-self-start { justify-self: start; }
+.fl-justify-self-center { justify-self: center; }
+.fl-justify-self-end { justify-self: end; }
+.fl-justify-self-stretch { justify-self: stretch; }
 .fl-justify-between { justify-content: space-between; }
 .fl-justify-start { justify-content: start; }
 .fl-justify-end { justify-content: end; }
@@ -569,7 +639,7 @@
    Clip lives on the direct image, so an accidental text child is not concealed.
    Focal atoms apply on a wrapper or directly on an image. */
 .fl-image { display: block; width: 100%; max-width: 100%; height: auto; object-fit: var(--fl-fit, cover); object-position: var(--fl-focus-x, 50%) var(--fl-focus-y, 50%); }
-.fl-frame { position: relative; width: 100%; min-width: 0; aspect-ratio: var(--fl-ratio, 3 / 2); }
+.fl-frame { position: var(--fl-frame-position, relative); width: var(--fl-frame-width, 100%); min-width: 0; aspect-ratio: var(--fl-ratio, 3 / 2); }
 .fl-frame > img { display: block; width: 100%; height: 100%; max-width: 100%; object-fit: var(--fl-fit, cover); object-position: var(--fl-focus-x, 50%) var(--fl-focus-y, 50%); overflow: clip; }
 .fl-ratio-square { --fl-ratio: 1 / 1; aspect-ratio: var(--fl-ratio); }
 .fl-ratio-photo { --fl-ratio: 3 / 2; aspect-ratio: var(--fl-ratio); }
@@ -584,6 +654,10 @@
 .fl-focus-left { --fl-focus-x: 0%; --fl-focus-y: 50%; object-position: var(--fl-focus-x) var(--fl-focus-y); }
 .fl-focus-right { --fl-focus-x: 100%; --fl-focus-y: 50%; object-position: var(--fl-focus-x) var(--fl-focus-y); }
 .fl-focus-center { --fl-focus-x: 50%; --fl-focus-y: 50%; object-position: var(--fl-focus-x) var(--fl-focus-y); }
+/* Opt into a bounded image viewport rather than an intrinsic aspect ratio.
+   The containing block must have a definite height (grid tracks count). */
+.fl-frame-fill { aspect-ratio: auto; height: 100%; min-height: 0; }
+.fl-image-fill { display: block; width: 100%; max-width: 100%; height: 100%; min-height: 0; object-fit: var(--fl-fit, cover); object-position: var(--fl-focus-x, 50%) var(--fl-focus-y, 50%); }
 
 /* Positioning is explicit. Full bleed does not waive content safety or declare
    an allowed overlap; retain data-bleed / data-overlap in authored HTML. */
@@ -593,6 +667,11 @@
 .fl-z-1 { z-index: 1; }
 .fl-z-2 { z-index: 2; }
 .fl-bleed { position: absolute; inset: 0; }
+/* Explicit photographic contrast layer; pair with fl-bleed or an authored local
+   box. No text or image is inserted. The real overlap/bleed still needs metadata,
+   and actual image + gradient + text must pass measured contrast. */
+.fl-scrim-top { background-image: linear-gradient(to bottom, var(--fl-scrim-color) 0%, transparent var(--fl-scrim-stop)); }
+.fl-scrim-bottom { background-image: linear-gradient(to top, var(--fl-scrim-color) 0%, transparent var(--fl-scrim-stop)); }
 .fl-rule { border-top: var(--fl-hair) solid var(--fl-stroke); }
 .fl-rule-strong { border-top: var(--fl-rule) solid var(--fl-text); }
 

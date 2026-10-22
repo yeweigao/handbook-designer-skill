@@ -1,0 +1,1878 @@
+{
+  "contract": 1,
+  "source": "source.md",
+  "segments": [
+    {
+      "id": "s001",
+      "kind": "para",
+      "text": "FOLIO / BUSINESS & JOURNEYS",
+      "origin": {
+        "page": null,
+        "line": 5
+      }
+    },
+    {
+      "id": "s002",
+      "kind": "heading",
+      "text": "从判断，\n到行动。",
+      "origin": {
+        "page": null,
+        "line": 7
+      }
+    },
+    {
+      "id": "s003",
+      "kind": "para",
+      "text": "用可核验的证据说明价值，\n用清楚的节奏组织执行。",
+      "origin": {
+        "page": null,
+        "line": 9
+      }
+    },
+    {
+      "id": "s004",
+      "kind": "para",
+      "text": "2025 · 示例",
+      "origin": {
+        "page": null,
+        "line": 11
+      }
+    },
+    {
+      "id": "s005",
+      "kind": "heading",
+      "text": "128 百万元",
+      "origin": {
+        "page": null,
+        "line": 13
+      }
+    },
+    {
+      "id": "s006",
+      "kind": "para",
+      "text": "年度收入\n较上年 +28%；基准 100",
+      "origin": {
+        "page": null,
+        "line": 15
+      }
+    },
+    {
+      "id": "s007",
+      "kind": "para",
+      "text": "2025 · 示例",
+      "origin": {
+        "page": null,
+        "line": 17
+      }
+    },
+    {
+      "id": "s008",
+      "kind": "heading",
+      "text": "32 百万元",
+      "origin": {
+        "page": null,
+        "line": 19
+      }
+    },
+    {
+      "id": "s009",
+      "kind": "para",
+      "text": "年度利润\n较上年 +7；基准 25",
+      "origin": {
+        "page": null,
+        "line": 21
+      }
+    },
+    {
+      "id": "s010",
+      "kind": "para",
+      "text": "2025 · 示例",
+      "origin": {
+        "page": null,
+        "line": 23
+      }
+    },
+    {
+      "id": "s011",
+      "kind": "heading",
+      "text": "25.0%",
+      "origin": {
+        "page": null,
+        "line": 25
+      }
+    },
+    {
+      "id": "s012",
+      "kind": "para",
+      "text": "利润 / 收入\n32 ÷ 128；同比持平",
+      "origin": {
+        "page": null,
+        "line": 27
+      }
+    },
+    {
+      "id": "s013",
+      "kind": "para",
+      "text": "来源：本页自拟演示数据；并非某家公司的实际经营业绩。",
+      "origin": {
+        "page": null,
+        "line": 29
+      }
+    },
+    {
+      "id": "s014",
+      "kind": "heading",
+      "text": "数字背后的路径",
+      "origin": {
+        "page": null,
+        "line": 31
+      }
+    },
+    {
+      "id": "s015",
+      "kind": "para",
+      "text": "输入 →",
+      "origin": {
+        "page": null,
+        "line": 33
+      }
+    },
+    {
+      "id": "s016",
+      "kind": "heading",
+      "text": "真实问题",
+      "origin": {
+        "page": null,
+        "line": 35
+      }
+    },
+    {
+      "id": "s017",
+      "kind": "para",
+      "text": "用户访谈与既有资料\n依据：需求记录",
+      "origin": {
+        "page": null,
+        "line": 37
+      }
+    },
+    {
+      "id": "s018",
+      "kind": "para",
+      "text": "活动 →",
+      "origin": {
+        "page": null,
+        "line": 39
+      }
+    },
+    {
+      "id": "s019",
+      "kind": "heading",
+      "text": "可重复方法",
+      "origin": {
+        "page": null,
+        "line": 41
+      }
+    },
+    {
+      "id": "s020",
+      "kind": "para",
+      "text": "小规模试验与过程复核\n依据：验证日志",
+      "origin": {
+        "page": null,
+        "line": 43
+      }
+    },
+    {
+      "id": "s021",
+      "kind": "para",
+      "text": "输出",
+      "origin": {
+        "page": null,
+        "line": 45
+      }
+    },
+    {
+      "id": "s022",
+      "kind": "heading",
+      "text": "可核验结果",
+      "origin": {
+        "page": null,
+        "line": 47
+      }
+    },
+    {
+      "id": "s023",
+      "kind": "para",
+      "text": "交付、采用与持续改进\n依据：验收与使用记录",
+      "origin": {
+        "page": null,
+        "line": 49
+      }
+    },
+    {
+      "id": "s024",
+      "kind": "para",
+      "text": "简化的价值创造路径；如分析完整产业链，应补齐采购、生产、分销及支持活动。",
+      "origin": {
+        "page": null,
+        "line": 51
+      }
+    },
+    {
+      "id": "s025",
+      "kind": "para",
+      "text": "01 / TREND & MIX",
+      "origin": {
+        "page": null,
+        "line": 53
+      }
+    },
+    {
+      "id": "s026",
+      "kind": "heading",
+      "text": "增长与结构，放在一起看。",
+      "origin": {
+        "page": null,
+        "line": 55
+      }
+    },
+    {
+      "id": "s027",
+      "kind": "para",
+      "text": "0",
+      "origin": {
+        "page": null,
+        "line": 57
+      }
+    },
+    {
+      "id": "s028",
+      "kind": "para",
+      "text": "64",
+      "origin": {
+        "page": null,
+        "line": 59
+      }
+    },
+    {
+      "id": "s029",
+      "kind": "para",
+      "text": "128",
+      "origin": {
+        "page": null,
+        "line": 61
+      }
+    },
+    {
+      "id": "s030",
+      "kind": "para",
+      "text": "2022",
+      "origin": {
+        "page": null,
+        "line": 63
+      }
+    },
+    {
+      "id": "s031",
+      "kind": "para",
+      "text": "2023",
+      "origin": {
+        "page": null,
+        "line": 65
+      }
+    },
+    {
+      "id": "s032",
+      "kind": "para",
+      "text": "2024",
+      "origin": {
+        "page": null,
+        "line": 67
+      }
+    },
+    {
+      "id": "s033",
+      "kind": "para",
+      "text": "2025",
+      "origin": {
+        "page": null,
+        "line": 69
+      }
+    },
+    {
+      "id": "s034",
+      "kind": "para",
+      "text": "收入 / 百万元",
+      "origin": {
+        "page": null,
+        "line": 71
+      }
+    },
+    {
+      "id": "s035",
+      "kind": "para",
+      "text": "128",
+      "origin": {
+        "page": null,
+        "line": 73
+      }
+    },
+    {
+      "id": "s036",
+      "kind": "para",
+      "text": "2022—2025 年；同口径年度收入。自拟演示数据。",
+      "origin": {
+        "page": null,
+        "line": 75
+      }
+    },
+    {
+      "id": "s037",
+      "kind": "para",
+      "text": "订阅",
+      "origin": {
+        "page": null,
+        "line": 77
+      }
+    },
+    {
+      "id": "s038",
+      "kind": "para",
+      "text": "项目",
+      "origin": {
+        "page": null,
+        "line": 79
+      }
+    },
+    {
+      "id": "s039",
+      "kind": "para",
+      "text": "其他",
+      "origin": {
+        "page": null,
+        "line": 81
+      }
+    },
+    {
+      "id": "s040",
+      "kind": "para",
+      "text": "2024",
+      "origin": {
+        "page": null,
+        "line": 83
+      }
+    },
+    {
+      "id": "s041",
+      "kind": "para",
+      "text": "45%",
+      "origin": {
+        "page": null,
+        "line": 85
+      }
+    },
+    {
+      "id": "s042",
+      "kind": "para",
+      "text": "35%",
+      "origin": {
+        "page": null,
+        "line": 87
+      }
+    },
+    {
+      "id": "s043",
+      "kind": "para",
+      "text": "20%",
+      "origin": {
+        "page": null,
+        "line": 89
+      }
+    },
+    {
+      "id": "s044",
+      "kind": "para",
+      "text": "100%",
+      "origin": {
+        "page": null,
+        "line": 91
+      }
+    },
+    {
+      "id": "s045",
+      "kind": "para",
+      "text": "2025",
+      "origin": {
+        "page": null,
+        "line": 93
+      }
+    },
+    {
+      "id": "s046",
+      "kind": "para",
+      "text": "55%",
+      "origin": {
+        "page": null,
+        "line": 95
+      }
+    },
+    {
+      "id": "s047",
+      "kind": "para",
+      "text": "30%",
+      "origin": {
+        "page": null,
+        "line": 97
+      }
+    },
+    {
+      "id": "s048",
+      "kind": "para",
+      "text": "15%",
+      "origin": {
+        "page": null,
+        "line": 99
+      }
+    },
+    {
+      "id": "s049",
+      "kind": "para",
+      "text": "100%",
+      "origin": {
+        "page": null,
+        "line": 101
+      }
+    },
+    {
+      "id": "s050",
+      "kind": "para",
+      "text": "收入结构 / %；每年合计 100%。自拟演示数据。",
+      "origin": {
+        "page": null,
+        "line": 103
+      }
+    },
+    {
+      "id": "s051",
+      "kind": "para",
+      "text": "02 / PROFIT BRIDGE",
+      "origin": {
+        "page": null,
+        "line": 105
+      }
+    },
+    {
+      "id": "s052",
+      "kind": "heading",
+      "text": "利润增加 7，\n每一步都能对上。",
+      "origin": {
+        "page": null,
+        "line": 107
+      }
+    },
+    {
+      "id": "s053",
+      "kind": "para",
+      "text": "在同口径的示例中，收入贡献与效率改善，抵消了研发投入及其他成本的增加。",
+      "origin": {
+        "page": null,
+        "line": 109
+      }
+    },
+    {
+      "id": "s054",
+      "kind": "para",
+      "text": "0",
+      "origin": {
+        "page": null,
+        "line": 111
+      }
+    },
+    {
+      "id": "s055",
+      "kind": "para",
+      "text": "25",
+      "origin": {
+        "page": null,
+        "line": 113
+      }
+    },
+    {
+      "id": "s056",
+      "kind": "para",
+      "text": "上年利润",
+      "origin": {
+        "page": null,
+        "line": 115
+      }
+    },
+    {
+      "id": "s057",
+      "kind": "para",
+      "text": "+12",
+      "origin": {
+        "page": null,
+        "line": 117
+      }
+    },
+    {
+      "id": "s058",
+      "kind": "para",
+      "text": "收入贡献",
+      "origin": {
+        "page": null,
+        "line": 119
+      }
+    },
+    {
+      "id": "s059",
+      "kind": "para",
+      "text": "+4",
+      "origin": {
+        "page": null,
+        "line": 121
+      }
+    },
+    {
+      "id": "s060",
+      "kind": "para",
+      "text": "效率改善",
+      "origin": {
+        "page": null,
+        "line": 123
+      }
+    },
+    {
+      "id": "s061",
+      "kind": "para",
+      "text": "-6",
+      "origin": {
+        "page": null,
+        "line": 125
+      }
+    },
+    {
+      "id": "s062",
+      "kind": "para",
+      "text": "研发投入",
+      "origin": {
+        "page": null,
+        "line": 127
+      }
+    },
+    {
+      "id": "s063",
+      "kind": "para",
+      "text": "-3",
+      "origin": {
+        "page": null,
+        "line": 129
+      }
+    },
+    {
+      "id": "s064",
+      "kind": "para",
+      "text": "其他成本",
+      "origin": {
+        "page": null,
+        "line": 131
+      }
+    },
+    {
+      "id": "s065",
+      "kind": "para",
+      "text": "32",
+      "origin": {
+        "page": null,
+        "line": 133
+      }
+    },
+    {
+      "id": "s066",
+      "kind": "para",
+      "text": "本年利润",
+      "origin": {
+        "page": null,
+        "line": 135
+      }
+    },
+    {
+      "id": "s067",
+      "kind": "para",
+      "text": "2024→2025 年利润桥接 / 百万元；25 + 12 + 4 − 6 − 3 = 32。自拟演示数据；变动项按不重叠口径分解。",
+      "origin": {
+        "page": null,
+        "line": 137
+      }
+    },
+    {
+      "id": "s068",
+      "kind": "para",
+      "text": "判断",
+      "origin": {
+        "page": null,
+        "line": 139
+      }
+    },
+    {
+      "id": "s069",
+      "kind": "heading",
+      "text": "增量来自哪里，比增幅本身更重要。",
+      "origin": {
+        "page": null,
+        "line": 141
+      }
+    },
+    {
+      "id": "s070",
+      "kind": "para",
+      "text": "把起点、增减项和终点放在同一张桥接图上，读者可以核对结论如何成立。",
+      "origin": {
+        "page": null,
+        "line": 143
+      }
+    },
+    {
+      "id": "s071",
+      "kind": "para",
+      "text": "核验清单",
+      "origin": {
+        "page": null,
+        "line": 145
+      }
+    },
+    {
+      "id": "s072",
+      "kind": "para",
+      "text": "期间一致\n单位一致\n各项不重复\n合计可闭合\n来源可回溯",
+      "origin": {
+        "page": null,
+        "line": 147
+      }
+    },
+    {
+      "id": "s073",
+      "kind": "para",
+      "text": "03 / PERFORMANCE",
+      "origin": {
+        "page": null,
+        "line": 149
+      }
+    },
+    {
+      "id": "s074",
+      "kind": "heading",
+      "text": "比较规模，也比较目标。",
+      "origin": {
+        "page": null,
+        "line": 151
+      }
+    },
+    {
+      "id": "s075",
+      "kind": "para",
+      "text": "服务 A",
+      "origin": {
+        "page": null,
+        "line": 153
+      }
+    },
+    {
+      "id": "s076",
+      "kind": "para",
+      "text": "48",
+      "origin": {
+        "page": null,
+        "line": 155
+      }
+    },
+    {
+      "id": "s077",
+      "kind": "para",
+      "text": "服务 B",
+      "origin": {
+        "page": null,
+        "line": 157
+      }
+    },
+    {
+      "id": "s078",
+      "kind": "para",
+      "text": "35",
+      "origin": {
+        "page": null,
+        "line": 159
+      }
+    },
+    {
+      "id": "s079",
+      "kind": "para",
+      "text": "服务 C",
+      "origin": {
+        "page": null,
+        "line": 161
+      }
+    },
+    {
+      "id": "s080",
+      "kind": "para",
+      "text": "28",
+      "origin": {
+        "page": null,
+        "line": 163
+      }
+    },
+    {
+      "id": "s081",
+      "kind": "para",
+      "text": "服务 D",
+      "origin": {
+        "page": null,
+        "line": 165
+      }
+    },
+    {
+      "id": "s082",
+      "kind": "para",
+      "text": "17",
+      "origin": {
+        "page": null,
+        "line": 167
+      }
+    },
+    {
+      "id": "s083",
+      "kind": "para",
+      "text": "0",
+      "origin": {
+        "page": null,
+        "line": 169
+      }
+    },
+    {
+      "id": "s084",
+      "kind": "para",
+      "text": "2025 年收入 / 百万元；四类合计 128。自拟演示数据。",
+      "origin": {
+        "page": null,
+        "line": 171
+      }
+    },
+    {
+      "id": "s085",
+      "kind": "heading",
+      "text": "目标差距仍须如实呈现",
+      "origin": {
+        "page": null,
+        "line": 173
+      }
+    },
+    {
+      "id": "s086",
+      "kind": "para",
+      "text": "项目",
+      "origin": {
+        "page": null,
+        "line": 175
+      }
+    },
+    {
+      "id": "s087",
+      "kind": "para",
+      "text": "目标",
+      "origin": {
+        "page": null,
+        "line": 177
+      }
+    },
+    {
+      "id": "s088",
+      "kind": "para",
+      "text": "实际",
+      "origin": {
+        "page": null,
+        "line": 179
+      }
+    },
+    {
+      "id": "s089",
+      "kind": "para",
+      "text": "差额",
+      "origin": {
+        "page": null,
+        "line": 181
+      }
+    },
+    {
+      "id": "s090",
+      "kind": "para",
+      "text": "收入 / 百万元",
+      "origin": {
+        "page": null,
+        "line": 183
+      }
+    },
+    {
+      "id": "s091",
+      "kind": "para",
+      "text": "130",
+      "origin": {
+        "page": null,
+        "line": 185
+      }
+    },
+    {
+      "id": "s092",
+      "kind": "para",
+      "text": "128",
+      "origin": {
+        "page": null,
+        "line": 187
+      }
+    },
+    {
+      "id": "s093",
+      "kind": "para",
+      "text": "−2",
+      "origin": {
+        "page": null,
+        "line": 189
+      }
+    },
+    {
+      "id": "s094",
+      "kind": "para",
+      "text": "利润 / 百万元",
+      "origin": {
+        "page": null,
+        "line": 191
+      }
+    },
+    {
+      "id": "s095",
+      "kind": "para",
+      "text": "30",
+      "origin": {
+        "page": null,
+        "line": 193
+      }
+    },
+    {
+      "id": "s096",
+      "kind": "para",
+      "text": "32",
+      "origin": {
+        "page": null,
+        "line": 195
+      }
+    },
+    {
+      "id": "s097",
+      "kind": "para",
+      "text": "+2",
+      "origin": {
+        "page": null,
+        "line": 197
+      }
+    },
+    {
+      "id": "s098",
+      "kind": "para",
+      "text": "交付项目 / 个",
+      "origin": {
+        "page": null,
+        "line": 199
+      }
+    },
+    {
+      "id": "s099",
+      "kind": "para",
+      "text": "50",
+      "origin": {
+        "page": null,
+        "line": 201
+      }
+    },
+    {
+      "id": "s100",
+      "kind": "para",
+      "text": "48",
+      "origin": {
+        "page": null,
+        "line": 203
+      }
+    },
+    {
+      "id": "s101",
+      "kind": "para",
+      "text": "−2",
+      "origin": {
+        "page": null,
+        "line": 205
+      }
+    },
+    {
+      "id": "s102",
+      "kind": "para",
+      "text": "2025 年度；差额 = 实际 − 目标。自拟演示数据。",
+      "origin": {
+        "page": null,
+        "line": 207
+      }
+    },
+    {
+      "id": "s103",
+      "kind": "para",
+      "text": "04 / INDUSTRY STRUCTURE",
+      "origin": {
+        "page": null,
+        "line": 209
+      }
+    },
+    {
+      "id": "s104",
+      "kind": "heading",
+      "text": "先理解竞争，\n再谈自己的优势。",
+      "origin": {
+        "page": null,
+        "line": 211
+      }
+    },
+    {
+      "id": "s105",
+      "kind": "para",
+      "text": "五力分析关注行业中价值如何被分配。以下只列出核验问题，不给尚无证据的行业打分。",
+      "origin": {
+        "page": null,
+        "line": 213
+      }
+    },
+    {
+      "id": "s106",
+      "kind": "heading",
+      "text": "潜在进入者",
+      "origin": {
+        "page": null,
+        "line": 215
+      }
+    },
+    {
+      "id": "s107",
+      "kind": "para",
+      "text": "技术门槛与渠道准入；需核验进入成本。",
+      "origin": {
+        "page": null,
+        "line": 217
+      }
+    },
+    {
+      "id": "s108",
+      "kind": "heading",
+      "text": "供应商议价",
+      "origin": {
+        "page": null,
+        "line": 219
+      }
+    },
+    {
+      "id": "s109",
+      "kind": "para",
+      "text": "关键原料集中度、替代来源和切换成本。",
+      "origin": {
+        "page": null,
+        "line": 221
+      }
+    },
+    {
+      "id": "s110",
+      "kind": "heading",
+      "text": "现有竞争者",
+      "origin": {
+        "page": null,
+        "line": 223
+      }
+    },
+    {
+      "id": "s111",
+      "kind": "para",
+      "text": "行业增长、差异化与退出成本。",
+      "origin": {
+        "page": null,
+        "line": 225
+      }
+    },
+    {
+      "id": "s112",
+      "kind": "heading",
+      "text": "购买者议价",
+      "origin": {
+        "page": null,
+        "line": 227
+      }
+    },
+    {
+      "id": "s113",
+      "kind": "para",
+      "text": "采购集中度、价格敏感度与转换选择。",
+      "origin": {
+        "page": null,
+        "line": 229
+      }
+    },
+    {
+      "id": "s114",
+      "kind": "heading",
+      "text": "替代品威胁",
+      "origin": {
+        "page": null,
+        "line": 231
+      }
+    },
+    {
+      "id": "s115",
+      "kind": "para",
+      "text": "满足同一需求的其他方案及性价比。",
+      "origin": {
+        "page": null,
+        "line": 233
+      }
+    },
+    {
+      "id": "s116",
+      "kind": "para",
+      "text": "方法框架：Michael E. Porter / HBS Institute for Strategy and Competitiveness；此页仅列分析问题，尚无行业结论。",
+      "origin": {
+        "page": null,
+        "line": 235
+      }
+    },
+    {
+      "id": "s117",
+      "kind": "para",
+      "text": "05 / CHOICES & CAPABILITIES",
+      "origin": {
+        "page": null,
+        "line": 237
+      }
+    },
+    {
+      "id": "s118",
+      "kind": "heading",
+      "text": "让取舍与主张都有依据。",
+      "origin": {
+        "page": null,
+        "line": 239
+      }
+    },
+    {
+      "id": "s119",
+      "kind": "para",
+      "text": "纵轴：预期影响 ↑ 横轴：实施难度 →",
+      "origin": {
+        "page": null,
+        "line": 241
+      }
+    },
+    {
+      "id": "s120",
+      "kind": "heading",
+      "text": "优先试行",
+      "origin": {
+        "page": null,
+        "line": 243
+      }
+    },
+    {
+      "id": "s121",
+      "kind": "para",
+      "text": "高影响 / 低难度\n先做小范围验证，确认收益可复现。",
+      "origin": {
+        "page": null,
+        "line": 245
+      }
+    },
+    {
+      "id": "s122",
+      "kind": "heading",
+      "text": "分阶段投入",
+      "origin": {
+        "page": null,
+        "line": 247
+      }
+    },
+    {
+      "id": "s123",
+      "kind": "para",
+      "text": "高影响 / 高难度\n先解依赖，设置里程碑与退出条件。",
+      "origin": {
+        "page": null,
+        "line": 249
+      }
+    },
+    {
+      "id": "s124",
+      "kind": "heading",
+      "text": "顺手改进",
+      "origin": {
+        "page": null,
+        "line": 251
+      }
+    },
+    {
+      "id": "s125",
+      "kind": "para",
+      "text": "低影响 / 低难度\n控制投入，避免占用核心资源。",
+      "origin": {
+        "page": null,
+        "line": 253
+      }
+    },
+    {
+      "id": "s126",
+      "kind": "heading",
+      "text": "谨慎延后",
+      "origin": {
+        "page": null,
+        "line": 255
+      }
+    },
+    {
+      "id": "s127",
+      "kind": "para",
+      "text": "低影响 / 高难度\n记录暂缓理由与重新评估的触发条件。",
+      "origin": {
+        "page": null,
+        "line": 257
+      }
+    },
+    {
+      "id": "s128",
+      "kind": "para",
+      "text": "定性示意；“高 / 低”需在项目中预先约定阈值。本例没有量化项目落点。",
+      "origin": {
+        "page": null,
+        "line": 259
+      }
+    },
+    {
+      "id": "s129",
+      "kind": "heading",
+      "text": "每一项主张，都要能被查证",
+      "origin": {
+        "page": null,
+        "line": 261
+      }
+    },
+    {
+      "id": "s130",
+      "kind": "para",
+      "text": "能力主张",
+      "origin": {
+        "page": null,
+        "line": 263
+      }
+    },
+    {
+      "id": "s131",
+      "kind": "para",
+      "text": "证据",
+      "origin": {
+        "page": null,
+        "line": 265
+      }
+    },
+    {
+      "id": "s132",
+      "kind": "para",
+      "text": "适用范围",
+      "origin": {
+        "page": null,
+        "line": 267
+      }
+    },
+    {
+      "id": "s133",
+      "kind": "para",
+      "text": "稳定交付",
+      "origin": {
+        "page": null,
+        "line": 269
+      }
+    },
+    {
+      "id": "s134",
+      "kind": "para",
+      "text": "项目验收记录",
+      "origin": {
+        "page": null,
+        "line": 271
+      }
+    },
+    {
+      "id": "s135",
+      "kind": "para",
+      "text": "明确的产品与地区",
+      "origin": {
+        "page": null,
+        "line": 273
+      }
+    },
+    {
+      "id": "s136",
+      "kind": "para",
+      "text": "一致质量",
+      "origin": {
+        "page": null,
+        "line": 275
+      }
+    },
+    {
+      "id": "s137",
+      "kind": "para",
+      "text": "抽样方法与缺陷率",
+      "origin": {
+        "page": null,
+        "line": 277
+      }
+    },
+    {
+      "id": "s138",
+      "kind": "para",
+      "text": "标注样本量与期间",
+      "origin": {
+        "page": null,
+        "line": 279
+      }
+    },
+    {
+      "id": "s139",
+      "kind": "para",
+      "text": "持续改进",
+      "origin": {
+        "page": null,
+        "line": 281
+      }
+    },
+    {
+      "id": "s140",
+      "kind": "para",
+      "text": "同口径前后对照",
+      "origin": {
+        "page": null,
+        "line": 283
+      }
+    },
+    {
+      "id": "s141",
+      "kind": "para",
+      "text": "说明外部因素",
+      "origin": {
+        "page": null,
+        "line": 285
+      }
+    },
+    {
+      "id": "s142",
+      "kind": "para",
+      "text": "示例是证据清单，尚未构成任何公司的已验证业绩。",
+      "origin": {
+        "page": null,
+        "line": 287
+      }
+    },
+    {
+      "id": "s143",
+      "kind": "para",
+      "text": "06 / A THREE-DAY JOURNEY",
+      "origin": {
+        "page": null,
+        "line": 289
+      }
+    },
+    {
+      "id": "s144",
+      "kind": "heading",
+      "text": "行程的价值，\n不在于把时间填满。",
+      "origin": {
+        "page": null,
+        "line": 291
+      }
+    },
+    {
+      "id": "s145",
+      "kind": "para",
+      "text": "适应、深入、收束。把转场、休息与天气备选一起写进体验，读者才知道自己将如何度过每一天。",
+      "origin": {
+        "page": null,
+        "line": 293
+      }
+    },
+    {
+      "id": "s146",
+      "kind": "para",
+      "text": "DAY 01 · 适应",
+      "origin": {
+        "page": null,
+        "line": 295
+      }
+    },
+    {
+      "id": "s147",
+      "kind": "heading",
+      "text": "抵达与定向",
+      "origin": {
+        "page": null,
+        "line": 297
+      }
+    },
+    {
+      "id": "s148",
+      "kind": "para",
+      "text": "上午｜集合与交通\n下午｜林地定向 · 低强度\n晚上｜整理问题 · 早休息",
+      "origin": {
+        "page": null,
+        "line": 299
+      }
+    },
+    {
+      "id": "s149",
+      "kind": "para",
+      "text": "DAY 02 · 深入",
+      "origin": {
+        "page": null,
+        "line": 301
+      }
+    },
+    {
+      "id": "s150",
+      "kind": "heading",
+      "text": "完整现场观察",
+      "origin": {
+        "page": null,
+        "line": 303
+      }
+    },
+    {
+      "id": "s151",
+      "kind": "para",
+      "text": "上午｜溪流样方 · 中强度\n下午｜自由记录 · 弹性休息\n晚上｜星空观察 · 天气备选",
+      "origin": {
+        "page": null,
+        "line": 305
+      }
+    },
+    {
+      "id": "s152",
+      "kind": "para",
+      "text": "DAY 03 · 收束",
+      "origin": {
+        "page": null,
+        "line": 307
+      }
+    },
+    {
+      "id": "s153",
+      "kind": "heading",
+      "text": "交换发现与返程",
+      "origin": {
+        "page": null,
+        "line": 309
+      }
+    },
+    {
+      "id": "s154",
+      "kind": "para",
+      "text": "上午｜小组交流 · 低强度\n中午｜午餐与整理\n下午｜返程 · 预留缓冲",
+      "origin": {
+        "page": null,
+        "line": 311
+      }
+    },
+    {
+      "id": "s155",
+      "kind": "heading",
+      "text": "上午节奏 / 180 分钟",
+      "origin": {
+        "page": null,
+        "line": 313
+      }
+    },
+    {
+      "id": "s156",
+      "kind": "para",
+      "text": "09:00—12:00 · 共 180 分钟",
+      "origin": {
+        "page": null,
+        "line": 315
+      }
+    },
+    {
+      "id": "s157",
+      "kind": "para",
+      "text": "集合\n30 min",
+      "origin": {
+        "page": null,
+        "line": 317
+      }
+    },
+    {
+      "id": "s158",
+      "kind": "para",
+      "text": "观察\n60 min",
+      "origin": {
+        "page": null,
+        "line": 319
+      }
+    },
+    {
+      "id": "s159",
+      "kind": "para",
+      "text": "休息\n30 min",
+      "origin": {
+        "page": null,
+        "line": 321
+      }
+    },
+    {
+      "id": "s160",
+      "kind": "para",
+      "text": "整理\n45 min",
+      "origin": {
+        "page": null,
+        "line": 323
+      }
+    },
+    {
+      "id": "s161",
+      "kind": "para",
+      "text": "缓冲\n15 min",
+      "origin": {
+        "page": null,
+        "line": 325
+      }
+    },
+    {
+      "id": "s162",
+      "kind": "para",
+      "text": "色段与下方标签逐项对齐；浅色代表休息或缓冲。",
+      "origin": {
+        "page": null,
+        "line": 327
+      }
+    },
+    {
+      "id": "s163",
+      "kind": "para",
+      "text": "结构示例；不对应实际场地、交通安排或已售活动。",
+      "origin": {
+        "page": null,
+        "line": 329
+      }
+    },
+    {
+      "id": "s164",
+      "kind": "para",
+      "text": "07 / FROM PLAN TO DELIVERY",
+      "origin": {
+        "page": null,
+        "line": 331
+      }
+    },
+    {
+      "id": "s165",
+      "kind": "heading",
+      "text": "时间清楚，协作才有起点。",
+      "origin": {
+        "page": null,
+        "line": 333
+      }
+    },
+    {
+      "id": "s166",
+      "kind": "para",
+      "text": "09:00",
+      "origin": {
+        "page": null,
+        "line": 335
+      }
+    },
+    {
+      "id": "s167",
+      "kind": "heading",
+      "text": "集合与安全说明",
+      "origin": {
+        "page": null,
+        "line": 337
+      }
+    },
+    {
+      "id": "s168",
+      "kind": "para",
+      "text": "30 分钟｜确认身体状态、路线与退出点。",
+      "origin": {
+        "page": null,
+        "line": 339
+      }
+    },
+    {
+      "id": "s169",
+      "kind": "para",
+      "text": "09:30",
+      "origin": {
+        "page": null,
+        "line": 341
+      }
+    },
+    {
+      "id": "s170",
+      "kind": "heading",
+      "text": "林缘慢行",
+      "origin": {
+        "page": null,
+        "line": 343
+      }
+    },
+    {
+      "id": "s171",
+      "kind": "para",
+      "text": "60 分钟｜小组轮换记录；坡段不安排讲解。",
+      "origin": {
+        "page": null,
+        "line": 345
+      }
+    },
+    {
+      "id": "s172",
+      "kind": "para",
+      "text": "10:30",
+      "origin": {
+        "page": null,
+        "line": 347
+      }
+    },
+    {
+      "id": "s173",
+      "kind": "heading",
+      "text": "饮水与休息",
+      "origin": {
+        "page": null,
+        "line": 349
+      }
+    },
+    {
+      "id": "s174",
+      "kind": "para",
+      "text": "30 分钟｜留出自主休息，不把缓冲当作活动。",
+      "origin": {
+        "page": null,
+        "line": 351
+      }
+    },
+    {
+      "id": "s175",
+      "kind": "para",
+      "text": "11:00",
+      "origin": {
+        "page": null,
+        "line": 353
+      }
+    },
+    {
+      "id": "s176",
+      "kind": "heading",
+      "text": "整理观察",
+      "origin": {
+        "page": null,
+        "line": 355
+      }
+    },
+    {
+      "id": "s177",
+      "kind": "para",
+      "text": "45 分钟｜比较记录；11:45 集合返程。",
+      "origin": {
+        "page": null,
+        "line": 357
+      }
+    },
+    {
+      "id": "s178",
+      "kind": "heading",
+      "text": "同时发生的三条工作线",
+      "origin": {
+        "page": null,
+        "line": 359
+      }
+    },
+    {
+      "id": "s179",
+      "kind": "para",
+      "text": "工作线",
+      "origin": {
+        "page": null,
+        "line": 361
+      }
+    },
+    {
+      "id": "s180",
+      "kind": "para",
+      "text": "准备期",
+      "origin": {
+        "page": null,
+        "line": 363
+      }
+    },
+    {
+      "id": "s181",
+      "kind": "para",
+      "text": "现场期",
+      "origin": {
+        "page": null,
+        "line": 365
+      }
+    },
+    {
+      "id": "s182",
+      "kind": "para",
+      "text": "复盘期",
+      "origin": {
+        "page": null,
+        "line": 367
+      }
+    },
+    {
+      "id": "s183",
+      "kind": "para",
+      "text": "内容",
+      "origin": {
+        "page": null,
+        "line": 369
+      }
+    },
+    {
+      "id": "s184",
+      "kind": "para",
+      "text": "确定问题",
+      "origin": {
+        "page": null,
+        "line": 371
+      }
+    },
+    {
+      "id": "s185",
+      "kind": "para",
+      "text": "采集记录",
+      "origin": {
+        "page": null,
+        "line": 373
+      }
+    },
+    {
+      "id": "s186",
+      "kind": "para",
+      "text": "校核结论",
+      "origin": {
+        "page": null,
+        "line": 375
+      }
+    },
+    {
+      "id": "s187",
+      "kind": "para",
+      "text": "运营",
+      "origin": {
+        "page": null,
+        "line": 377
+      }
+    },
+    {
+      "id": "s188",
+      "kind": "para",
+      "text": "确认资源",
+      "origin": {
+        "page": null,
+        "line": 379
+      }
+    },
+    {
+      "id": "s189",
+      "kind": "para",
+      "text": "协调现场",
+      "origin": {
+        "page": null,
+        "line": 381
+      }
+    },
+    {
+      "id": "s190",
+      "kind": "para",
+      "text": "归档反馈",
+      "origin": {
+        "page": null,
+        "line": 383
+      }
+    },
+    {
+      "id": "s191",
+      "kind": "para",
+      "text": "设计",
+      "origin": {
+        "page": null,
+        "line": 385
+      }
+    },
+    {
+      "id": "s192",
+      "kind": "para",
+      "text": "建立结构",
+      "origin": {
+        "page": null,
+        "line": 387
+      }
+    },
+    {
+      "id": "s193",
+      "kind": "para",
+      "text": "整理素材",
+      "origin": {
+        "page": null,
+        "line": 389
+      }
+    },
+    {
+      "id": "s194",
+      "kind": "para",
+      "text": "出版交付",
+      "origin": {
+        "page": null,
+        "line": 391
+      }
+    },
+    {
+      "id": "s195",
+      "kind": "para",
+      "text": "08 / DECISION GATES",
+      "origin": {
+        "page": null,
+        "line": 393
+      }
+    },
+    {
+      "id": "s196",
+      "kind": "heading",
+      "text": "阶段的终点，\n也是下一步的条件。",
+      "origin": {
+        "page": null,
+        "line": 395
+      }
+    },
+    {
+      "id": "s197",
+      "kind": "para",
+      "text": "01 / 定义",
+      "origin": {
+        "page": null,
+        "line": 397
+      }
+    },
+    {
+      "id": "s198",
+      "kind": "heading",
+      "text": "确认问题",
+      "origin": {
+        "page": null,
+        "line": 399
+      }
+    },
+    {
+      "id": "s199",
+      "kind": "para",
+      "text": "交付：观察清单\n进入条件：范围与责任人已确认",
+      "origin": {
+        "page": null,
+        "line": 401
+      }
+    },
+    {
+      "id": "s200",
+      "kind": "para",
+      "text": "02 / 试行",
+      "origin": {
+        "page": null,
+        "line": 403
+      }
+    },
+    {
+      "id": "s201",
+      "kind": "heading",
+      "text": "验证方法",
+      "origin": {
+        "page": null,
+        "line": 405
+      }
+    },
+    {
+      "id": "s202",
+      "kind": "para",
+      "text": "交付：试点记录\n进入条件：关键假设得到证据",
+      "origin": {
+        "page": null,
+        "line": 407
+      }
+    },
+    {
+      "id": "s203",
+      "kind": "para",
+      "text": "03 / 推进",
+      "origin": {
+        "page": null,
+        "line": 409
+      }
+    },
+    {
+      "id": "s204",
+      "kind": "heading",
+      "text": "形成常规",
+      "origin": {
+        "page": null,
+        "line": 411
+      }
+    },
+    {
+      "id": "s205",
+      "kind": "para",
+      "text": "交付：执行手册\n进入条件：资源与复盘机制就绪",
+      "origin": {
+        "page": null,
+        "line": 413
+      }
+    },
+    {
+      "id": "s206",
+      "kind": "para",
+      "text": "每一次推进，都以新的证据为起点。",
+      "origin": {
+        "page": null,
+        "line": 415
+      }
+    },
+    {
+      "id": "s207",
+      "kind": "para",
+      "text": "一份有用的宣传册，可以鲜明地表达优势，也应该让读者看清这些优势建立在什么基础之上。指标给出规模，桥接图解释变化，分析框架提出问题，执行安排则说明下一步如何发生。",
+      "origin": {
+        "page": null,
+        "line": 417
+      }
+    },
+    {
+      "id": "s208",
+      "kind": "para",
+      "text": "本册经营数值为自拟示例，目的是展示信息组织，不代表任何企业的真实业绩。波特五力方法参考 HBS Institute for Strategy and Competitiveness；图表由本仓库标准库工具生成，原始 JSON 随作者源保存。",
+      "origin": {
+        "page": null,
+        "line": 419
+      }
+    }
+  ]
+}

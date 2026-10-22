@@ -1,0 +1,4 @@
+/* Page-level editorial choices, not hidden component styles. */
+.page{--fl-margin-top:17mm;--fl-margin-bottom:19mm}.fl-l-chronology{padding:0;list-style:none}table{table-layout:fixed}td,th{padding-right:12px!important}.page svg{width:640px;max-width:100%}
+
+.page{--fl-size-key:15px;--fl-size-aux:12px;--fl-size-body:18px;--fl-leading-body:1.6}

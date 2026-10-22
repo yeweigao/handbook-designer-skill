@@ -50,7 +50,7 @@ test('local showcase filters recipes, opens source, preserves layout in structur
  try{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(new URL('../../folio-css/index.html',import.meta.url).href);await page.evaluate(()=>document.fonts.ready);
-  assert.equal(await page.locator('.recipe-card').count(),24);
+  assert.equal(await page.locator('.recipe-card').count(),await page.evaluate(()=>FOLIO_CATALOG.layouts.length+FOLIO_CATALOG.components.length));
   await page.locator('button[data-category=photography]').click();assert.equal(await page.locator('#layout-gallery .recipe-card:visible').count(),8);
   const geometry=()=>page.locator('#layout-gallery .recipe-card:visible .preview-sheet').first().evaluate(e=>[e.scrollWidth,e.scrollHeight]);
   const before=await geometry();await page.locator('#structure-toggle').check();assert.deepEqual(await geometry(),before);
@@ -58,6 +58,8 @@ test('local showcase filters recipes, opens source, preserves layout in structur
   await page.keyboard.press('Escape');assert.equal(await page.locator('dialog').evaluate(e=>e.open),false);
   await page.locator('button[data-grid="4,2"]').click();assert.equal(await page.locator('#grid-content .fl-span-4').count(),1);
   await page.locator('#image-ratio').selectOption('square');await page.locator('#image-focus').selectOption('right');assert.match(await page.locator('#image-code').innerText(),/fl-ratio-square fl-focus-right/);
+  await page.locator('button[data-component=charts]').click();assert.equal(await page.locator('#component-gallery .recipe-card:visible').count(),4);
+  await page.locator('#component-gallery .recipe-card:visible button').first().click();assert.equal(await page.locator('#chart-data').isVisible(),true);assert.match(await page.locator('#dialog-data').textContent(),/values/);await page.keyboard.press('Escape');
   await page.setViewportSize({width:390,height:844});const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);assert.equal(overflow,0);
   assert.deepEqual(errors,[]);
  }finally{await page.close();}

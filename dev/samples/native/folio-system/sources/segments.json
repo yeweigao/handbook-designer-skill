@@ -3,678 +3,1002 @@
   "source": "source.md",
   "segments": [
     {
-      "id": "p01-kicker",
+      "id": "s001",
       "kind": "para",
-      "text": "FOLIO · FIELD NOTES",
+      "text": "FOLIO / FIELD EDITION 01",
+      "origin": {
+        "page": null,
+        "line": 5
+      }
+    },
+    {
+      "id": "s002",
+      "kind": "heading",
+      "text": "看见\n之间",
+      "origin": {
+        "page": null,
+        "line": 7
+      }
+    },
+    {
+      "id": "s003",
+      "kind": "para",
+      "text": "地面，水边，夜空。",
       "origin": {
         "page": null,
         "line": 9
       }
     },
     {
-      "id": "p01-edition",
+      "id": "s004",
       "kind": "para",
-      "text": "观察小册 / 01",
+      "text": "一份关于距离与注意力的编辑样刊",
       "origin": {
         "page": null,
-        "line": 10
+        "line": 11
       }
     },
     {
-      "id": "p01-title",
-      "kind": "heading",
-      "text": "看见\n之间",
+      "id": "s005",
+      "kind": "para",
+      "text": "WAYS OF SEEING",
       "origin": {
         "page": null,
         "line": 13
       }
     },
     {
-      "id": "p01-side",
+      "id": "s006",
       "kind": "para",
-      "text": "在风景与语言之间，\n留一点观察的时间。",
+      "text": "2026 / 摄影与文字实验",
       "origin": {
         "page": null,
-        "line": 14
+        "line": 15
       }
     },
     {
-      "id": "p01-caption",
+      "id": "s007",
       "kind": "para",
-      "text": "海岸、岩壁、灯塔。先看关系，再看名字。",
+      "text": "EDITOR’S NOTE",
       "origin": {
         "page": null,
-        "line": 18
+        "line": 17
       }
     },
     {
-      "id": "p01-description",
+      "id": "s008",
+      "kind": "heading",
+      "text": "我们走得很远，\n也可能\n什么都没看见。",
+      "origin": {
+        "page": null,
+        "line": 19
+      }
+    },
+    {
+      "id": "s009",
       "kind": "para",
-      "text": "一本关于如何阅读图像的练习册",
+      "text": "旅途中最容易被带走的，是一张看起来完整的照片。山、水、天空都在画面里，观看却可能只停留了几秒。直到我们尝试描述一片叶子的边缘，才发现眼前还有许多未曾进入语言的细节。",
       "origin": {
         "page": null,
         "line": 21
       }
     },
     {
-      "id": "p01-status",
+      "id": "s010",
       "kind": "para",
-      "text": "原创教学示例 · 非旅行指南",
+      "text": "这本小刊从三个尺度展开：脚下的纹理、流动的水，以及辽阔的夜空。它不提供地点清单，而是邀请读者在下一次抵达时，多停留一会儿。",
       "origin": {
         "page": null,
-        "line": 22
+        "line": 23
       }
     },
     {
-      "id": "p02-kicker",
+      "id": "s011",
       "kind": "para",
-      "text": "01 / 停留",
+      "text": "照片来自不同地区的公开授权影像。它们在这里构成一次编辑上的相遇，并非同一条实地路线；关于世界的判断，仍应回到现场核验。",
+      "origin": {
+        "page": null,
+        "line": 25
+      }
+    },
+    {
+      "id": "s012",
+      "kind": "para",
+      "text": "编者 / Folio",
+      "origin": {
+        "page": null,
+        "line": 27
+      }
+    },
+    {
+      "id": "s013",
+      "kind": "para",
+      "text": "CONTENTS / 阅读路径",
       "origin": {
         "page": null,
         "line": 29
       }
     },
     {
-      "id": "p02-title",
-      "kind": "heading",
-      "text": "先停一下，\n再给风景命名。",
-      "origin": {
-        "page": null,
-        "line": 30
-      }
-    },
-    {
-      "id": "p02-lead",
+      "id": "s014",
       "kind": "para",
-      "text": "看到一棵树，可以先不问它叫什么。试着描述它怎样进入画面：靠近哪一边，挡住了什么，又把哪里留给光。",
+      "text": "01",
       "origin": {
         "page": null,
         "line": 31
       }
     },
     {
-      "id": "p02-a1",
-      "kind": "para",
-      "text": "我们常常很快地辨认一幅照片：这是森林，那是海岸。名字让交流变得方便，也容易让观察提前结束。再停留片刻，画面里还会出现更多关系：枝叶的疏密、水面的明暗，以及前景和远处之间的距离。",
+      "id": "s015",
+      "kind": "heading",
+      "text": "地面",
       "origin": {
         "page": null,
-        "line": 34
+        "line": 33
       }
     },
     {
-      "id": "p02-a2",
+      "id": "s016",
       "kind": "para",
-      "text": "不必立刻解释每个细节。先写下能指给别人看的东西。例如，“左上方的枝叶遮住了天空”比“这里很有生机”更容易核对。它把一句感受变成了可以继续讨论的起点。",
+      "text": "慢下来，辨认具体。\n04—05 / 阅读",
       "origin": {
         "page": null,
         "line": 35
       }
     },
     {
-      "id": "p02-a3",
+      "id": "s017",
       "kind": "para",
-      "text": "描述也不需要覆盖全部。选一个你最在意的关系，沿着它往下看：一条边界如何转折，一小片亮处怎样被暗处包围，或一处空白让视线停在哪里。",
+      "text": "02",
       "origin": {
         "page": null,
-        "line": 36
+        "line": 37
       }
     },
     {
-      "id": "p02-b1",
-      "kind": "para",
-      "text": "随后再写下你的判断，并把两者分开。“画面里的水很平静”是一种阅读；“水面上有连续的浅色反光”则是另一种描述。判断可以保留，只要读者知道它从哪里开始。",
+      "id": "s018",
+      "kind": "heading",
+      "text": "夜空",
       "origin": {
         "page": null,
         "line": 39
       }
     },
     {
-      "id": "p02-b2",
+      "id": "s019",
       "kind": "para",
-      "text": "这本小册把同一张照片放进不同边界，也让一张照片延续到相邻的两页。你可以比较：哪些线索被保留，哪些暂时离开了视野，文字又在什么时候介入。",
-      "origin": {
-        "page": null,
-        "line": 40
-      }
-    },
-    {
-      "id": "p02-b3",
-      "kind": "para",
-      "text": "最后，给自己留一个还没有答案的问题。观察并不总要收束为结论。有时，一句准确的问题就足以让下一次观看有所不同。",
+      "text": "为距离留出空间。\n06—07 / 全景",
       "origin": {
         "page": null,
         "line": 41
       }
     },
     {
-      "id": "p02-end",
+      "id": "s020",
       "kind": "para",
-      "text": "把“我觉得”，接在“我看见”之后。",
+      "text": "03",
       "origin": {
         "page": null,
-        "line": 44
+        "line": 43
       }
     },
     {
-      "id": "p03-kicker",
+      "id": "s021",
+      "kind": "heading",
+      "text": "取景",
+      "origin": {
+        "page": null,
+        "line": 45
+      }
+    },
+    {
+      "id": "s022",
       "kind": "para",
-      "text": "02 / 描述",
+      "text": "从整体走向细节。\n08—13 / 影像与方法",
+      "origin": {
+        "page": null,
+        "line": 47
+      }
+    },
+    {
+      "id": "s023",
+      "kind": "para",
+      "text": "14 / 余韵  15 / 图像索引",
+      "origin": {
+        "page": null,
+        "line": 49
+      }
+    },
+    {
+      "id": "s024",
+      "kind": "para",
+      "text": "01 / ON THE GROUND",
       "origin": {
         "page": null,
         "line": 51
       }
     },
     {
-      "id": "p03-title",
+      "id": "s025",
       "kind": "heading",
-      "text": "从画面，到问题",
-      "origin": {
-        "page": null,
-        "line": 52
-      }
-    },
-    {
-      "id": "p03-lead",
-      "kind": "para",
-      "text": "先写一句可以在照片上指出位置的话，再问一句需要继续观察的话。以下是练习句式，不是对照片拍摄地的事实认定。",
+      "text": "把“风景”\n拆成具体的事物。",
       "origin": {
         "page": null,
         "line": 53
       }
     },
     {
-      "id": "p03-th1",
-      "kind": "cell",
-      "text": "看什么",
+      "id": "s026",
+      "kind": "para",
+      "text": "沿着林缘走，第一眼通常是绿色。更深一点的绿、更亮一点的绿，又在枝叶投下的阴影里重新混合。颜色先于名称抵达，我们却常常急着把它们归为同一种背景。",
       "origin": {
         "page": null,
-        "line": 56
+        "line": 55
       }
     },
     {
-      "id": "p03-th2",
-      "kind": "cell",
-      "text": "可以这样描述",
+      "id": "s027",
+      "kind": "para",
+      "text": "当目光停在一片叶子上，观看开始改变。叶脉有自己的方向，缺口有清楚的边缘。邻近的蕨叶托起一小块光，也托起了季节留下的痕迹。对象不再只是“自然”，而是一组可以描述、可以回来比较的关系。",
       "origin": {
         "page": null,
         "line": 57
       }
     },
     {
-      "id": "p03-th3",
-      "kind": "cell",
-      "text": "接着这样追问",
-      "origin": {
-        "page": null,
-        "line": 58
-      }
-    },
-    {
-      "id": "p03-r1a",
-      "kind": "cell",
-      "text": "位置",
-      "origin": {
-        "page": null,
-        "line": 61
-      }
-    },
-    {
-      "id": "p03-r1b",
-      "kind": "cell",
-      "text": "主体靠近画面的右边，左侧保留了一片较空的区域。",
-      "origin": {
-        "page": null,
-        "line": 61
-      }
-    },
-    {
-      "id": "p03-r1c",
-      "kind": "cell",
-      "text": "如果把主体移到中央，视线会怎样走？",
-      "origin": {
-        "page": null,
-        "line": 61
-      }
-    },
-    {
-      "id": "p03-r2a",
-      "kind": "cell",
-      "text": "明暗",
-      "origin": {
-        "page": null,
-        "line": 62
-      }
-    },
-    {
-      "id": "p03-r2b",
-      "kind": "cell",
-      "text": "亮处被较暗的枝叶围住，边缘仍能分辨出细节。",
-      "origin": {
-        "page": null,
-        "line": 62
-      }
-    },
-    {
-      "id": "p03-r2c",
-      "kind": "cell",
-      "text": "先吸引你的是最亮的地方，还是最清晰的边缘？",
-      "origin": {
-        "page": null,
-        "line": 62
-      }
-    },
-    {
-      "id": "p03-r3a",
-      "kind": "cell",
-      "text": "尺度",
-      "origin": {
-        "page": null,
-        "line": 63
-      }
-    },
-    {
-      "id": "p03-r3b",
-      "kind": "cell",
-      "text": "近处的叶片占据更多画面，远处的树干显得更细。",
-      "origin": {
-        "page": null,
-        "line": 63
-      }
-    },
-    {
-      "id": "p03-r3c",
-      "kind": "cell",
-      "text": "有没有一个细节，能帮助你感受远近？",
-      "origin": {
-        "page": null,
-        "line": 63
-      }
-    },
-    {
-      "id": "p03-r4a",
-      "kind": "cell",
-      "text": "边界",
-      "origin": {
-        "page": null,
-        "line": 64
-      }
-    },
-    {
-      "id": "p03-r4b",
-      "kind": "cell",
-      "text": "一部分枝叶在画面边缘被截断，方向仍然可见。",
-      "origin": {
-        "page": null,
-        "line": 64
-      }
-    },
-    {
-      "id": "p03-r4c",
-      "kind": "cell",
-      "text": "画面之外，哪些内容值得再去查看？",
-      "origin": {
-        "page": null,
-        "line": 64
-      }
-    },
-    {
-      "id": "p03-note-label",
+      "id": "s028",
       "kind": "para",
-      "text": "随手练习",
+      "text": "描述并不需要很多术语。可以先从形状、位置和尺度开始：一条弧线穿过哪里？两种颜色在什么地方相接？如果移动半步，遮挡会不会改变？这些问题足够具体，因此也容得下不同的答案。",
       "origin": {
         "page": null,
-        "line": 68
+        "line": 59
       }
     },
     {
-      "id": "p03-note",
+      "id": "s029",
       "kind": "para",
-      "text": "任选一幅图，写下一句描述和一句问题。先不要查答案；请同伴只根据你的文字，找到你指的那一处。",
+      "text": "观察札记 01",
+      "origin": {
+        "page": null,
+        "line": 61
+      }
+    },
+    {
+      "id": "s030",
+      "kind": "para",
+      "text": "名称可以稍后再查。\n先写下形状、位置、方向。",
+      "origin": {
+        "page": null,
+        "line": 63
+      }
+    },
+    {
+      "id": "s031",
+      "kind": "para",
+      "text": "一段准确的描述，往往比一个过早的结论更有用。",
+      "origin": {
+        "page": null,
+        "line": 65
+      }
+    },
+    {
+      "id": "s032",
+      "kind": "para",
+      "text": "记录时，试着把看到的与想到的分开。前者是叶片的颜色、缺口的位置，后者是关于时间与原因的推测。分开记录不是消除想象，而是给想象留下接受检验的机会。",
+      "origin": {
+        "page": null,
+        "line": 67
+      }
+    },
+    {
+      "id": "s033",
+      "kind": "para",
+      "text": "拍照是有效的记忆方式，却不能替代所有感受。风让叶缘颤动，脚步改变地面的声音，湿润的空气让远近的颜色出现差别。照片保存一个切面，笔记可以保存切面之外的事物。",
       "origin": {
         "page": null,
         "line": 69
       }
     },
     {
-      "id": "p04-kicker",
+      "id": "s034",
       "kind": "para",
-      "text": "03 / 远近",
+      "text": "再回到原处时，不必急着寻找“变化”。先确认站位、光线与观察时段。没有参照的差别，可能来自观看者本身。把参照写下来，才知道哪些发现值得追问。",
+      "origin": {
+        "page": null,
+        "line": 71
+      }
+    },
+    {
+      "id": "s035",
+      "kind": "para",
+      "text": "注意力不是\n把世界缩小，\n而是让一个局部\n重新变得辽阔。",
+      "origin": {
+        "page": null,
+        "line": 73
+      }
+    },
+    {
+      "id": "s036",
+      "kind": "para",
+      "text": "落叶与蕨叶。图像说明的是可见关系，无法仅凭一张照片确认变化原因。",
+      "origin": {
+        "page": null,
+        "line": 75
+      }
+    },
+    {
+      "id": "s037",
+      "kind": "para",
+      "text": "02 / UNDER THE NIGHT SKY",
       "origin": {
         "page": null,
         "line": 77
       }
     },
     {
-      "id": "p04-title",
+      "id": "s038",
       "kind": "heading",
-      "text": "把目光，放近一点。",
+      "text": "让视线，比脚步更远。",
       "origin": {
         "page": null,
-        "line": 78
+        "line": 79
       }
     },
     {
-      "id": "p04-cap1",
+      "id": "s039",
       "kind": "para",
-      "text": "水与石块之间，可以沿着亮暗交界追踪视线。",
+      "text": "夜空把距离变成一种感受。地平线很低，眼睛便有了缓慢上行的时间。",
       "origin": {
         "page": null,
-        "line": 82
+        "line": 81
       }
     },
     {
-      "id": "p04-cap2",
+      "id": "s040",
       "kind": "para",
-      "text": "抬头看，一条坡面把视线引向远处。",
+      "text": "一幅图像 / 两张纸页",
+      "origin": {
+        "page": null,
+        "line": 83
+      }
+    },
+    {
+      "id": "s041",
+      "kind": "para",
+      "text": "在星光与地面之间，树木让尺度变得可感。我们无法从一幅照片测量距离，却能看见前景怎样帮助视线抵达远处。",
+      "origin": {
+        "page": null,
+        "line": 85
+      }
+    },
+    {
+      "id": "s042",
+      "kind": "para",
+      "text": "03 / CHANGING THE FRAME",
       "origin": {
         "page": null,
         "line": 87
       }
     },
     {
-      "id": "p04-cap3",
+      "id": "s043",
+      "kind": "heading",
+      "text": "一张照片，\n不止一个入口。",
+      "origin": {
+        "page": null,
+        "line": 89
+      }
+    },
+    {
+      "id": "s044",
       "kind": "para",
-      "text": "低头看，叶片的方向与纹理进入画面。",
+      "text": "原图 / 落叶、蕨叶与彼此遮挡的背景。",
       "origin": {
         "page": null,
         "line": 91
       }
     },
     {
-      "id": "p04-text",
+      "id": "s045",
       "kind": "para",
-      "text": "整幅风景与局部细节可以放在一起阅读。试着先看大图，再回到旁边的小图；留意你的描述是变得更具体，还是出现了新的问题。",
+      "text": "取景练习",
       "origin": {
         "page": null,
-        "line": 96
+        "line": 93
       }
     },
     {
-      "id": "p04-note",
+      "id": "s046",
       "kind": "para",
-      "text": "本页照片来自不同拍摄地点，编排用于观看练习，不表示同一地点或同一段旅程。",
+      "text": "改变画框，就改变了读者先看到的关系。右页保留同一张原图，只调整取景比例与焦点；裁切没有创造新的事实。",
+      "origin": {
+        "page": null,
+        "line": 95
+      }
+    },
+    {
+      "id": "s047",
+      "kind": "para",
+      "text": "A",
       "origin": {
         "page": null,
         "line": 97
       }
     },
     {
-      "id": "p05-kicker",
+      "id": "s048",
       "kind": "para",
-      "text": "04 / 取景",
+      "text": "收紧画框\n看边缘与方向",
+      "origin": {
+        "page": null,
+        "line": 99
+      }
+    },
+    {
+      "id": "s049",
+      "kind": "para",
+      "text": "B",
+      "origin": {
+        "page": null,
+        "line": 101
+      }
+    },
+    {
+      "id": "s050",
+      "kind": "heading",
+      "text": "主体之外，\n仍然有信息。",
+      "origin": {
+        "page": null,
+        "line": 103
+      }
+    },
+    {
+      "id": "s051",
+      "kind": "para",
+      "text": "小图的重点落在叶片与蕨叶交会处。放大后的纹理更清楚，但环境线索也随之减少。",
       "origin": {
         "page": null,
         "line": 105
       }
     },
     {
-      "id": "p05-title",
-      "kind": "heading",
-      "text": "同一张照片，\n两种停留。",
-      "origin": {
-        "page": null,
-        "line": 106
-      }
-    },
-    {
-      "id": "p05-cap1",
+      "id": "s052",
       "kind": "para",
-      "text": "向左取景 / 岩壁与水面占据视野。",
+      "text": "IMAGE SEQUENCE / 由近及远",
       "origin": {
         "page": null,
-        "line": 110
+        "line": 107
       }
     },
     {
-      "id": "p05-cap2",
+      "id": "s053",
       "kind": "para",
-      "text": "向右取景 / 灯塔与坡面成为线索。",
+      "text": "纹理。\n结构。\n环境。",
       "origin": {
         "page": null,
-        "line": 114
+        "line": 109
       }
     },
     {
-      "id": "p05-q1",
-      "kind": "heading",
-      "text": "你先看到了什么？",
-      "origin": {
-        "page": null,
-        "line": 118
-      }
-    },
-    {
-      "id": "p05-a1",
+      "id": "s054",
       "kind": "para",
-      "text": "先用一句话描述左图。再看右图，看看这句话是否仍然合适。",
+      "text": "组照以观看尺度组织，不以拍摄时间伪造连续旅程。每张图像保留独立来源，排列只提出一种阅读关系。",
       "origin": {
         "page": null,
-        "line": 118
+        "line": 111
       }
     },
     {
-      "id": "p05-q2",
+      "id": "s055",
+      "kind": "para",
+      "text": "海胆近景 / 落叶与蕨叶 / 森林。三张图像来自不同地点。",
+      "origin": {
+        "page": null,
+        "line": 113
+      }
+    },
+    {
+      "id": "s056",
+      "kind": "para",
+      "text": "WATER",
+      "origin": {
+        "page": null,
+        "line": 115
+      }
+    },
+    {
+      "id": "s057",
       "kind": "heading",
-      "text": "什么离开了画面？",
+      "text": "水\n把方向\n留下。",
+      "origin": {
+        "page": null,
+        "line": 117
+      }
+    },
+    {
+      "id": "s058",
+      "kind": "para",
+      "text": "从上缘落下，经过岩石，再回到深色的水面。白色并不是装饰，它指示流动正在发生的地方。",
       "origin": {
         "page": null,
         "line": 119
       }
     },
     {
-      "id": "p05-a2",
+      "id": "s059",
       "kind": "para",
-      "text": "回到封面的完整取景，找出两次裁切各自省略的线索。",
-      "origin": {
-        "page": null,
-        "line": 119
-      }
-    },
-    {
-      "id": "p05-end",
-      "kind": "para",
-      "text": "照片相同；取景改变了我们先遇见的内容。",
+      "text": "让这张竖幅图保持足够的高度。阅读也随之放慢。",
       "origin": {
         "page": null,
         "line": 121
       }
     },
     {
-      "id": "p06-kicker",
+      "id": "s060",
       "kind": "para",
-      "text": "05 / 延续",
+      "text": "METHOD / 从观看到记录",
+      "origin": {
+        "page": null,
+        "line": 123
+      }
+    },
+    {
+      "id": "s061",
+      "kind": "heading",
+      "text": "一个问题，\n三次靠近。",
+      "origin": {
+        "page": null,
+        "line": 125
+      }
+    },
+    {
+      "id": "s062",
+      "kind": "para",
+      "text": "01",
+      "origin": {
+        "page": null,
+        "line": 127
+      }
+    },
+    {
+      "id": "s063",
+      "kind": "heading",
+      "text": "建立参照",
       "origin": {
         "page": null,
         "line": 129
       }
     },
     {
-      "id": "p06-title",
-      "kind": "heading",
-      "text": "一片林，",
+      "id": "s064",
+      "kind": "para",
+      "text": "先画出地平线、路径与主体位置。记录日期、时段和站位，让第二次观察有一个共同起点。",
       "origin": {
         "page": null,
-        "line": 130
+        "line": 131
       }
     },
     {
-      "id": "p06-note-title",
+      "id": "s065",
       "kind": "para",
-      "text": "让目光穿过书脊",
-      "origin": {
-        "page": null,
-        "line": 132
-      }
-    },
-    {
-      "id": "p06-note",
-      "kind": "para",
-      "text": "从左侧枝叶开始，沿着亮处向右看。暂时放下文字，让眼睛自己选择下一处停留。",
+      "text": "02",
       "origin": {
         "page": null,
         "line": 133
       }
     },
     {
-      "id": "p06-credit",
-      "kind": "para",
-      "text": "Landscape of a wild forest · SpessiG · CC0 1.0",
+      "id": "s066",
+      "kind": "heading",
+      "text": "缩小问题",
       "origin": {
         "page": null,
-        "line": 134
+        "line": 135
       }
     },
     {
-      "id": "p07-kicker",
+      "id": "s067",
       "kind": "para",
-      "text": "FOREST / CONTINUED",
+      "text": "从整幅景象中选择一处关系：光与阴影、边缘与背景、流动与停留。一次只追一个问题。",
+      "origin": {
+        "page": null,
+        "line": 137
+      }
+    },
+    {
+      "id": "s068",
+      "kind": "para",
+      "text": "03",
+      "origin": {
+        "page": null,
+        "line": 139
+      }
+    },
+    {
+      "id": "s069",
+      "kind": "heading",
+      "text": "回来比较",
+      "origin": {
+        "page": null,
+        "line": 141
+      }
+    },
+    {
+      "id": "s070",
+      "kind": "para",
+      "text": "重新检查原来的描述。哪些仍然成立？哪些需要修改？把没有解释的部分留下，作为下一次的问题。",
       "origin": {
         "page": null,
         "line": 143
       }
     },
     {
-      "id": "p07-title",
-      "kind": "heading",
-      "text": "不止一页。",
+      "id": "s071",
+      "kind": "para",
+      "text": "记录不是为了把每次经验变成答案。它也可以帮助我们准确地保留疑问。",
       "origin": {
         "page": null,
-        "line": 144
+        "line": 145
       }
     },
     {
-      "id": "p07-note-title",
+      "id": "s072",
       "kind": "para",
-      "text": "再回到你选中的细节",
-      "origin": {
-        "page": null,
-        "line": 146
-      }
-    },
-    {
-      "id": "p07-note",
-      "kind": "para",
-      "text": "它靠近哪一条边界？和周围相比，是更亮、更密，还是方向不同？试着用一个可指认的关系描述它。",
+      "text": "FIELD RECORD / 示例笔记",
       "origin": {
         "page": null,
         "line": 147
       }
     },
     {
-      "id": "p07-credit",
-      "kind": "para",
-      "text": "两页为同一图像的连续视野，保留书脊两侧的衔接。",
-      "origin": {
-        "page": null,
-        "line": 148
-      }
-    },
-    {
-      "id": "p08-kicker",
-      "kind": "para",
-      "text": "FOLIO / 再看一次",
-      "origin": {
-        "page": null,
-        "line": 156
-      }
-    },
-    {
-      "id": "p08-title",
+      "id": "s073",
       "kind": "heading",
-      "text": "带走一个问题，\n留下观看的余地。",
+      "text": "分清看到的，\n与我们推测的。",
+      "origin": {
+        "page": null,
+        "line": 149
+      }
+    },
+    {
+      "id": "s074",
+      "kind": "para",
+      "text": "直接观察",
+      "origin": {
+        "page": null,
+        "line": 151
+      }
+    },
+    {
+      "id": "s075",
+      "kind": "para",
+      "text": "暂时推测",
+      "origin": {
+        "page": null,
+        "line": 153
+      }
+    },
+    {
+      "id": "s076",
+      "kind": "para",
+      "text": "落叶与蕨叶的颜色不同。",
+      "origin": {
+        "page": null,
+        "line": 155
+      }
+    },
+    {
+      "id": "s077",
+      "kind": "para",
+      "text": "差异可能与物种或生长阶段有关。",
       "origin": {
         "page": null,
         "line": 157
       }
     },
     {
-      "id": "p08-lead",
+      "id": "s078",
       "kind": "para",
-      "text": "下一次遇见一幅风景，先写下你看见的，再写下你想知道的。让这两句话之间，留一点空白。",
+      "text": "水面局部出现明亮的白色。",
       "origin": {
         "page": null,
-        "line": 158
+        "line": 159
       }
     },
     {
-      "id": "p08-about-title",
+      "id": "s079",
       "kind": "para",
-      "text": "关于这本小册",
+      "text": "可能有急流，也可能是反光。",
       "origin": {
         "page": null,
         "line": 161
       }
     },
     {
-      "id": "p08-about",
+      "id": "s080",
       "kind": "para",
-      "text": "本文为 Folio CSS 编写的原创教学示例，内容围绕图像观察与阅读；所有照片只作观看材料，不构成行程推荐或地点介绍。",
-      "origin": {
-        "page": null,
-        "line": 162
-      }
-    },
-    {
-      "id": "p08-brand",
-      "kind": "para",
-      "text": "Folio CSS · 排版与图像共用一套规则\n2026 · 中文样册",
+      "text": "森林照片的远处更亮。",
       "origin": {
         "page": null,
         "line": 163
       }
     },
     {
-      "id": "p08-credits-title",
+      "id": "s081",
       "kind": "para",
-      "text": "图像与授权",
+      "text": "亮度可能来自开口或曝光选择。",
       "origin": {
         "page": null,
-        "line": 166
+        "line": 165
       }
     },
     {
-      "id": "p08-c1",
+      "id": "s082",
       "kind": "para",
-      "text": "海岸灯塔 / BLM Oregon & Washington\nGreat blue heron at Yaquina Head\nPublic domain · 第 1、4、5 页",
+      "text": "还需要什么证据？",
       "origin": {
         "page": null,
         "line": 167
       }
     },
     {
-      "id": "p08-c2",
+      "id": "s083",
       "kind": "para",
-      "text": "溪流 / U.S. Forest Service – Pacific Northwest Region\nSmall Waterfall on Upper Santiam River\nPublic domain · 第 4 页",
-      "origin": {
-        "page": null,
-        "line": 168
-      }
-    },
-    {
-      "id": "p08-c3",
-      "kind": "para",
-      "text": "落叶 / Superior National Forest\nLeaf on fern close up\nPublic domain · 第 4 页",
+      "text": "原始拍摄信息、不同角度、连续时段，以及现场记录。单幅照片给出的线索有限；好的图注帮助读者理解这种限制。",
       "origin": {
         "page": null,
         "line": 169
       }
     },
     {
-      "id": "p08-c4",
+      "id": "s084",
       "kind": "para",
-      "text": "森林 / SpessiG\nLandscape of a wild forest\nCC0 1.0 · 第 6、7 页",
-      "origin": {
-        "page": null,
-        "line": 170
-      }
-    },
-    {
-      "id": "p08-source",
-      "kind": "para",
-      "text": "图像均来自 Wikimedia Commons。\n完整链接、许可及原文件记录见 sources/assets.json。",
+      "text": "以上为阅读图像的示例练习，并非对照片地点的科学调查。",
       "origin": {
         "page": null,
         "line": 171
+      }
+    },
+    {
+      "id": "s085",
+      "kind": "para",
+      "text": "AFTERWORD / 余韵",
+      "origin": {
+        "page": null,
+        "line": 173
+      }
+    },
+    {
+      "id": "s086",
+      "kind": "heading",
+      "text": "世界很大。\n从一片叶子\n开始。",
+      "origin": {
+        "page": null,
+        "line": 175
+      }
+    },
+    {
+      "id": "s087",
+      "kind": "para",
+      "text": "带走的也许不是一张更漂亮的照片，而是下一次抵达时，多问一句、多看一眼的习惯。",
+      "origin": {
+        "page": null,
+        "line": 177
+      }
+    },
+    {
+      "id": "s088",
+      "kind": "para",
+      "text": "IMAGE INDEX / 图像来源",
+      "origin": {
+        "page": null,
+        "line": 179
+      }
+    },
+    {
+      "id": "s089",
+      "kind": "para",
+      "text": "TELESCOPE NIGHT",
+      "origin": {
+        "page": null,
+        "line": 181
+      }
+    },
+    {
+      "id": "s090",
+      "kind": "para",
+      "text": "LassenNPS / Public domain",
+      "origin": {
+        "page": null,
+        "line": 183
+      }
+    },
+    {
+      "id": "s091",
+      "kind": "para",
+      "text": "MILKY WAY ARCH",
+      "origin": {
+        "page": null,
+        "line": 185
+      }
+    },
+    {
+      "id": "s092",
+      "kind": "para",
+      "text": "NPS/Jeremy M. White / Public domain",
+      "origin": {
+        "page": null,
+        "line": 187
+      }
+    },
+    {
+      "id": "s093",
+      "kind": "para",
+      "text": "AUTUMN LEAVES",
+      "origin": {
+        "page": null,
+        "line": 189
+      }
+    },
+    {
+      "id": "s094",
+      "kind": "para",
+      "text": "Superior National Forest / Public domain",
+      "origin": {
+        "page": null,
+        "line": 191
+      }
+    },
+    {
+      "id": "s095",
+      "kind": "para",
+      "text": "SEA URCHIN",
+      "origin": {
+        "page": null,
+        "line": 193
+      }
+    },
+    {
+      "id": "s096",
+      "kind": "para",
+      "text": "BLM Oregon & Washington / Public domain",
+      "origin": {
+        "page": null,
+        "line": 195
+      }
+    },
+    {
+      "id": "s097",
+      "kind": "para",
+      "text": "FOREST CC0",
+      "origin": {
+        "page": null,
+        "line": 197
+      }
+    },
+    {
+      "id": "s098",
+      "kind": "para",
+      "text": "SpessiG / CC0-1.0",
+      "origin": {
+        "page": null,
+        "line": 199
+      }
+    },
+    {
+      "id": "s099",
+      "kind": "para",
+      "text": "WATERFALL MOSS",
+      "origin": {
+        "page": null,
+        "line": 201
+      }
+    },
+    {
+      "id": "s100",
+      "kind": "para",
+      "text": "U.S. Forest Service – Pacific Northwest Region / Public domain",
+      "origin": {
+        "page": null,
+        "line": 203
+      }
+    },
+    {
+      "id": "s101",
+      "kind": "para",
+      "text": "完整来源网址、授权及素材哈希见 sources/assets.json。影像用于排版与观看方式展示，不表示编辑者在同一次旅程中到访这些地点。",
+      "origin": {
+        "page": null,
+        "line": 205
+      }
+    },
+    {
+      "id": "s102",
+      "kind": "para",
+      "text": "Folio",
+      "origin": {
+        "page": null,
+        "line": 207
+      }
+    },
+    {
+      "id": "s103",
+      "kind": "para",
+      "text": "FIELD EDITION / 01",
+      "origin": {
+        "page": null,
+        "line": 209
+      }
+    },
+    {
+      "id": "s104",
+      "kind": "heading",
+      "text": "让每一次观看，\n都有自己的尺度。",
+      "origin": {
+        "page": null,
+        "line": 211
+      }
+    },
+    {
+      "id": "s105",
+      "kind": "para",
+      "text": "看见之间 · 2026",
+      "origin": {
+        "page": null,
+        "line": 213
+      }
+    },
+    {
+      "id": "s106",
+      "kind": "para",
+      "text": "原创示范文稿 / 公开授权摄影\n共享网格、色彩、字阶与图像规则\n印刷样刊 · 210 × 297 mm",
+      "origin": {
+        "page": null,
+        "line": 215
+      }
+    },
+    {
+      "id": "extra4-0",
+      "kind": "para",
+      "text": "同一幅图像也有不同的阅读路径。有人沿着叶脉的方向看，有人先注意到黄色与绿色相接的边界。把两个人的描述并排，我们会发现，差异不一定来自对错，而可能来自注意力最先落下的位置。",
+      "origin": {
+        "page": null,
+        "line": 217
+      }
+    },
+    {
+      "id": "extra4-1",
+      "kind": "para",
+      "text": "可以做一次简单的练习：先用三句话写下照片里能够直接指出的事物，再用三句话写下它让你想到的事情。前一组描述负责让别人找到同一个对象，后一组负责暴露自己的经验。两种文字都重要，但承担的任务不同。",
+      "origin": {
+        "page": null,
+        "line": 219
+      }
+    },
+    {
+      "id": "extra4-2",
+      "kind": "para",
+      "text": "当描述进入一份出版物，图像的尺寸和位置也成为编辑决定。放大纹理，会降低地点的可识别性；保留边缘，会带回一部分环境。每次裁切都在选择读者首先看到什么，也因此需要承担说明的责任。",
+      "origin": {
+        "page": null,
+        "line": 221
+      }
+    },
+    {
+      "id": "extra5-0",
+      "kind": "para",
+      "text": "观看也是一种取舍。我们无法在同一时间看清整个环境与每一条纹理；靠近让细节增多，也会让背景退出视野。因此，记录最好保留两个尺度：一张说明位置，一张说明问题。它们彼此补充，而不是争夺哪张更漂亮。",
+      "origin": {
+        "page": null,
+        "line": 223
+      }
+    },
+    {
+      "id": "extra5-1",
+      "kind": "para",
+      "text": "回看笔记时，可以尝试删去“很好看”“很特别”这样的评价，看看还剩下什么。若文字仍能引导别人找到对象，说明观察已经具体；若几乎没有内容留下，就值得再看一次。这样的删改不是压低感受，而是让感受获得可以分享的形状。",
+      "origin": {
+        "page": null,
+        "line": 225
       }
     }
   ]

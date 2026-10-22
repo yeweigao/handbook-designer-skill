@@ -1,0 +1,104 @@
+{
+  "contract": 1,
+  "status": "delivered",
+  "name": "folio-system-v1.1",
+  "build_id": "66661d362fca",
+  "fingerprint": "66661d362fcabb2e8e35eaf7bea3ea2553dddb853a3b7456197a68b0328e098f",
+  "tools": {
+    "contract": 1,
+    "playwright": "1.64.1",
+    "chromium": "149.0.7827.55",
+    "executable": "HB_CHROMIUM",
+    "node": "24",
+    "tool_hash": "ee031c4fc06385f1ac015e8e0ad5d5470242b1b3a28df8d48c18aff39aeaaa5a"
+  },
+  "visual_review": {
+    "verdict": "deliverable",
+    "by": "Codex（作者全页复核，非独立评测）",
+    "date": "2026-10-22T17:59:19.963Z"
+  },
+  "checks": [
+    {
+      "id": "pdf.zh-CN",
+      "status": "pass",
+      "severity": "hard",
+      "message": "正式 PDF 与验收记录一致",
+      "evidence": {}
+    },
+    {
+      "id": "editable.zh-CN",
+      "status": "pass",
+      "severity": "hard",
+      "message": "可编辑 PDF：字体扩充嵌入（非子集）、无 Type 3、逐页栅格与正式版一致",
+      "evidence": {
+        "replaced": 6,
+        "fonts": [
+          "Inter-Regular",
+          "Inter-SemiBold",
+          "NotoSansSC-Bold",
+          "NotoSansSC-Regular",
+          "NotoSerifSC-Bold",
+          "NotoSerifSC-Regular"
+        ],
+        "glyphs": {
+          "Inter-SemiBold": 1146,
+          "NotoSerifSC-Bold": 8493,
+          "NotoSansSC-Regular": 8495,
+          "Inter-Regular": 1146,
+          "NotoSerifSC-Regular": 8493,
+          "NotoSansSC-Bold": 8495
+        },
+        "not_replaced": [],
+        "bytes": 15809312,
+        "compare": "{\"pages_a\": 16, \"pages_b\": 16, \"diff\": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], \"worst\": 0.0}"
+      }
+    },
+    {
+      "id": "offline.zh-CN",
+      "status": "pass",
+      "severity": "hard",
+      "message": "离线 HTML：无外部请求、资源全部就绪、打印结果与正式 PDF 一致",
+      "evidence": {
+        "pages_a": 16,
+        "pages_b": 16,
+        "diff": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "worst": 0
+      }
+    },
+    {
+      "id": "source.rebuild",
+      "status": "pass",
+      "severity": "hard",
+      "message": "源文件包在干净目录重建：构建 ID 相同、验收通过、逐页栅格一致",
+      "evidence": {
+        "rebuilt_build": "66661d362fca"
+      }
+    }
+  ],
+  "files": {
+    "credits.md": "15a3ab8a820f552a3e0733fda90125d99bbc557e6e44572c5a943b4d0d78b80f",
+    "folio-system-v1.1.source.zip": "048ad483645d1134e1ae4f4ecf0042d6f0081d5f311b34ba817958b6cdd1f803",
+    "folio-system-v1.1.zh-CN.editable.pdf": "8da091459199cbbad1f14aa23a854e5b2fe1f9758b5882511d44e0b2f82f0377",
+    "folio-system-v1.1.zh-CN.html": "ec3a282b3d6841d1c31fd144e3ccc648898e3a83e2e97a82993f55cf0700e0c7",
+    "folio-system-v1.1.zh-CN.pdf": "875a926adb8bef81f89f36f3f86d717db86d58cef3d785542e74ebcd4fab1dc0",
+    "folio-system-v1.1.zh-CN.sheet.png": "3ac76386fa4d16862541a13b188311a8f1f4553f6edda94d6a8549a8c99ed1da",
+    "folio-system-v1.1.zh-CN.spreads.png": "75f10bd44dc4d279d74341b2ea338d0b1b4b5674888bc64ff300772fc81de2cc"
+  }
+}

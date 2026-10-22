@@ -1,0 +1,95 @@
+{
+  "contract": 1,
+  "status": "delivered",
+  "name": "folio-business-v1.1",
+  "build_id": "4a143ad5c0c7",
+  "fingerprint": "4a143ad5c0c7beefb7c11cb4d20056d7f0b00a29c36a5c53d882eca185ec565d",
+  "tools": {
+    "contract": 1,
+    "playwright": "1.64.1",
+    "chromium": "149.0.7827.55",
+    "executable": "HB_CHROMIUM",
+    "node": "24",
+    "tool_hash": "ee031c4fc06385f1ac015e8e0ad5d5470242b1b3a28df8d48c18aff39aeaaa5a"
+  },
+  "visual_review": {
+    "verdict": "deliverable",
+    "by": "Codex（作者全页复核，非独立评测）",
+    "date": "2026-10-22T17:59:41.936Z"
+  },
+  "checks": [
+    {
+      "id": "pdf.zh-CN",
+      "status": "pass",
+      "severity": "hard",
+      "message": "正式 PDF 与验收记录一致",
+      "evidence": {}
+    },
+    {
+      "id": "editable.zh-CN",
+      "status": "pass",
+      "severity": "hard",
+      "message": "可编辑 PDF：字体扩充嵌入（非子集）、无 Type 3、逐页栅格与正式版一致",
+      "evidence": {
+        "replaced": 5,
+        "fonts": [
+          "Inter-Regular",
+          "Inter-SemiBold",
+          "NotoSansSC-Bold",
+          "NotoSansSC-Regular",
+          "NotoSerifSC-Bold"
+        ],
+        "glyphs": {
+          "Inter-SemiBold": 1156,
+          "NotoSerifSC-Bold": 8494,
+          "NotoSansSC-Regular": 8496,
+          "NotoSansSC-Bold": 8496,
+          "Inter-Regular": 1156
+        },
+        "not_replaced": [],
+        "bytes": 5222054,
+        "compare": "{\"pages_a\": 9, \"pages_b\": 9, \"diff\": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], \"worst\": 0.0}"
+      }
+    },
+    {
+      "id": "offline.zh-CN",
+      "status": "pass",
+      "severity": "hard",
+      "message": "离线 HTML：无外部请求、资源全部就绪、打印结果与正式 PDF 一致",
+      "evidence": {
+        "pages_a": 9,
+        "pages_b": 9,
+        "diff": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "worst": 0
+      }
+    },
+    {
+      "id": "source.rebuild",
+      "status": "pass",
+      "severity": "hard",
+      "message": "源文件包在干净目录重建：构建 ID 相同、验收通过、逐页栅格一致",
+      "evidence": {
+        "rebuilt_build": "4a143ad5c0c7"
+      }
+    }
+  ],
+  "files": {
+    "credits.md": "ad3b2f24f19961f7b22015f667afcb30a45c6186c896b88b7ade00338e824d48",
+    "folio-business-v1.1.source.zip": "64c594cf701f882625ffd8031f51afd1809dd6364971ee1ca6df68bf451ca13d",
+    "folio-business-v1.1.zh-CN.editable.pdf": "e2b11748715165ccff68384900aea26575c7c918d86de1dc629d900b90e73356",
+    "folio-business-v1.1.zh-CN.html": "c555a9ef8feb7757a5621d546dcde25deecbdaac7fd76f44ee0004cd02233577",
+    "folio-business-v1.1.zh-CN.pdf": "243b6125e559e00baf6650076ef0a19b769b5f666efb10420ce20a791fe75193",
+    "folio-business-v1.1.zh-CN.sheet.png": "c1bc7c8965d00a289291af0dff6a3f210c8b68fa8b2e81119ec740ac28bc7fc7",
+    "folio-business-v1.1.zh-CN.spreads.png": "acf3b089fa0d38e08674391d781b05fb1c223e8a010aa9b748176d2da013bb8f"
+  }
+}

@@ -1,4 +1,4 @@
-# Folio CSS · 1.0.0
+# Folio CSS · 1.1.0
 
 一套供印刷页面使用的 CSS 语言。相同的颜色角色、字体、网格和节奏可以组合出纯文字、摄影、信息查阅和混合页面。普通 HTML/CSS 是作者源，布局类是可选起点，组件是可拆开的组合示例。
 
@@ -36,9 +36,9 @@ python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh
 ## 统一规则
 
 - **颜色**：纸面 `#FFFEFA`，次级纸面 `#F0EEE8`，正文 `#202B32`，辅助 `#56616A`，强调蓝 `#164BE8`，深色面 `#182238`。文字使用语义角色，而非在子元素里写死纸面颜色。
-- **字体**：展示 Noto Serif SC 700；正文 Noto Sans SC 400/700；标签 Inter 400/600；数字 Inter 600。标签和数字的中文回退为已声明 Noto Sans SC。没有假斜体或模拟 900 字重。
+- **字体**：展示 Noto Serif SC 700；阅读衬线 Noto Serif SC 400/700；正文 Noto Sans SC 400/700；标签 Inter 400/600；数字 Inter 600。标签和数字的中文回退为已声明 Noto Sans SC。没有假斜体或模拟 900 字重。
 - **字号**：aux 11、key 13、body 16、lead 20、h3 24、h2 32、h1 46、display 64、hero 112px。1 CSS px = 0.75pt；改变纸张不等比缩小文字。
-- **行距**：body 1.75，lead 1.6，tight 1.25，display 1.12。基线 28px 是正文的起点，字号与行距可独立组合。
+- **行距**：body 1.75，reading 1.5，lead 1.6，tight 1.25，display 1.12。基线 28px 是正文的起点，字号与行距可独立组合。
 - **间距**：0–6 对应 0/7/14/28/42/56/84px，即基线的 0、¼、½、1、1½、2、3 倍。段落默认半基线间距。
 - **版心**：上18、下21、内19、外15mm；六栏/十二栏共用6mm栏距。版心取家族边距与当前印刷安全边距的较大值，另加出血。
 
@@ -55,10 +55,12 @@ python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh
 | `.fl-grid` + `.fl-cols-{1,2,3,4,6,12}` | 统一栏距网格；默认行间距为space-3 |
 | `.fl-span-{1…12}`、`.fl-span-full`、`.fl-start-{1…12}` | 跨栏与起栏，可组合；起栏+跨栏须在当前网格内 |
 | `.fl-row-start-{1…6}` | 显式起行；行高由内容或本书 CSS 决定 |
+| `.fl-rows-{2,3,4,6}`、`.fl-row-span-{1…6}`、`.fl-row-span-full` | 有界网格内的等分行、跨行与全行；必须给网格明确高度，内容溢出保持可见 |
 | `.fl-flex`、`.fl-flex-col`、`.fl-wrap` | 独立选择 Flex、方向及换行 |
 | `.fl-grow`、`.fl-shrink-0` | 子项伸展或避免收缩，不隐藏溢出 |
 | `.fl-items-{start,center,end,baseline,stretch}` | 子项在交叉轴的对齐 |
 | `.fl-self-{start,center,end,stretch}` | 单项在交叉轴的对齐 |
+| `.fl-justify-self-{start,center,end,stretch}` | Grid 子项沿行内轴独立对齐；对 Flex 子项无效 |
 | `.fl-justify-{start,center,end,between}` | 主轴内容分布 |
 | `.fl-content-{start,center,end,between}` | 多行/多轨道内容分布 |
 | `.fl-gap-{0…6}`、`.fl-gap-x-{0…6}`、`.fl-gap-y-{0…6}` | 全部、列、行间距 |
@@ -66,17 +68,21 @@ python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh
 | `.fl-pt-{0…6}`、`.fl-pb-{0…6}`、`.fl-mt-{0…6}`、`.fl-mb-{0…6}` | 上下内/外边距 |
 | `.fl-mt-auto` | 在剩余空间中把当前组推向底部，通常用于纵向Flex |
 | `.fl-w-full`、`.fl-h-full`、`.fl-min-w-0` | 填满已定容器，或允许网格/Flex子项合理收缩 |
-| `.fl-font-{display,body,label,number}` | 字体角色及它对应的真实常规/强调字重 |
+| `.fl-font-{display,reading,body,label,number}` | 字体角色及它对应的真实常规/强调字重 |
 | `.fl-size-{aux,key,body,lead,h3,h2,h1,display,hero}` | 只改变字号 |
 | `.fl-weight-{regular,strong}` | 按当前字体角色选实际字重；display两者均700，number两者均600 |
-| `.fl-leading-{body,lead,tight,display}` | 独立行距 |
+| `.fl-leading-{body,reading,lead,tight,display}` | 独立行距 |
 | `.fl-tracking-{tight,normal,wide}` | 字距 −.02em / 0 / .12em |
 | `.fl-text-{left,center,right}` | 文字对齐 |
 | `.fl-text-{main,muted,accent}` | 当前表面下的语义文字色 |
 | `.fl-tabular`、`.fl-balance` | 等宽数字、标题均衡换行 |
 | `.fl-measure` | 行长上限，默认34ic，可用`--fl-measure`按内容调整 |
 | `.fl-prose` | 直接子段落间space-2，保留自然流和完整文字 |
+| `.fl-prose-columns-2` | 一个连续 DOM 文流自动平衡为两栏，栏距使用gutter；不自动分页 |
+| `.fl-prose-indent` | 直接子段落从第二段起缩进2ic、取消段距；首段齐头，适用于中文连续正文 |
 | `.fl-surface-{paper,soft,dark,accent}` | 背景与完整前景角色组合 |
+| `.fl-tone-inverse` | 仅反白前景角色与文字色，不增加背景；需测量照片或自定色面上的实际对比 |
+| `.fl-scrim-{top,bottom}` | 显式摄影渐变层，从指定边缘向透明过渡；不决定尺寸、文字或叠放许可 |
 | `.fl-rule`、`.fl-rule-strong` | 1px语义细线或2px正文色主线，均为顶边线 |
 | `.fl-relative`、`.fl-absolute`、`.fl-z-{0,1,2}` | 显式定位与层叠 |
 | `.fl-bleed` | 相对定位父级的绝对满铺；满页出血时直接放在`.page`内 |
@@ -93,6 +99,8 @@ python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh
 |---|---|
 | `.fl-image` | 正常流图片：块级、宽100%、自然高度、默认居中 |
 | `.fl-frame` | 图片框：默认3:2；直接子`img`填满并按cover裁切，图注应放框外 |
+| `.fl-frame-fill` | 与frame组合，取消固有比例并填满已定高容器；用于有界网格图像格 |
+| `.fl-image-fill` | 直接图片宽高100%，保留fit/focus；父容器必须已定高，可与bleed组合 |
 | `.fl-ratio-{square,photo,landscape,portrait,wide,tall}` | 比例1:1 / 3:2 / 4:3 / 3:4 / 16:9 / 2:3；可放框或图片 |
 | `.fl-fit-{cover,contain}` | 裁满或完整显示；可放框或直接放图片 |
 | `.fl-focus-{top,bottom,left,right,center}` | 焦点居顶、底、左、右、中心；可放框或图片 |
@@ -125,6 +133,18 @@ python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh
 
 组件配方应能展开为真实原子与布局。例如引文由字体、字号、行长、署名和留白组成；图注由照片与说明的关系组成；目录由标题与页码的对齐组成。线、底色和图片裁切均为显式选择。
 
+## 有界模块、连续正文与摄影文字
+
+二维网格需要一个明确的高度，例如 `class="fl-area fl-grid fl-cols-12 fl-rows-4"`。`fl-area` 的上下边界给它高度；跨行图片使用 `fl-frame fl-frame-fill`，文字仍完整显示。行轨道不会自动缩字、裁字或续排。起行与跨行必须落在声明的网格内；内容变长后重新测量。
+
+`fl-prose-columns-2` 在同一个容器内继续文章，无需手工把左右栏拆为两份文案。默认自然高度按实际内容平衡；若人为固定高度，CSS 可能继续生成第三栏，必须检查完整阅读顺序与横向溢出，不可用隐藏修饰。`fl-prose-indent` 是另一种段落节奏，适合中文连续论述，英文或清单不默认套用。`fl-font-reading fl-leading-reading` 提供真实400字重衬线与1.5行距，可独立组合。
+
+`fl-l-bleed-outer` 的子项仍为 `fl-l-photo` 和 `fl-l-copy fl-area`。照片以 `--fl-image-width`（默认43%）向书本外侧出血，文案保留内侧安全边距。偶数页默认向左、奇数页向右，显式 `data-side` 优先。照片仍需按实际方向声明 `data-bleed`；文本的安全与阅读宽度必须检查。原有 `fl-l-bleed-side` 保持物理右侧，已有项目不因新版改变方向。
+
+照片叠字时，优先根据实际画面选择位置。`fl-tone-inverse` 只提供反白角色，照片本身保持可见。需要局部压暗时，显式增加 `fl-scrim-top` 或 `fl-scrim-bottom` 图层（例如再加 `fl-bleed`），默认色为 `--fl-scrim-color:rgb(8 18 30 / .88)`，在 `--fl-scrim-stop:72%` 处过渡透明；两项均可按实际画面调整。不要把渐变当作自动保证可读性的滤镜。
+
+所有压在照片上的文字组仍写精确 `data-overlap="图片目标ID"`，不透明文字底板也不例外。图片优先使用真实 `img`，使有效分辨率与裁切可检查；不能用背景图或装饰角色绕过检查。叠放声明只解释几何关系，不降低真实背景上的对比度下限；印刷文字、图片与渐变应在最终PDF中一起复核。
+
 ## 物理边界与验证
 
 - `.page` 尺寸、分页、出血变量和字体声明由运行时生成；家族不定义 `@page` 或 `@font-face`。
@@ -136,4 +156,11 @@ python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh
 
 ## 版本
 
+- **1.1.0**：增加有界二维网格、填满图框、Grid单项横向对齐、镜像外侧出血、连续双栏/缩进、真实400衬线阅读字体、1.5行距、透明反白上下文与显式摄影渐变。布局与原子不改变检查下限；旧项目保留冻结副本。
 - **1.0.0**：统一 tokens、作用域基底、组合原子、可选布局和可拆解组件示例。保留`.area`与`.display`两项最小初始化兼容别名；新写页面使用`.fl-*`。
+
+## 企业信息与行程组件
+
+展示目录同时包括多日行程、纵向时刻、比例节奏带、里程碑、并行泳道、KPI、目标对照、五力、定性矩阵、价值链与能力证据。完整范围见 [覆盖清单](../../dev/folio-css/coverage.md)。四种定量图表通过 [数据构造工具](../../dev/folio-css/charts.md) 输出，HTML标签接受原生印刷审计；CSS不承担数学计算。
+
+图框默认 `--fl-frame-width:100%`、`--fl-frame-position:relative`；侧向出血布局在槽位中设定这两个变量，避免通用 `.fl-frame` 覆盖布局几何。直接尺寸原子或本书CSS仍可明确覆盖。

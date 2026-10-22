@@ -1,4 +1,4 @@
-/* Folio 1.0.0 · shared print design tokens.
+/* Folio 1.1.0 · shared print design tokens.
    Edit these source modules, then regenerate design.css with dev/build-folio-css.py.
    CSS px are physical print sizes; changing paper dimensions does not scale type. */
 :root {
@@ -13,12 +13,17 @@
   --fl-on-dark-accent: #B7CCFF;
   --fl-line: #B7BEC6;
   --fl-line-dark: #78869E;
+  --fl-scrim-color: rgb(8 18 30 / .88);
+  --fl-scrim-stop: 72%;
 
   --fl-font-display: "Noto Serif SC", serif;
+  --fl-font-reading: "Noto Serif SC", serif;
   --fl-font-body: "Noto Sans SC", sans-serif;
   --fl-font-label: "Inter", "Noto Sans SC", sans-serif;
   --fl-font-number: "Inter", "Noto Sans SC", sans-serif;
   --fl-weight-display: 700;
+  --fl-weight-reading: 400;
+  --fl-weight-reading-strong: 700;
   --fl-weight-body: 400;
   --fl-weight-body-strong: 700;
   --fl-weight-label: 400;
@@ -35,6 +40,7 @@
   --fl-size-display: 64px;
   --fl-size-hero: 112px;
   --fl-leading-body: 1.75;
+  --fl-leading-reading: 1.5;
   --fl-leading-lead: 1.6;
   --fl-leading-tight: 1.25;
   --fl-leading-display: 1.12;

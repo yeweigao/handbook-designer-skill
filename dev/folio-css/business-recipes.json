@@ -1,0 +1,238 @@
+{
+  "components": [
+    {
+      "id": "itinerary-days",
+      "title": "多日行程 · 张弛安排",
+      "category": "itinerary",
+      "description": "到达、深入、收束各有节奏；每天明确核心体验与休息时段。",
+      "grammar": "共享六轨 / 字阶 / 间距；语义 HTML 保留阅读顺序。",
+      "classes": [
+        "fl-cols-3",
+        "fl-grid",
+        "fl-h3",
+        "fl-key",
+        "fl-kicker",
+        "fl-mb-2"
+      ],
+      "limits": "等宽列表示天数，不表示每项持续时长。示例行程未核验交通、场地或天气，不可直接用于出行承诺。",
+      "html": "<div class=\"fl-grid fl-cols-3\"><section><p class=\"fl-kicker fl-mb-2\">DAY 01 · 适应</p><h3 class=\"fl-h3 fl-mb-2\">抵达与定向</h3><p class=\"fl-key\">上午｜集合与交通<br>下午｜林地定向 · 低强度<br>晚上｜整理问题 · 早休息</p></section><section><p class=\"fl-kicker fl-mb-2\">DAY 02 · 深入</p><h3 class=\"fl-h3 fl-mb-2\">完整现场观察</h3><p class=\"fl-key\">上午｜溪流样方 · 中强度<br>下午｜自由记录 · 弹性休息<br>晚上｜星空观察 · 天气备选</p></section><section><p class=\"fl-kicker fl-mb-2\">DAY 03 · 收束</p><h3 class=\"fl-h3 fl-mb-2\">交换发现与返程</h3><p class=\"fl-key\">上午｜小组交流 · 低强度<br>中午｜午餐与整理<br>下午｜返程 · 预留缓冲</p></section></div>"
+    },
+    {
+      "id": "timeline-vertical",
+      "title": "纵向 timeline · 当日时刻",
+      "category": "itinerary",
+      "description": "让时间、活动、转场和休息沿同一条阅读路径展开。",
+      "grammar": "共享六轨 / 字阶 / 间距；语义 HTML 保留阅读顺序。",
+      "classes": [
+        "fl-h3",
+        "fl-key",
+        "fl-l-chronology",
+        "fl-l-item",
+        "fl-l-label",
+        "fl-l-main",
+        "fl-mb-2",
+        "fl-tabular"
+      ],
+      "limits": "这是按事件顺序排列的定性 timeline；行高随文字增长，不代表时间长度。需要时长比例时使用节奏时间带。",
+      "html": "<ol class=\"fl-l-chronology\"><li class=\"fl-l-item\"><time class=\"fl-l-label fl-key fl-tabular\">09:00</time><div class=\"fl-l-main\"><h3 class=\"fl-h3 fl-mb-2\">集合与安全说明</h3><p class=\"fl-key\">30 分钟｜确认身体状态、路线与退出点。</p></div></li><li class=\"fl-l-item\"><time class=\"fl-l-label fl-key fl-tabular\">09:30</time><div class=\"fl-l-main\"><h3 class=\"fl-h3 fl-mb-2\">林缘慢行</h3><p class=\"fl-key\">60 分钟｜小组轮换记录；坡段不安排讲解。</p></div></li><li class=\"fl-l-item\"><time class=\"fl-l-label fl-key fl-tabular\">10:30</time><div class=\"fl-l-main\"><h3 class=\"fl-h3 fl-mb-2\">饮水与休息</h3><p class=\"fl-key\">30 分钟｜留出自主休息，不把缓冲当作活动。</p></div></li><li class=\"fl-l-item\"><time class=\"fl-l-label fl-key fl-tabular\">11:00</time><div class=\"fl-l-main\"><h3 class=\"fl-h3 fl-mb-2\">整理观察</h3><p class=\"fl-key\">45 分钟｜比较记录；11:45 集合返程。</p></div></li></ol>"
+    },
+    {
+      "id": "rhythm-band",
+      "title": "节奏时间带 · 按时长比例",
+      "category": "itinerary",
+      "description": "以 15 分钟为一格，活动时长与色段宽度严格对应。",
+      "grammar": "共享六轨 / 字阶 / 间距；语义 HTML 保留阅读顺序。",
+      "classes": [
+        "fl-caption",
+        "fl-cols-12",
+        "fl-cols-3",
+        "fl-gap-0",
+        "fl-gap-2",
+        "fl-grid",
+        "fl-key",
+        "fl-l-stack",
+        "fl-span-1",
+        "fl-span-2",
+        "fl-span-3",
+        "fl-span-4",
+        "fl-surface-accent",
+        "fl-surface-dark",
+        "fl-surface-soft",
+        "fl-weight-strong"
+      ],
+      "limits": "每轨必须对应相同时间单位；此例 12×15 分钟。色带不是活动强度曲线，短时段标签置于色带外。",
+      "html": "<div class=\"fl-l-stack fl-gap-2\"><p class=\"fl-key fl-weight-strong\">09:00—12:00 · 共 180 分钟</p><div class=\"fl-grid fl-cols-12 fl-gap-0\" style=\"height:42px\" aria-label=\"30分钟集合，60分钟观察，30分钟休息，45分钟整理，15分钟缓冲\"><div class=\"fl-span-2 fl-surface-dark\"></div><div class=\"fl-span-4 fl-surface-accent\"></div><div class=\"fl-span-2 fl-surface-soft\"></div><div class=\"fl-span-3 fl-surface-dark\"></div><div class=\"fl-span-1 fl-surface-soft\"></div></div><div class=\"fl-grid fl-cols-12 fl-gap-0\"><p class=\"fl-key fl-span-2\">集合<br>30 min</p><p class=\"fl-key fl-span-4\">观察<br>60 min</p><p class=\"fl-key fl-span-2\">休息<br>30 min</p><p class=\"fl-key fl-span-3\">整理<br>45 min</p><p class=\"fl-key fl-span-1\">缓冲<br>15 min</p></div><p class=\"fl-caption\">色段与下方标签逐项对齐；浅色代表休息或缓冲。</p></div>"
+    },
+    {
+      "id": "milestones",
+      "title": "横向 timeline · 阶段里程碑",
+      "category": "itinerary",
+      "description": "阶段、交付与判断标准一起展示，让读者知道下一步何时发生。",
+      "grammar": "共享六轨 / 字阶 / 间距；语义 HTML 保留阅读顺序。",
+      "classes": [
+        "fl-cols-3",
+        "fl-grid",
+        "fl-h3",
+        "fl-key",
+        "fl-kicker",
+        "fl-mb-2"
+      ],
+      "limits": "等距节点表示阶段顺序，不暗示等长时间；若有日期，将实际日期写入标签。",
+      "html": "<div class=\"fl-grid fl-cols-3\"><section><p class=\"fl-kicker fl-mb-2\">01 / 定义</p><h3 class=\"fl-h3 fl-mb-2\">确认问题</h3><p class=\"fl-key\">交付：观察清单<br>进入条件：范围与责任人已确认</p></section><section><p class=\"fl-kicker fl-mb-2\">02 / 试行</p><h3 class=\"fl-h3 fl-mb-2\">验证方法</h3><p class=\"fl-key\">交付：试点记录<br>进入条件：关键假设得到证据</p></section><section><p class=\"fl-kicker fl-mb-2\">03 / 推进</p><h3 class=\"fl-h3 fl-mb-2\">形成常规</h3><p class=\"fl-key\">交付：执行手册<br>进入条件：资源与复盘机制就绪</p></section></div>"
+    },
+    {
+      "id": "swimlane",
+      "title": "并行泳道 · 谁在何时做什么",
+      "category": "itinerary",
+      "description": "三条任务线共享时间列，呈现并行、交接与协同。",
+      "grammar": "共享六轨 / 字阶 / 间距；语义 HTML 保留阅读顺序。",
+      "classes": [
+        "fl-key",
+        "fl-py-2",
+        "fl-rule"
+      ],
+      "limits": "使用真实表头，按行读取仍有意义。列代表阶段，不是按日历比例绘制的甘特图；依赖关系另加文字说明。",
+      "html": "<table class=\"fl-key\" style=\"width:100%;border-collapse:collapse;text-align:left\"><thead><tr><th class=\"fl-py-2 fl-rule\">工作线</th><th class=\"fl-py-2 fl-rule\">准备期</th><th class=\"fl-py-2 fl-rule\">现场期</th><th class=\"fl-py-2 fl-rule\">复盘期</th></tr></thead><tbody><tr><th class=\"fl-py-2 fl-rule\">内容</th><td class=\"fl-py-2 fl-rule\">确定问题</td><td class=\"fl-py-2 fl-rule\">采集记录</td><td class=\"fl-py-2 fl-rule\">校核结论</td></tr><tr><th class=\"fl-py-2 fl-rule\">运营</th><td class=\"fl-py-2 fl-rule\">确认资源</td><td class=\"fl-py-2 fl-rule\">协调现场</td><td class=\"fl-py-2 fl-rule\">归档反馈</td></tr><tr><th class=\"fl-py-2 fl-rule\">设计</th><td class=\"fl-py-2 fl-rule\">建立结构</td><td class=\"fl-py-2 fl-rule\">整理素材</td><td class=\"fl-py-2 fl-rule\">出版交付</td></tr></tbody></table>"
+    },
+    {
+      "id": "kpi-evidence",
+      "title": "关键指标 · 数字与口径",
+      "category": "business",
+      "description": "数字旁边同时给出单位、时期、比较基准与来源。",
+      "grammar": "共享六轨 / 字阶 / 间距；语义 HTML 保留阅读顺序。",
+      "classes": [
+        "fl-caption",
+        "fl-cols-3",
+        "fl-grid",
+        "fl-h3",
+        "fl-key",
+        "fl-kicker",
+        "fl-mb-2",
+        "fl-mt-3"
+      ],
+      "limits": "指标必须可追溯；比例需写分子分母。实际业务口径（如税前/税后）需补齐后再用于宣传。",
+      "html": "<div class=\"fl-grid fl-cols-3\"><section><p class=\"fl-kicker fl-mb-2\">2025 · 示例</p><h3 class=\"fl-h3 fl-mb-2\">128 百万元</h3><p class=\"fl-key\">年度收入<br>较上年 +28%；基准 100</p></section><section><p class=\"fl-kicker fl-mb-2\">2025 · 示例</p><h3 class=\"fl-h3 fl-mb-2\">32 百万元</h3><p class=\"fl-key\">年度利润<br>较上年 +7；基准 25</p></section><section><p class=\"fl-kicker fl-mb-2\">2025 · 示例</p><h3 class=\"fl-h3 fl-mb-2\">25.0%</h3><p class=\"fl-key\">利润 / 收入<br>32 ÷ 128；同比持平</p></section></div><p class=\"fl-caption fl-mt-3\">来源：本页自拟演示数据；并非某家公司的实际经营业绩。</p>"
+    },
+    {
+      "id": "target-actual",
+      "title": "目标与实际 · 差距可见",
+      "category": "business",
+      "description": "目标、实际和差额共同呈现，避免只挑选好看的百分比。",
+      "grammar": "共享六轨 / 字阶 / 间距；语义 HTML 保留阅读顺序。",
+      "classes": [
+        "fl-caption",
+        "fl-key",
+        "fl-mt-2",
+        "fl-py-2",
+        "fl-rule",
+        "fl-tabular"
+      ],
+      "limits": "不同单位的指标不共用长度比例；差额的正负不自动等同于好坏，例如成本应按业务目标解读。",
+      "html": "<table class=\"fl-key\" style=\"width:100%;border-collapse:collapse;text-align:left\"><thead><tr><th class=\"fl-py-2 fl-rule\">项目</th><th class=\"fl-py-2 fl-rule\">目标</th><th class=\"fl-py-2 fl-rule\">实际</th><th class=\"fl-py-2 fl-rule\">差额</th></tr></thead><tbody><tr><td class=\"fl-py-2 fl-rule fl-tabular\">收入 / 百万元</td><td class=\"fl-py-2 fl-rule fl-tabular\">130</td><td class=\"fl-py-2 fl-rule fl-tabular\">128</td><td class=\"fl-py-2 fl-rule fl-tabular\">−2</td></tr><tr><td class=\"fl-py-2 fl-rule fl-tabular\">利润 / 百万元</td><td class=\"fl-py-2 fl-rule fl-tabular\">30</td><td class=\"fl-py-2 fl-rule fl-tabular\">32</td><td class=\"fl-py-2 fl-rule fl-tabular\">+2</td></tr><tr><td class=\"fl-py-2 fl-rule fl-tabular\">交付项目 / 个</td><td class=\"fl-py-2 fl-rule fl-tabular\">50</td><td class=\"fl-py-2 fl-rule fl-tabular\">48</td><td class=\"fl-py-2 fl-rule fl-tabular\">−2</td></tr></tbody></table><p class=\"fl-caption fl-mt-2\">2025 年度；差额 = 实际 − 目标。自拟演示数据。</p>"
+    },
+    {
+      "id": "five-forces",
+      "title": "波特五力 · 行业结构",
+      "category": "analysis",
+      "description": "把五种竞争压力与判断依据对应，避免把框架误写成企业能力雷达。",
+      "grammar": "共享六轨 / 字阶 / 间距；语义 HTML 保留阅读顺序。",
+      "classes": [
+        "fl-caption",
+        "fl-cols-3",
+        "fl-gap-3",
+        "fl-grid",
+        "fl-h3",
+        "fl-key",
+        "fl-mb-2",
+        "fl-mt-3",
+        "fl-p-3",
+        "fl-row-start-2",
+        "fl-row-start-3",
+        "fl-start-1",
+        "fl-start-2",
+        "fl-surface-dark"
+      ],
+      "limits": "五力用于行业竞争结构；应注明行业、地区、时间与证据。定性强弱须写依据，不凭装饰性分数宣称精确。",
+      "html": "<div class=\"fl-grid fl-cols-3 fl-gap-3\"><section class=\"fl-start-2\"><h3 class=\"fl-h3 fl-mb-2\">潜在进入者</h3><p class=\"fl-key\">技术门槛与渠道准入；需核验进入成本。</p></section><section class=\"fl-start-1 fl-row-start-2\"><h3 class=\"fl-h3 fl-mb-2\">供应商议价</h3><p class=\"fl-key\">关键原料集中度、替代来源和切换成本。</p></section><section class=\"fl-row-start-2 fl-surface-dark fl-p-3\"><h3 class=\"fl-h3 fl-mb-2\">现有竞争者</h3><p class=\"fl-key\">行业增长、差异化与退出成本。</p></section><section class=\"fl-row-start-2\"><h3 class=\"fl-h3 fl-mb-2\">购买者议价</h3><p class=\"fl-key\">采购集中度、价格敏感度与转换选择。</p></section><section class=\"fl-start-2 fl-row-start-3\"><h3 class=\"fl-h3 fl-mb-2\">替代品威胁</h3><p class=\"fl-key\">满足同一需求的其他方案及性价比。</p></section></div><p class=\"fl-caption fl-mt-3\">方法框架：Michael E. Porter / HBS Institute for Strategy and Competitiveness；此页仅列分析问题，尚无行业结论。</p>"
+    },
+    {
+      "id": "decision-matrix",
+      "title": "二维决策矩阵 · 取舍有轴",
+      "category": "analysis",
+      "description": "用明确的两个维度组织判断，并写出象限的行动含义。",
+      "grammar": "共享六轨 / 字阶 / 间距；语义 HTML 保留阅读顺序。",
+      "classes": [
+        "fl-caption",
+        "fl-cols-2",
+        "fl-gap-0",
+        "fl-gap-2",
+        "fl-grid",
+        "fl-h3",
+        "fl-key",
+        "fl-l-stack",
+        "fl-mb-2",
+        "fl-p-3",
+        "fl-rule",
+        "fl-surface-soft",
+        "fl-weight-strong"
+      ],
+      "limits": "明确轴、阈值与评估时期；定性四象限不是数据散点图。不要给无依据的精确坐标。",
+      "html": "<div class=\"fl-l-stack fl-gap-2\"><p class=\"fl-key fl-weight-strong\">纵轴：预期影响 ↑ 横轴：实施难度 →</p><div class=\"fl-grid fl-cols-2 fl-gap-0\"><section class=\"fl-p-3 fl-rule fl-surface-soft\"><h3 class=\"fl-h3 fl-mb-2\">优先试行</h3><p class=\"fl-key\">高影响 / 低难度<br>先做小范围验证，确认收益可复现。</p></section><section class=\"fl-p-3 fl-rule \"><h3 class=\"fl-h3 fl-mb-2\">分阶段投入</h3><p class=\"fl-key\">高影响 / 高难度<br>先解依赖，设置里程碑与退出条件。</p></section><section class=\"fl-p-3 fl-rule \"><h3 class=\"fl-h3 fl-mb-2\">顺手改进</h3><p class=\"fl-key\">低影响 / 低难度<br>控制投入，避免占用核心资源。</p></section><section class=\"fl-p-3 fl-rule fl-surface-soft\"><h3 class=\"fl-h3 fl-mb-2\">谨慎延后</h3><p class=\"fl-key\">低影响 / 高难度<br>记录暂缓理由与重新评估的触发条件。</p></section></div><p class=\"fl-caption\">定性示意；“高 / 低”需在项目中预先约定阈值。本例没有量化项目落点。</p></div>"
+    },
+    {
+      "id": "value-chain",
+      "title": "价值链 · 从能力到结果",
+      "category": "analysis",
+      "description": "连接投入、关键活动、交付结果，并暴露每一步的验证依据。",
+      "grammar": "共享六轨 / 字阶 / 间距；语义 HTML 保留阅读顺序。",
+      "classes": [
+        "fl-caption",
+        "fl-cols-3",
+        "fl-grid",
+        "fl-h3",
+        "fl-key",
+        "fl-kicker",
+        "fl-mb-2",
+        "fl-mt-3"
+      ],
+      "limits": "箭头表示逻辑顺序，不证明因果。企业宣传中的能力描述需有可核验证据支撑。",
+      "html": "<div class=\"fl-grid fl-cols-3\"><section><p class=\"fl-kicker fl-mb-2\">输入 →</p><h3 class=\"fl-h3 fl-mb-2\">真实问题</h3><p class=\"fl-key\">用户访谈与既有资料<br>依据：需求记录</p></section><section><p class=\"fl-kicker fl-mb-2\">活动 →</p><h3 class=\"fl-h3 fl-mb-2\">可重复方法</h3><p class=\"fl-key\">小规模试验与过程复核<br>依据：验证日志</p></section><section><p class=\"fl-kicker fl-mb-2\">输出</p><h3 class=\"fl-h3 fl-mb-2\">可核验结果</h3><p class=\"fl-key\">交付、采用与持续改进<br>依据：验收与使用记录</p></section></div><p class=\"fl-caption fl-mt-3\">简化的价值创造路径；如分析完整产业链，应补齐采购、生产、分销及支持活动。</p>"
+    },
+    {
+      "id": "capability-table",
+      "title": "能力对照 · 可核验的主张",
+      "category": "business",
+      "description": "每项能力都对应证据、范围和限制。",
+      "grammar": "共享六轨 / 字阶 / 间距；语义 HTML 保留阅读顺序。",
+      "classes": [
+        "fl-caption",
+        "fl-key",
+        "fl-mt-2",
+        "fl-py-2",
+        "fl-rule"
+      ],
+      "limits": "竞品对照需同口径、有日期与来源；未经证实的勾选和“领先”结论不能用图表造型代替。",
+      "html": "<table class=\"fl-key\" style=\"width:100%;border-collapse:collapse;text-align:left\"><thead><tr><th class=\"fl-py-2 fl-rule\">能力主张</th><th class=\"fl-py-2 fl-rule\">证据</th><th class=\"fl-py-2 fl-rule\">适用范围</th></tr></thead><tbody><tr><td class=\"fl-py-2 fl-rule\">稳定交付</td><td class=\"fl-py-2 fl-rule\">项目验收记录</td><td class=\"fl-py-2 fl-rule\">明确的产品与地区</td></tr><tr><td class=\"fl-py-2 fl-rule\">一致质量</td><td class=\"fl-py-2 fl-rule\">抽样方法与缺陷率</td><td class=\"fl-py-2 fl-rule\">标注样本量与期间</td></tr><tr><td class=\"fl-py-2 fl-rule\">持续改进</td><td class=\"fl-py-2 fl-rule\">同口径前后对照</td><td class=\"fl-py-2 fl-rule\">说明外部因素</td></tr></tbody></table><p class=\"fl-caption fl-mt-2\">示例是证据清单，尚未构成任何公司的已验证业绩。</p>"
+    },
+    {
+      "id": "claim-evidence",
+      "title": "结论与证据 · 咨询式图文组",
+      "category": "business",
+      "description": "先给可验证结论，再给证据，最后说明局限与下一步。",
+      "grammar": "共享六轨 / 字阶 / 间距；语义 HTML 保留阅读顺序。",
+      "classes": [
+        "fl-body",
+        "fl-h3",
+        "fl-key",
+        "fl-kicker",
+        "fl-l-aside",
+        "fl-l-main",
+        "fl-l-sidebar",
+        "fl-mb-2",
+        "fl-weight-strong"
+      ],
+      "limits": "标题须由数据支持；相关性不能写成因果。没有证据时展示待验证假设，不写成既定结论。",
+      "html": "<article class=\"fl-l-sidebar\"><div class=\"fl-l-main\"><p class=\"fl-kicker fl-mb-2\">判断</p><h3 class=\"fl-h3 fl-mb-2\">增量来自哪里，比增幅本身更重要。</h3><p class=\"fl-body\">把起点、增减项和终点放在同一张桥接图上，读者可以核对结论如何成立。</p></div><aside class=\"fl-l-aside\"><p class=\"fl-key fl-weight-strong\">核验清单</p><p class=\"fl-key\">期间一致<br>单位一致<br>各项不重复<br>合计可闭合<br>来源可回溯</p></aside></article>"
+    }
+  ]
+}

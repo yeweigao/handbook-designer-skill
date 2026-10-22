@@ -1,0 +1,8 @@
+{
+  "build_id": "4a143ad5c0c7",
+  "pdf_sha256": "243b6125e559e00baf6650076ef0a19b769b5f666efb10420ce20a791fe75193",
+  "page_count": 9,
+  "family_css_sha256": "8ccfe635bc4d9794c24bde794a4184935cb98e75ad29973afcfadc90ed79ae2e",
+  "preview": "../samples/native/folio-business/preview.html",
+  "source": "../samples/native/folio-business/book.html"
+}

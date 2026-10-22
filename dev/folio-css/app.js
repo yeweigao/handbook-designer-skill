@@ -3,7 +3,7 @@
   const catalog = window.FOLIO_CATALOG;
   if (!catalog) { document.querySelector('#layout-count').textContent = '请运行 python3 dev/build-folio-css.py 生成展示数据。'; return; }
   const $ = (s) => document.querySelector(s);
-  const labels = { reading: '阅读', information: '信息', photography: '摄影' };
+  const labels = { reading: '阅读', information: '信息', photography: '摄影', itinerary: '行程', business: '经营', analysis: '分析', charts: '图表' };
   const dialog = $('#recipe-dialog');
   let activeRecipe;
   function pressed(group, selected) {
@@ -11,14 +11,18 @@
   }
   function sheet(entry) {
     const el = document.createElement('div'); el.className = 'preview-sheet fl-scope';
+    if (entry.data) el.style.width = `${entry.data.width + 60}px`;
     if (entry.id === 'panorama') el.style.width = '1180px';
     el.innerHTML = entry.html;
+    // Card previews are aria-hidden; avoid duplicate SVG title IDs when the recipe opens.
+    el.querySelectorAll('svg [id]').forEach(n => { const old = n.id; n.id = old + '-' + (++sheet.serial); el.querySelectorAll('[aria-labelledby]').forEach(a => { if(a.getAttribute('aria-labelledby') === old) a.setAttribute('aria-labelledby',n.id); }); });
     el.querySelectorAll('[class*="fl-l-"]').forEach(node => {
       const layout = Array.from(node.classList).find(c => c.startsWith('fl-l-'));
       if (layout) node.dataset.structure = layout.replace('fl-l-', '');
     });
     return el;
   }
+  sheet.serial = 0;
   function fitSheet(viewport) {
     const el = viewport.querySelector('.preview-sheet'); if (!el || !viewport.clientWidth) return;
     el.style.transform = 'none';
@@ -39,6 +43,9 @@
     $('#dialog-grammar').textContent = `组合：${entry.grammar}`;
     $('#dialog-limits').textContent = `适用边界：${entry.limits}`;
     $('#dialog-code').textContent = entry.html;
+    $('#chart-data').hidden = !entry.data;
+    $('#dialog-data').textContent = entry.data ? JSON.stringify(entry.data, null, 2) : '';
+    // Every dialog has a single live chart, so its accessible title ID is unique.
     $('#copy-status').textContent = '';
     $('#dialog-preview').replaceChildren(sheet(entry));
     $('#dialog-preview').classList.toggle('structure', $('#structure-toggle').checked);
@@ -62,6 +69,7 @@
   }
   catalog.layouts.forEach((entry,i) => $('#layout-gallery').append(card(entry,i)));
   catalog.components.forEach((entry,i) => $('#component-gallery').append(card(entry,i)));
+  $('#component-count').textContent = `${catalog.components.length} 个组件`;
   $('#layout-count').textContent = `${catalog.layouts.length} 组布局`;
   $('#category-options').addEventListener('click', event => {
     const button = event.target.closest('button[data-category]'); if (!button) return;
@@ -71,6 +79,12 @@
       card.hidden = !show; if(show) count++;
     });
     $('#layout-count').textContent = `${count} 组布局`; refit();
+  });
+  $('#component-options').addEventListener('click', event => {
+    const button = event.target.closest('button[data-component]'); if(!button) return;
+    pressed($('#component-options'),button); let count=0;
+    $('#component-gallery').querySelectorAll('.recipe-card').forEach(card => { const show=button.dataset.component==='all'||card.dataset.category===button.dataset.component;card.hidden=!show;if(show)count++; });
+    $('#component-count').textContent=`${count} 个组件`;refit();
   });
   $('#structure-toggle').addEventListener('change', event => {
     $('#layout-gallery').classList.toggle('structure',event.target.checked);

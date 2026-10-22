@@ -121,6 +121,7 @@
 :where(.fl-l-bleed-bottom,
 .fl-l-bleed-side) { position: absolute; inset: 0; }
 :where(.fl-l-bleed-bottom > .fl-l-photo) {
+  --fl-frame-position: absolute; --fl-ratio: auto;
   position: absolute; left: 0; right: 0; bottom: 0;
   height: var(--fl-image-height, 42%);
   aspect-ratio: auto;
@@ -128,10 +129,39 @@
 :where(.fl-l-bleed-bottom > .fl-l-copy) { bottom: calc(var(--fl-image-height, 42%) + var(--fl-space-3)); }
 :where(.fl-l-bleed-side > .fl-l-photo) {
   position: absolute; top: 0; right: 0; bottom: 0;
-  width: var(--fl-image-width, 43%);
+  --fl-frame-position: absolute; --fl-frame-width: var(--fl-image-width, 43%); --fl-ratio: auto; width: var(--fl-image-width, 43%);
   aspect-ratio: auto;
 }
 :where(.fl-l-bleed-side > .fl-l-copy) { right: calc(var(--fl-image-width, 43%) + var(--fl-space-3)); }
+
+/* The same side-bleed relationship, mirrored toward the outside of a book.
+   Default first page is right; an explicit data-side overrides page parity.
+   .fl-l-copy still uses .fl-area, so the inner edge keeps its safety margin. */
+:where(.fl-l-bleed-outer) {
+  position: absolute; inset: 0;
+  --fl-side-photo-left: auto;
+  --fl-side-photo-right: 0px;
+  --fl-side-copy-left: calc(var(--bleed, 0px) + max(var(--safe-left, 0px), var(--fl-page-left, var(--fl-margin-inner))));
+  --fl-side-copy-right: calc(var(--fl-image-width, 43%) + var(--fl-space-3));
+}
+:where(.page:nth-of-type(even), .page[data-side="left"]) :where(.fl-l-bleed-outer) {
+  --fl-side-photo-left: 0px;
+  --fl-side-photo-right: auto;
+  --fl-side-copy-left: calc(var(--fl-image-width, 43%) + var(--fl-space-3));
+  --fl-side-copy-right: calc(var(--bleed, 0px) + max(var(--safe-right, 0px), var(--fl-page-right, var(--fl-margin-inner))));
+}
+:where(.page[data-side="right"]) :where(.fl-l-bleed-outer) {
+  --fl-side-photo-left: auto;
+  --fl-side-photo-right: 0px;
+  --fl-side-copy-left: calc(var(--bleed, 0px) + max(var(--safe-left, 0px), var(--fl-page-left, var(--fl-margin-inner))));
+  --fl-side-copy-right: calc(var(--fl-image-width, 43%) + var(--fl-space-3));
+}
+:where(.fl-l-bleed-outer > .fl-l-photo) {
+  position: absolute; top: 0; bottom: 0;
+  left: var(--fl-side-photo-left); right: var(--fl-side-photo-right);
+  --fl-frame-position: absolute; --fl-frame-width: var(--fl-image-width, 43%); --fl-ratio: auto; width: var(--fl-image-width, 43%); aspect-ratio: auto;
+}
+:where(.fl-l-bleed-outer > .fl-l-copy) { left: var(--fl-side-copy-left); right: var(--fl-side-copy-right); }
 
 /* Deliberate overlap, not an automatic contrast treatment. The photograph and
    text are separate grid layers; text remains in normal flow and can grow.
