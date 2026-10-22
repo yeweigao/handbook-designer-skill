@@ -8,6 +8,7 @@
 import json
 import os
 import re
+import struct
 import sys
 from html.parser import HTMLParser
 
@@ -88,6 +89,31 @@ def check_ref(rep, root, base_dir, ref, where, must_exist=True, allow_link=False
         rep.error("ref.missing", where, f"文件不存在：{ref}")
         return None
     return full
+
+
+def font_tables(path):
+    """读取字体文件的表名集合；无法判断时返回 None。"""
+    try:
+        with open(path, "rb") as f:
+            head = f.read(12)
+            sig = head[:4]
+            if sig in (b"\x00\x01\x00\x00", b"OTTO", b"true"):
+                n = struct.unpack(">H", head[4:6])[0]
+                data = f.read(16 * n)
+                return {data[i * 16:i * 16 + 4].decode("latin-1") for i in range(n)}
+            if sig == b"wOFF":
+                f.seek(12)
+                n = struct.unpack(">H", f.read(2))[0]
+                f.seek(44)
+                data = f.read(20 * n)
+                return {data[i * 20:i * 20 + 4].decode("latin-1") for i in range(n)}
+    except (OSError, struct.error):
+        return None
+    try:  # woff2 等：有 fontTools 时用它判断
+        from fontTools.ttLib import TTFont
+        return set(TTFont(path, lazy=True).keys())
+    except Exception:
+        return None
 
 
 # ---------------------------------------------------------------- project.json
@@ -209,10 +235,17 @@ def check_project(rep, root):
                 if not isinstance(fil, str) or os.path.splitext(fil)[1].lower() not in FONT_EXT:
                     rep.error("project.fonts", w, f"file 必须是 {sorted(FONT_EXT)} 字体文件")
                 else:
-                    check_ref(rep, root, root, fil, w)
+                    full = check_ref(rep, root, root, fil, w)
+                    if full:
+                        tables = font_tables(full)
+                        if tables is None:
+                            rep.warn("font.unchecked", w, f"无法判断 {fil} 是否为可变字体")
+                        elif "fvar" in tables:
+                            rep.error("font.variable", w, f"{fil} 是可变字体：Chrome 导出 PDF 时会变成 Type 3。"
+                                      f"先用 python3 hb/core/font_static.py 实例化为固定字重")
                 wt = f.get("weight", "400")
-                if not (isinstance(wt, (str, int)) and re.match(r"^\d{3}( \d{3})?$", str(wt))):
-                    rep.error("project.fonts", w, "weight 写成 \"400\" 或可变范围 \"100 900\"")
+                if not (isinstance(wt, (str, int)) and re.match(r"^\d{3}$", str(wt))):
+                    rep.error("project.fonts", w, "weight 写成单个字重，如 \"400\"（字体必须是静态字体）")
                 st = f.get("style", "normal")
                 if st not in ("normal", "italic", "oblique"):
                     rep.error("project.fonts", w, "style 必须是 normal / italic / oblique")

@@ -67,7 +67,7 @@ S1–S4 是地基：没有它们，后面任何页面都无法可靠渲染、测
 
 **先读**：`references/contract.md`、旧 `hb/pdf.js`、`hb/fonts.py`（字体本地化逻辑可复用）。
 
-**归属文件**：`hb/core/render.mjs`、`hb/core/print-css.mjs`、`hb/core/inject.mjs`、`hb/core/fingerprint.mjs`、`hb/core/browser.mjs`、`hb/core/cli.mjs`、`dev/tests/core/render.test.mjs`。
+**归属文件**：`hb/core/render.mjs`、`project.mjs`、`print-css.mjs`、`inject.mjs`、`server.mjs`、`fingerprint.mjs`、`browser.mjs`、`cli.mjs`、`pdfboxes.py`、`font_static.py`、`setup_env.sh`（均在 `hb/core/`）、`dev/tests/core/render.test.mjs`。
 
 **要做**：
 - `print-css.mjs`：从 `project.json` 唯一生成 `@page` 尺寸、出血与 CSS 变量（`--trim-w` 等）；作者 CSS 里再声明 `@page size` 即报错。
@@ -82,7 +82,7 @@ S1–S4 是地基：没有它们，后面任何页面都无法可靠渲染、测
 - 同一项目两次独立进程渲染：`pdftoppm -r 100` 逐页像素比较一致；manifest 指纹一致。
 - 改任意一个 CSS/字体/图片文件，指纹变化。
 - 删掉一个字体文件、加一个外链图片：分别以非 0 退出并给出可操作的错误。
-- 测试脚本 `node --test dev/tests/core/` 通过。
+- 测试脚本 `node --test dev/tests/core/*.test.mjs` 通过。
 
 ---
 
@@ -106,7 +106,7 @@ S1–S4 是地基：没有它们，后面任何页面都无法可靠渲染、测
 **完成判定**：
 - 每个检查项至少一个反例被判 fail、一个合法版式（海报叠放、满版出血图、竖排装饰字）不误报。
 - S1 两个正例全部 pass 或有理由的 unverified。
-- `node --test dev/tests/core/` 通过。
+- `node --test dev/tests/core/*.test.mjs` 通过。
 
 ---
 

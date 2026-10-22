@@ -42,7 +42,8 @@ project/
   "first_page": "right",
   "content_mode": "carry",
   "fonts": [
-    { "family": "Noto Sans SC", "file": "assets/fonts/NotoSansSC.ttf", "weight": "100 900", "style": "normal" }
+    { "family": "Noto Sans SC", "file": "assets/fonts/NotoSansSC-400.ttf", "weight": "400", "style": "normal" },
+    { "family": "Noto Sans SC", "file": "assets/fonts/NotoSansSC-700.ttf", "weight": "700", "style": "normal" }
   ],
   "readability": { "body_px": 16 },
   "family": { "name": "campus", "version": "1", "sha256": "…" }
@@ -63,7 +64,7 @@ project/
 | `binding` | 是 | `digital` 电子版 / `loose` 散页 / `saddle` 骑马钉（页数须为 4 的倍数）/ `perfect` 胶装（页数须为偶数） |
 | `first_page` | 是 | 第一页在跨页中的位置：`right`（默认，封面单独成右页）或 `left` |
 | `content_mode` | 是 | `carry` 原文搬运 / `polish` 授权润色 / `translate` 授权翻译 / `frozen` 内容冻结（§5） |
-| `fonts` | 是 | 至少一项。字体只在这里声明，渲染据此生成 `@font-face`；作者 CSS 不得自写 `@font-face` |
+| `fonts` | 是 | 至少一项。字体只在这里声明，渲染据此生成 `@font-face`；作者 CSS 不得自写 `@font-face`。每项是一个固定字重的**静态字体**（`weight` 为单个值）：可变字体在 Chrome 导出的 PDF 里会变成 Type 3，印刷与可编辑 PDF 都不接受。用 `python3 hb/core/font_static.py` 从可变字体实例化 |
 | `readability` | 否 | 覆盖可读性下限（§3.4），只能比默认值更严 |
 | `readability_waiver` | 否 | 用户明确授权降低下限时填写：`{"reason": "…", "approved_by": "…", "date": "YYYY-MM-DD", "values": {"aux_px": 9}}`。检查器按放宽后的值检查，并始终报告一条 hint |
 | `family` | 否 | 家族 CSS 的来源名、版本与 `design.css` 复制时的哈希 |
@@ -74,6 +75,8 @@ project/
 - `.page { position: relative; box-sizing: border-box; width: var(--media-w); height: var(--media-h); overflow: hidden; break-after: page }`。作者 CSS 不要改 `.page` 的宽高与 `break-*`，S3 会核对实际尺寸；
 - 变量：`--trim-w`、`--trim-h`、`--bleed`、`--media-w`、`--media-h`、`--safe-top`、`--safe-right`、`--safe-bottom`、`--safe-left`（从成品边向内量），以及 `--inset-top`… `--inset-left`（= 出血 + 安全边距，从 `.page` 外边向内量，作者排版通常用它）；
 - 页码计数器 `page-n`：每个 `.page` 自增，作者可用 `counter(page-n)` 显示页码。
+
+PDF 页面框：MediaBox = CropBox = BleedBox = 媒体尺寸（成品 + 出血），TrimBox = 成品尺寸。Chrome 只能输出 1/75 英寸取整的纸张，渲染器先按稍大纸张输出，再精确裁切到左上角的媒体区域（`hb/core/pdfboxes.py`），内容不缩放。
 
 ## 3. 作者源 HTML
 

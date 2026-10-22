@@ -2,15 +2,48 @@
   "contract": 1,
   "title": "契约样例：最小中文册",
   "entry": "book.html",
-  "styles": ["design.css", "book.css"],
-  "languages": ["zh-CN"],
+  "styles": [
+    "design.css",
+    "book.css"
+  ],
+  "languages": [
+    "zh-CN"
+  ],
   "default_language": "zh-CN",
-  "canvas": { "trim_mm": [210, 297], "bleed_mm": 0, "safe_mm": [14, 14, 16, 14] },
+  "canvas": {
+    "trim_mm": [
+      210,
+      297
+    ],
+    "bleed_mm": 0,
+    "safe_mm": [
+      14,
+      14,
+      16,
+      14
+    ]
+  },
   "binding": "digital",
   "first_page": "right",
   "content_mode": "carry",
   "fonts": [
-    { "family": "Noto Serif SC", "file": "assets/fonts/NotoSerifSC.ttf", "weight": "200 900", "style": "normal" },
-    { "family": "Noto Sans SC", "file": "assets/fonts/NotoSansSC.ttf", "weight": "100 900", "style": "normal" }
+    {
+      "family": "Noto Serif SC",
+      "file": "assets/fonts/NotoSerifSC-700.ttf",
+      "weight": "700",
+      "style": "normal"
+    },
+    {
+      "family": "Noto Sans SC",
+      "file": "assets/fonts/NotoSansSC-400.ttf",
+      "weight": "400",
+      "style": "normal"
+    },
+    {
+      "family": "Noto Sans SC",
+      "file": "assets/fonts/NotoSansSC-700.ttf",
+      "weight": "700",
+      "style": "normal"
+    }
   ]
 }

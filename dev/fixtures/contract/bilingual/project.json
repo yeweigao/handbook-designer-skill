@@ -2,17 +2,64 @@
   "contract": 1,
   "title": "契约样例：中英双语跨页",
   "entry": "book.html",
-  "styles": ["design.css", "book.css"],
-  "languages": ["zh-CN", "en"],
+  "styles": [
+    "design.css",
+    "book.css"
+  ],
+  "languages": [
+    "zh-CN",
+    "en"
+  ],
   "default_language": "zh-CN",
-  "canvas": { "trim_mm": [210, 297], "bleed_mm": 3, "safe_mm": [14, 14, 16, 14] },
+  "canvas": {
+    "trim_mm": [
+      210,
+      297
+    ],
+    "bleed_mm": 3,
+    "safe_mm": [
+      14,
+      14,
+      16,
+      14
+    ]
+  },
   "binding": "saddle",
   "first_page": "right",
   "content_mode": "translate",
   "fonts": [
-    { "family": "Noto Serif SC", "file": "assets/fonts/NotoSerifSC.ttf", "weight": "200 900", "style": "normal" },
-    { "family": "Noto Sans SC", "file": "assets/fonts/NotoSansSC.ttf", "weight": "100 900", "style": "normal" },
-    { "family": "Inter", "file": "assets/fonts/Inter.ttf", "weight": "100 900", "style": "normal" }
+    {
+      "family": "Noto Serif SC",
+      "file": "assets/fonts/NotoSerifSC-700.ttf",
+      "weight": "700",
+      "style": "normal"
+    },
+    {
+      "family": "Noto Sans SC",
+      "file": "assets/fonts/NotoSansSC-400.ttf",
+      "weight": "400",
+      "style": "normal"
+    },
+    {
+      "family": "Noto Sans SC",
+      "file": "assets/fonts/NotoSansSC-700.ttf",
+      "weight": "700",
+      "style": "normal"
+    },
+    {
+      "family": "Inter",
+      "file": "assets/fonts/Inter-400.ttf",
+      "weight": "400",
+      "style": "normal"
+    },
+    {
+      "family": "Inter",
+      "file": "assets/fonts/Inter-700.ttf",
+      "weight": "700",
+      "style": "normal"
+    }
   ],
-  "readability": { "body_px": 15 }
+  "readability": {
+    "body_px": 15
+  }
 }

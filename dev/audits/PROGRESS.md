@@ -6,8 +6,8 @@
 
 | 步骤 | 状态 | 最近更新 | 提交 |
 |---|---|---|---|
-| S1 契约与最小样例 | 完成 | 2026-10-22 | 见记录 |
-| S2 渲染运行时 | 未开始 | | |
+| S1 契约与最小样例 | 完成 | 2026-10-22 | 086b8b7 |
+| S2 渲染运行时 | 完成 | 2026-10-22 | 见记录 |
 | S3 版面测量与可读性检查 | 未开始 | | |
 | S4 最终 PDF 检查与验收绑定 | 未开始 | | |
 | S5 内容提取与原文覆盖 | 未开始 | | |
@@ -79,3 +79,41 @@
   - `validate.py` 是静态检查，不知道实际渲染尺寸；页面尺寸、溢出、字体回退等由 S2/S3 在浏览器里检查。
   - 装订页数在作者阶段只报警告，硬检查在 S4 的 PDF 上做。
 - 下一步：S2 渲染运行时。先 `cd hb && npm ci`（或 `npm install`）安装锁定的 playwright@1.64.1，并确认能拿到对应的 Chromium。
+
+### S2 · 渲染运行时 · 完成 · 2026-10-22
+
+- 改动范围（均在 `hb/core/`）：
+  - `cli.mjs`（入口 `render`）、`render.mjs`（校验 → 组装 → 注入 → 快照 → 资源就绪 → 尺寸核对 → PDF → 清单）、`project.mjs`、`print-css.mjs`（打印 CSS 与字体 CSS）、`inject.mjs`（白名单行内标记、其余转义）、`server.mjs`（只服务项目目录的本地 HTTP，记录请求）、`browser.mjs`（锁定 Chromium、拦截外部请求、自动加载补齐的系统库）、`fingerprint.mjs`（静态扫描依赖闭包 + 工具哈希 → 构建 ID）。
+  - `pdfboxes.py`：精确裁切 PDF 并写 MediaBox/CropBox/BleedBox/TrimBox。
+  - `font_static.py`：可变字体实例化为静态字重。
+  - `setup_env.sh`：一条命令准备环境（npm ci、下载 Chromium、无 root 时补系统库、试启动）。
+  - `validate.py`：新增可变字体检查（`font.variable`）与单字重要求。
+  - 样例字体改为静态实例（`NotoSansSC-400/700`、`NotoSerifSC-700`、`Inter-400/700`），`dev/tests/core/fixture_fonts.py` 改为子集 + 实例化。
+  - `dev/tests/core/render.test.mjs`（9 项）；`test_validate.py` 增加 2 个反例（共 38 个）。
+- 可复制命令：
+  - 环境：`bash hb/core/setup_env.sh`（新会话第一次运行；Chromium 缓存在会话用户目录，换 agent 会话后需重跑）
+  - 渲染：`node hb/core/cli.mjs render dev/fixtures/contract/bilingual [--lang en] [--out .build/xxx]`
+  - 测试：`node --test dev/tests/core/*.test.mjs` 与 `python3 -m unittest discover -s dev/tests/core -p 'test_*.py'`
+- 完成判定逐条结果：
+  - 两个正例渲染、页尺寸核对：pass —— A4 无出血 `595.276 x 841.89 pts`；A4+3mm 出血 `612.283 x 858.898 pts`，TrimBox 每边内收 8.50pt。
+  - 两次独立进程渲染一致：pass —— 构建 ID、指纹、快照哈希相同；`pdftoppm -r 60` 逐页 PNG 字节相同。
+  - 改 CSS / 图片 / lang CSS / 译文后指纹变化：pass。
+  - 删字体、加外链图：pass —— 删字体被契约校验拦下并指出文件；损坏字体在运行时报 `resource.font`；外链图（绕过静态校验）被拦截并报 `network.blocked`，退出码非 0。
+  - 作者 CSS 改 `.page` 宽度：pass —— 报 `page.size`。
+  - 测试：pass —— Node 9/9，Python 4/4（含 38 个反例子测试）。
+  - 资源缓存冷/热：设计上每次渲染都是新浏览器、`Cache-Control: no-store`，不存在热缓存；全新机器的系统级冷环境：unverified。
+- 契约变更（已同步 `references/contract.md` 与 `validate.py`）：
+  - 字体必须是静态字体、`weight` 为单个值。原因：Chrome 把可变字体导出为 Type 3（实测），印刷与可编辑 PDF 都不接受。
+  - 写明 PDF 页面框约定与精确裁切做法。
+- 偏离计划的决定：
+  - Chrome 只能输出按 1/75 英寸取整的纸张（A4 实测 594.96×841.92pt）：改为按每边多 1mm 输出，再用 pikepdf 精确裁到左上角媒体区域，内容不缩放。
+  - 渲染经本地 HTTP 服务而不是 `file://`：才能拦截并记录每个请求、拒绝项目目录外文件。
+  - 文案注入在浏览器 DOM 中按 `data-source-id` 替换，片段由 Node 端白名单清洗后生成。
+  - `HB_CHROMIUM` 可显式指定浏览器（如云端预装 Chromium），会记入清单并改变构建 ID；不会静默回退系统 Chrome。
+- 新增依赖：无新包。运行时现在必需 `pikepdf`（原已在 requirements 中；本环境装的是 10.13.0.post1，与 `requirements.lock` 的 10.17.0 不一致，未处理）。
+- 环境备注：本机 Linux 虚拟机缺 `libXdamage.so.1`，`setup_env.sh` 已用 `apt-get download` 补到 `~/.local/hb-libs`，`browser.mjs` 自动加入 `LD_LIBRARY_PATH`。
+- 未完成与已知问题：
+  - 续页片段的多语言注入未实现，遇到即报 `inject.fragment`（S6）。
+  - 页面内容是否溢出、遮挡、字号/对比度、实际字体回退均未检查（S3）。PDF 页数、字体嵌入的硬检查在 S4。
+  - 审跨页用的拼图需要按 TrimBox 裁切，否则中缝出血会重复显示（S4 的 `rasterize.sh` 处理）。
+- 下一步：S3、S4、S5 可并行。S3 先读 `render.mjs` 的快照与清单结构；测量应在 `snapshot.html` 上用 `emulateMedia({ media: 'print' })` 进行，与 PDF 同源。
