@@ -5,11 +5,14 @@
 //   check   <项目> [--lang zh-CN]                     渲染 + 测量 + 最终 PDF 检查 + 栅格 + 原文覆盖 → .qa/<构建 ID>/gate.json
 //   verify  <项目>                                    核对当前源与 PDF 是否仍与验收记录一致（导出前必跑）
 //   paginate <项目> [--flow <名称>]                    默认语言续排：按实际排版分配 data-flow 内容并写回 book.html
+//   review  <项目> --verdict deliverable|excellent|fail --by <审稿人> [--notes <文件>]   记录对当前最终 PDF 的视觉审稿结论
+//   export  <项目> [--name <文件名>] [--draft]         正式导出（需有效验收 + 视觉审稿）或草稿导出 → out/
 import path from 'node:path';
 import { render } from './render.mjs';
 import { measure } from './measure.mjs';
 import { check, verify } from './gate.mjs';
 import { paginate } from './paginate.mjs';
+import { review, exportBook } from './export.mjs';
 
 function parse(argv) {
   const args = { _: [], langs: [] };
@@ -19,6 +22,11 @@ function parse(argv) {
     else if (a === '--out') args.out = argv[++i];
     else if (a === '--build') args.build = argv[++i];
     else if (a === '--flow') args.flow = argv[++i];
+    else if (a === '--verdict') args.verdict = argv[++i];
+    else if (a === '--by') args.by = argv[++i];
+    else if (a === '--notes') args.notes = argv[++i];
+    else if (a === '--name') args.name = argv[++i];
+    else if (a === '--draft') args.draft = true;
     else args._.push(a);
   }
   return args;
@@ -27,8 +35,8 @@ function parse(argv) {
 async function main() {
   const args = parse(process.argv.slice(2));
   const [cmd, project] = args._;
-  if (!['render', 'measure', 'check', 'verify', 'paginate'].includes(cmd) || !project) {
-    console.error('用法：node hb/core/cli.mjs render|measure|check|verify|paginate <项目> [--lang <语言>] [--out <项目内目录>] [--build <构建 ID>] [--flow <名称>]');
+  if (!['render', 'measure', 'check', 'verify', 'paginate', 'review', 'export'].includes(cmd) || !project) {
+    console.error('用法：node hb/core/cli.mjs render|measure|check|verify|paginate|review|export <项目> [选项]（见文件开头说明）');
     return 2;
   }
   try {
@@ -38,6 +46,20 @@ async function main() {
       for (const [l, v] of Object.entries(g.languages)) console.log(`  ${l}: ${Object.entries(v.checks).map(([k, s]) => `${k}=${s}`).join(' ')}`);
       for (const b of g.blocking) console.log(`    ${String(b.status).toUpperCase()} [${b.lang}] ${b.id}${b.page ? ' ' + b.page : ''}${b.target ? ' ' + b.target : ''}: ${b.message}`);
       return g.status === 'deliverable' ? 0 : 1;
+    }
+    if (cmd === 'review') {
+      const r = await review(project, args);
+      console.log(`已记录视觉审稿：${r.verdict}（${r.by}）→ ${r.file}`);
+      return 0;
+    }
+    if (cmd === 'export') {
+      const r = await exportBook(project, args);
+      if (r.status === 'refused') { console.log('拒绝正式导出：'); for (const x of r.reasons) console.log(`  ${x}`); console.log('（只想先给人看：加 --draft）'); return 1; }
+      for (const c of r.checks || []) console.log(`  ${c.status === 'pass' ? '✓' : '✗'} ${c.id}: ${c.message}`);
+      if (r.status === 'draft') { console.log(`草稿导出 → ${r.out}`); for (const f of r.files) console.log(`  ${f}`); return 0; }
+      if (r.status === 'failed') { console.log(`导出实测未通过，未发布；诊断保留在 ${r.staging}`); return 1; }
+      console.log(`已交付 → ${r.out}`); for (const f of r.files) console.log(`  ${f}`);
+      return 0;
     }
     if (cmd === 'paginate') {
       const r = await paginate(project, { flow: args.flow });

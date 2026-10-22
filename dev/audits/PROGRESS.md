@@ -11,9 +11,9 @@
 | S3 版面测量与可读性检查 | 完成 | 2026-10-22 | adaee42 |
 | S4 最终 PDF 检查与验收绑定 | 完成 | 2026-10-22 | 21b4f2b |
 | S5 内容提取与原文覆盖 | 完成 | 2026-10-22 | 98e4938 |
-| S6 长文续页工具 | 完成 | 2026-10-22 | 见记录 |
+| S6 长文续页工具 | 完成 | 2026-10-22 | cb102a6 |
 | S7 Campus 家族与真实样册 | 未开始 | | |
-| S8 导出与离线交付 | 未开始 | | |
+| S8 导出与离线交付 | 完成 | 2026-10-22 | 见记录 |
 | S9 Folio 联动 | 未开始 | | |
 | S10 Skill 文档与旧引擎退役 | 未开始 | | |
 | S11 视觉参考资产 | 未开始 | | |
@@ -244,3 +244,39 @@
   - 列表、表格不拆；超长表格需要作者拆成多个表。
   - 其他语言的续页在 Folio 中编辑时，回写只能按内容 ID 合并到 `copy/<lang>.json`（S9 处理）。
 - 下一步：S7（Campus 家族与真实样册）、S8（导出）、S9（Folio）依赖都已满足，可并行。
+
+### S8 · 导出与离线交付 · 完成 · 2026-10-22
+
+- 改动范围（`hb/core/`）：
+  - `export.mjs` 与 `cli.mjs review / export`：
+    - `review <项目> --verdict deliverable|excellent|fail --by <审稿人> [--notes <文件>]`：仅在技术验收有效时，把视觉审稿结论绑定到当前构建 ID 与各语言 PDF 哈希（`.qa/<构建 ID>/visual-review.json`）。
+    - `export <项目> [--name <文件名>]`：verify 有效 + 视觉审稿为可交付/优秀，才在 `out/.staging-<构建 ID>/` 生成交付物并逐项实测；全部通过才改名发布到 `out/<文件名>/`，失败保留暂存目录供诊断。
+    - `export --draft`：不需要验收，在 PDF 上叠加「草稿 DRAFT」水印（不重新渲染），输出到 `out/<文件名>-draft/`。
+  - `editable_pdf.py`：不重新渲染，把 PDF 里每个嵌入字体替换为同一项目字体的扩充版（GB2312 常用字 + 拉丁 + 本书用字，`retain_gids` 保持字形编号）；保留 Chrome 写入的宽度表、只给新增字形补宽度；去掉子集前缀。
+  - `offline_html.py`：快照 → 单文件 HTML（样式表递归 @import、CSS url、img/srcset、style 属性、SVG href 全部内嵌）；网络地址、项目外文件、缺失文件一律报错。
+  - `pack.py`：源文件包 = 构建清单全部输入 + brief/page-plan/experience + `sources/` 全部 + 字体与素材旁的授权文本 + `REBUILD.md`（重建命令、预期构建 ID、工具版本）；不含 `.build/.qa/out`。
+  - `compare_pdf.py`：两份 PDF 逐页栅格对比（差异像素比例）。
+- 交付物（每种语言）：`<名>.<语言>.pdf`、`.editable.pdf`、`.html`、`.sheet.png`、`.spreads.png`；另有 `<名>.source.zip`、`credits.md`（素材与字体来源授权）、`delivery.json`（检查结果与每个文件哈希）。
+- 可复制命令：
+  - `node hb/core/cli.mjs check <项目> && node hb/core/cli.mjs review <项目> --verdict deliverable --by <审稿人> && node hb/core/cli.mjs export <项目> --name <文件名>`
+  - `node --test dev/tests/core/export.test.mjs`（约 2.5 分钟）
+- 完成判定逐条结果：
+  - 最终 PDF：pass —— 复制自验收的 PDF，哈希与 gate 一致。
+  - 可编辑 PDF：pass —— 字体非子集、无 Type 3；中英两版与正式版 60dpi 逐页**零像素差异**，文字层相同。支持范围：Chrome 导出、静态 TrueType 字体；扩充字库为 GB2312 + 拉丁 + 本书用字。**未在 Acrobat 等编辑器里实测改字**（本环境没有），这一点记为 unverified。
+  - 离线 HTML：pass —— 浏览器打开时除 data: 与文件本身外无任何请求，字体与图片全部就绪；打印出的 PDF 与正式版逐页一致（容差 0.1%，实测 0）。
+  - 源文件包重建：pass —— 在新的临时目录解包后运行 check，构建 ID 与原构建相同、验收通过、逐页栅格零差异。渲染器本身拒绝一切外部请求，因此即"断网"重建；系统级断网（关闭网卡）未单独验证。
+  - verify 失败拒绝正式导出：pass —— 没有验收、没有审稿、审稿不合格、PDF 在验收后被改动，四种情况都拒绝，且不留下发布目录。
+  - `--draft` 水印与状态：pass。
+  - 回归：export 4/4、gate 6/6。
+- 契约变更：无（`visual-review.json` 是新的 .qa 产物）。
+- 偏离计划的决定：
+  - 可编辑 PDF 改为直接替换嵌入字体，不再像旧引擎那样用扩充字库重新渲染：省一次渲染，并保证版式与正式版逐像素一致。
+  - 视觉审稿结论用 `review` 命令落为绑定构建的记录；正式导出强制要求它。审稿本身怎么做由 S10 的 visual-review 工作流规定。
+  - 离线 HTML 保留原图，不缩小（与 PDF 同源，便于核对）；大量照片的书 HTML 会很大，S10 可以视需要增加"屏幕版"选项。
+  - 草稿水印用叠加方式，正式 PDF 不受影响。
+- 新增依赖：无。
+- 未完成与已知问题：
+  - PDF 书签（旧引擎有）没有迁移：需要章节结构信息，留给 S10（可从 h1/h2 与 data-page-id 生成）。
+  - 文件名会保留书名里的全角标点；跨平台分发若有问题，用 `--name` 指定。
+  - Pillow 14 将移除 `getdata`，`compare_pdf.py` 已改用 histogram。
+- 下一步：S9（Folio 联动）。S7（家族 CSS 与真实样册）也可以开始。

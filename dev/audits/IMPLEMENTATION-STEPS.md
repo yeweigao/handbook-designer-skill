@@ -175,7 +175,7 @@ S1–S4 是地基：没有它们，后面任何页面都无法可靠渲染、测
 
 ## S8 · 导出与离线交付
 
-**归属文件**：`hb/core/export.mjs`、`hb/core/pack.mjs`、`hb/core/editable_pdf.py`、相关测试。
+**归属文件**：`hb/core/export.mjs`、`pack.py`、`editable_pdf.py`、`offline_html.py`、`compare_pdf.py`（均在 `hb/core/`）、`dev/tests/core/export.test.mjs`。
 
 **完成判定**：最终 PDF、可编辑 PDF（实测文字与图片与普通 PDF 一致，写明支持范围）、离线单文件 HTML（依赖闭包完整，断网打开无外部请求）、源包；源包在新临时目录、断网解包后重建，输出与原 PDF 栅格一致；导出前 `verify` 失败则拒绝正式导出，`--draft` 加水印且状态明确。
 
