@@ -152,6 +152,7 @@ PDF 页面框：MediaBox = CropBox = BleedBox = 媒体尺寸（成品 + 出血�
 
 - `sources/segments.json`：由 `hb/core/extract.py` 从原稿生成，逐段 `{id, kind, text, origin}`；`kind` 为 `heading / para / item / cell / artifact`（artifact 是原稿页码等非正文，不参与核对）。
 - `sources/adapt.json`（可选，`frozen` 模式不接受）：`omit` 声明不进册子的原文段、`strip` 声明去掉的前缀或标记、`extra` 声明允许的非原文内容节点，每项写理由。
+- `sources/user-edits.json`（由 `folio-sync` 写入）：用户本人在 Folio 里改过的文字 `{target, lang, old, new, via, build, date}`。原文覆盖检查把改后的文字视为原文、不再要求改前的句子出现；所有内容模式（包括 `frozen`）都承认用户本人的修改，agent 不得借此记录自己的改写。
 - `sources/facts.md`（可选）：调研得到的事实与来源，数字出处检查会参考它。
 - `sources/assets.json`：`{"contract": 1, "assets": {"<素材 ID>": {"file", "source", "license", "credit"}}}`。页面上非装饰图片必须带 `data-asset` 并在这里写明来源与授权；空着即为硬项 unverified。
 

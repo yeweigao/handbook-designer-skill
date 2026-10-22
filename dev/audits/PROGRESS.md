@@ -13,8 +13,8 @@
 | S5 内容提取与原文覆盖 | 完成 | 2026-10-22 | 98e4938 |
 | S6 长文续页工具 | 完成 | 2026-10-22 | cb102a6 |
 | S7 Campus 家族与真实样册 | 未开始 | | |
-| S8 导出与离线交付 | 完成 | 2026-10-22 | 见记录 |
-| S9 Folio 联动 | 未开始 | | |
+| S8 导出与离线交付 | 完成 | 2026-10-22 | ce515da |
+| S9 Folio 联动 | 完成 | 2026-10-22 | 见记录 |
 | S10 Skill 文档与旧引擎退役 | 未开始 | | |
 | S11 视觉参考资产 | 未开始 | | |
 | S12 独立生成基准 | 未开始 | | |
@@ -280,3 +280,43 @@
   - 文件名会保留书名里的全角标点；跨平台分发若有问题，用 `--name` 指定。
   - Pillow 14 将移除 `getdata`，`compare_pdf.py` 已改用 histogram。
 - 下一步：S9（Folio 联动）。S7（家族 CSS 与真实样册）也可以开始。
+
+### S9 · Folio 联动 · 完成 · 2026-10-22
+
+- 改动范围（本仓库）：
+  - `hb/core/folio.mjs` 与 `cli.mjs folio-pack <项目> [--lang] [--name]`：当前源对应构建的快照 → 离线单文件 HTML + 构建标记（`hb-contract / hb-build / hb-lang / hb-title`），写到 `out/folio/<名>.<语言>.folio.html`；同一份存为 `.build/<构建 ID>/<语言>/folio-base.html` 作写回基准。
+  - `hb/core/folio_sync.py` 与 `cli.mjs folio-sync <项目> <下载的 HTML> [--dry-run]`：三方比对（编辑包基准 ↔ Folio 交回的 HTML ↔ 当前作者源）。
+    - 改字：默认语言按片段写回 `book.html`；其他语言合并片段后写回 `copy/<语言>.json`；富文本按白名单清洗（b→strong、i→em、换行→br）。
+    - 换图：新图存为 `assets/images/folio-<编辑 ID>-<哈希>`，改作者源的 `src` 与 `data-asset`，在 `sources/assets.json` 登记且授权留空（交付前必须确认）。
+    - 样式与位置：`data-folio-overrides` 与 `folio-shared-styles` 批量规则 → `edits.css`（按 `data-edit-id` / `data-source-id` / `.page` 选择器；其他语言限定 `html[lang]`）。
+    - 冲突（作者源在导出编辑包后改过）不覆盖；没有 ID 的改字、换图、样式列为未写回。
+    - 用户改字记入 `sources/user-edits.json`，原文覆盖检查视为用户认可的改动（`coverage.py` 相应更新）。
+  - 契约：`sources/user-edits.json` 说明。
+  - 测试：`dev/tests/core/folio.test.mjs`（模拟写回 2 项 + 真实 Folio 界面往返 1 项）。
+- 改动范围（`folio-html-studio`，分支 `hb-package`，提交 162a616）：
+  - `src/bridge.js`：读取构建标记；选中对象时给出 `sourceId / editId / traceable{text, style, image}`。
+  - `src/App.tsx`、`src/types.ts`、`src/style.css`：顶栏显示「基于构建 xxx · 语言」；对不可写回的修改在属性面板给出提示（仍允许修改）。
+  - `tests/handbook-package.test.mjs`；README 增加联动说明。不新增导出功能，不需要服务器。
+- 可复制命令：
+  - `node hb/core/cli.mjs folio-pack <项目>` → 在 Folio 导入 `out/folio/*.folio.html` → 下载 HTML → `node hb/core/cli.mjs folio-sync <项目> <下载的 HTML>` → `check`
+  - 本仓库：`node --test dev/tests/core/folio.test.mjs`（会启动 `../folio-html-studio` 的开发服务器；找不到时真实往返项跳过）
+  - Folio 仓库：`npm test`（本机 Linux 虚拟机需 `LD_LIBRARY_PATH` 指向 `~/.local/hb-libs` 补的系统库）
+- 完成判定逐条结果：
+  - 真实界面往返：pass —— 在 Folio 里改导语、拖动标题、给跨页图换一张 2600×1850 的新图 → 下载 → folio-sync 写回 `book.html`、`edits.css`、新图片与素材登记 → 授权未确认时 check 不可交付 → 确认授权后 check **可交付**。
+  - 旧值不符的冲突被报告：pass —— 同一份修改再次写回时全部判冲突、作者源字节不变；其他语言的译文在导出后被改过时判冲突、不覆盖。
+  - 无 ID 改动被列出：pass —— 无 ID 的新段落、无 ID 色块的样式都列入「未写回」。
+  - Folio 保留 ID 与构建标记、显示构建版本、提示无 ID 修改：pass —— Folio 新测试；顶栏显示与提示文案经截图确认。
+  - Folio 原有测试：pass —— 10/10。
+  - 回归：coverage 12/12。
+- 契约变更：新增 `sources/user-edits.json`；原文覆盖在所有内容模式下承认用户本人的修改。
+- 偏离计划的决定：
+  - 不另做"修改清单导出"，交回的就是 Folio 正常下载的 HTML（与用户确认过的方案一致）。
+  - 用户改字以"用户认可的改动"记录，覆盖检查据此放行；冻结模式也承认（沿用旧引擎规则）。agent 自己的改写不能用这个文件。
+  - 写回的样式统一加 `!important` 追加在 `edits.css` 末尾（与 Folio 的覆盖语义一致），文件头注明"待审阅"。
+- 新增依赖：本仓库无；Folio 仓库无新依赖（`npm ci` 安装既有锁定依赖）。
+- 环境备注：Playwright 的 `locator.click` 会把比页面还宽的跨页图滚到中央（连 `overflow:hidden` 的页面也会被程序化滚动），测试里改为按可见位置用鼠标点击；真实用户点击不受影响。
+- 未完成与已知问题：
+  - Folio 的品牌图形内部样式（`graphicStyles`）不写回，会列为未写回。
+  - 其他语言的续页在 Folio 中拖动位置时，样式写回限定在该语言的 `html[lang]` 下，但目标是渲染时生成的片段编号，重新续排后可能对不上；建议其他语言只改字。
+  - Folio 仓库改动在 `hb-package` 分支，尚未合并到 main、尚未部署。
+- 下一步：S7（Campus 家族 CSS 与真实样册）、S10（Skill 文档重写与旧引擎退役）。S10 依赖 S7 的家族与样册路径。

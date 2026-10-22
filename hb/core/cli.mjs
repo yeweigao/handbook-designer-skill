@@ -7,12 +7,16 @@
 //   paginate <项目> [--flow <名称>]                    默认语言续排：按实际排版分配 data-flow 内容并写回 book.html
 //   review  <项目> --verdict deliverable|excellent|fail --by <审稿人> [--notes <文件>]   记录对当前最终 PDF 的视觉审稿结论
 //   export  <项目> [--name <文件名>] [--draft]         正式导出（需有效验收 + 视觉审稿）或草稿导出 → out/
+//   folio-pack <项目> [--lang <语言>] [--name <文件名>]  生成 Folio 编辑包 → out/folio/
+//   folio-sync <项目> <Folio 下载的 HTML> [--dry-run]    把 Folio 里的修改写回作者源（冲突不覆盖）
 import path from 'node:path';
 import { render } from './render.mjs';
 import { measure } from './measure.mjs';
 import { check, verify } from './gate.mjs';
 import { paginate } from './paginate.mjs';
 import { review, exportBook } from './export.mjs';
+import { folioPack } from './folio.mjs';
+import { spawnSync } from 'node:child_process';
 
 function parse(argv) {
   const args = { _: [], langs: [] };
@@ -27,6 +31,7 @@ function parse(argv) {
     else if (a === '--notes') args.notes = argv[++i];
     else if (a === '--name') args.name = argv[++i];
     else if (a === '--draft') args.draft = true;
+    else if (a === '--dry-run') args.dry = true;
     else args._.push(a);
   }
   return args;
@@ -35,8 +40,8 @@ function parse(argv) {
 async function main() {
   const args = parse(process.argv.slice(2));
   const [cmd, project] = args._;
-  if (!['render', 'measure', 'check', 'verify', 'paginate', 'review', 'export'].includes(cmd) || !project) {
-    console.error('用法：node hb/core/cli.mjs render|measure|check|verify|paginate|review|export <项目> [选项]（见文件开头说明）');
+  if (!['render', 'measure', 'check', 'verify', 'paginate', 'review', 'export', 'folio-pack', 'folio-sync'].includes(cmd) || !project) {
+    console.error('用法：node hb/core/cli.mjs render|measure|check|verify|paginate|review|export|folio-pack|folio-sync <项目> [选项]（见 hb/core/cli.mjs 开头说明）');
     return 2;
   }
   try {
@@ -46,6 +51,17 @@ async function main() {
       for (const [l, v] of Object.entries(g.languages)) console.log(`  ${l}: ${Object.entries(v.checks).map(([k, s]) => `${k}=${s}`).join(' ')}`);
       for (const b of g.blocking) console.log(`    ${String(b.status).toUpperCase()} [${b.lang}] ${b.id}${b.page ? ' ' + b.page : ''}${b.target ? ' ' + b.target : ''}: ${b.message}`);
       return g.status === 'deliverable' ? 0 : 1;
+    }
+    if (cmd === 'folio-pack') {
+      const r = await folioPack(project, { langs: args.langs, name: args.name });
+      console.log(`Folio 编辑包（构建 ${r.buildId}）：`); for (const f of r.files) console.log(`  ${f}`);
+      return 0;
+    }
+    if (cmd === 'folio-sync') {
+      const file = args._[2];
+      if (!file) { console.error('用法：folio-sync <项目> <Folio 下载的 HTML> [--dry-run]'); return 2; }
+      const r = spawnSync('python3', [new URL('./folio_sync.py', import.meta.url).pathname, project, file, ...(args.dry ? ['--dry-run'] : [])], { stdio: 'inherit' });
+      return r.status;
     }
     if (cmd === 'review') {
       const r = await review(project, args);

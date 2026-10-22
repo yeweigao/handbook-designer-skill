@@ -183,7 +183,7 @@ S1–S4 是地基：没有它们，后面任何页面都无法可靠渲染、测
 
 ## S9 · Folio 联动
 
-**归属文件**：`hb/core/folio-pack.mjs`、`hb/core/folio-sync.mjs`、相关测试；外部仓库 `folio-html-studio` 的对应改动（在该仓库单独提交）。
+**归属文件**：`hb/core/folio.mjs`（编辑包）、`hb/core/folio_sync.py`（写回）、`dev/tests/core/folio.test.mjs`；外部仓库 `folio-html-studio` 的对应改动（在该仓库 `hb-package` 分支单独提交）。
 
 **完成判定**：导出编辑包 → 用 Folio 的浏览器测试脚本模拟改字、换图、拖动 → 下载 HTML → `folio-sync` 对比写回 `copy/<lang>.json`、`assets/`、`edits.css` → 重建通过；旧值不符的冲突被报告；无 ID 改动被列出；Folio 保留 ID 与构建 ID、显示构建版本、提示无 ID 修改，其原有测试仍通过。
 

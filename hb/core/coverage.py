@@ -173,6 +173,15 @@ def check_source(project, proj, mode, visible, items, stats):
         else:
             adapt.update(load(apath))
     omit = {o["segment"] for o in adapt.get("omit", [])}
+    # 用户本人的改动（在线编辑写回）：改后的文字视为原文，改前的句子不再要求出现。所有内容模式都承认。
+    user_new, user_old = [], set()
+    upath = os.path.join(project, "sources", "user-edits.json")
+    if os.path.exists(upath):
+        for e in load(upath).get("edits", []):
+            if e.get("lang") in (None, proj["default_language"]):
+                user_new.append(e.get("new", ""))
+                user_old.update(norm(x) for x in sentences(e.get("old", "")))
+        stats["user_edits"] = len(load(upath).get("edits", []))
     strip = {}
     for st in adapt.get("strip", []):
         strip.setdefault(st["segment"], []).append(st["text"])
@@ -193,6 +202,8 @@ def check_source(project, proj, mode, visible, items, stats):
         ref_parts.append(text)
         for s in sentences(text):
             pos = book.find(norm(s))
+            if pos < 0 and norm(s) in user_old:
+                continue
             if pos < 0:
                 missing.append((sg, s))
             else:
@@ -218,7 +229,7 @@ def check_source(project, proj, mode, visible, items, stats):
     if os.path.exists(fpath):
         with open(fpath, encoding="utf-8") as f:
             facts = f.read()
-    ref = norm("\n".join(ref_parts))
+    ref = norm("\n".join(ref_parts + user_new))
     ref_raw = re.sub(r"[\s,，]", "", unicodedata.normalize("NFKC", "\n".join(ref_parts) + facts))
     extras, nums = [], []
     for n in visible:
