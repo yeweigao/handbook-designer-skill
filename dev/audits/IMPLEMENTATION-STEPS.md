@@ -92,7 +92,7 @@ S1–S4 是地基：没有它们，后面任何页面都无法可靠渲染、测
 
 **先读**：契约、`hb/core/render.mjs`、旧 `hb/fill.js` 与 `hb/doctor.py`（只借鉴测量方法，不搬自动缩字逻辑）。
 
-**归属文件**：`hb/core/measure.mjs`、`hb/core/checks/*.mjs`、`hb/core/report.mjs`、`dev/fixtures/qa/**`、`dev/tests/core/measure.test.mjs`。
+**归属文件**：`hb/core/measure.mjs`、`hb/core/checks/*.mjs`、`hb/core/fontcover.py`、`dev/fixtures/qa/**`、`dev/tests/core/measure.test.mjs`。
 
 **要做**（每项都要有正例和反例 fixture）：
 - 溢出与裁切：内容节点超出所在 `.page`、超出安全区（`deco` 与声明出血的图片除外）、被祖先 `overflow:hidden` 裁掉的文字、滚动溢出。

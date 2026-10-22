@@ -37,7 +37,7 @@ project/
   "styles": ["design.css", "book.css"],
   "languages": ["zh-CN", "en"],
   "default_language": "zh-CN",
-  "canvas": { "trim_mm": [210, 297], "bleed_mm": 0, "safe_mm": [12, 12, 14, 12] },
+  "canvas": { "trim_mm": [210, 297], "bleed_mm": 0, "safe_mm": 8 },
   "binding": "digital",
   "first_page": "right",
   "content_mode": "carry",
@@ -60,7 +60,7 @@ project/
 | `default_language` | 是 | 必须在 `languages` 中；它的文案写在 `book.html` 里 |
 | `canvas.trim_mm` | 是 | 成品宽、高（mm），正数 |
 | `canvas.bleed_mm` | 是 | 出血（mm），≥ 0。为 0 时成品框等于媒体框 |
-| `canvas.safe_mm` | 是 | 安全边距（mm），一个数或 `[上, 右, 下, 左]`，从成品边缘向内量 |
+| `canvas.safe_mm` | 是 | 印刷安全区（mm），一个数或 `[上, 右, 下, 左]`，从成品边缘向内量：所有文字与功能信息（含页码、页眉）必须在安全区内。它不是版心边距，版心由作者 CSS 决定，通常比安全区更宽 |
 | `binding` | 是 | `digital` 电子版 / `loose` 散页 / `saddle` 骑马钉（页数须为 4 的倍数）/ `perfect` 胶装（页数须为偶数） |
 | `first_page` | 是 | 第一页在跨页中的位置：`right`（默认，封面单独成右页）或 `left` |
 | `content_mode` | 是 | `carry` 原文搬运 / `polish` 授权润色 / `translate` 授权翻译 / `frozen` 内容冻结（§5） |
@@ -73,7 +73,7 @@ project/
 
 - `@page { size: <媒体宽>mm <媒体高>mm; margin: 0 }`，媒体尺寸 = 成品 + 2 × 出血；
 - `.page { position: relative; box-sizing: border-box; width: var(--media-w); height: var(--media-h); overflow: hidden; break-after: page }`。作者 CSS 不要改 `.page` 的宽高与 `break-*`，S3 会核对实际尺寸；
-- 变量：`--trim-w`、`--trim-h`、`--bleed`、`--media-w`、`--media-h`、`--safe-top`、`--safe-right`、`--safe-bottom`、`--safe-left`（从成品边向内量），以及 `--inset-top`… `--inset-left`（= 出血 + 安全边距，从 `.page` 外边向内量，作者排版通常用它）；
+- 变量：`--trim-w`、`--trim-h`、`--bleed`、`--media-w`、`--media-h`、`--safe-top`、`--safe-right`、`--safe-bottom`、`--safe-left`（从成品边向内量），以及 `--inset-top`… `--inset-left`（= 出血 + 安全边距，即安全区在 `.page` 内的位置）。版心边距由作者 CSS 自己定义（通常写成 `calc(var(--bleed) + 版心边距)`）；
 - 页码计数器 `page-n`：每个 `.page` 自增，作者可用 `counter(page-n)` 显示页码。
 
 PDF 页面框：MediaBox = CropBox = BleedBox = 媒体尺寸（成品 + 出血），TrimBox = 成品尺寸。Chrome 只能输出 1/75 英寸取整的纸张，渲染器先按稍大纸张输出，再精确裁切到左上角的媒体区域（`hb/core/pdfboxes.py`），内容不缩放。

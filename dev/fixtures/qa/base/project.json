@@ -1,0 +1,17 @@
+{
+  "contract": 1,
+  "title": "测量样例：合法的复杂版式",
+  "entry": "book.html",
+  "styles": ["design.css", "book.css"],
+  "languages": ["zh-CN"],
+  "default_language": "zh-CN",
+  "canvas": { "trim_mm": [210, 297], "bleed_mm": 3, "safe_mm": 8 },
+  "binding": "loose",
+  "first_page": "right",
+  "content_mode": "carry",
+  "fonts": [
+    { "family": "Noto Serif SC", "file": "assets/fonts/NotoSerifSC-700.ttf", "weight": "700", "style": "normal" },
+    { "family": "Noto Sans SC", "file": "assets/fonts/NotoSansSC-400.ttf", "weight": "400", "style": "normal" },
+    { "family": "Noto Sans SC", "file": "assets/fonts/NotoSansSC-700.ttf", "weight": "700", "style": "normal" }
+  ]
+}

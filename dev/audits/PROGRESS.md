@@ -7,8 +7,8 @@
 | 步骤 | 状态 | 最近更新 | 提交 |
 |---|---|---|---|
 | S1 契约与最小样例 | 完成 | 2026-10-22 | 086b8b7 |
-| S2 渲染运行时 | 完成 | 2026-10-22 | 见记录 |
-| S3 版面测量与可读性检查 | 未开始 | | |
+| S2 渲染运行时 | 完成 | 2026-10-22 | c4824c5 |
+| S3 版面测量与可读性检查 | 完成 | 2026-10-22 | 见记录 |
 | S4 最终 PDF 检查与验收绑定 | 未开始 | | |
 | S5 内容提取与原文覆盖 | 未开始 | | |
 | S6 长文续页工具 | 未开始 | | |
@@ -117,3 +117,34 @@
   - 页面内容是否溢出、遮挡、字号/对比度、实际字体回退均未检查（S3）。PDF 页数、字体嵌入的硬检查在 S4。
   - 审跨页用的拼图需要按 TrimBox 裁切，否则中缝出血会重复显示（S4 的 `rasterize.sh` 处理）。
 - 下一步：S3、S4、S5 可并行。S3 先读 `render.mjs` 的快照与清单结构；测量应在 `snapshot.html` 上用 `emulateMedia({ media: 'print' })` 进行，与 PDF 同源。
+
+### S3 · 版面测量与可读性检查 · 完成 · 2026-10-22
+
+- 改动范围：
+  - `hb/core/measure.mjs`：在快照上以打印媒体只读测量；对比度用"隐藏全部文字后截图"取真实背景；字体回退用 CDP `CSS.getPlatformFontsForNode`；写 `.qa/<构建 ID>/<语言>/measure.json` 与 `measure.md`；硬项 fail 或 unverified 时退出码非 0。
+  - `hb/core/checks/collect.mjs`：浏览器内收集与几何检查（出页面、出安全区、容器裁切、文字互相遮挡、文字压图、字号下限、伪元素文字、图片有效分辨率、出血与出血不足、内容不可见、复杂变换提示）+ 对比度采样。
+  - `hb/core/fontcover.py`：算出没有任何声明字体覆盖的字符，写进回退报告。
+  - `hb/core/cli.mjs` 新增 `measure` 命令；`browser.mjs` 共享 `waitResources`；`fingerprint.mjs` 新增 `makeTools`，工具哈希改为递归包含 `checks/`（修复：之前改检查代码不会改变构建 ID）。
+  - 样例：`dev/fixtures/qa/base/`（3 页：满版出血海报、声明的文字叠放、旋转装饰字、分栏正文、行内图、上标、页码伪元素、三边出血色带、溢出隐藏引文框）；`contract/` 两个样例改为 8mm 安全区 + CSS 版心边距，双语封面眉标颜色修正（S3 首次运行即查出其对比度仅 1.4:1）。
+  - 测试：`dev/tests/core/measure.test.mjs`（正例 1 + 反例 18 + 旋转提示 1 + 放宽授权 1）；`test_validate.py` 正例加入 QA 样例。
+- 可复制命令：
+  - `node hb/core/cli.mjs render dev/fixtures/qa/base && node hb/core/cli.mjs measure dev/fixtures/qa/base`
+  - `node --test dev/tests/core/measure.test.mjs`（约 90 秒；本环境下长命令建议后台运行并读日志）
+- 完成判定逐条结果：
+  - 每个检查项至少一个反例被判硬项失败：pass —— overflow.page、overflow.safe（含页码伪元素）、clip.text、overlap.text、overlap.image、readability.size（含伪元素）、readability.contrast（纯色背景与压图两种）、font.fallback（缺字、字体栈两种）、image.dpi、image.bleed（出血不足、未声明两种）、content.hidden（透明、display:none、<1px、透明色）共 18 个反例全部命中。
+  - 合法版式不误报：pass —— 满版出血图、声明的叠放、旋转装饰字、页边页码、三边出血色带、溢出隐藏但放得下的引文框均为 0 硬项。旋转的内容文字只给 `geometry.unverified` 提示，不阻断。
+  - 两个契约样例全部 pass：pass。
+  - 测试：pass —— Node render 9/9、measure 21/21，Python 4/4。
+- 契约变更（已同步 `references/contract.md`）：`safe_mm` 明确为印刷安全区（所有文字含页码必须在内），不是版心边距；版心由作者 CSS 定义。样例与契约示例改为 8mm。
+- 偏离计划的决定：
+  - 对比度不把"背景是图片/渐变"一律记为 unverified，而是实际测量：隐藏文字截图后在文字矩形内采样，取第 5 百分位对比度（同时给出最小值和中位数）。只有渐变文字（background-clip:text）与复杂变换记为待目检提示。
+  - 内容文字带旋转/斜切、filter、mask、clip-path 时，几何检查记为 hint 级 unverified（交给视觉审稿），不阻断交付。
+  - 伪元素文字（页码等）没有可测矩形：非绝对定位时用宿主盒子近似检查位置，绝对定位时给提示。
+  - 可读性下限：放宽只能来自 `readability_waiver`，报告里始终保留一条说明。
+- 新增依赖：无。
+- 未完成与已知问题：
+  - CSS 背景图的分辨率只给提示（未测）；SVG 内文字的字号与位置只给提示。
+  - 未检测"伪粗体"（声明字重缺失时浏览器合成加粗）。
+  - 对比度采样基于屏幕截图（打印媒体模拟），与最终 PDF 栅格可能有细微差异；最终以 S4 的 PDF 审稿为准。
+  - 文字互相遮挡按行框计算，行距很紧的大标题若行框相交但字形不相交，可能误报，需要用 `data-overlap` 声明。
+- 下一步：S4（验收绑定，汇总 measure.json）与 S5（内容覆盖）可并行。S5 的"内容是否可见"可直接读 `measure.json` 里的 `content.hidden` 项。

@@ -58,9 +58,11 @@ export function collectInputs(dir, p) {
 }
 
 export function toolHash() {
-  const names = fs.readdirSync(HERE).filter((f) => /\.(mjs|py)$/.test(f)).sort();
+  // hb/core 下全部运行时代码（递归，含 checks/），任一改动都会改变构建 ID。
+  const names = fs.readdirSync(HERE, { recursive: true }).map(String)
+    .filter((f) => /\.(mjs|py)$/.test(f) && !f.includes('__pycache__')).sort();
   const h = crypto.createHash('sha256');
-  for (const f of names) h.update(f).update('\0').update(fs.readFileSync(path.join(HERE, f))).update('\0');
+  for (const f of names) h.update(f.split(path.sep).join('/')).update('\0').update(fs.readFileSync(path.join(HERE, f))).update('\0');
   return h.digest('hex');
 }
 
@@ -72,3 +74,7 @@ export function fingerprint(dir, p, tools) {
 }
 
 export const fileSha256 = (file) => sha256(fs.readFileSync(file));
+
+// 构建清单里的工具信息（render 与 measure 共用，参与指纹）。
+export const makeTools = (info) => ({ contract: 1, playwright: info.playwright, chromium: info.chromium,
+  executable: info.executable, node: process.versions.node.split('.')[0], tool_hash: toolHash() });

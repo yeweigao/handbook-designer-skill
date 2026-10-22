@@ -6,8 +6,8 @@ import { loadProject, mmToPx } from './project.mjs';
 import { printCss, fontCss } from './print-css.mjs';
 import { loadCopy } from './inject.mjs';
 import { serve } from './server.mjs';
-import { launch, openPage } from './browser.mjs';
-import { fingerprint, toolHash, fileSha256 } from './fingerprint.mjs';
+import { launch, openPage, waitResources } from './browser.mjs';
+import { fingerprint, makeTools, fileSha256 } from './fingerprint.mjs';
 
 const HERE = path.dirname(new URL(import.meta.url).pathname);
 const TIMEOUT = 30000;
@@ -45,23 +45,6 @@ function assemble({ dir, p, geom }, lang, langDir) {
     ? html.replace(/(<html\b[^>]*\blang\s*=\s*)(["'])[^"']*\2/i, `$1"${lang}"`)
     : html.replace(/<html\b/i, `<html lang="${lang}"`);
   return html;
-}
-
-async function waitResources(page) {
-  return page.evaluate(async (timeoutMs) => {
-    const within = (pr) => Promise.race([pr, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), timeoutMs))]);
-    const fontFail = []; const imgFail = [];
-    await within(document.fonts.ready);
-    for (const f of document.fonts) {
-      try { await within(f.load()); } catch { fontFail.push(`${f.family} ${f.weight} ${f.style}`); }
-    }
-    for (const img of document.images) {
-      try { await within(img.decode()); if (!img.naturalWidth) throw new Error('empty'); }
-      catch { imgFail.push(img.getAttribute('src')); }
-    }
-    await within(document.fonts.ready);
-    return { fontFail, imgFail };
-  }, TIMEOUT);
 }
 
 async function renderLang(ctx, browser, server, lang, langDir, fp, tools) {
@@ -104,7 +87,7 @@ async function renderLang(ctx, browser, server, lang, langDir, fp, tools) {
   const s = await openPage(browser, server.origin, blocked);
   await s.page.emulateMedia({ media: 'print' });
   await s.page.goto(`${server.origin}/${relOf(snapshotPath)}`, { waitUntil: 'networkidle', timeout: TIMEOUT });
-  const res = await waitResources(s.page);
+  const res = await waitResources(s.page, TIMEOUT);
   for (const f of res.fontFail) errors.push({ code: 'resource.font', message: `字体加载失败：${f}（检查 project.json 的 fonts 与字体文件是否完整）` });
   for (const i of res.imgFail) errors.push({ code: 'resource.image', message: `图片加载或解码失败：${i}` });
 
@@ -169,8 +152,7 @@ export async function render(root, opts = {}) {
   const { browser, info } = await launch();
   const server = await serve(dir);
   try {
-    const tools = { contract: 1, playwright: info.playwright, chromium: info.chromium,
-      node: process.versions.node.split('.')[0], tool_hash: toolHash() };
+    const tools = makeTools(info);
     const fp = fingerprint(dir, p, tools);
     const outDir = opts.out ? path.resolve(dir, opts.out) : path.join(dir, '.build', fp.buildId);
     const rel = path.relative(dir, outDir);

@@ -8,10 +8,11 @@
                 object-fit: cover; }
 .spread-left .spread-photo { left: 0; }
 .spread-right .spread-photo { left: calc(var(--bleed) * 2 - var(--media-w)); }
-.spread-caption { position: absolute; top: calc(var(--bleed) + 154mm); left: var(--inset-left); }
+.spread-caption { position: absolute; top: calc(var(--bleed) + 154mm); left: calc(var(--bleed) + var(--m-left)); }
 .spread-right .spread-caption { display: none; }
-.story { position: absolute; top: calc(var(--bleed) + 168mm); bottom: var(--inset-bottom); left: var(--inset-left); right: var(--inset-right); }
+.story { position: absolute; top: calc(var(--bleed) + 168mm); bottom: calc(var(--bleed) + var(--m-bottom)); left: calc(var(--bleed) + var(--m-left)); right: calc(var(--bleed) + var(--m-right)); }
 .story h2 { font-size: 30px; line-height: 1.3; margin-bottom: 16px; }
-.folio { position: absolute; bottom: calc(var(--inset-bottom) - 28px); }
-.spread-left .folio { left: var(--inset-left); }
-.spread-right .folio { right: var(--inset-right); }
+.folio { position: absolute; bottom: calc(var(--bleed) + 10mm); }
+.spread-left .folio { left: calc(var(--bleed) + var(--m-left)); }
+.spread-right .folio { right: calc(var(--bleed) + var(--m-right)); }
+.cover [data-role="aux"] { color: #c9d6ee; }

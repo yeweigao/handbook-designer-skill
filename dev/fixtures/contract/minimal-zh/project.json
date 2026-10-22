@@ -16,12 +16,7 @@
       297
     ],
     "bleed_mm": 0,
-    "safe_mm": [
-      14,
-      14,
-      16,
-      14
-    ]
+    "safe_mm": 8
   },
   "binding": "digital",
   "first_page": "right",

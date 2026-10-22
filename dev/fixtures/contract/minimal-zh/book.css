@@ -1,7 +1,7 @@
 .cover { display: flex; flex-direction: column; justify-content: flex-end; gap: 20px; }
 .cover h1 { font-size: 52px; line-height: 1.25; max-width: 13em; }
 .cover .lead { max-width: 28em; color: var(--muted); }
-.cover-mark { position: absolute; top: var(--inset-top); right: var(--inset-right); width: 72px; height: 72px; border-radius: 50%; background: var(--accent); }
+.cover-mark { position: absolute; top: calc(var(--bleed) + var(--m-top)); right: calc(var(--bleed) + var(--m-right)); width: 72px; height: 72px; border-radius: 50%; background: var(--accent); }
 .running { display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
 .month h2 { margin-top: 40px; font-size: 34px; line-height: 1.3; }
 .month .intro { margin-top: 16px; color: var(--muted); }
@@ -10,4 +10,4 @@
 .facts dd { margin: 0; font-weight: 600; }
 .month .body { columns: 2; column-gap: 28px; }
 .month .note { margin-top: 20px; }
-.month .folio { position: absolute; left: var(--inset-left); bottom: calc(var(--inset-bottom) - 28px); }
+.month .folio { position: absolute; left: calc(var(--bleed) + var(--m-left)); bottom: calc(var(--bleed) + 10mm); }

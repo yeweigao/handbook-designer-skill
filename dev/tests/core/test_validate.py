@@ -16,6 +16,7 @@ import validate  # noqa: E402
 FIX = os.path.join(REPO, "dev", "fixtures", "contract")
 MIN = os.path.join(FIX, "minimal-zh")
 BI = os.path.join(FIX, "bilingual")
+QA = os.path.join(REPO, "dev", "fixtures", "qa", "base")
 
 
 def edit(path, old, new):
@@ -88,7 +89,7 @@ def codes(rep, level="error"):
 
 class ValidateTest(unittest.TestCase):
     def test_positive_fixtures(self):
-        for fx in (MIN, BI):
+        for fx in (MIN, BI, QA):
             with self.subTest(fx=os.path.basename(fx)):
                 rep = validate.validate(fx)
                 self.assertEqual(rep.errors, [], rep.errors)

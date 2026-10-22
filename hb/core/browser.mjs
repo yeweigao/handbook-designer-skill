@@ -53,3 +53,21 @@ export async function openPage(browser, origin, blocked) {
   const page = await context.newPage();
   return { context, page };
 }
+
+// 等待字体、图片全部就绪（逐个 load / decode，带超时），返回失败清单。
+export async function waitResources(page, timeout = 30000) {
+  return page.evaluate(async (timeoutMs) => {
+    const within = (pr) => Promise.race([pr, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), timeoutMs))]);
+    const fontFail = []; const imgFail = [];
+    await within(document.fonts.ready);
+    for (const f of document.fonts) {
+      try { await within(f.load()); } catch { fontFail.push(`${f.family} ${f.weight} ${f.style}`); }
+    }
+    for (const img of document.images) {
+      try { await within(img.decode()); if (!img.naturalWidth) throw new Error('empty'); }
+      catch { imgFail.push(img.getAttribute('src')); }
+    }
+    await within(document.fonts.ready);
+    return { fontFail, imgFail };
+  }, timeout);
+}

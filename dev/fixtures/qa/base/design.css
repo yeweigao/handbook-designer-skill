@@ -1,0 +1,16 @@
+/* 测量样例的最小家族基因，只为测试。 */
+:root {
+  --paper: #fffdf8; --ink: #1b1f24; --muted: #545d68; --primary: #123a6b; --accent: #e3a019; --line: #d8d2c4;
+  --font-display: "Noto Serif SC", serif; --font-body: "Noto Sans SC", sans-serif;
+  --size-body: 16px; --size-key: 14px; --size-aux: 11px; --lh-body: 28px;
+  --m-top: 16mm; --m-right: 15mm; --m-bottom: 20mm; --m-left: 15mm;
+}
+body { margin: 0; }
+.page { background: var(--paper); color: var(--ink); font: 400 var(--size-body)/var(--lh-body) var(--font-body);
+        padding: calc(var(--bleed) + var(--m-top)) calc(var(--bleed) + var(--m-right)) calc(var(--bleed) + var(--m-bottom)) calc(var(--bleed) + var(--m-left)); }
+h1, h2 { margin: 0; font-family: var(--font-display); font-weight: 700; color: var(--primary); }
+p { margin: 0; }
+[data-role="aux"] { font-size: var(--size-aux); line-height: 1.5; color: var(--muted); }
+[data-role="key"] { font-size: var(--size-key); line-height: 1.6; }
+.folio { position: absolute; bottom: calc(var(--bleed) + 11mm); font-size: var(--size-aux); color: var(--muted); }
+.folio::after { content: counter(page-n); }
