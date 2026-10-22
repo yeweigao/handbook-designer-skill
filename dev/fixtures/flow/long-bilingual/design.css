@@ -1,0 +1,12 @@
+/* 续排样例的最小家族基因，只为测试。 */
+:root { --paper: #fffefb; --ink: #1d2329; --muted: #56606b; --primary: #1f3b5c; --line: #d9d3c7;
+  --font-display: "Noto Serif SC", serif; --font-body: "Noto Sans SC", sans-serif; --font-latin: "Inter", "Noto Sans SC", sans-serif;
+  --m-top: 18mm; --m-right: 16mm; --m-bottom: 22mm; --m-left: 16mm; }
+body { margin: 0; }
+.page { background: var(--paper); color: var(--ink); font: 400 16px/28px var(--font-body); }
+h1, h2 { margin: 0; font-family: var(--font-display); font-weight: 700; color: var(--primary); }
+p { margin: 0; }
+[data-role="aux"] { font-size: 11px; line-height: 1.5; color: var(--muted); }
+.folio { position: absolute; bottom: calc(var(--bleed) + 12mm); right: calc(var(--bleed) + var(--m-right)); }
+.folio::after { content: counter(page-n); }
+html[lang="en"] .page { font-family: var(--font-latin); }

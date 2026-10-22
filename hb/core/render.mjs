@@ -8,6 +8,7 @@ import { loadCopy } from './inject.mjs';
 import { serve } from './server.mjs';
 import { launch, openPage, waitResources } from './browser.mjs';
 import { fingerprint, makeTools, fileSha256 } from './fingerprint.mjs';
+import { flowInPage } from './checks/flow.mjs';
 
 const HERE = path.dirname(new URL(import.meta.url).pathname);
 const TIMEOUT = 30000;
@@ -16,7 +17,7 @@ export class RenderError extends Error {
   constructor(code, message, extra = {}) { super(message); this.code = code; Object.assign(this, extra); }
 }
 
-function runValidate(dir) {
+export function runValidate(dir) {
   const r = spawnSync('python3', [path.join(HERE, 'validate.py'), dir, '--json'], { encoding: 'utf8' });
   if (r.error) throw new RenderError('validate.run', `无法运行契约校验：${r.error.message}`);
   let rep;
@@ -29,7 +30,7 @@ function runValidate(dir) {
   return rep.items;
 }
 
-function assemble({ dir, p, geom }, lang, langDir) {
+export function assemble({ dir, p, geom }, lang, langDir) {
   let html = fs.readFileSync(path.join(dir, p.entry), 'utf8');
   const base = path.relative(langDir, dir).split(path.sep).join('/') + '/';
   const links = [...p.styles];
@@ -58,23 +59,29 @@ async function renderLang(ctx, browser, server, lang, langDir, fp, tools) {
   const assembledPath = path.join(langDir, '.assembled.html');
   fs.writeFileSync(assembledPath, assemble(ctx, lang, langDir));
   const a = await openPage(browser, server.origin, blocked);
+  await a.page.emulateMedia({ media: 'print' });
   await a.page.goto(`${server.origin}/${relOf(assembledPath)}`, { waitUntil: 'load', timeout: TIMEOUT });
+  let flows = null;
   if (lang !== p.default_language) {
+    // 其他语言：先把续页片段合并回整段，注入译文，再按同一续排算法重新分页（默认语言的分页已由 paginate 写回作者源）
+    await a.page.evaluate(flowInPage, { mergeOnly: true });
     const copy = loadCopy(dir, lang);
     const r = await a.page.evaluate((copy) => {
-      const missing = []; const fragments = []; const seen = new Set();
+      const missing = []; const seen = new Set();
       for (const el of document.querySelectorAll('[data-source-id]')) {
         const id = el.dataset.sourceId;
-        if (el.hasAttribute('data-fragment')) { fragments.push(id); continue; }
         if (!(id in copy)) { missing.push(id); continue; }
         el.innerHTML = copy[id]; seen.add(id);
       }
-      return { missing, fragments, extra: Object.keys(copy).filter((k) => !seen.has(k)) };
+      return { missing, extra: Object.keys(copy).filter((k) => !seen.has(k)) };
     }, copy);
     for (const id of r.missing) errors.push({ code: 'inject.untranslated', message: `缺译：${id}` });
     for (const id of r.extra) errors.push({ code: 'inject.extra', message: `多余译文：${id}` });
-    for (const id of [...new Set(r.fragments)]) {
-      errors.push({ code: 'inject.fragment', message: `续页片段 ${id} 的多语言注入尚未实现（由 S6 定义）` });
+    const pre = await waitResources(a.page, TIMEOUT);
+    for (const f of pre.fontFail) errors.push({ code: 'resource.font', message: `字体加载失败：${f}（检查 project.json 的 fonts 与字体文件是否完整）` });
+    if (await a.page.evaluate(() => !!document.querySelector('[data-flow]'))) {
+      flows = await a.page.evaluate(flowInPage, { firstPage: p.first_page });
+      for (const e of flows.errors) errors.push({ code: e.code, page: e.page, message: `[续排 ${e.flow || ''}] ${e.message}` });
     }
   }
   const snapshot = '<!DOCTYPE html>\n' + await a.page.evaluate(() => document.documentElement.outerHTML) + '\n';
@@ -130,7 +137,7 @@ async function renderLang(ctx, browser, server, lang, langDir, fp, tools) {
 
   const manifest = {
     contract: 1, build_id: fp.buildId, fingerprint: fp.fingerprint, lang, tools, expected, pages,
-    page_count: pages.length, inputs: fp.inputs, requested,
+    page_count: pages.length, inputs: fp.inputs, requested, flows,
     snapshot: { path: relOf(snapshotPath), sha256: fileSha256(snapshotPath) },
     pdf: fs.existsSync(pdfPath) && !fatal && !errors.some((e) => e.code === 'pdf.boxes') ? { path: relOf(pdfPath), sha256: fileSha256(pdfPath), bytes: fs.statSync(pdfPath).size } : null,
     status: errors.length ? 'fail' : 'pass', errors,
