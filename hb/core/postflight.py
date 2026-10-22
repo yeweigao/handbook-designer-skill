@@ -151,7 +151,7 @@ def main(project, build, lang):
 
     # 逐页文字（供原文覆盖检查）
     if shutil.which("pdftotext"):
-        r = subprocess.run(["pdftotext", "-enc", "UTF-8", pdf, "-"], capture_output=True, text=True)
+        r = subprocess.run(["pdftotext", "-raw", "-enc", "UTF-8", pdf, "-"], capture_output=True, text=True)  # -raw：按绘制顺序，避免多栏交错
         pages = r.stdout.split("\f")
         if pages and not pages[-1].strip():
             pages = pages[:-1]

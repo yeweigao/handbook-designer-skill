@@ -1,0 +1,23 @@
+{
+  "contract": 1,
+  "assets": {
+    "poster": {
+      "file": "assets/images/poster.jpg",
+      "source": "合成图：dev/tests/core/make_fixture_images.py 与测试脚本生成",
+      "license": "项目自有（测试素材）",
+      "credit": ""
+    },
+    "inline": {
+      "file": "assets/images/inline.jpg",
+      "source": "合成图：dev/tests/core/make_fixture_images.py 与测试脚本生成",
+      "license": "项目自有（测试素材）",
+      "credit": ""
+    },
+    "small": {
+      "file": "assets/images/small.png",
+      "source": "合成图：dev/tests/core/make_fixture_images.py 与测试脚本生成",
+      "license": "项目自有（测试素材）",
+      "credit": ""
+    }
+  }
+}

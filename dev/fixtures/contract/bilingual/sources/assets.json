@@ -1,0 +1,11 @@
+{
+  "contract": 1,
+  "assets": {
+    "campus": {
+      "file": "assets/images/campus.jpg",
+      "source": "合成图：dev/tests/core/make_fixture_images.py 与测试脚本生成",
+      "license": "项目自有（测试素材）",
+      "credit": ""
+    }
+  }
+}

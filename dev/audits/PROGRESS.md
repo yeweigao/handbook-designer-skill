@@ -9,8 +9,8 @@
 | S1 契约与最小样例 | 完成 | 2026-10-22 | 086b8b7 |
 | S2 渲染运行时 | 完成 | 2026-10-22 | c4824c5 |
 | S3 版面测量与可读性检查 | 完成 | 2026-10-22 | adaee42 |
-| S4 最终 PDF 检查与验收绑定 | 完成 | 2026-10-22 | 见记录 |
-| S5 内容提取与原文覆盖 | 未开始 | | |
+| S4 最终 PDF 检查与验收绑定 | 完成 | 2026-10-22 | 21b4f2b |
+| S5 内容提取与原文覆盖 | 完成 | 2026-10-22 | 见记录 |
 | S6 长文续页工具 | 未开始 | | |
 | S7 Campus 家族与真实样册 | 未开始 | | |
 | S8 导出与离线交付 | 未开始 | | |
@@ -178,3 +178,36 @@
   - gate 不检查视觉审稿是否完成（S8 导出前处理）。
   - `verify` 需要启动一次浏览器读取版本号（参与指纹），约 0.5 秒。
 - 下一步：S5 原文覆盖。实现 `hb/core/coverage.mjs`，导出 `coverage(dir, buildId, lang)`，返回 `{status, items}`（契约 §7 格式），并写 `.qa/<构建 ID>/<语言>/coverage.json`；输入可用 `measure.json` 的 `content.hidden` 与 `pdf-text.json`。
+
+### S5 · 内容提取与原文覆盖 · 完成 · 2026-10-22
+
+- 改动范围（`hb/core/`）：
+  - `extract.py`：原稿（md / txt / docx / pdf / pptx）→ `sources/original/`、`source.md`、`segments.json`（稳定 ID `s0001…`，kind：heading / para / item / cell / artifact）、`images/`、`assets.json`（新图片登记为待确认授权，不覆盖已填写条目）。不决定页面结构。
+  - `office_extract.py`：旧 `hb/extract.py` 原样迁入（PPT 文字与图片、Word/PDF 图片），S10 退役旧引擎时无需再搬。
+  - `coverage.py` + `coverage.mjs`：三方证据核对——原文段 ↔ 快照中可见的内容节点（排除 `measure.json` 的 `content.hidden`）↔ 最终 PDF 文字层。默认语言：MISSING、ORDER、EXTRA、无出处数字；所有语言：可见内容必须进入 PDF 文字层；素材：非装饰图片必须登记来源与授权。已接入 gate。
+  - `postflight.py`：PDF 抽字改用 `pdftotext -raw`（默认模式会把两栏正文交错，导致误判）。
+  - 契约：§5 内容模式表更新；新增「原文与素材（sources/）」小节（segments、adapt.json、facts.md、assets.json）。
+  - 样例：三个样例都补了 `sources/original/原稿.md` 与提取结果；双语与 QA 样例登记了合成图素材；QA 样例的图片加 `data-asset`，并用 `adapt.json` 声明设计添加的序号。
+  - 测试：`dev/tests/core/coverage.test.mjs`（12 项）；`gate.test.mjs` 第 1 项改为断言可交付且 `verify` 有效；`measure.test.mjs` 一处查找串随样例更新。
+- 可复制命令：
+  - `python3 hb/core/extract.py <原稿> <项目>`
+  - `node hb/core/cli.mjs check dev/fixtures/contract/bilingual`（现在为「可交付（技术检查）」）
+  - `node --test dev/tests/core/coverage.test.mjs`（约 3 分钟，建议后台运行）
+- 完成判定逐条结果：
+  - 提取与排版解耦、稳定 ID：pass —— product-brochure 原稿 160 段，重提取 ID 不变；docx（标题/段落/列表/表格）与 pptx（标题/正文）分段正确；统计数字「24」不再被误当页码。
+  - 隐藏副本、透明字、页外字不算已展示：pass —— 4 种隐藏方式均判 `coverage.missing` 硬项。
+  - frozen 模式多一句即 fail：pass —— 设计添加的 aux 文字在冻结模式判 EXTRA 硬项，顺序调整判 ORDER 硬项；搬运模式下顺序只作提示；冻结模式拒绝 adapt.json。
+  - 其他：自创句判 EXTRA；润色模式缺段只提示；adapt.json 声明省略后通过；PDF 文字层缺失（中、英）判硬项；素材授权空缺与未登记都阻止交付；无出处数字只提示。
+  - 接入 gate：pass —— 三个样例全部「可交付」，gate 测试 6/6。
+  - 回归：Node render 9/9、measure 21/21、gate 6/6、coverage 12/12；Python 4/4。
+- 契约变更：`translate` 模式下默认语言按 carry 严格检查；`polish` 下 MISSING/EXTRA/ORDER 为提示；新增 `sources/` 约定。
+- 偏离计划的决定：
+  - 数字出处与素材清单合并进 `coverage.py`（不再单独建 `facts.py`、`assets.py`），共用同一次快照解析。
+  - 覆盖按文本句子匹配，而不是要求作者源的 `data-source-id` 与原文段 ID 一一对应：作者可以自由拆分、合并段落，内容 ID 仍服务于多语言和编辑回写。
+  - 数字出处仍只作提示（与旧引擎一致）。
+- 新增依赖：无（python-docx、python-pptx、markitdown、pandoc 在本环境已有；markitdown/pandoc 缺失时 docx 回退到 python-docx）。
+- 未完成与已知问题：
+  - PDF 原稿只抽文字与图片，不保留版面结构；扫描版 PDF 没有文字层时提取为空（需 OCR，未做）。
+  - 续页片段（S6）的跨页句子在 PDF 文字层中可能被页眉页脚隔开：PDF 层检查是按内容节点各自的句子进行的，片段各自独立核对，已考虑；S6 落地后需加回归。
+  - 译文与原文的语义对应（是否译错）不做自动判断，属于语义审稿。
+- 下一步：S6 续页工具（依赖 S3 已完成）；S7、S8、S9 的依赖也已满足，可以分给不同 agent 并行。

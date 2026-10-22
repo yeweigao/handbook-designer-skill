@@ -1,0 +1,88 @@
+{
+ "contract": 1,
+ "source": "原稿.md",
+ "segments": [
+  {
+   "id": "s0001",
+   "kind": "para",
+   "text": "校园开放日 · 2026",
+   "origin": {
+    "page": null
+   }
+  },
+  {
+   "id": "s0002",
+   "kind": "heading",
+   "text": "走进一所双语学校的一天",
+   "origin": {
+    "page": null,
+    "level": 1
+   }
+  },
+  {
+   "id": "s0003",
+   "kind": "para",
+   "text": "从早读到社团活动，用一个上午看懂孩子在这里怎样学习。",
+   "origin": {
+    "page": null
+   }
+  },
+  {
+   "id": "s0004",
+   "kind": "heading",
+   "text": "上午八点到十二点",
+   "origin": {
+    "page": null,
+    "level": 2
+   }
+  },
+  {
+   "id": "s0005",
+   "kind": "para",
+   "text": "早读从八点开始，孩子们先用中文朗读，再用英语复述同一个故事。老师会记录每个孩子愿意开口的次数，而不是只看对错。",
+   "origin": {
+    "page": null
+   }
+  },
+  {
+   "id": "s0006",
+   "kind": "para",
+   "text": "第二节是项目课。三年级正在研究校园里的植物，他们用两种语言写观察笔记，并在周五向低年级同学展示。",
+   "origin": {
+    "page": null
+   }
+  },
+  {
+   "id": "s0007",
+   "kind": "para",
+   "text": "课间活动安排在操场和图书馆两处。下雨时，体育老师会把活动改到室内体育馆。",
+   "origin": {
+    "page": null
+   }
+  },
+  {
+   "id": "s0008",
+   "kind": "para",
+   "text": "十一点半午餐前，每个班有十分钟的分享时间。家长开放日当天，欢迎您在教室后排安静旁听。",
+   "origin": {
+    "page": null
+   }
+  },
+  {
+   "id": "s0009",
+   "kind": "para",
+   "text": "预约旁听：开放日前三天致电招生办 0571-8888 6666。",
+   "origin": {
+    "page": null
+   }
+  },
+  {
+   "id": "s0010",
+   "kind": "para",
+   "text": "杭州市示例路 1 号",
+   "origin": {
+    "page": null
+   }
+  }
+ ]
+}

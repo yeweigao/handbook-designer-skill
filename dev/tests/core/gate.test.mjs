@@ -20,18 +20,20 @@ const copy = (name) => {
 const buildOf = (out) => out.match(/(?:构建|验收) ([0-9a-f]{12})/)[1];
 const json = (f) => JSON.parse(fs.readFileSync(f, 'utf8'));
 
-test('check：技术检查全过，唯一阻止项是尚未实现的原文覆盖', () => {
+test('check：全部检查通过，可交付', () => {
   const d = copy('bilingual');
   const r = cli('check', d);
-  assert.notEqual(r.status, 0);
+  assert.equal(r.status, 0, r.stdout);
   const g = json(path.join(d, '.qa', buildOf(r.stdout), 'gate.json'));
-  assert.equal(g.status, 'blocked');
+  assert.equal(g.status, 'deliverable');
+  const v = cli('verify', d);
+  assert.equal(v.status, 0, v.stdout);
   for (const lang of ['zh-CN', 'en']) {
     const c = g.languages[lang].checks;
-    assert.deepEqual([c.render, c.measure, c.postflight, c.raster], ['pass', 'pass', 'pass', 'pass']);
+    assert.deepEqual([c.render, c.measure, c.postflight, c.raster, c.coverage], ['pass', 'pass', 'pass', 'pass', 'pass']);
     assert.match(g.languages[lang].pdf_sha256, /^[0-9a-f]{64}$/);
   }
-  assert.deepEqual([...new Set(g.blocking.map((b) => b.id))], ['coverage.missing']);
+  assert.equal(g.blocking.length, 0);
   const raster = path.join(d, '.qa', g.build_id, 'en', 'raster');
   for (const f of ['page-001.png', 'page-004.png', 'sheet.png', 'spreads.png']) assert.ok(fs.existsSync(path.join(raster, f)), f);
 });

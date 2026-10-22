@@ -144,13 +144,20 @@ PDF 页面框：MediaBox = CropBox = BleedBox = 媒体尺寸（成品 + 出血�
 - 语言差异先用 `lang/<lang>.css` 处理（`:lang()` 或 `html[lang]` 选择器）。某语言必须改变分页时，由 S6 定义的语言页面覆盖处理，不复制整本作者源。
 - 每种语言独立渲染、独立检查、独立交付。
 
+### 原文与素材（`sources/`）
+
+- `sources/segments.json`：由 `hb/core/extract.py` 从原稿生成，逐段 `{id, kind, text, origin}`；`kind` 为 `heading / para / item / cell / artifact`（artifact 是原稿页码等非正文，不参与核对）。
+- `sources/adapt.json`（可选，`frozen` 模式不接受）：`omit` 声明不进册子的原文段、`strip` 声明去掉的前缀或标记、`extra` 声明允许的非原文内容节点，每项写理由。
+- `sources/facts.md`（可选）：调研得到的事实与来源，数字出处检查会参考它。
+- `sources/assets.json`：`{"contract": 1, "assets": {"<素材 ID>": {"file", "source", "license", "credit"}}}`。页面上非装饰图片必须带 `data-asset` 并在这里写明来源与授权；空着即为硬项 unverified。
+
 ## 5. 内容模式
 
 | 模式 | 允许 | 检查 |
 |---|---|---|
 | `carry` 原文搬运 | 删去编号标签、批注等非读者内容（须在 `sources/` 中声明）；调整页序 | MISSING 必须为 0；ORDER 逐条确认；EXTRA 只允许结构性文字（页眉、图注、填写提示等，须标 `data-role="aux"` 或声明） |
-| `polish` 授权润色 | 改写措辞、合并压缩 | 逐段对照表；事实与数字不变 |
-| `translate` 授权翻译 | 生成或改写译文 | 译文与原文按内容 ID 对应 |
+| `polish` 授权润色 | 改写措辞、合并压缩 | MISSING / EXTRA / ORDER 只作提示，须另附逐段对照表；事实与数字不变 |
+| `translate` 授权翻译 | 生成或改写其他语言的译文 | 默认语言按 `carry` 检查；其他语言按内容 ID 对应，且可见译文必须进入该语言 PDF |
 | `frozen` 内容冻结 | 只改版面 | MISSING / ORDER / EXTRA 全为 0；页序与原稿一一对应 |
 
 ## 6. 构建产物与构建 ID

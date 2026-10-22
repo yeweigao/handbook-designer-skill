@@ -57,7 +57,7 @@ const NEGATIVE = [
   ['字体栈不含声明字体', [css('.text .intro { font-family: "Nonexistent Face", sans-serif; }')], 'font.fallback'],
   ['低分辨率图片', [html('<div class="band"', '<img src="assets/images/small.png" alt="" data-edit-id="img-small" style="position:absolute;left:30mm;top:60mm;width:120mm;height:80mm"><div class="band"')], 'image.dpi'],
   ['出血不足', [css('.band { bottom: 1mm; }')], 'image.bleed'],
-  ['越过成品边未声明出血', [html(' data-edit-id="img-poster" data-bleed="all"', ' data-edit-id="img-poster"')], 'image.bleed'],
+  ['越过成品边未声明出血', [html(' data-asset="poster" data-bleed="all"', ' data-asset="poster"')], 'image.bleed'],
   ['内容透明', [css('.text .intro { opacity: 0; }')], 'content.hidden'],
   ['内容 display:none', [css('[data-source-id="text-p2"] { display: none; }')], 'content.hidden'],
   ['内容字号小于 1px', [css('.text .intro { font-size: 0.5px; }')], 'content.hidden'],

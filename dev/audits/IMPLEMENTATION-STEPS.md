@@ -138,7 +138,7 @@ S1–S4 是地基：没有它们，后面任何页面都无法可靠渲染、测
 
 **先读**：契约、旧 `hb/extract.py`、`hb/doc2yaml.py`、`hb/check_copy.py`、`hb/facts.py`、`hb/images.py`、`references/adaptation.md`。
 
-**归属文件**：`hb/core/extract.py`、`hb/core/coverage.mjs`（或 `.py`）、`hb/core/facts.py`、`hb/core/assets.py`、`dev/tests/core/test_extract.py`、`dev/tests/core/coverage.test.mjs`、`dev/fixtures/content/**`。
+**归属文件**：`hb/core/extract.py`、`hb/core/office_extract.py`、`hb/core/coverage.py`、`hb/core/coverage.mjs`、`dev/tests/core/coverage.test.mjs`、各样例的 `sources/`。
 
 **要做**：
 - `extract.py`：docx / pptx / md / txt / pdf → `sources/source.md` + `sources/segments.json`（每段 `{id, kind, text, origin}`）+ 抽出的图片；不决定页面结构。
