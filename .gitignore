@@ -15,3 +15,5 @@ dev/samples/native/*/.qa/**
 !dev/samples/native/*/.qa/*/visual-review.json
 !dev/samples/native/*/.qa/*/gate.json
 dev/samples/native/*/out/
+/output/*/.qa/
+/output/*/out/

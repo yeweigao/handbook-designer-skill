@@ -60,6 +60,31 @@ test('多语言注入：英文快照含译文与 lang 属性', () => {
   assert.doesNotMatch(snap, /走进一所双语学校的一天/);
 });
 
+test('书签：显式层级优先，未标记时回退到每页首个标题', () => {
+  const p = copyFixture('minimal-zh');
+  const book = path.join(p, 'book.html');
+  const source = fs.readFileSync(book, 'utf8');
+  const marked = source
+    .replace('<h1 data-role="display"', '<h1 data-outline="1" data-role="display"')
+    .replace('<h2 data-role="display"', '<h2 data-outline="2" data-role="display"');
+  fs.writeFileSync(book, marked);
+
+  const explicit = run(p);
+  assert.equal(explicit.code, 0, explicit.out);
+  assert.deepEqual(manifest(explicit.outDir, 'zh-CN').outline, [
+    { title: '让孩子在双语环境里自在成长', level: 1, page: 0 },
+    { title: '开学第一个月', level: 2, page: 1 },
+  ]);
+
+  fs.writeFileSync(book, source);
+  const fallback = run(p);
+  assert.equal(fallback.code, 0, fallback.out);
+  assert.deepEqual(manifest(fallback.outDir, 'zh-CN').outline, [
+    { title: '让孩子在双语环境里自在成长', level: 1, page: 0 },
+    { title: '开学第一个月', level: 1, page: 1 },
+  ]);
+});
+
 test('行内标记白名单与转义', () => {
   assert.equal(sanitizeInline('a <em>b</em> c'), 'a <em>b</em> c');
   assert.equal(sanitizeInline('<script>x</script>'), '&lt;script&gt;x&lt;/script&gt;');

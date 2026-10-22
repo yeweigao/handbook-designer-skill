@@ -118,6 +118,7 @@ PDF 页面框：MediaBox = CropBox = BleedBox = 媒体尺寸（成品 + 出血�
 | `data-overlap` | 内容元素 | 允许与之重叠的元素 ID，空格分隔；`*` 表示允许与任意装饰性元素重叠。只解释局部关系，不豁免整页 |
 | `data-bleed` | 图片、色块 | 允许进入出血/越过安全区的边：`top right bottom left` 的组合或 `all` |
 | `data-asset` | 图片 | 对应 `sources/assets.json` 中的素材 ID（S5） |
+| `data-outline` | 标题元素 | PDF 书签层级 `1`/`2`/`3`，书签文字取该元素在本语言中的可见文字。全书只要有一个 `data-outline` 就只用标记过的；一个都没有时，每页第一个 `h1`/`h2` 作为一级书签 |
 
 `deco` 元素不得带 `data-source-id`：装饰不算内容，内容也不能藏进装饰里逃避检查。
 

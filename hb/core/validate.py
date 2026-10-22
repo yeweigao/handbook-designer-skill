@@ -420,6 +420,11 @@ class AuthorParser(HTMLParser):
             toks = attrs["data-bleed"].split()
             if not toks or any(t not in ("top", "right", "bottom", "left", "all") for t in toks):
                 rep.error("html.bleed", w, "data-bleed 取值为 top / right / bottom / left 的组合或 all")
+        if "data-outline" in attrs:
+            if tag not in ("h1", "h2", "h3", "h4", "h5", "h6"):
+                rep.error("html.outline", w, "data-outline 只能用于标题元素 h1–h6")
+            if attrs["data-outline"].strip() not in ("1", "2", "3"):
+                rep.error("html.outline", w, "data-outline 取值为 1 / 2 / 3（书签层级）")
         if "data-overlap" in attrs and not attrs["data-overlap"].strip():
             rep.error("html.overlap", w, "data-overlap 需要写允许重叠的元素 ID 或 *")
         if "data-flow" in attrs and not SOURCE_ID.match(attrs["data-flow"]):

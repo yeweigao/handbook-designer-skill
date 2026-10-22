@@ -79,6 +79,8 @@ NEGATIVE = [
     ("跨页起始在右页", BI, lambda d: edit_json(f"{d}/project.json", lambda p: p.update(first_page="left")), "html.spread"),
     ("跨页不相邻", BI, lambda d: edit(f"{d}/book.html", '<section class="page" data-page-id="p-back">', '<section class="page" data-page-id="p-back" data-spread="s-day">'), "html.spread"),
     ("data-bleed 取值", BI, lambda d: edit(f"{d}/book.html", 'data-bleed="all"></div>', 'data-bleed="outside"></div>'), "html.bleed"),
+    ("data-outline 取值", MIN, lambda d: edit(f"{d}/book.html", '<h2 data-role="display"', '<h2 data-outline="4" data-role="display"'), "html.outline"),
+    ("data-outline 仅标题可用", MIN, lambda d: edit(f"{d}/book.html", '<p class="intro"', '<p data-outline="1" class="intro"'), "html.outline"),
     ("data-edit-id 重复", BI, lambda d: edit(f"{d}/book.html", 'data-edit-id="img-day-right"', 'data-edit-id="img-day-left"'), "html.edit-id"),
 ]
 

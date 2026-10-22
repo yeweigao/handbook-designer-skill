@@ -111,12 +111,24 @@ async function renderLang(ctx, browser, server, lang, langDir, fp, tools) {
     }
   }
 
+  // PDF 书签：有 [data-outline]（值为层级 1/2/3）时只用它们；否则每页第一个 h1/h2 作为一级书签。
+  const outline = await s.page.evaluate(() => {
+    const pagesEl = [...document.querySelectorAll('.page')];
+    const pageOf = (el) => pagesEl.indexOf(el.closest('.page'));
+    const text = (el) => (el.innerText || '').replace(/\s+/g, ' ').trim();
+    const marked = [...document.querySelectorAll('.page [data-outline]')];
+    if (marked.length) return marked.map((el) => ({ title: text(el), level: Number(el.dataset.outline) || 1, page: pageOf(el) }));
+    return pagesEl.map((pg, i) => { const h = pg.querySelector('h1, h2'); return h ? { title: text(h), level: 1, page: i } : null; }).filter(Boolean);
+  });
+  const outlinePath = path.join(langDir, 'outline.json');
+  fs.writeFileSync(outlinePath, JSON.stringify(outline, null, 1) + '\n');
+
   const pdfPath = path.join(langDir, 'book.pdf');
   const fatal = errors.some((e) => e.code.startsWith('resource.') || e.code.startsWith('inject.'));
   if (!fatal) {
     // Chrome 的纸张尺寸按 1/75 英寸取整：先按每边大 1mm 输出，再由 pdfboxes.py 精确裁切并写入页面框。
     await s.page.pdf({ path: pdfPath, width: `${geom.mediaW + 1}mm`, height: `${geom.mediaH + 1}mm`, printBackground: true });
-    const r = spawnSync('python3', [path.join(HERE, 'pdfboxes.py'), pdfPath, String(geom.mediaW), String(geom.mediaH), String(geom.bleed)], { encoding: 'utf8' });
+    const r = spawnSync('python3', [path.join(HERE, 'pdfboxes.py'), pdfPath, String(geom.mediaW), String(geom.mediaH), String(geom.bleed), outlinePath], { encoding: 'utf8' });
     if (r.status !== 0) errors.push({ code: 'pdf.boxes', message: `PDF 页面框处理失败：${(r.stderr || r.error?.message || '').trim()}（需要 pikepdf）` });
   }
   await s.context.close();
@@ -137,7 +149,7 @@ async function renderLang(ctx, browser, server, lang, langDir, fp, tools) {
 
   const manifest = {
     contract: 1, build_id: fp.buildId, fingerprint: fp.fingerprint, lang, tools, expected, pages,
-    page_count: pages.length, inputs: fp.inputs, requested, flows,
+    page_count: pages.length, inputs: fp.inputs, requested, flows, outline,
     snapshot: { path: relOf(snapshotPath), sha256: fileSha256(snapshotPath) },
     pdf: fs.existsSync(pdfPath) && !fatal && !errors.some((e) => e.code === 'pdf.boxes') ? { path: relOf(pdfPath), sha256: fileSha256(pdfPath), bytes: fs.statSync(pdfPath).size } : null,
     status: errors.length ? 'fail' : 'pass', errors,
