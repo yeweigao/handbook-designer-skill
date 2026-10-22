@@ -6,3 +6,5 @@ node_modules/
 /brands/*
 /dev/proofs/
 /.venv
+.build/
+dev/fixtures/**/.qa/

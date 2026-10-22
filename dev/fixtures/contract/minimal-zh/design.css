@@ -1,0 +1,23 @@
+/* 契约样例的最小家族基因：颜色角色、字体角色、字号层级。只为测试，不是正式家族。 */
+:root {
+  --paper: #fbfaf7;
+  --ink: #1f2933;
+  --muted: #52606d;
+  --primary: #1d3557;
+  --accent: #c8553d;
+  --line: #d9d4ca;
+  --font-display: "Noto Serif SC", serif;
+  --font-body: "Noto Sans SC", sans-serif;
+  --size-body: 16px;
+  --size-key: 14px;
+  --size-aux: 11px;
+  --lh-body: 28px;
+}
+body { margin: 0; background: #e9e6df; }
+.page { background: var(--paper); color: var(--ink); font: 400 var(--size-body)/var(--lh-body) var(--font-body);
+        padding: var(--inset-top) var(--inset-right) var(--inset-bottom) var(--inset-left); }
+h1, h2 { margin: 0; font-family: var(--font-display); color: var(--primary); font-weight: 700; }
+p { margin: 0; }
+[data-role="aux"] { font-size: var(--size-aux); line-height: 1.5; color: var(--muted); }
+[data-role="key"] { font-size: var(--size-key); line-height: 1.6; }
+.folio::after { content: counter(page-n); }

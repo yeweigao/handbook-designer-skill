@@ -41,7 +41,7 @@ S1–S4 是地基：没有它们，后面任何页面都无法可靠渲染、测
 
 **先读**：总计划「目标架构与责任边界」「最小作者约定」「CSS 基因」「与 Folio 联动」。
 
-**归属文件**：`references/contract.md`、`hb/core/schema/*.json`、`hb/core/validate.mjs`、`dev/fixtures/contract/**`。
+**归属文件**：`references/contract.md`、`hb/core/validate.py`、`dev/fixtures/contract/**`、`dev/tests/core/test_validate.py`、`dev/tests/core/fixture_fonts.py`、`dev/tests/core/make_fixture_images.py`、`dev/tests/core/font-licenses/`。
 
 **要做**：
 - `references/contract.md`：
@@ -51,13 +51,12 @@ S1–S4 是地基：没有它们，后面任何页面都无法可靠渲染、测
   - `copy/<lang>.json` 格式：`{ "<source_id>": "文本" }`，可选行内标记的写法（仅允许 `<em> <strong> <a> <br>` 白名单，注入时其余一律转义）。
   - 构建 ID：输入指纹的组成（见 S2），构建产物目录 `.build/<build-id>/<lang>/`。
   - 检查报告格式：每项 `{id, status: pass|fail|unverified, severity: hard|hint, page, target, evidence, message}`。
-- `hb/core/schema/project.schema.json`、`copy.schema.json`、`report.schema.json`。
-- `hb/core/validate.mjs <project>`：校验 project.json、copy 文件、HTML 约定（ID 唯一、copy 键与 `data-source-id` 一一对应、`data-role` 取值合法）。不引入 schema 库；手写校验即可。
-- 样例：`dev/fixtures/contract/minimal-zh/`（2 页中文）、`bilingual/`（3 页中英，含一个跨页对和一个 `data-flow`）、`invalid/`（若干缺 ID、重复 ID、多余译文、缺译文的反例）。字体用 `dev/fonts/` 里的 Noto Sans/Serif SC、Inter、Source Serif 4。
+- `hb/core/validate.py <project>`：只用标准库，校验 project.json、作者 HTML、作者 CSS、多语言文案。契约文档 + 这个脚本就是权威，不另建 JSON schema（避免双重真相）。
+- 样例：`dev/fixtures/contract/minimal-zh/`（2 页中文）、`bilingual/`（4 页中英，3mm 出血，含跨页对、跨页图和 `data-flow`）。反例不建目录，由测试在正例副本上逐项引入违规。字体为 `dev/fonts/` 的 Noto Sans/Serif SC、Inter 子集。
 
 **完成判定**：
-- `node hb/core/validate.mjs dev/fixtures/contract/minimal-zh` 与 `bilingual` 退出码 0。
-- `invalid/` 下每个反例退出码非 0，且错误信息指出文件和 ID。
+- `python3 hb/core/validate.py dev/fixtures/contract/minimal-zh` 与 `bilingual` 退出码 0。
+- 每个反例退出码非 0，且错误信息指出文件和 ID。
 - 契约文档与总计划无冲突；有取舍的地方在交接记录写明。
 
 ---

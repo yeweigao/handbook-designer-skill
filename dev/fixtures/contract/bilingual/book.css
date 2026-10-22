@@ -1,0 +1,17 @@
+.cover { background: var(--primary); color: #fff; display: flex; flex-direction: column; justify-content: center; gap: 24px; }
+.cover h1 { color: #fff; font-size: 56px; line-height: 1.2; max-width: 11em; }
+.cover .lead { max-width: 26em; color: #e8eef8; font-size: 18px; line-height: 30px; }
+.cover-band { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--bleed) + 30mm); background: var(--accent); }
+
+/* 跨页：同一张图在左右两页各显示一半，图片进入出血 */
+.spread-photo { position: absolute; top: 0; height: calc(var(--bleed) + 150mm); width: calc(var(--media-w) * 2 - var(--bleed) * 2);
+                object-fit: cover; }
+.spread-left .spread-photo { left: 0; }
+.spread-right .spread-photo { left: calc(var(--bleed) * 2 - var(--media-w)); }
+.spread-caption { position: absolute; top: calc(var(--bleed) + 154mm); left: var(--inset-left); }
+.spread-right .spread-caption { display: none; }
+.story { position: absolute; top: calc(var(--bleed) + 168mm); bottom: var(--inset-bottom); left: var(--inset-left); right: var(--inset-right); }
+.story h2 { font-size: 30px; line-height: 1.3; margin-bottom: 16px; }
+.folio { position: absolute; bottom: calc(var(--inset-bottom) - 28px); }
+.spread-left .folio { left: var(--inset-left); }
+.spread-right .folio { right: var(--inset-right); }

@@ -1,0 +1,17 @@
+{
+  "contract": 1,
+  "lang": "en",
+  "strings": {
+    "cover-eyebrow": "Open Day · 2026",
+    "cover-title": "A Day Inside a Bilingual School",
+    "cover-lead": "From morning reading to club time, one morning shows how your child learns here.",
+    "day-caption": "Image: a synthetic colour band for geometry regression, not a real campus photo.",
+    "day-title": "From 8 a.m. to noon",
+    "day-p1": "Morning reading starts at eight. Children read a story aloud in Chinese, then retell it in English. Teachers note how often each child is willing to speak, <em>not</em> only whether they are right.",
+    "day-p2": "The second period is project time. Grade 3 is studying the plants on campus, writing observation notes in both languages and presenting them to younger pupils on Friday.",
+    "day-p3": "Break time is split between the playground and the library. On rainy days the PE teachers move activities into the indoor gym.",
+    "day-p4": "Before lunch at 11:30, every class has ten minutes of sharing time. On Open Day you are welcome to sit quietly at the back of the classroom.",
+    "day-contact": "To book a visit, call the admissions office on 0571-8888 6666 at least three days before Open Day.",
+    "back-address": "1 Example Road, Hangzhou"
+  }
+}

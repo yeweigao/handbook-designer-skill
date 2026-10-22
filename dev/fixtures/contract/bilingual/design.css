@@ -1,0 +1,24 @@
+/* 契约样例的最小家族基因，只为测试。 */
+:root {
+  --paper: #ffffff;
+  --ink: #17202a;
+  --muted: #4d5966;
+  --primary: #0b3d91;
+  --accent: #f2b705;
+  --line: #d6dbe1;
+  --font-display: "Noto Serif SC", serif;
+  --font-body: "Noto Sans SC", sans-serif;
+  --font-latin: "Inter", "Noto Sans SC", sans-serif;
+  --size-body: 16px;
+  --size-key: 14px;
+  --size-aux: 11px;
+  --lh-body: 28px;
+}
+body { margin: 0; background: #e9e6df; }
+.page { background: var(--paper); color: var(--ink); font: 400 var(--size-body)/var(--lh-body) var(--font-body);
+        padding: var(--inset-top) var(--inset-right) var(--inset-bottom) var(--inset-left); }
+h1, h2 { margin: 0; font-family: var(--font-display); color: var(--primary); font-weight: 700; }
+p { margin: 0; }
+p + p { margin-top: 14px; }
+[data-role="aux"] { font-size: var(--size-aux); line-height: 1.5; color: var(--muted); }
+.folio::after { content: counter(page-n); }
