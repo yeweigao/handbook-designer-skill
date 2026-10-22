@@ -50,7 +50,7 @@ def find_source(name):
     for d in SEARCH:
         if d and os.path.isfile(os.path.join(d, name)):
             return os.path.join(d, name)
-    raise SystemExit(f"找不到字体 {name}：放到 $HB_FONT_DIR 或 ~/.cache/handbook-designer/fonts（python3 hb/fonts.py fetch 可下载）")
+    raise SystemExit(f"找不到字体 {name}：将已授权源字体放到 $HB_FONT_DIR 或 ~/.cache/handbook-designer/fonts（见 references/delivery.md）")
 
 
 def build_fonts(project, fam, text):

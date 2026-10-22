@@ -67,7 +67,7 @@ test('草稿导出：不需要验收，PDF 带水印', () => {
   const r = cli('export', d, '--draft', '--name', 'm');
   assert.equal(r.status, 0, r.stdout);
   const f = path.join(d, 'out', 'm-draft', 'm.zh-CN.draft.pdf');
-  assert.match(spawnSync('pdftotext', ['-raw', f, '-'], { encoding: 'utf8' }).stdout, /草稿 DRAFT/);
+  assert.match(spawnSync('pdftotext', ['-raw', f, '-'], { encoding: 'utf8' }).stdout, /草稿\s*DRAFT/);
   assert.equal(json(path.join(d, 'out', 'm-draft', 'delivery.json')).status, 'draft');
 });
 

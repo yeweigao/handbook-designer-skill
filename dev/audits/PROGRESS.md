@@ -15,7 +15,7 @@
 | S7 Campus 家族与真实样册 | 完成 | 2026-10-22 | a190408 + 本提交 |
 | S8 导出与离线交付 | 完成 | 2026-10-22 | ce515da |
 | S9 Folio 联动 | 完成 | 2026-10-22 | c2cff36（Folio 162a616） |
-| S10 Skill 文档与旧引擎退役 | 未开始 | | |
+| S10 Skill 文档与旧引擎退役 | 完成 | 2026-10-22 | 本提交（S10:） |
 | S11 视觉参考资产 | 未开始 | | |
 | S12 独立生成基准 | 未开始 | | |
 
@@ -352,3 +352,42 @@
   - 其他语言的续页在 Folio 中拖动位置时，样式写回限定在该语言的 `html[lang]` 下，但目标是渲染时生成的片段编号，重新续排后可能对不上；建议其他语言只改字。
   - Folio 仓库改动在 `hb-package` 分支，尚未合并到 main、尚未部署。
 - 下一步：S7（Campus 家族 CSS 与真实样册）、S10（Skill 文档重写与旧引擎退役）。S10 依赖 S7 的家族与样册路径。
+
+### S10 · Skill 文档重写与旧引擎退役 · 完成 · 2026-10-22
+
+- 改动范围：
+  - `SKILL.md`：HTML/CSS/SVG 唯一作者源，路线、授权边界、家族/构图分工、内容/语言、技术与视觉验收、导出及按需文档路由；4,199 字符。原 `agent_created` 移入合法 metadata。
+  - `workflows/` 九条工作流、`references/` 十份作者指南全部改写；移除固定多轮确认、布局枚举入口、自动缩字及后台字体替换说明。契约保持工作区原样。
+  - `templates/`：brief、page-plan、experience、visual-review Markdown；`purposes/`：五种用途转为内容任务/审稿指南；`brands/`：虚构 Acme 的 CSS/资源与说明，不再自动加 logo/联系方式。
+  - `dev/archive/yaml-engine/`：107 份原引擎/模板/配置/专用测试/文档按迁移前字节保留，另加 README 与 VERSION.json；基线 `bb574941a5b13462720c9918b8a4584c727d7744`，说明冻结、重现方法和新回归归属。旧 gallery/previews/samples 原位保留，交 S11 审计。
+  - `dev/maintenance.md` 与 `dev/tests/selftest.sh`：责任表、依赖成本、经验边界；quick 检查静态/链接/语法/契约，完整模式加全部 core 测试和隔离真实样册 check/verify，不自动安装依赖。
+  - 归档必要解耦：`hb/core/family.py` 去除指向退役字体下载器的报错命令；`office_extract.py` 的联系表字体复用现有本地源查找，不再 import 旧 fonts 模块，更新说明。
+  - 经用户本轮明确允许，修改 `dev/tests/core/export.test.mjs`（水印文本空格可选）与 `folio.test.mjs`（读取 HB_CHROMIUM、避开悬浮工具条发起真实拖动），保留原结果断言。
+- 可复制命令（从仓库根目录）：
+  - `bash dev/tests/selftest.sh --quick`
+  - 完整自检：`HB_CHROMIUM="<已有浏览器可执行文件>" PYTHONPATH="<已有依赖目录>" bash dev/tests/selftest.sh`；常规已配置环境不必设置两项。没有自动浏览器回退，显式版本记入 manifest。
+  - `python3 /Users/apple/.codex/skills/.system/skill-creator/scripts/quick_validate.py .`（本机 Skill 格式校验器）
+  - `grep -rn "book.yaml" SKILL.md workflows references hb/core`（无输出，退出码 1）。
+- 完成判定逐条结果：
+  - Skill ≤ 12000 字符、只指向新路径：pass —— 4,199 字符；Skill 格式合法、34 份文档链接存在，活跃入口无旧作者源引用。
+  - 全部工作流按总计划改写：pass —— 九条路线均使用原生作者源与当前公开命令，涵盖冻结、系列、品牌、研究、Folio、安全回写与最终 PDF 全页审改。
+  - 旧链路归档并注明版本、有价值回归迁移：pass —— 107 个归档源文件与基线逐字节一致；README 按能力列出现行 core 正反例，不保留兼容入口，不删除旧失败证据。
+  - 新 selftest：pass —— Python 4/4，Node 61/61（零失败、零跳过，含真实 Folio 改字/拖动/换图往返）；两本真实样册的所有语言 render/measure/postflight/raster/coverage 均 pass，verify 有效。产品手册构建 `83a86b17eae4`；自然营中英构建 `266eb68f015e`。最后文档微调后 quick 也通过（`hb-native-selftest.YYV4GJ`）。
+  - experience 格式与写入职责：pass —— `templates/experience.md` 与各流程、维护文档，含材料条件/观察/修改/证据/适用范围/未验项，不自动晋升。
+  - 带图片 Word 提取及联系表：pass —— 临时目录 `hb-s10-office-0qns7vjb`，两段文字、一张图片和联系表生成；授权保持待确认。
+- 验证环境与证据：
+  - 最终 selftest 目录：`/var/folders/cd/w5hb78m12v3cpcs3cmc_zkwh0000gn/T/hb-native-selftest.5GO6AQ/`（static.log、validate-tests.log、browser.log、core-tests.log、样册 check/verify 日志及 `.build/.qa`）。
+  - Node 24.9.0、Python 3.13.3、Playwright 1.64.1、显式本机 Chromium 149.0.7827.55；复用 `/tmp/hb-editorial-test-deps` 的 pikepdf 10.17.0 等已有包。本轮没有新增安装或依赖。
+  - 首轮全测 59/61；水印提取空格与外部测试未读浏览器选项导致两项失败，保留首轮日志 `hb-native-selftest.R6fqyz/core-tests.log`。Folio 实际拖动又暴露浮动工具栏遮挡旧测试坐标，截图定位后修正手势，真实往返单测已通过。
+- 契约变更：本步骤无。开工时已有 `hb/core/pdfboxes.py`、`render.mjs`、`validate.py` 和 `references/contract.md` 四个未提交文件，字节完整保留且不纳入本提交；本轮验证基于包含这些预存改动的工作区，未单独验证只含 S10 提交的干净 checkout。
+- 偏离计划的决定：
+  - 字体资源准备与 Office 联系表两处解耦随旧引擎退役完成，否则新链路仍引用已退役的 helper；没有恢复字体下载、系统字体替换或旧布局。
+  - 用户质疑整套依赖成本后停止下载尝试，改为显式复用已有 Chromium；文档区分实际模块依赖和未实现的轻量默认路径，`requirements*` 未改。
+  - 经用户明确允许扩展两处现有测试文件的环境适配；没有放宽实际水印存在、拖动写回或交付门禁要求。
+- 新增依赖：无。
+- 未完成与已知问题：
+  - Node 22 / Python 3.10 的参考运行环境未实测（unverified）；做了 Python 3.10 语法检查，全部运行结果以上述实际环境为准。精确版本复现不能等同本轮环境复用。
+  - 依赖分层、轻量默认运行路径及按功能加载尚未实现，需要后续调整 S2–S4 的契约与运行时；已写入 maintenance。当前 hb/requirements* 仍含历史组件，不要求每次安装全部。
+  - 可编辑 PDF 在 Acrobat 等编辑器实际改字的既有 unverified 保留；本轮没有新视觉审稿或重做 S12 独立生成/人工校准。
+- 下一步：S11 视觉参考资产（审计 gallery、原生样册与反例）；S12 在 S11 后继续，不把 S10 技术回归冒充独立创作评测。
+- 提交：本记录所在的 `S10:` 提交（见 git log）。

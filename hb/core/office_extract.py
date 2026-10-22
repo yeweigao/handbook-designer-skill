@@ -1,8 +1,8 @@
-# 由 hb/extract.py 原样迁入（S5，2026-10-22）：PPT/Word/PDF 的文字与图片解析。新运行时通过 hb/core/extract.py 调用。
+# PPT/Word/PDF 的文字与图片解析，由 hb/core/extract.py 调用。
 #!/usr/bin/env python3
 """从带图的资料里同时抽出“文字 + 图片”，并把两者按页对上：宣讲 PPT、Word、PDF → 手册素材。
-  python3 hb/extract.py 资料.pptx|.docx|.pdf <project_dir> [--images-only]
-  （new_project.sh 会自动调用：.pptx 走全套；.docx/.pdf 的正文由 doc2yaml 转换，这里只抽图片）
+  python3 hb/core/office_extract.py 资料.pptx|.docx|.pdf <project_dir> [--images-only]
+  （core/extract.py 调用：.pptx 提取文字及图片，.docx/.pdf 在这里抽图，正文由上层提取）
 
 输出（都在 project_dir 里）：
   doc.md            原文（按页/按段顺序；<!-- 第 N 页 · 照片：s03_1.jpg · 图形：s03_2.png --> 注释标出每页对应的图片，原文核对会忽略注释）
@@ -274,9 +274,9 @@ def contact(ph, rows, out):
     if not items: return
     C, TW, TH = 4, 300, 230; im = Image.new('RGB', (C * TW + 20, ((len(items) + C - 1) // C) * (TH + 54) + 20), (236, 236, 236)); d = ImageDraw.Draw(im)
     try:
-        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import fonts as F
-        fp = F.path_of('lxgw-neo-xihei') or F.path_of('noto-sans-sc'); font = ImageFont.truetype(fp, 15) if fp else ImageFont.load_default()
-    except Exception: font = ImageFont.load_default()
+        from family import find_source
+        font = ImageFont.truetype(find_source('NotoSansSC-VF.ttf'), 15)
+    except (Exception, SystemExit): font = ImageFont.load_default()
     for i, (name, pgn, size, kd, frac, adv) in enumerate(items):
         x, y = 10 + (i % C) * TW, 10 + (i // C) * (TH + 54)
         try:
@@ -291,4 +291,4 @@ def contact(ph, rows, out):
 if __name__ == '__main__':
     a = [x for x in sys.argv[1:] if not x.startswith('--')]
     if len(a) < 2: sys.exit(__doc__)
-    main(a[0], a[1], images_only='--images-only' in sys.argv)   # --images-only：只抽图片（原文已由 doc2yaml 转好时用）
+    main(a[0], a[1], images_only='--images-only' in sys.argv)   # --images-only：只抽图片（文字由 core/extract.py 单独提取）

@@ -110,7 +110,7 @@ test('真实往返：Folio 界面改字、拖动、换图 → 下载 → 写回 
     for (let i = 0; i < 150; i++) { try { if ((await fetch(`http://127.0.0.1:${port}`)).ok) break; } catch { /* 等待 */ } await new Promise((r) => setTimeout(r, 100)); }
     const libRoot = path.join(os.homedir(), '.local/hb-libs/root/usr/lib');
     const libs = fs.existsSync(libRoot) ? fs.readdirSync(libRoot).map((x) => path.join(libRoot, x)) : [];
-    browser = await chromium.launch({ env: libs.length ? { ...process.env, LD_LIBRARY_PATH: libs.join(':') } : undefined });
+    browser = await chromium.launch({ executablePath: process.env.HB_CHROMIUM || undefined, env: libs.length ? { ...process.env, LD_LIBRARY_PATH: libs.join(':') } : undefined });
     const ctx = await browser.newContext({ viewport: { width: 1440, height: 1100 }, acceptDownloads: true });
     const page = await ctx.newPage();
     await page.goto(`http://127.0.0.1:${port}`);
@@ -130,10 +130,10 @@ test('真实往返：Folio 界面改字、拖动、换图 → 下载 → 写回 
     await frame.locator('[data-source-id="cover-lead"][contenteditable="true"]').waitFor();
     await frame.locator('[data-source-id="cover-lead"]').fill('从早读到社团活动，看懂孩子怎样学习。');
     await page.getByRole('heading', { name: '编辑属性' }).click();
-    // 拖动标题
+    // 悬浮文字工具条可能覆盖标题中部，从标题上沿发起单次拖动。
+    await frame.locator('[data-source-id="cover-title"]').hover({ position: { x: 30, y: 10 } });
     const t = await frame.locator('[data-source-id="cover-title"]').boundingBox();
-    await frame.locator('[data-source-id="cover-title"]').click();
-    await page.mouse.move(t.x + 30, t.y + 30); await page.mouse.down(); await page.mouse.move(t.x + 50, t.y + 45, { steps: 6 }); await page.mouse.up();
+    await page.mouse.move(t.x + 30, t.y + 10); await page.mouse.down(); await page.mouse.move(t.x + 50, t.y + 25, { steps: 6 }); await page.mouse.up();
     await page.waitForTimeout(300);
     // 第 2 页换图
     await page.getByRole('button', { name: '下一页' }).click();

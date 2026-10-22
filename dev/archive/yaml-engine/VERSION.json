@@ -1,0 +1,7 @@
+{
+  "archived_on": "2026-10-22",
+  "source_commit": "bb574941a5b13462720c9918b8a4584c727d7744",
+  "branch": "html-native",
+  "status": "retired",
+  "contract": "YAML engine; no compatibility entrypoint"
+}
