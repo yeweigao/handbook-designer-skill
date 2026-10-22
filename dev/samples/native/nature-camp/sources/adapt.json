@@ -1,0 +1,16 @@
+{
+ "extra": [
+  {
+   "content": "photo-credits",
+   "reason": "照片来源与授权说明，设计添加"
+  },
+  {
+   "content": "book-title",
+   "reason": "封底书名（原稿书名字段）"
+  },
+  {
+   "content": "book-folio",
+   "reason": "页眉（原稿书眉字段）"
+  }
+ ]
+}

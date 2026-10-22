@@ -1,0 +1,168 @@
+/* 《山海自然探索营 · 项目介绍》专属构图（Campus 家族 v1）
+   主张：照片是“现场”，纸面是“任务册”。满版照片只在封面与两个章节页出现；
+   内页照片一律放进有边界的图框或贴着出血边，文字永远落在纸面或压暗层上。 */
+
+.bleed-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.cover-scrim, .chapter-scrim { position: absolute; left: 0; right: 0; bottom: 0; }
+
+/* —— 封面 —— */
+.cover-scrim { height: 74%; background: linear-gradient(to top, rgba(18, 30, 40, .86) 0%, rgba(18, 30, 40, .72) 50%, rgba(18, 30, 40, .45) 68%, rgba(18, 30, 40, 0) 100%); }
+.cover-photo { object-position: 76% 50%; }   /* 让灯塔进画面，避开中段的黄色告示牌与鹭 */
+.cover .area { align-content: end; }
+.cover .kicker { margin-bottom: var(--s2); }
+.cover-title { font: 700 92px/1.12 var(--font-display); color: #fff; letter-spacing: -.01em; }
+html[lang="en"] .cover-title { font-size: 84px; line-height: 1.08; letter-spacing: -.02em; }
+.cover-en { margin-top: var(--s3); font: 600 15px/1.5 var(--font-latin); letter-spacing: .04em; color: var(--gold); }
+.cover-intro { margin-top: var(--s1); color: var(--on-dark); }
+.cover-stats { margin-top: var(--s4); display: grid; grid-template-columns: repeat(3, 1fr); column-gap: var(--gutter); border-top: var(--hair) solid rgba(228, 198, 139, .6); padding-top: var(--s2); }
+.cover-stats dt { font: 600 44px/1 var(--font-num); color: #fff; letter-spacing: -.02em; }
+.cover-stats dd { margin-top: var(--s1); font-size: var(--fs-key); color: var(--on-dark-muted); }
+
+/* —— 目录 —— */
+.contents-title { margin-top: var(--s2); }
+.contents-intro { margin-top: var(--s3); color: var(--muted); }
+.toc { margin-top: var(--s4); border-top: var(--rule) solid var(--primary); }
+.toc li { display: grid; grid-template-columns: 22mm 1fr 14mm; column-gap: var(--gutter); align-items: baseline; padding: 10px 0; border-bottom: var(--hair) solid var(--line); }
+.toc .toc-chapter { padding: var(--s3) 0 var(--s2); border-bottom: 0; }
+.toc .toc-chapter + li { border-top: var(--hair) solid var(--line); }
+.toc-chapter .toc-no { font: 600 40px/1 var(--font-num); color: var(--primary); letter-spacing: -.02em; }
+.toc-chapter .toc-name { font: 700 28px/1.3 var(--font-display); color: var(--primary); }
+.toc-pg { text-align: right; font: 600 var(--fs-aux)/1 var(--font-num); color: var(--muted); letter-spacing: .06em; }
+.toc li:not(.toc-chapter) > span:nth-child(2) { font-size: var(--fs-body); }
+
+/* —— 致家长 —— */
+.letter-title { margin-top: var(--s2); }
+.letter .area { grid-template-rows: auto auto 1fr auto; }
+.letter-body { align-self: end; margin-top: var(--s4); font-size: var(--fs-lead); line-height: var(--lh-lead); }
+.letter-body p + p { margin-top: var(--s3); }
+.letter-quote { margin-top: var(--s4); padding: var(--s3) 0 var(--s3) var(--s3); border-left: 6px solid var(--gold); background: var(--paper-deep); }
+.letter-quote .quote { font-size: 26px; line-height: 1.55; padding-right: var(--s3); }
+.letter-quote cite { display: block; margin-top: var(--s2); font: 400 var(--fs-aux)/1.4 var(--font-latin); letter-spacing: .08em; color: var(--muted); font-style: normal; }
+
+/* —— 章节页（照片满版 / 深色上半照片） —— */
+.chapter-scrim { height: 82%; background: linear-gradient(to top, rgba(18, 30, 40, .86) 0%, rgba(18, 30, 40, .7) 55%, rgba(18, 30, 40, 0) 100%); }
+.chapter .area, .chapter2 .area { align-content: end; }
+.chapter-no { font: 600 168px/.9 var(--font-num); letter-spacing: -.04em; color: var(--gold); margin-bottom: var(--s3); }
+.chapter .kicker, .chapter2 .kicker { margin-bottom: var(--s2); }
+.chapter-intro { margin-top: var(--s3); color: var(--on-dark); }
+.ch2-photo { position: absolute; left: 0; right: 0; top: 0; width: 100%; height: calc(var(--bleed) + 128mm); object-fit: cover; display: block; }
+
+/* —— 六个关键词 —— */
+.hl-intro { margin-top: var(--s3); color: var(--muted); }
+.highlights .area { grid-template-rows: auto auto auto 1fr; }
+.hl-cards { margin-top: var(--s4); display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; column-gap: var(--gutter); row-gap: var(--s3); }
+.hl-card { display: flex; flex-direction: column; background: var(--paper-deep); border-top: var(--rule) solid var(--primary); padding: var(--s2) var(--s2) var(--s2); }
+.hl-card .hl-no { order: 3; margin-top: auto; text-align: right; }
+.hl-no { display: block; font: 600 88px/1 var(--font-num); letter-spacing: -.03em; color: var(--ochre); }   /* 不用描边字：-webkit-text-stroke 会把字形变成 Type 3 */
+.hl-card .h3 { color: var(--primary); margin-bottom: var(--s1); }
+.hl-card p { font-size: 15px; line-height: 26px; }
+.highlights .h1 { margin-top: var(--s2); }
+
+/* —— 三条主线：图文错位 —— */
+.themes .h1 { margin-top: var(--s2); }
+.theme-rows { margin-top: var(--s3); display: grid; row-gap: var(--s3); }
+.theme-row { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: var(--gutter); align-items: center; }
+.theme-photo { grid-column: 1 / span 3; height: 64mm; }
+.theme-text { grid-column: 4 / -1; }
+.theme-row.r2 .theme-photo { grid-column: 4 / -1; grid-row: 1; }
+.theme-row.r2 .theme-text { grid-column: 1 / span 3; grid-row: 1; }
+.theme-text .kicker { margin-bottom: var(--s1); }
+.theme-text .h2 { font-size: 26px; margin-bottom: var(--s1); }
+
+/* —— 报名须知 —— */
+.join::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: calc(var(--bleed) + 132mm); background: var(--paper-deep); }
+.join .area { grid-template-rows: auto 1fr auto; }
+.join-title { margin-top: var(--s2); align-self: end; margin-bottom: 30mm; font-size: 88px; }
+html[lang="en"] .join-title { font-size: 64px; }
+.join-col { align-self: start; border-top: var(--rule) solid var(--primary); padding-top: var(--s2); }
+.join-col .h3 { color: var(--primary); margin-bottom: var(--s2); }
+.join-col .checklist li { font-size: var(--fs-lead); line-height: var(--lh-lead); padding-left: 28px; }
+.join-col .checklist li::before { top: 10px; width: 13px; height: 13px; }
+.join-col .checklist li + li { margin-top: var(--s2); }
+.join-col { margin-bottom: var(--s4); }
+.join-prep { border-top-color: var(--ochre); }
+
+/* —— 行程与费用 —— */
+.itinerary .area { grid-template-rows: auto auto auto auto auto 1fr; }
+.itinerary .h1 { margin-top: var(--s2); }
+.it-intro { margin-top: var(--s2); color: var(--muted); }
+.days { margin-top: var(--s3); border-top: var(--rule) solid var(--primary); }
+.days li { display: grid; grid-template-columns: 24mm 1fr; column-gap: var(--gutter); padding: 14px 0; font-size: 17px; border-bottom: var(--hair) solid var(--line); align-items: baseline; }
+.day-k { font: 600 var(--fs-key)/1.6 var(--font-latin); color: var(--ochre); letter-spacing: .04em; }
+.days .day-hot { background: var(--paper-deep); padding-left: 0; }
+.day-hot .day-t strong { color: var(--primary); }
+.day-x { margin-left: var(--s2); color: var(--muted); }
+.fees { margin-top: var(--s5); width: 100%; border-collapse: collapse; font-size: var(--fs-key); line-height: 1.6; }
+.fees th { text-align: left; font: 600 var(--fs-key)/1.6 var(--font-body); color: var(--primary); border-bottom: var(--rule) solid var(--primary); padding: 6px 0; }
+.fees td { padding: 12px 0; border-bottom: var(--hair) solid var(--line); vertical-align: top; }
+.fees th:first-child, .fees td:first-child { width: 24mm; }
+.fees th:last-child, .fees td:last-child { text-align: right; width: 24mm; }
+.it-notes { align-self: end; margin-top: var(--s3); display: grid; grid-template-columns: repeat(3, 1fr); column-gap: var(--gutter); }
+.it-notes li { font-size: var(--fs-key); line-height: 1.6; border-top: var(--hair) solid var(--line); padding-top: var(--s1); color: var(--muted); }
+
+/* —— 往届回顾：深色纯文字 —— */
+.lastyear .area { grid-template-rows: auto auto auto 1fr; }
+.ly-title { margin-top: var(--s2); color: #fff; }
+.ly-text { margin-top: var(--s4); font: 700 36px/1.55 var(--font-display); color: var(--on-dark); hyphens: manual; text-wrap: balance; word-break: keep-all; }
+html[lang="en"] .ly-text { font-size: 32px; line-height: 1.45; }
+.ly-moments { align-self: end; display: grid; grid-template-columns: repeat(5, 1fr); column-gap: var(--gutter); }
+.ly-moments li { border-top: var(--hair) solid var(--gold); padding-top: var(--s2); font: 700 20px/1.4 var(--font-display); color: #fff; }
+.ly-no { display: block; margin-bottom: var(--s1); font: 600 var(--fs-aux)/1.4 var(--font-latin); letter-spacing: .1em; color: var(--gold); }
+.lastyear .folio { color: var(--on-dark-muted); }
+
+/* —— 四个数字 —— */
+.numbers .area { grid-template-rows: auto auto auto 1fr; }
+.numbers .h1 { margin-top: var(--s2); }
+.facts { margin-top: var(--s5); display: grid; grid-template-columns: repeat(2, 1fr); column-gap: var(--gutter); row-gap: var(--s5); }
+.facts > div { border-top: var(--rule) solid var(--primary); padding-top: var(--s1); }
+.facts dt { font: 600 150px/1.2 var(--font-num); letter-spacing: -.04em; color: var(--primary); }
+.facts dd { margin-top: 0; font-size: 15px; color: var(--muted); }
+.facts-note { align-self: end; margin-top: var(--s4); }
+
+/* —— 营地生活：外侧出血竖照片 —— */
+.daily-photo { position: absolute; top: 0; bottom: 0; left: 0; width: calc(var(--bleed) + 98mm); height: 100%; object-fit: cover; display: block; }
+.daily .area { align-content: center; }
+.daily-text .h1 { margin-top: var(--s2); }
+.daily-list { margin-top: var(--s4); }
+.daily-list li { display: grid; grid-template-columns: 30px 1fr; column-gap: var(--s2); padding: var(--s2) 0; border-top: var(--hair) solid var(--line); }
+.daily-no { font: 600 var(--fs-aux)/2.3 var(--font-latin); letter-spacing: .1em; color: var(--ochre); }
+.daily-list .h3 { color: var(--primary); }
+.daily-list p { font-size: 15px; line-height: 26px; }
+
+/* —— 导师团队：上方出血照片 —— */
+.team-photo { position: absolute; top: 0; left: 0; right: 0; width: 100%; height: calc(var(--bleed) + 156mm); object-fit: cover; display: block; }
+.team .area { top: calc(var(--bleed) + 166mm); column-gap: var(--gutter); }
+.team .h1 { margin-top: var(--s1); margin-bottom: var(--s3); }
+.team-sec { border-top: var(--rule) solid var(--primary); padding-top: var(--s2); }
+.team-sec .h3 { color: var(--primary); margin-bottom: var(--s1); }
+.team-quote { margin-top: var(--s4); padding-top: var(--s2); border-top: var(--hair) solid var(--line); }
+.team-quote .quote { font-size: 26px; line-height: 1.5; }
+.team-quote cite { display: block; margin-top: var(--s1); font: 400 var(--fs-aux)/1.4 var(--font-latin); letter-spacing: .08em; color: var(--muted); font-style: normal; }
+
+/* —— 安全 —— */
+.safety .h1 { margin-top: var(--s2); }
+.safety-photo { margin-top: var(--s3); height: 128mm; }
+.safety-secs { margin-top: var(--s3); display: grid; grid-template-columns: repeat(3, 1fr); column-gap: var(--gutter); }
+.safety-secs > div { border-top: var(--rule) solid var(--primary); padding-top: var(--s2); }
+.safety-no { display: block; font: 600 var(--fs-aux)/1.4 var(--font-latin); letter-spacing: .1em; color: var(--ochre); margin-bottom: var(--s1); }
+.safety-secs .h3 { color: var(--primary); margin-bottom: var(--s1); }
+.safety-secs p { font-size: 15px; line-height: 26px; }
+
+/* —— 常见问题 —— */
+.faq .h1 { margin-top: var(--s2); }
+.faq .area { grid-template-rows: auto auto 1fr; }
+.faq-grid { margin-top: var(--s4); display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: 1fr 1fr; gap: var(--gutter); }
+.faq-item { background: var(--paper-deep); padding: var(--s3); border-top: var(--rule) solid var(--primary); }
+.faq-item { display: flex; flex-direction: column; }
+.faq-item .h3 { color: var(--primary); margin-bottom: var(--s2); font: 700 26px/1.4 var(--font-display); }
+.faq-item p { font-size: var(--fs-lead); line-height: var(--lh-lead); }
+
+/* —— 封底 —— */
+.back .area { grid-template-rows: auto auto auto auto 1fr; }
+.back-title { margin-top: var(--s4); font: 700 88px/1.15 var(--font-display); color: #fff; letter-spacing: -.01em; }
+html[lang="en"] .back-title { font-size: 76px; }
+.back-office { margin-top: var(--s4); color: var(--on-dark); }
+.back-name { margin-top: var(--s1); color: var(--gold); }
+.credits { align-self: end; border-top: var(--hair) solid rgba(228, 198, 139, .5); padding-top: var(--s2); color: var(--on-dark-muted); }
+.faq-no { font: 600 48px/1 var(--font-num); letter-spacing: -.02em; color: var(--ochre); margin-bottom: var(--s3); }
+html[lang="en"] .themes .h1 { font-size: 38px; }

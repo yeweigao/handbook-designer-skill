@@ -12,7 +12,7 @@
 | S4 最终 PDF 检查与验收绑定 | 完成 | 2026-10-22 | 21b4f2b |
 | S5 内容提取与原文覆盖 | 完成 | 2026-10-22 | 98e4938 |
 | S6 长文续页工具 | 完成 | 2026-10-22 | cb102a6 |
-| S7 Campus 家族与真实样册 | 进行中 | 2026-10-22 | |
+| S7 Campus 家族与真实样册 | 完成 | 2026-10-22 | a190408 + 本提交 |
 | S8 导出与离线交付 | 完成 | 2026-10-22 | ce515da |
 | S9 Folio 联动 | 完成 | 2026-10-22 | c2cff36（Folio 162a616） |
 | S10 Skill 文档与旧引擎退役 | 未开始 | | |
@@ -244,6 +244,38 @@
   - 列表、表格不拆；超长表格需要作者拆成多个表。
   - 其他语言的续页在 Folio 中编辑时，回写只能按内容 ID 合并到 `copy/<lang>.json`（S9 处理）。
 - 下一步：S7（Campus 家族与真实样册）、S8（导出）、S9（Folio）依赖都已满足，可并行。
+
+### S7 · Campus 家族与真实样册 · 完成 · 2026-10-22
+
+- 改动范围：
+  - `families/campus/`：家族 CSS（颜色/字体/字号角色、可读性下限内的字号阶梯、六栏网格与 28px 基线、排印/线/引文/图框/清单/步骤/深色面/压暗层/页码页眉原语，无整页模板类）、`family.json`、README；`families/licenses/`。
+    - v1.1（本次）：英文版 `font-variant-east-asian: proportional-width` 写到每个元素（`font` 简写会重置它），修正宋体/黑体里 ’ “ ” 全角；`hyphenate-character: "-"`（思源字体的 U+2010 是全角）。v1 的纯中文项目不受影响。
+  - `hb/core/family.py`：`list / init / fonts`，从家族建项目（复制家族 CSS、按 GB2312 + 项目文字子集字体、写 project.json 的 family 名/版本/sha256）。
+  - `dev/samples/native/product-brochure/`（12 页中文纯文字，提交 a190408）。
+  - `dev/samples/native/nature-camp/`（16 页中英双语，9 张 Wikimedia Commons 公有领域照片）：`book.html`、`book.css`、`copy/en.json`、`sources/`（原稿、segments、adapt.json 声明设计添加的照片署名/书名/页眉、assets.json 逐张写来源页/授权/作者）、`brief.md`、`page-plan.md`、`experience.md`、`.qa/<构建>/gate.json + visual-review.json`。
+- 可复制命令：
+  - `node hb/core/cli.mjs check dev/samples/native/nature-camp` → 构建 c063f2f71ce6，中英两版 render/measure/postflight/raster/coverage 全 pass
+  - `node hb/core/cli.mjs verify dev/samples/native/nature-camp` → 有效
+  - `node hb/core/cli.mjs check dev/samples/native/product-brochure` → 3d1f501feb03 可交付
+  - 新项目：`python3 hb/core/family.py init campus <目录> --title … --langs zh-CN,en --mode translate`
+- 完成判定逐条结果：
+  - 家族 CSS 含颜色/字体/字号/网格/间距/低层原语/打印安全变量，无整页模板类：pass —— `families/campus/design.css`；两本样册的整页构图都写在各自 `book.css`。
+  - 至少两本样册，其中含真实 CC0/公有领域照片、≥16 页、中英双语：pass —— 产品手册 12 页中文；山海自然探索营 16 页中英，照片授权逐张登记，封底署名并注明"拍摄地与营地无关，仅作示意"。
+  - 全部通过 S2–S4（与 S5 原文覆盖）：pass —— 见上方构建 ID。
+  - 最终 PDF 栅格审稿记录：pass —— 两本的 `.qa/<构建>/visual-review.json` 均为 deliverable，绑定 PDF 哈希。
+- 检查在样册上抓到的真问题（都已修，记录在各自 `experience.md`）：压在亮云/亮岩上的序号与眉标对比度不足；`-webkit-text-stroke` 描边字在 PDF 里变 Type 3；大数字行高过小与说明文字重叠；标题孤字与拆词；`.mono` 字体栈缺中文导致回退。视觉审稿另外抓到：英文标点与连字符全角、多页下部大片空白、封面裁切里的告示牌、署名被截断。
+- 契约变更：无。
+- 偏离计划的决定：
+  - 照片来自 Wikimedia Commons 的美国林务局/土地管理局/国家公园管理局公有领域作品（不是严格意义的 CC0，但同样无需授权）；拍摄地与"营地"无关，所以往届回顾页不配照片，避免让人以为是实拍。
+  - 家族在样册过程中升到 v1.1；产品手册仍记录 v1（纯中文，不受影响），不强制升级。
+  - 样册的 `book.html` 是用一次性脚本从原稿模板填出来的，之后作为作者源直接维护；脚本不入库。
+- 新增依赖：无。
+- 未完成与已知问题：
+  - 自然营素材 21MB（图片 13MB：封面只用到原图 40% 宽度，再压缩会过不了栅格分辨率检查）。
+  - 中文行末标点被 Chrome 默认 `text-spacing-trim` 挤压成半宽，属正常排印，未改。
+  - 第 10 页（深色纯文字）中部留白偏大，审稿判可接受。
+- 下一步：S10（Skill 文档重写与旧引擎退役）、S11（视觉参考资产）可并行开始。
+- 提交：见 git log（S7 收尾提交）
 
 ### S8 · 导出与离线交付 · 完成 · 2026-10-22
 

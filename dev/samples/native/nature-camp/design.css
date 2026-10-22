@@ -1,0 +1,138 @@
+/* Campus 家族基因 v1 —— 颜色角色、字体角色、字号层级、网格与低层原语。
+   只放家族共同语言，不放整页模板。页面构图写在项目的 book.css。
+   改这里属于家族级决定：记录原因，并复查用到它的全部样册。 */
+
+:root {
+  /* —— 颜色角色（文字组合均已核对对比度） —— */
+  --paper: #FBFAF7;          /* 暖纸 */
+  --paper-deep: #F1ECE2;     /* 次级纸面、引文底 */
+  --ink: #202B32;            /* 正文      14.8:1 于纸 */
+  --muted: #4B575E;          /* 辅助文字   7.2:1 于纸 */
+  --primary: #253C4C;        /* 学院墨蓝：标题、强调块、深色页 */
+  --ochre: #665644;          /* 赭：次要强调文字 6.9:1 于纸 */
+  --gold: #E4C68B;           /* 金：只用于深色底上的文字、线和小面积装饰（纸上不作文字色） */
+  --line: #D6CEBF;           /* 发丝线 */
+  --on-dark: #F4F1EA;        /* 深色底上的正文 */
+  --on-dark-muted: #C3CDD3;  /* 深色底上的辅助文字 6.6:1 于墨蓝 */
+
+  /* —— 字体角色 —— */
+  --font-display: "Noto Serif SC", serif;
+  --font-body: "Noto Sans SC", sans-serif;
+  --font-latin: "Inter", "Noto Sans SC", sans-serif;
+  --font-num: "Inter", "Noto Sans SC", sans-serif;
+
+  /* —— 字号层级（可读性下限：正文 ≥ 14px、关键信息 ≥ 12px、辅助 ≥ 10px） —— */
+  --fs-aux: 11px;
+  --fs-key: 13px;
+  --fs-body: 16px;
+  --fs-lead: 19px;
+  --fs-h3: 21px;
+  --fs-h2: 30px;
+  --fs-h1: 44px;
+  --fs-display: 62px;
+  --fs-hero: 120px;
+  --lh-body: 28px;           /* 基线：正文行距，也是垂直节奏单位 */
+  --lh-lead: 32px;
+
+  /* —— 网格：A4 六栏。版心边距从成品边量起，左右页内外侧对称 —— */
+  --m-top: 18mm;
+  --m-bottom: 21mm;
+  --m-inner: 19mm;
+  --m-outer: 15mm;
+  --gutter: 6mm;
+  --baseline: 28px;
+
+  /* —— 线与间距（基线的倍数） —— */
+  --hair: 1px;
+  --rule: 2px;
+  --s1: 7px;
+  --s2: 14px;
+  --s3: 28px;
+  --s4: 56px;
+  --s5: 84px;
+}
+
+body { margin: 0; background: #E8E4DC; }
+.page {
+  background: var(--paper); color: var(--ink);
+  font: 400 var(--fs-body)/var(--lh-body) var(--font-body);
+  font-kerning: normal; text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+html[lang="en"] .page { font-family: var(--font-latin); hyphens: auto; }
+/* 非中文版里，宋体/黑体负责的标题仍会遇到 ’ “ ” 等标点：思源字体默认给全角字宽，用 pwid 改成比例宽度（v1.1） */
+html[lang="en"] .page, html[lang="en"] .page * { font-variant-east-asian: proportional-width; }   /* 要写到每个元素上：font 简写会把它重置 */
+html[lang="en"] .page { hyphenate-character: "-"; }   /* 自动断词默认用 U+2010，思源字体里它是全角宽度 */
+h1, h2, h3, h4, p, figure, blockquote, ul, ol, dl, dd { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+strong { font-weight: 700; }
+/* 断行：标题平衡各行长度，正文避免末行孤字 */
+.display, .h1, .h2, .h3, .quote, h1, h2, h3, h4 { text-wrap: balance; word-break: keep-all; }   /* 中文标题只在标点与空格处断行 */
+p, li, dd, blockquote { text-wrap: pretty; }
+
+/* —— 版心：放在 .page 里的绝对定位六栏网格。偶数页（左页）外侧在左 —— */
+.area {
+  position: absolute;
+  top: calc(var(--bleed) + var(--m-top)); bottom: calc(var(--bleed) + var(--m-bottom));
+  left: calc(var(--bleed) + var(--m-inner)); right: calc(var(--bleed) + var(--m-outer));
+  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: var(--gutter);
+  align-content: start;
+}
+.page:nth-of-type(even) .area { left: calc(var(--bleed) + var(--m-outer)); right: calc(var(--bleed) + var(--m-inner)); }
+.area > * { grid-column: 1 / -1; }
+.c1-2 { grid-column: 1 / span 2; } .c1-3 { grid-column: 1 / span 3; } .c1-4 { grid-column: 1 / span 4; } .c1-5 { grid-column: 1 / span 5; }
+.c2-5 { grid-column: 2 / span 4; } .c2-6 { grid-column: 2 / -1; } .c3-6 { grid-column: 3 / -1; } .c4-6 { grid-column: 4 / -1; }
+.c5-6 { grid-column: 5 / -1; } .c3-4 { grid-column: 3 / span 2; } .c2-3 { grid-column: 2 / span 2; }
+
+/* —— 排印原语 —— */
+.kicker { font: 600 var(--fs-aux)/1.4 var(--font-latin); letter-spacing: .12em; text-transform: uppercase; color: var(--ochre); }
+.kicker-dark { color: var(--gold); }
+.display { font: 700 var(--fs-display)/1.18 var(--font-display); letter-spacing: -.01em; color: var(--primary); }
+.h1 { font: 700 var(--fs-h1)/1.25 var(--font-display); color: var(--primary); }
+.h2 { font: 700 var(--fs-h2)/1.3 var(--font-display); color: var(--primary); }
+.h3 { font: 700 var(--fs-h3)/1.45 var(--font-body); color: var(--ink); }
+.subtitle { font: 400 15px/1.5 var(--font-latin); color: var(--muted); letter-spacing: .01em; }
+.lead { font-size: var(--fs-lead); line-height: var(--lh-lead); color: var(--ink); }
+.body p + p { margin-top: var(--s2); }
+.aux, .caption { font-size: var(--fs-aux); line-height: 1.55; color: var(--muted); }
+.key { font-size: var(--fs-key); line-height: 1.6; }
+.num { font: 600 var(--fs-display)/1 var(--font-num); letter-spacing: -.02em; color: var(--primary); font-variant-numeric: lining-nums tabular-nums; }
+.index-num { font: 600 var(--fs-hero)/.9 var(--font-num); letter-spacing: -.04em; color: var(--primary); }
+.mono { font-family: "Inter", "Noto Sans SC", monospace; font-variant-numeric: tabular-nums; }   /* 家族没有等宽字体：命令、代码用 Inter 等宽数字，中文仍用思源黑体 */
+
+/* —— 线、引文、旁注、图注、图框 —— */
+.rule { border-top: var(--rule) solid var(--primary); }
+.hair { border-top: var(--hair) solid var(--line); }
+.quote { font: 700 22px/1.6 var(--font-display); color: var(--primary); }
+.quote cite { display: block; margin-top: var(--s2); font: 400 var(--fs-aux)/1.4 var(--font-latin); letter-spacing: .08em; color: var(--muted); font-style: normal; }
+.note { border-top: var(--rule) solid var(--primary); padding-top: var(--s1); font-size: var(--fs-key); line-height: 1.65; color: var(--muted); }
+.note b, .note strong { display: block; margin-bottom: 4px; color: var(--primary); font: 600 var(--fs-aux)/1.4 var(--font-latin); letter-spacing: .1em; }
+.frame { position: relative; overflow: hidden; background: var(--paper-deep); }
+.frame > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.caption { margin-top: var(--s1); }
+
+/* —— 功能原语：书写线、清单、编号步骤 —— */
+.fill-lines { min-height: calc(var(--baseline) * 4); background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--baseline) - 1px), var(--line) calc(var(--baseline) - 1px) var(--baseline)); }
+.checklist li { position: relative; padding-left: 22px; }
+.checklist li::before { content: ""; position: absolute; left: 0; top: 7px; width: 11px; height: 11px; border: 1.5px solid var(--primary); border-radius: 2px; }
+.step { display: grid; grid-template-columns: 64px 1fr; column-gap: var(--s3); }
+.step-no { font: 600 var(--fs-key)/1.6 var(--font-latin); letter-spacing: .1em; color: var(--ochre); }
+
+/* —— 深色面与照片上的文字 —— */
+.on-dark { background: var(--primary); color: var(--on-dark); }
+.on-dark .display, .on-dark .h1, .on-dark .h2, .on-dark .quote { color: #FFFFFF; }
+.on-dark .aux, .on-dark .caption, .on-dark .subtitle { color: var(--on-dark-muted); }
+.on-dark .kicker { color: var(--gold); }
+.scrim-bottom { background: linear-gradient(to top, rgba(18, 30, 40, .82) 0%, rgba(18, 30, 40, .55) 45%, rgba(18, 30, 40, 0) 100%); }
+
+/* —— 页码与页眉（在印刷安全区内） —— */
+.folio { position: absolute; bottom: calc(var(--bleed) + 11mm); font: 600 var(--fs-aux)/1 var(--font-latin); letter-spacing: .08em; color: var(--muted); }
+.folio::after { content: counter(page-n); }
+.page:nth-of-type(odd) .folio { right: calc(var(--bleed) + var(--m-outer)); }
+.page:nth-of-type(even) .folio { left: calc(var(--bleed) + var(--m-outer)); }
+.running { position: absolute; top: calc(var(--bleed) + 10mm); font: 600 10px/1.4 var(--font-latin); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.page:nth-of-type(odd) .running { right: calc(var(--bleed) + var(--m-outer)); }
+.page:nth-of-type(even) .running { left: calc(var(--bleed) + var(--m-outer)); }
+
+/* —— 调试网格：只在排版时手动打开（html 上加 data-debug-grid），渲染器从不设置 —— */
+html[data-debug-grid] .area { background: repeating-linear-gradient(to bottom, transparent 0 27px, rgba(200, 60, 60, .18) 27px 28px); }

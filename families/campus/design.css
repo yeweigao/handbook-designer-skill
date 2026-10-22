@@ -60,6 +60,9 @@ body { margin: 0; background: #E8E4DC; }
   -webkit-font-smoothing: antialiased;
 }
 html[lang="en"] .page { font-family: var(--font-latin); hyphens: auto; }
+/* 非中文版里，宋体/黑体负责的标题仍会遇到 ’ “ ” 等标点：思源字体默认给全角字宽，用 pwid 改成比例宽度（v1.1） */
+html[lang="en"] .page, html[lang="en"] .page * { font-variant-east-asian: proportional-width; }   /* 要写到每个元素上：font 简写会把它重置 */
+html[lang="en"] .page { hyphenate-character: "-"; }   /* 自动断词默认用 U+2010，思源字体里它是全角宽度 */
 h1, h2, h3, h4, p, figure, blockquote, ul, ol, dl, dd { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
 strong { font-weight: 700; }

@@ -1,0 +1,42 @@
+{
+  "contract": 1,
+  "build_id": "c063f2f71ce6",
+  "fingerprint": "c063f2f71ce6a93aa9fba2b1a770801a774ec0d1d9ac1f09b0df9e267d1e452b",
+  "tools": {
+    "contract": 1,
+    "playwright": "1.64.1",
+    "chromium": "156.0.8078.4",
+    "executable": "playwright-bundled",
+    "node": "22",
+    "tool_hash": "eebe4d8d3c87f60c90b4cdb82f065c161ba2b5fcf26522ad7b330c2628b63d43"
+  },
+  "languages": {
+    "zh-CN": {
+      "checks": {
+        "render": "pass",
+        "measure": "pass",
+        "postflight": "pass",
+        "raster": "pass",
+        "coverage": "pass"
+      },
+      "pdf": ".build/c063f2f71ce6/zh-CN/book.pdf",
+      "pdf_sha256": "470bcbd858ce5e7ace382ec10afe28965fc187ac2f022cacb2e3a79f68dcb161",
+      "pages": 16
+    },
+    "en": {
+      "checks": {
+        "render": "pass",
+        "measure": "pass",
+        "postflight": "pass",
+        "raster": "pass",
+        "coverage": "pass"
+      },
+      "pdf": ".build/c063f2f71ce6/en/book.pdf",
+      "pdf_sha256": "05264799a3382cf1e64d0d84fae47be3fcd0cada0c8af570a300fdc49f8f3d8a",
+      "pages": 16
+    }
+  },
+  "status": "deliverable",
+  "blocking": [],
+  "visual_review": "not-recorded"
+}
