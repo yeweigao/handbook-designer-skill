@@ -1,0 +1,8 @@
+/* Folio specimen: only compositions specific to these eight pages.
+   Typography, surfaces, grids, spacing, image ratios and crops come from design.css. */
+.fsp-table { border-collapse: collapse; table-layout: fixed; }
+.fsp-table th, .fsp-table td { text-align: left; vertical-align: top; }
+.fsp-table th:first-child { width: 18%; }
+.fsp-table th:not(:first-child), .fsp-table td { padding-left: var(--fl-space-3); }
+.fsp-panorama { --fl-panorama-top: 76mm; --fl-panorama-height: 150mm; }
+.fsp-panorama-note { max-width: 34ic; }

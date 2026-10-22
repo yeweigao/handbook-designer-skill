@@ -1,0 +1,61 @@
+/* Folio 1.0.0 · shared print design tokens.
+   Edit these source modules, then regenerate design.css with dev/build-folio-css.py.
+   CSS px are physical print sizes; changing paper dimensions does not scale type. */
+:root {
+  --fl-paper: #FFFEFA;
+  --fl-soft: #F0EEE8;
+  --fl-ink: #202B32;
+  --fl-muted: #56616A;
+  --fl-accent: #164BE8;
+  --fl-dark: #182238;
+  --fl-on-dark: #FFFEFA;
+  --fl-on-dark-muted: #CDD5E2;
+  --fl-on-dark-accent: #B7CCFF;
+  --fl-line: #B7BEC6;
+  --fl-line-dark: #78869E;
+
+  --fl-font-display: "Noto Serif SC", serif;
+  --fl-font-body: "Noto Sans SC", sans-serif;
+  --fl-font-label: "Inter", "Noto Sans SC", sans-serif;
+  --fl-font-number: "Inter", "Noto Sans SC", sans-serif;
+  --fl-weight-display: 700;
+  --fl-weight-body: 400;
+  --fl-weight-body-strong: 700;
+  --fl-weight-label: 400;
+  --fl-weight-label-strong: 600;
+  --fl-weight-number: 600;
+
+  --fl-size-aux: 11px;
+  --fl-size-key: 13px;
+  --fl-size-body: 16px;
+  --fl-size-lead: 20px;
+  --fl-size-h3: 24px;
+  --fl-size-h2: 32px;
+  --fl-size-h1: 46px;
+  --fl-size-display: 64px;
+  --fl-size-hero: 112px;
+  --fl-leading-body: 1.75;
+  --fl-leading-lead: 1.6;
+  --fl-leading-tight: 1.25;
+  --fl-leading-display: 1.12;
+  --fl-tracking-tight: -.02em;
+  --fl-tracking-normal: 0;
+  --fl-tracking-wide: .12em;
+
+  --fl-baseline: 28px;
+  --fl-space-0: 0px;
+  --fl-space-1: 7px;
+  --fl-space-2: 14px;
+  --fl-space-3: 28px;
+  --fl-space-4: 42px;
+  --fl-space-5: 56px;
+  --fl-space-6: 84px;
+  --fl-gutter: 6mm;
+  --fl-margin-top: 18mm;
+  --fl-margin-bottom: 21mm;
+  --fl-margin-inner: 19mm;
+  --fl-margin-outer: 15mm;
+  --fl-hair: 1px;
+  --fl-rule: 2px;
+  --fl-measure: 34ic;
+}

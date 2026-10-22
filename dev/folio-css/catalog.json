@@ -1,0 +1,377 @@
+{
+  "version": "1.0.0",
+  "layouts": [
+    {
+      "id": "flow",
+      "title": "行间与段间",
+      "category": "reading",
+      "description": "同一组间距控制段落推进与短信息并列，适合开篇、说明和页内元信息。",
+      "grammar": "stack 纵向排列；cluster 依内容宽度换行。原子可覆盖 gap，而文字本身自然增高。",
+      "classes": [
+        "fl-l-stack",
+        "fl-l-cluster",
+        "fl-gap-2",
+        "fl-gap-4"
+      ],
+      "limits": "cluster 适合短标签与元信息；长正文保留独立阅读路径。它们不限制高度，也不自动截断内容。",
+      "html": "<article class=\"fl-l-stack fl-gap-4\">\n  <header class=\"fl-l-stack fl-gap-2\"><p class=\"fl-kicker\">FIELD NOTES / 观察笔记</p><h2 class=\"fl-h2\">先看见，再命名。</h2></header>\n  <p class=\"fl-lead\">同一页中，标题、引言和正文有不同的停顿。</p>\n  <p class=\"fl-body fl-measure\">先写下眼前的形状、颜色和方向。暂时不急着下结论，让一个细节带来下一个问题。</p>\n  <footer class=\"fl-l-cluster fl-key fl-text-muted\"><span>观察</span><span>记录</span><span>回看</span></footer>\n</article>"
+    },
+    {
+      "id": "split",
+      "title": "双栏阅读",
+      "category": "reading",
+      "description": "把相关但独立的两段阅读放在相同的栏宽里，形成安静、稳定的节拍。",
+      "grammar": "六轨各占三轨；列间共享 --fl-gutter；fl-l-full 可穿越两栏。",
+      "classes": [
+        "fl-l-split",
+        "fl-l-full"
+      ],
+      "limits": "双栏不是自动多栏排文；按 DOM 先左后右阅读。续接长文需人工确定段落分界，不把完整句子切在两栏之间。",
+      "html": "<article class=\"fl-l-split\">\n  <h2 class=\"fl-l-full fl-h2\">一处地方，两次观察。</h2>\n  <div class=\"fl-prose fl-body\"><h3 class=\"fl-h3 fl-mb-2\">第一次：看整体</h3><p>从远处确认地形与路径。光线落在哪里，人或植物集中在哪里？先建立一张粗略的空间印象。</p><p>记录最先吸引你的东西，也写下尚未理解的部分。</p></div>\n  <div class=\"fl-prose fl-body\"><h3 class=\"fl-h3 fl-mb-2\">第二次：看细节</h3><p>靠近一个具体对象，观察边缘、纹理与相邻关系。让描述比判断先发生。</p><p>把两次记录并排放在一起，变化本身也可以成为线索。</p></div>\n</article>"
+    },
+    {
+      "id": "sidebar-offset",
+      "title": "主文与侧栏",
+      "category": "reading",
+      "description": "让正文承担完整论述，短旁注提供词义、来源或另一种观察角度；左右可以交换。",
+      "grammar": "sidebar=主文四轨＋旁注两轨；offset=旁注两轨＋主文四轨。两者沿同一六轨线。",
+      "classes": [
+        "fl-l-sidebar",
+        "fl-l-offset",
+        "fl-l-main",
+        "fl-l-aside",
+        "fl-l-full"
+      ],
+      "limits": "旁注应是短的辅助阅读，不是把装不下的正文塞进窄栏。相同页面内可交换主次位置，但保持明确读序。",
+      "html": "<div class=\"fl-l-stack fl-gap-5\">\n  <article class=\"fl-l-sidebar\"><div class=\"fl-l-main fl-prose\"><h3 class=\"fl-h3 fl-mb-2\">主文先说清楚</h3><p class=\"fl-body\">记录一次观察，不只是列出物体的名称。我们也可以描述它与环境的关系：朝向、距离，以及随着时间发生的变化。</p></div><aside class=\"fl-l-aside fl-key fl-text-muted\"><p class=\"fl-kicker fl-mb-2\">旁注</p><p>将一个术语或一个来源放在这里，正文仍能独立读完。</p></aside></article>\n  <article class=\"fl-l-offset\"><aside class=\"fl-l-aside fl-key fl-text-muted\">另一种起笔：先给一个短问题。</aside><div class=\"fl-l-main\"><h3 class=\"fl-h3 fl-mb-2\">哪些变化值得回来再看？</h3><p class=\"fl-body\">让问题占据较窄的位置，把展开它的论述留在宽栏中。</p></div></article>\n</div>"
+    },
+    {
+      "id": "marginalia",
+      "title": "贴近段落的旁注",
+      "category": "reading",
+      "description": "注释和它解释的段落成对排布，读者不用在整页中寻找关联。",
+      "grammar": "每个 fl-l-pair 独立成行；左侧 1 份为短注，右侧 3 份为主文；以首行基线对齐。",
+      "classes": [
+        "fl-l-marginalia",
+        "fl-l-pair",
+        "fl-l-main",
+        "fl-l-aside"
+      ],
+      "limits": "1:3 是旁注自身的局部比例，不宣称沿六轨 2+4。每条旁注只对应同一 pair 的正文；长注应移到正文或页末。",
+      "html": "<article class=\"fl-l-marginalia\">\n  <section class=\"fl-l-pair\"><aside class=\"fl-l-aside fl-aux fl-text-muted\">01 / 位置<br>先有参照，再谈变化。</aside><div class=\"fl-l-main\"><h3 class=\"fl-h3 fl-mb-2\">找到共同的起点</h3><p class=\"fl-body\">每次观察都从同一个位置开始。这样回看记录时，我们更容易判断变化来自对象，还是来自观察角度。</p></div></section>\n  <section class=\"fl-l-pair\"><aside class=\"fl-l-aside fl-aux fl-text-muted\">02 / 时间<br>记下日期与光线。</aside><div class=\"fl-l-main\"><h3 class=\"fl-h3 fl-mb-2\">给记录一个时间坐标</h3><p class=\"fl-body\">同一处景物在不同时间有不同面貌。把观察发生的时间放在描述附近，让后来的比较有依据。</p></div></section>\n</article>"
+    },
+    {
+      "id": "hanging",
+      "title": "悬挂编号",
+      "category": "information",
+      "description": "编号在正文之外建立稳定入口，正文保持完整的左对齐边。",
+      "grammar": "max-content 标签＋可伸展正文；首行基线对齐。标签宽度由真实内容决定。",
+      "classes": [
+        "fl-l-hanging",
+        "fl-l-label",
+        "fl-l-main"
+      ],
+      "limits": "标签宜短；长标题放入正文。这里的编号表示顺序，大小和间距不表示数量。",
+      "html": "<div class=\"fl-l-stack fl-gap-4\">\n  <section class=\"fl-l-hanging\"><span class=\"fl-l-label fl-number fl-size-h2\">01</span><div class=\"fl-l-main\"><h3 class=\"fl-h3 fl-mb-2\">选定一个对象</h3><p class=\"fl-body\">从一片叶、一块石头或一道水流开始，给观察一个清楚的范围。</p></div></section>\n  <section class=\"fl-l-hanging\"><span class=\"fl-l-label fl-number fl-size-h2\">02</span><div class=\"fl-l-main\"><h3 class=\"fl-h3 fl-mb-2\">留下可比较的描述</h3><p class=\"fl-body\">写下位置、尺度和可见细节，让下一次观察可以接续这一次。</p></div></section>\n</div>"
+    },
+    {
+      "id": "comparison",
+      "title": "同行对照",
+      "category": "information",
+      "description": "把同一维度的两个观察放在真实的同一行，长内容增高时仍保持对照关系。",
+      "grammar": "六轨 3+3；fl-l-pair 横跨全宽，再以 subgrid 继承列轴；每对内容共同决定行高。",
+      "classes": [
+        "fl-l-comparison",
+        "fl-l-pair"
+      ],
+      "limits": "每一行比较相同问题。未知值明确标示，不为了对称编造信息；这不是面积或长度图表。",
+      "html": "<article class=\"fl-l-comparison\">\n  <h3 class=\"fl-h3\">远看</h3><h3 class=\"fl-h3\">近看</h3>\n  <div class=\"fl-l-pair fl-rule fl-pt-2\"><p class=\"fl-body\">确认整体轮廓与环境。</p><p class=\"fl-body\">观察边缘、纹理与细小差异。</p></div>\n  <div class=\"fl-l-pair fl-rule fl-pt-2\"><p class=\"fl-body\">记录对象之间的距离和方向。</p><p class=\"fl-body\">记录同一对象内部的形状与结构。</p></div>\n  <div class=\"fl-l-pair fl-rule fl-pt-2\"><p class=\"fl-body\">适合提出一个范围较大的问题。</p><p class=\"fl-body\">适合为问题寻找一个具体的线索。</p></div>\n</article>"
+    },
+    {
+      "id": "chronology",
+      "title": "时间与事件",
+      "category": "information",
+      "description": "让短时间标签形成查阅入口，解释内容自然展开，不让段落长短打乱两列关系。",
+      "grammar": "每个 fl-l-item 是标签＋正文的一行；统一 --fl-label-width，默认 5.5em。",
+      "classes": [
+        "fl-l-chronology",
+        "fl-l-item",
+        "fl-l-label",
+        "fl-l-main"
+      ],
+      "limits": "这是按序排列的文字，不是按比例绘制的时间轴。标签较长时增宽列或改用表格，不缩小正文。",
+      "html": "<div class=\"fl-l-chronology\" style=\"--fl-label-width:6em\">\n  <section class=\"fl-l-item\"><p class=\"fl-l-label fl-number fl-size-lead\">抵达时</p><div class=\"fl-l-main\"><h3 class=\"fl-h3 fl-mb-1\">建立地点印象</h3><p class=\"fl-body\">记下方位、地形与天气，画一个简单的观察位置图。</p></div></section>\n  <section class=\"fl-l-item\"><p class=\"fl-l-label fl-number fl-size-lead\">观察中</p><div class=\"fl-l-main\"><h3 class=\"fl-h3 fl-mb-1\">跟随一个细节</h3><p class=\"fl-body\">记录具体的形状、行为或变化，并区分看到的事实与自己的解释。</p></div></section>\n  <section class=\"fl-l-item\"><p class=\"fl-l-label fl-number fl-size-lead\">离开前</p><div class=\"fl-l-main\"><h3 class=\"fl-h3 fl-mb-1\">留下下次的问题</h3><p class=\"fl-body\">回看记录，写下一件仍想确认的事。</p></div></section>\n</div>"
+    },
+    {
+      "id": "photo-pair",
+      "title": "并置的两张照片",
+      "category": "photography",
+      "description": "用同等宽度并置两个视角，靠照片内容与图注建立关系。",
+      "grammar": "六轨各占三轨；比例由图框原子决定，照片不被拉伸。",
+      "classes": [
+        "fl-l-photo-pair",
+        "fl-frame",
+        "fl-ratio-portrait",
+        "fl-l-full"
+      ],
+      "limits": "同宽不等于同地点或同时间。若作事实比较，图注必须交代可比条件。每张图独立选择焦点。",
+      "html": "<div class=\"fl-l-photo-pair\">\n  <figure><figure class=\"fl-frame fl-ratio-portrait\"><img src=\"../samples/native/nature-camp/assets/images/forest-cc0.jpg\" alt=\"树木与林地\" loading=\"lazy\"></figure><figcaption class=\"fl-caption fl-mt-2\">01 / 林地的层次</figcaption></figure>\n  <figure><figure class=\"fl-frame fl-ratio-portrait\"><img src=\"../samples/native/nature-camp/assets/images/clear-stream.jpg\" alt=\"清澈水流\" loading=\"lazy\"></figure><figcaption class=\"fl-caption fl-mt-2\">02 / 水面与石头</figcaption></figure>\n  <p class=\"fl-l-full fl-key fl-text-muted\">不同地点的素材，用于展示观察尺度；并置不表示同一次活动。</p>\n</div>"
+    },
+    {
+      "id": "photo-essay",
+      "title": "主图与两个细节",
+      "category": "photography",
+      "description": "让一张主图建立场景，再用两张较小的照片补充不同观察尺度。",
+      "grammar": "主图占四轨，辅助图组占两轨；两张辅图沿同一列边排列，共享沟槽。",
+      "classes": [
+        "fl-l-photo-essay",
+        "fl-l-main",
+        "fl-l-aside",
+        "fl-l-full"
+      ],
+      "limits": "主图必须有叙事任务。辅助图不能只是为了填满空位；比例和焦点需随素材调整。",
+      "html": "<div class=\"fl-l-photo-essay\">\n  <figure class=\"fl-l-main fl-frame fl-ratio-portrait\"><img src=\"../samples/native/nature-camp/assets/images/forest-cc0.jpg\" alt=\"作为主图的林地场景\" loading=\"lazy\"></figure>\n  <div class=\"fl-l-aside\"><figure class=\"fl-frame fl-ratio-square\"><img src=\"../samples/native/nature-camp/assets/images/autumn-leaves.jpg\" alt=\"叶片细节\" loading=\"lazy\"></figure><figure class=\"fl-frame fl-ratio-square\"><img src=\"../samples/native/nature-camp/assets/images/waterfall-moss.jpg\" alt=\"苔藓与水流\" loading=\"lazy\"></figure></div>\n  <div class=\"fl-l-full\"><h3 class=\"fl-h3 fl-mb-2\">从场景，到纹理。</h3><p class=\"fl-caption\">主图建立环境，两张辅助照片展示形状与质地。本组为不同地点的示例素材。</p></div>\n</div>"
+    },
+    {
+      "id": "contact",
+      "title": "六图接触印样",
+      "category": "photography",
+      "description": "以重复的框和间距方便扫描六个视角，让图像差异成为内容。",
+      "grammar": "三列两行；每幅图使用相同比例，图注与图片处于同一个 figure。",
+      "classes": [
+        "fl-l-contact",
+        "fl-frame",
+        "fl-ratio-photo",
+        "fl-l-full"
+      ],
+      "limits": "按 DOM 从左到右、从上到下阅读。编号只标识图像；若需要先后顺序，在图注明确，不让版位暗示未证实的时间关系。",
+      "html": "<div class=\"fl-l-contact\">\n  <figure><figure class=\"fl-frame fl-ratio-photo\"><img src=\"../samples/native/nature-camp/assets/images/forest-cc0.jpg\" alt=\"林地\" loading=\"lazy\"></figure><figcaption class=\"fl-caption fl-mt-1\">01 / 林地</figcaption></figure>\n  <figure><figure class=\"fl-frame fl-ratio-photo\"><img src=\"../samples/native/nature-camp/assets/images/clear-stream.jpg\" alt=\"水流\" loading=\"lazy\"></figure><figcaption class=\"fl-caption fl-mt-1\">02 / 水流</figcaption></figure>\n  <figure><figure class=\"fl-frame fl-ratio-photo\"><img src=\"../samples/native/nature-camp/assets/images/autumn-leaves.jpg\" alt=\"叶片\" loading=\"lazy\"></figure><figcaption class=\"fl-caption fl-mt-1\">03 / 叶片</figcaption></figure>\n  <figure><figure class=\"fl-frame fl-ratio-photo\"><img src=\"../samples/native/nature-camp/assets/images/waterfall-moss.jpg\" alt=\"苔藓\" loading=\"lazy\"></figure><figcaption class=\"fl-caption fl-mt-1\">04 / 苔藓</figcaption></figure>\n  <figure><figure class=\"fl-frame fl-ratio-photo\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" alt=\"海岸\" loading=\"lazy\"></figure><figcaption class=\"fl-caption fl-mt-1\">05 / 海岸</figcaption></figure>\n  <figure><figure class=\"fl-frame fl-ratio-photo\"><img src=\"../samples/native/nature-camp/assets/images/milky-way-arch.jpg\" alt=\"星空\" loading=\"lazy\"></figure><figcaption class=\"fl-caption fl-mt-1\">06 / 星空</figcaption></figure>\n  <p class=\"fl-l-full fl-key fl-text-muted\">六个不同地点的观察主题。图像来源沿用样册素材记录。</p>\n</div>"
+    },
+    {
+      "id": "masonry",
+      "title": "有边界的组图",
+      "category": "photography",
+      "description": "固定列边、沟槽和共同底线，按照片内容人工安排高低关系。",
+      "grammar": "三列共用 --fl-masonry-height；每列 --fl-masonry-rows 明确两张照片的高度比例。",
+      "classes": [
+        "fl-l-masonry",
+        "fl-l-column",
+        "fl-frame",
+        "fl-l-full"
+      ],
+      "limits": "这里不使用自动最短列填充。每列必须有两张图片，图注放在有界图像场之外；仅图框裁切图片，不裁文字。",
+      "html": "<div class=\"fl-l-masonry\" style=\"--fl-masonry-height:105mm\">\n  <div class=\"fl-l-column\" style=\"--fl-masonry-rows:minmax(0,1fr) minmax(0,1.35fr)\"><figure class=\"fl-frame\"><img src=\"../samples/native/nature-camp/assets/images/forest-cc0.jpg\" alt=\"上部林地\" loading=\"lazy\"></figure><figure class=\"fl-frame\"><img src=\"../samples/native/nature-camp/assets/images/autumn-leaves.jpg\" alt=\"下部叶片\" loading=\"lazy\"></figure></div>\n  <div class=\"fl-l-column\" style=\"--fl-masonry-rows:minmax(0,1.7fr) minmax(0,1fr)\"><figure class=\"fl-frame\"><img src=\"../samples/native/nature-camp/assets/images/waterfall-moss.jpg\" alt=\"上部苔藓水流\" loading=\"lazy\"></figure><figure class=\"fl-frame\"><img src=\"../samples/native/nature-camp/assets/images/clear-stream.jpg\" alt=\"下部清澈溪流\" loading=\"lazy\"></figure></div>\n  <div class=\"fl-l-column\" style=\"--fl-masonry-rows:minmax(0,1fr) minmax(0,1.8fr)\"><figure class=\"fl-frame\"><img src=\"../samples/native/nature-camp/assets/images/milky-way-arch.jpg\" alt=\"上部星空\" loading=\"lazy\"></figure><figure class=\"fl-frame\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" alt=\"下部海岸\" loading=\"lazy\"></figure></div>\n  <div class=\"fl-l-full\"><h3 class=\"fl-h3 fl-mb-2\">共同的边，不同的节拍。</h3><p class=\"fl-caption\">按列从上到下：林地／叶片，水流／溪流，星空／海岸。来自不同地点，示范裁切与图组节奏。</p></div>\n</div>"
+    },
+    {
+      "id": "stagger",
+      "title": "错位的图像叙事",
+      "category": "photography",
+      "description": "让相邻照片从不同高度进入视线，图注给读者一条明确路径。",
+      "grammar": "两列；偶数项下移 --fl-stagger-step；每项占据正常文流，不相互遮盖。",
+      "classes": [
+        "fl-l-stagger",
+        "fl-l-item",
+        "fl-l-full"
+      ],
+      "limits": "错位不能代替读序。保持 DOM 顺序、编号与图注一致，勿把不同地点的素材写成真实连续行程。",
+      "html": "<div class=\"fl-l-stagger\">\n  <figure class=\"fl-l-item\"><figure class=\"fl-frame fl-ratio-portrait\"><img src=\"../samples/native/nature-camp/assets/images/forest-cc0.jpg\" alt=\"林地远景\" loading=\"lazy\"></figure><figcaption class=\"fl-caption fl-mt-2\">01 / 先看环境的层次</figcaption></figure>\n  <figure class=\"fl-l-item\"><figure class=\"fl-frame fl-ratio-portrait\"><img src=\"../samples/native/nature-camp/assets/images/autumn-leaves.jpg\" alt=\"叶片细节\" loading=\"lazy\"></figure><figcaption class=\"fl-caption fl-mt-2\">02 / 再靠近一种纹理</figcaption></figure>\n  <p class=\"fl-l-full fl-body\">这是从整体到局部的阅读顺序。两张素材不代表同一地点。</p>\n</div>"
+    },
+    {
+      "id": "edge-photo",
+      "title": "照片走到页边",
+      "category": "photography",
+      "description": "阅读区和照片各有完整空间，让照片触及裁切边形成页面的尺度感。",
+      "grammar": "bleed-bottom 用 --fl-image-height 保留下部图像场；bleed-side 用 --fl-image-width 保留右侧图像场。文字使用 fl-area 安全边距。",
+      "classes": [
+        "fl-l-bleed-bottom",
+        "fl-l-bleed-side",
+        "fl-l-photo",
+        "fl-l-copy",
+        "fl-area"
+      ],
+      "limits": "放在 runtime .page 内。照片和底层容器需要准确 data-bleed；不要把文本放入图框。下方示范 A5 几何，真实成品尺寸由项目控制；切换侧图时将图片出血声明改为 top right bottom。",
+      "html": "<section class=\"page\" data-side=\"right\" style=\"--trim-w:148mm;--trim-h:210mm;--bleed:0mm;--media-w:148mm;--media-h:210mm;position:relative;width:var(--media-w);height:var(--media-h)\">\n  <div class=\"fl-l-bleed-bottom\" style=\"--fl-image-height:44%\">\n    <figure class=\"fl-l-photo fl-frame\" data-bleed=\"left right bottom\"><img src=\"../samples/native/nature-camp/assets/images/forest-cc0.jpg\" alt=\"林地场景\" data-bleed=\"left right bottom\"></figure>\n    <div class=\"fl-l-copy fl-area fl-l-stack fl-gap-3\"><p class=\"fl-kicker\">FIELD NOTES</p><h2 class=\"fl-h1\">让阅读<br>走向风景。</h2><p class=\"fl-body\">上半页展开一个简短的想法，下半页把它带回具体的环境。文字保有稳定的行长，照片获得完整的宽度。</p></div>\n  </div>\n</section>",
+      "previewHeight": 800
+    },
+    {
+      "id": "overlay",
+      "title": "图文跨过边界",
+      "category": "photography",
+      "description": "标题跨越白边与图像边界，让两种材料产生联系，仍保持独立可编辑。",
+      "grammar": "六轨中图片占第二至第六轨；标题占第一至第五轨，位于较高层。布局不自动添加遮罩或底色。",
+      "classes": [
+        "fl-l-overlay",
+        "fl-l-photo",
+        "fl-l-copy",
+        "fl-l-caption"
+      ],
+      "limits": "对比处理必须针对真实照片；可选表面原子只用于所需文字区域。标题保持简短，不将长段落直接压在复杂图像上。",
+      "html": "<article class=\"fl-l-overlay\" style=\"--fl-overlay-min:100mm\">\n  <figure class=\"fl-l-photo fl-frame\"><img src=\"../samples/native/nature-camp/assets/images/forest-cc0.jpg\" alt=\"林地照片，作为可独立替换的图层\" loading=\"lazy\"></figure>\n  <div class=\"fl-l-copy\"><h2 class=\"fl-h1 fl-leading-display\"><span class=\"fl-surface-paper fl-px-2\">走近一点，</span><br><span class=\"fl-surface-paper fl-px-2\">再看一次。</span></h2></div>\n  <p class=\"fl-l-caption fl-caption\">照片、文字及局部阅读底各自独立；这里主动使用纸色原子保证字后对比，布局本身不带底框。</p>\n</article>"
+    },
+    {
+      "id": "panorama",
+      "title": "同一场景的面对页",
+      "category": "photography",
+      "description": "一幅照片跨越真正相邻的左右页，共用裁切坐标，让风景连续经过书脊。",
+      "grammar": "完整图像场宽 2×trim-w＋2×bleed；左页位移 0，右页位移 −trim-w。两页同源、同高、同焦点，先共同裁切再分开观察。",
+      "classes": [
+        "fl-l-panorama",
+        "fl-l-panorama-image",
+        "fl-area"
+      ],
+      "limits": "正式书序必须偶数左页＋下一奇数右页；data-side 声明不替代页序验证。两页的 top/height/src/focus 必须一致，关键主体避开中缝。下方是零出血的 A5 并置演示；生产时保留 runtime bleed，检查裁切后拼合，不能直接把含出血的两张页面边缘相接。",
+      "html": "<div class=\"fl-flex\" style=\"--trim-w:148mm;--trim-h:210mm;--bleed:0mm;--media-w:148mm;--media-h:210mm;--fl-panorama-top:0mm;--fl-panorama-height:133mm;--fl-focus-x:50%;--fl-focus-y:50%;width:calc(2 * var(--media-w))\">\n  <section class=\"page fl-shrink-0\" data-side=\"left\" data-spread=\"forest\" style=\"position:relative;width:var(--media-w);height:var(--media-h)\">\n    <figure class=\"fl-l-panorama\" data-side=\"left\" data-bleed=\"left right top\"><img class=\"fl-l-panorama-image\" src=\"../samples/native/nature-camp/assets/images/forest-cc0.jpg\" alt=\"同一林地场景的左半页\" data-bleed=\"left right top\"></figure>\n    <div class=\"fl-area\" style=\"top:145mm\"><p class=\"fl-kicker fl-mb-2\">一幅景观 / 左页</p><h2 class=\"fl-h2\">让目光<br>继续向前。</h2></div>\n  </section>\n  <section class=\"page fl-shrink-0\" data-side=\"right\" data-spread=\"forest\" style=\"position:relative;width:var(--media-w);height:var(--media-h)\">\n    <figure class=\"fl-l-panorama\" data-side=\"right\" data-bleed=\"left right top\"><img class=\"fl-l-panorama-image\" src=\"../samples/native/nature-camp/assets/images/forest-cc0.jpg\" alt=\"同一林地场景的右半页\" data-bleed=\"left right top\"></figure>\n    <div class=\"fl-area\" style=\"top:145mm\"><p class=\"fl-body\">两张页面共享同一个图像场。翻开的书页在中间相遇，照片的尺度与位置始终保持一致。</p><p class=\"fl-caption fl-mt-2\">照片：SpessiG，CC0 1.0。</p></div>\n  </section>\n</div>",
+      "previewHeight": 800,
+      "ratio": "296 / 210"
+    },
+    {
+      "id": "typographic",
+      "title": "文字的停顿",
+      "category": "reading",
+      "description": "用短句的尺度、偏置的小声部与留白，让一页成为阅读中的停顿。",
+      "grammar": "标题横跨六轨；下部两轨短声部＋四轨主文；纵向停顿使用 space token。字体与字号由原子决定。",
+      "classes": [
+        "fl-l-typographic",
+        "fl-l-title",
+        "fl-l-aside",
+        "fl-l-main"
+      ],
+      "limits": "大字只承载短思想，不是长文章容器。中文词组和英文专名保持完整；若标题过长就换尺度或换布局，而非隐藏溢出。",
+      "html": "<article class=\"fl-l-typographic\">\n  <h2 class=\"fl-l-title fl-display fl-leading-display fl-balance\">慢一点。<br>看得更多。</h2>\n  <p class=\"fl-l-aside fl-key fl-text-muted\">留白不是<br>尚未填满。</p>\n  <div class=\"fl-l-main fl-prose fl-body\"><p>当一个想法足够重要，可以给它一个更慢的入口。</p><p>让标题先发生，再让较小的声音接住它。共同的对齐关系让页面仍然完整。</p></div>\n</article>"
+    }
+  ],
+  "components": [
+    {
+      "id": "opening",
+      "title": "眉题、标题、导语",
+      "category": "reading",
+      "description": "三个不同阅读速度组成一个开篇：定位、命题、展开。",
+      "grammar": "stack＋角色字级＋固定段间距；字号、字重和颜色均可独立替换。",
+      "classes": [
+        "fl-l-stack",
+        "fl-kicker",
+        "fl-h1",
+        "fl-lead",
+        "fl-gap-2"
+      ],
+      "limits": "眉题提供语境，不重复标题。导语宜短；长论述进入正文，不持续放大字号。",
+      "html": "<header class=\"fl-l-stack fl-gap-2\">\n  <p class=\"fl-kicker fl-text-muted\">观察练习 / 第一章</p>\n  <h2 class=\"fl-h1 fl-balance\">从熟悉的地方<br>发现一个新问题。</h2>\n  <p class=\"fl-lead fl-mt-2\">给第一次看见的细节留一个位置，也给尚未理解的事留一点时间。</p>\n</header>"
+    },
+    {
+      "id": "quotation",
+      "title": "引文与署名",
+      "category": "reading",
+      "description": "引文通过独立字级和留白获得第二种阅读速度，署名紧跟其后。",
+      "grammar": "blockquote 内使用 stack；引文 display 字体＋lead 尺度，署名为 key 角色。",
+      "classes": [
+        "fl-l-stack",
+        "fl-font-display",
+        "fl-size-h3",
+        "fl-leading-lead",
+        "fl-key"
+      ],
+      "limits": "引用真实作者时保留原文、署名和出处。下方文字为本库编排示例，不借用人物名义。",
+      "html": "<blockquote class=\"fl-l-stack fl-gap-3 fl-py-3\">\n  <p class=\"fl-font-display fl-size-h3 fl-leading-lead\">“给一个细节足够的空间，<br>它会带来下一个问题。”</p>\n  <footer class=\"fl-key fl-text-muted\">Folio 编排示例 · 原创示例文案</footer>\n</blockquote>"
+    },
+    {
+      "id": "caption",
+      "title": "图片与分层图注",
+      "category": "photography",
+      "description": "图片、说明和来源各自清楚，却作为一个完整单元移动。",
+      "grammar": "figure 包含 frame、正文图注和较轻的来源行；全由原子与 stack 构成。",
+      "classes": [
+        "fl-frame",
+        "fl-ratio-wide",
+        "fl-caption",
+        "fl-aux",
+        "fl-l-stack"
+      ],
+      "limits": "说明写可见内容；来源保持可追溯。不要将图库照片说成项目现场。该例来源链接来自现有素材记录。",
+      "html": "<figure class=\"fl-l-stack fl-gap-2\">\n  <figure class=\"fl-frame fl-ratio-wide\"><img src=\"../samples/native/nature-camp/assets/images/forest-cc0.jpg\" alt=\"树木与林地\" loading=\"lazy\"></figure>\n  <figcaption class=\"fl-l-stack fl-gap-1\"><p class=\"fl-caption\">林地的远近层次。画面用于展示图注与照片的对应关系。</p><p class=\"fl-aux fl-text-muted\">SpessiG · Landscape of a wild forest · CC0 1.0<br><a href=\"https://commons.wikimedia.org/wiki/File:Landscape_of_a_wild_forest.jpg\">Wikimedia Commons 素材来源</a></p></figcaption>\n</figure>"
+    },
+    {
+      "id": "number-unit",
+      "title": "数字、单位与解释",
+      "category": "information",
+      "description": "让关键数字成为入口，同时把单位和限定保留在旁边。",
+      "grammar": "baseline cluster 将大数字与单位对齐；下方短说明保持自然阅读尺度。",
+      "classes": [
+        "fl-l-cluster",
+        "fl-items-baseline",
+        "fl-number",
+        "fl-size-hero",
+        "fl-tabular",
+        "fl-key"
+      ],
+      "limits": "数字必须有真实来源与单位。示例 6 指本库网格的轨数，不是装饰性的业务指标。",
+      "html": "<div class=\"fl-l-stack fl-gap-2\">\n  <div class=\"fl-l-cluster fl-gap-2 fl-items-baseline\"><strong class=\"fl-number fl-size-hero fl-leading-display fl-tabular\">6</strong><span class=\"fl-key\">条对齐轨道</span></div>\n  <p class=\"fl-body\">可以组成 3＋3 双栏、4＋2 主文旁注，或完整的通栏。</p>\n  <p class=\"fl-caption fl-text-muted\">轨道定义对齐关系；正文实际行长由内容与字级决定。</p>\n</div>"
+    },
+    {
+      "id": "contents",
+      "title": "目录条目",
+      "category": "information",
+      "description": "章节号、标题和页码保持稳定关系，读者能快速寻找目标。",
+      "grammar": "hanging 外置编号；正文内部 flex 将标题与页码分开，下方放简短说明。",
+      "classes": [
+        "fl-l-stack",
+        "fl-l-hanging",
+        "fl-l-label",
+        "fl-l-main",
+        "fl-flex",
+        "fl-justify-between"
+      ],
+      "limits": "目录页码在成册后核对；示例页码只演示关系。标题长度变动时允许换行，不用省略号掩盖内容。",
+      "html": "<nav aria-label=\"示例目录\" class=\"fl-l-stack fl-gap-4\">\n  <div class=\"fl-l-hanging\"><span class=\"fl-l-label fl-number fl-size-lead\">01</span><div class=\"fl-l-main\"><div class=\"fl-flex fl-justify-between fl-gap-3 fl-items-baseline\"><span class=\"fl-h3\">走进现场</span><span class=\"fl-number fl-key\">04</span></div><p class=\"fl-key fl-text-muted fl-mt-1\">认识环境，找到观察的起点。</p></div></div>\n  <div class=\"fl-l-hanging\"><span class=\"fl-l-label fl-number fl-size-lead\">02</span><div class=\"fl-l-main\"><div class=\"fl-flex fl-justify-between fl-gap-3 fl-items-baseline\"><span class=\"fl-h3\">留下记录</span><span class=\"fl-number fl-key\">12</span></div><p class=\"fl-key fl-text-muted fl-mt-1\">从描述出发，再组织自己的解释。</p></div></div>\n</nav>"
+    },
+    {
+      "id": "question-answer",
+      "title": "问答条目",
+      "category": "reading",
+      "description": "问题成为明确入口，回答保有连续段落，不用每条套一个提示框。",
+      "grammar": "两个 hanging 行；Q/A 使用相同标签位置，回答维持正文尺度。",
+      "classes": [
+        "fl-l-stack",
+        "fl-l-hanging",
+        "fl-l-label",
+        "fl-l-main",
+        "fl-h3",
+        "fl-body"
+      ],
+      "limits": "真实问答应完整回应问题。回答较长时可以继续自然段或续页，不固定条目高度。",
+      "html": "<article class=\"fl-l-stack fl-gap-3\">\n  <div class=\"fl-l-hanging\"><span class=\"fl-l-label fl-key fl-text-muted\">Q</span><h3 class=\"fl-l-main fl-h3\">一定要先知道名称，才能开始观察吗？</h3></div>\n  <div class=\"fl-l-hanging\"><span class=\"fl-l-label fl-key fl-text-muted\">A</span><div class=\"fl-l-main fl-prose fl-body\"><p>可以先描述你看见的东西。形状、位置、颜色和变化，都是有效的记录。</p><p>找到名称之后，再回看原来的描述。比较两者，会帮助你发现哪些细节最有区分力。</p></div></div>\n</article>"
+    },
+    {
+      "id": "checklist",
+      "title": "可勾选清单",
+      "category": "information",
+      "description": "让勾选标记承担实际记录用途，条目之间用行距组织。",
+      "grammar": "stack＋hanging；fl-check 是固定大小的功能标记，正文仍自然换行。",
+      "classes": [
+        "fl-l-stack",
+        "fl-l-hanging",
+        "fl-check",
+        "fl-body"
+      ],
+      "limits": "清单是打印记录，不是浏览器交互表单。需要线上输入时应换成原生 input，并单独处理可访问名称。",
+      "html": "<section class=\"fl-l-stack fl-gap-3\">\n  <h3 class=\"fl-h3\">离开前，回看记录。</h3>\n  <div class=\"fl-l-hanging\"><span class=\"fl-l-label fl-check\" aria-hidden=\"true\"></span><p class=\"fl-l-main fl-body\">写下观察的位置与时间。</p></div>\n  <div class=\"fl-l-hanging\"><span class=\"fl-l-label fl-check\" aria-hidden=\"true\"></span><p class=\"fl-l-main fl-body\">区分看到的事实与自己的解释。</p></div>\n  <div class=\"fl-l-hanging\"><span class=\"fl-l-label fl-check\" aria-hidden=\"true\"></span><p class=\"fl-l-main fl-body\">留下一个下次想确认的问题。</p></div>\n</section>"
+    },
+    {
+      "id": "open-table",
+      "title": "开放式表格",
+      "category": "information",
+      "description": "通过列对齐和水平分隔呈现查阅信息，让完整数据保持可读。",
+      "grammar": "原生 table＋width 原子＋表头字重；横线加在行上，单元格使用相同 padding。",
+      "classes": [
+        "fl-w-full",
+        "fl-rule",
+        "fl-rule-strong",
+        "fl-key",
+        "fl-weight-strong",
+        "fl-py-2",
+        "fl-px-2"
+      ],
+      "limits": "真实表格保留全部行、单位与来源。不要把每行变成独立卡片；长表需要按实际内容分页并重复表头。",
+      "html": "<table class=\"fl-w-full fl-key\">\n  <caption class=\"fl-h3 fl-text-left fl-mb-3\">观察记录的三个维度</caption>\n  <thead><tr class=\"fl-rule-strong\"><th scope=\"col\" class=\"fl-py-2 fl-px-2 fl-weight-strong\">维度</th><th scope=\"col\" class=\"fl-py-2 fl-px-2 fl-weight-strong\">记录什么</th><th scope=\"col\" class=\"fl-py-2 fl-px-2 fl-weight-strong\">回看时的问题</th></tr></thead>\n  <tbody><tr class=\"fl-rule\"><th scope=\"row\" class=\"fl-py-2 fl-px-2 fl-weight-regular\">位置</th><td class=\"fl-py-2 fl-px-2\">方向与相邻关系</td><td class=\"fl-py-2 fl-px-2\">观察角度是否一致？</td></tr><tr class=\"fl-rule\"><th scope=\"row\" class=\"fl-py-2 fl-px-2 fl-weight-regular\">时间</th><td class=\"fl-py-2 fl-px-2\">日期与光照条件</td><td class=\"fl-py-2 fl-px-2\">变化可能来自什么？</td></tr><tr class=\"fl-rule\"><th scope=\"row\" class=\"fl-py-2 fl-px-2 fl-weight-regular\">细节</th><td class=\"fl-py-2 fl-px-2\">形状、颜色与质地</td><td class=\"fl-py-2 fl-px-2\">哪些差异值得再看？</td></tr></tbody>\n</table>"
+    }
+  ]
+}

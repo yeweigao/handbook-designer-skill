@@ -1,0 +1,61 @@
+{
+  "contract": 1,
+  "title": "看见之间 · Folio 观察小册",
+  "entry": "book.html",
+  "styles": [
+    "design.css",
+    "book.css"
+  ],
+  "languages": [
+    "zh-CN"
+  ],
+  "default_language": "zh-CN",
+  "canvas": {
+    "trim_mm": [
+      210,
+      297
+    ],
+    "bleed_mm": 3,
+    "safe_mm": 8
+  },
+  "binding": "digital",
+  "first_page": "right",
+  "content_mode": "carry",
+  "fonts": [
+    {
+      "family": "Noto Serif SC",
+      "file": "assets/fonts/NotoSerifSC-700.ttf",
+      "weight": "700",
+      "style": "normal"
+    },
+    {
+      "family": "Noto Sans SC",
+      "file": "assets/fonts/NotoSansSC-400.ttf",
+      "weight": "400",
+      "style": "normal"
+    },
+    {
+      "family": "Noto Sans SC",
+      "file": "assets/fonts/NotoSansSC-700.ttf",
+      "weight": "700",
+      "style": "normal"
+    },
+    {
+      "family": "Inter",
+      "file": "assets/fonts/Inter-400.ttf",
+      "weight": "400",
+      "style": "normal"
+    },
+    {
+      "family": "Inter",
+      "file": "assets/fonts/Inter-600.ttf",
+      "weight": "600",
+      "style": "normal"
+    }
+  ],
+  "family": {
+    "name": "folio",
+    "version": "1.0.0",
+    "sha256": "745ba92b976dbe8cee06de40ae0220fcc81907b590c1e11affb0d49039a7a4c7"
+  }
+}

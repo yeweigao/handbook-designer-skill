@@ -52,6 +52,8 @@ for p in sorted((r/'hb/core').rglob('*.mjs')) + sorted((r/'dev/tests/core').glob
     subprocess.run(['node', '--check', str(p)], check=True)
 print(f'PASS: SKILL.md {len(skill)} 字符，{len(docs)} 份文档链接、原生入口/归档边界、Python 3.10 语法与 JS 语法')
 PY
+python3 dev/build-folio-css.py --check | tee "$T/folio-css-build.log"
+
 echo '2 · 契约正例与反例'
 python3 hb/core/validate.py dev/fixtures/contract/minimal-zh | tee "$T/validate-minimal.log"
 python3 hb/core/validate.py dev/fixtures/contract/bilingual | tee "$T/validate-bilingual.log"

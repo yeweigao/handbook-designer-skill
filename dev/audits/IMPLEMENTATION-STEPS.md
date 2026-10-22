@@ -173,6 +173,14 @@ S1–S4 是地基：没有它们，后面任何页面都无法可靠渲染、测
 
 ---
 
+### S7 的用户追加范围 · 2026-10-22
+
+统一品牌为 **Folio CSS**。用户要求把原先简略的家族基因扩展为可组合的完整规则层：原子、可选布局、组件配方及交互展示。文字和摄影使用同一底层，不再建立 Campus/Photo 两套系统；Campus 与既有样册冻结以供历史复现。
+
+追加归属：`families/core/**`、`families/folio/**`、`families/README.md`、`dev/build-folio-css.py`、`dev/folio-css/**`、`dev/samples/native/folio-system/**`、`dev/tests/core/family-css.test.mjs`、selftest 的生成文件检查、对应作者入口文档及 `docs/plans/folio-css.md`。允许共享可选布局；组件以 HTML 组合公开，不变成运行时版式注册菜单。以实际浏览器组合、展示交互和最终 PDF 样册验证；不计为 S11 全量旧资产审计或 S12 独立生成基准。
+
+---
+
 ## S8 · 导出与离线交付
 
 **归属文件**：`hb/core/export.mjs`、`pack.py`、`editable_pdf.py`、`offline_html.py`、`compare_pdf.py`（均在 `hb/core/`）、`dev/tests/core/export.test.mjs`。

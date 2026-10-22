@@ -1,0 +1,181 @@
+/* Folio optional layouts · geometry and reading relationships only.
+   Named slots are ordinary semantic HTML. Type, colour, rules and space overrides
+   come from atoms loaded after this module; low-specificity :where() selectors
+   let a single atom override layout defaults; no component-specific paint lives here.
+   Text is never clipped or reduced to fit a layout. Choose another layout or page.
+   Catalogue + copyable examples: dev/folio-css/catalog.json. */
+
+:where(:where([class*="fl-l-"])) { min-width: 0; }
+
+:where(.fl-l-stack) { display: flex; flex-direction: column; gap: var(--fl-space-3); }
+:where(.fl-l-cluster) { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--fl-space-2) var(--fl-space-3); }
+
+/* Six shared tracks. A 4+2 split includes the same gutter as a 3+3 split;
+   two fractional columns in a 2:1 ratio would miss those shared grid lines. */
+:where(.fl-l-split,
+.fl-l-sidebar,
+.fl-l-offset,
+.fl-l-comparison,
+.fl-l-photo-pair,
+.fl-l-photo-essay,
+.fl-l-typographic) {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--fl-gutter);
+  align-items: start;
+}
+:where(.fl-l-split > *,
+.fl-l-comparison > *,
+.fl-l-photo-pair > *) { grid-column: span 3; }
+:where(.fl-l-sidebar > .fl-l-main) { grid-column: 1 / span 4; }
+:where(.fl-l-sidebar > .fl-l-aside) { grid-column: 5 / span 2; }
+:where(.fl-l-offset > .fl-l-aside) { grid-column: 1 / span 2; }
+:where(.fl-l-offset > .fl-l-main) { grid-column: 3 / span 4; }
+:where(.fl-l-split > .fl-l-full,
+.fl-l-sidebar > .fl-l-full,
+.fl-l-offset > .fl-l-full,
+.fl-l-comparison > .fl-l-full,
+.fl-l-photo-pair > .fl-l-full,
+.fl-l-photo-essay > .fl-l-full) { grid-column: 1 / -1; }
+
+/* Pair each note with its own passage, so note alignment follows content.
+   Repeat .fl-l-pair; a shared row number must never be hard-coded to text height. */
+:where(.fl-l-marginalia) { display: flex; flex-direction: column; gap: var(--fl-space-4); }
+:where(.fl-l-marginalia > .fl-l-pair) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  gap: var(--fl-gutter);
+  align-items: baseline;
+}
+:where(.fl-l-marginalia > .fl-l-pair > .fl-l-aside) { grid-column: 1; grid-row: 1; }
+:where(.fl-l-marginalia > .fl-l-pair > .fl-l-main) { grid-column: 2; grid-row: 1; }
+
+:where(.fl-l-hanging) {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--fl-space-2) var(--fl-gutter);
+  align-items: baseline;
+}
+:where(.fl-l-hanging > .fl-l-label) { grid-column: 1; }
+:where(.fl-l-hanging > .fl-l-main) { grid-column: 2; }
+
+/* Each comparison pair shares a real grid row. Long text grows the whole row.
+   Use .fl-l-pair for comparisons; direct children remain useful for two headings. */
+:where(.fl-l-comparison > .fl-l-pair) {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  column-gap: inherit;
+  align-items: start;
+}
+:where(.fl-l-comparison > .fl-l-pair > *) { grid-column: span 3; }
+
+:where(.fl-l-chronology) { display: flex; flex-direction: column; gap: var(--fl-space-3); }
+:where(.fl-l-chronology > .fl-l-item) {
+  display: grid;
+  grid-template-columns: var(--fl-label-width, 5.5em) minmax(0, 1fr);
+  gap: var(--fl-gutter);
+  align-items: baseline;
+}
+:where(.fl-l-chronology > .fl-l-item > .fl-l-label) { grid-column: 1; }
+:where(.fl-l-chronology > .fl-l-item > .fl-l-main) { grid-column: 2; }
+
+:where(.fl-l-photo-essay > .fl-l-main) { grid-column: 1 / span 4; }
+:where(.fl-l-photo-essay > .fl-l-aside) {
+  grid-column: 5 / span 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fl-gutter);
+}
+:where(.fl-l-contact) { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--fl-gutter); align-items: start; }
+:where(.fl-l-contact > .fl-l-full) { grid-column: 1 / -1; }
+
+/* Bounded manual masonry: each column has the same authored height, with two
+   explicitly proportioned image tracks. Captions sit outside the bounded field.
+   This is not automatic shortest-column packing. Only the .fl-frame image clips. */
+:where(.fl-l-masonry) {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--fl-gutter);
+  align-items: start;
+}
+:where(.fl-l-masonry > .fl-l-column) {
+  display: grid;
+  grid-template-rows: var(--fl-masonry-rows, minmax(0, 1fr) minmax(0, 1fr));
+  gap: var(--fl-gutter);
+  height: var(--fl-masonry-height, 112mm);
+  min-height: 0;
+}
+:where(.fl-l-masonry > .fl-l-column > .fl-frame) { height: 100%; min-height: 0; aspect-ratio: auto; }
+:where(.fl-l-masonry > .fl-l-full) { grid-column: 1 / -1; }
+
+/* DOM order stays 1, 2, 3…; the second column begins later but never overlaps.
+   Keep numbering or captions when the sequence is meaningful. */
+:where(.fl-l-stagger) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--fl-gutter); align-items: start; }
+:where(.fl-l-stagger > .fl-l-item:nth-child(even)) { margin-top: var(--fl-stagger-step, var(--fl-space-5)); }
+:where(.fl-l-stagger > .fl-l-full) { grid-column: 1 / -1; }
+
+/* Place directly in a runtime .page. .fl-l-copy also receives .fl-area.
+   Images reach the media edge, including bleed; content keeps safe mirrored margins.
+   Declare matching data-bleed on the image holder for the runtime audit. */
+:where(.fl-l-bleed-bottom,
+.fl-l-bleed-side) { position: absolute; inset: 0; }
+:where(.fl-l-bleed-bottom > .fl-l-photo) {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: var(--fl-image-height, 42%);
+  aspect-ratio: auto;
+}
+:where(.fl-l-bleed-bottom > .fl-l-copy) { bottom: calc(var(--fl-image-height, 42%) + var(--fl-space-3)); }
+:where(.fl-l-bleed-side > .fl-l-photo) {
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: var(--fl-image-width, 43%);
+  aspect-ratio: auto;
+}
+:where(.fl-l-bleed-side > .fl-l-copy) { right: calc(var(--fl-image-width, 43%) + var(--fl-space-3)); }
+
+/* Deliberate overlap, not an automatic contrast treatment. The photograph and
+   text are separate grid layers; text remains in normal flow and can grow.
+   Set --fl-overlay-min to reserve image height; choose a quiet crop or a separately
+   authored surface atom when needed. This layout adds no plate or decoration. */
+:where(.fl-l-overlay) { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0 var(--fl-gutter); isolation: isolate; min-height: var(--fl-overlay-min, 88mm); }
+:where(.fl-l-overlay > .fl-l-photo) { grid-column: 2 / -1; grid-row: 1; align-self: stretch; min-height: 0; aspect-ratio: auto; z-index: 0; }
+:where(.fl-l-overlay > .fl-l-copy) { grid-column: 1 / span 5; grid-row: 1; align-self: end; position: relative; z-index: 1; margin-block: var(--fl-space-3); }
+:where(.fl-l-overlay > .fl-l-caption) { grid-column: 1 / -1; grid-row: 2; margin-top: var(--fl-space-2); }
+
+/* One scene in shared media coordinates, not two independently fitted crops.
+   W = 2*trimW + 2*bleed. Left media reads x=[0, trimW+2*bleed].
+   Right media reads x=[trimW, 2*trimW+2*bleed], hence shift=-trimW.
+   The overlap is the two physical bleed strips; trimmed interiors meet exactly.
+   BOTH pages must share src, height, top, object-fit and focus. Each image is
+   fitted once to the SAME full scene W x H before that scene is translated.
+   Put this image-only holder directly in a .page with explicit data-side.
+   Actual book order must be even-left / following odd-right. Folio CSS cannot
+   validate adjacency or equal source assets; inspect the joined trimmed export.
+   Text and captions belong in independent .fl-area siblings, never in this crop. */
+:where(.fl-l-panorama) {
+  position: absolute;
+  left: 0;
+  top: var(--fl-panorama-top, 0px);
+  width: var(--media-w);
+  height: var(--fl-panorama-height, var(--media-h));
+  overflow: hidden;
+}
+:where(.fl-l-panorama > .fl-l-panorama-image) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: calc(2 * var(--trim-w) + 2 * var(--bleed));
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--fl-focus-x, 50%) var(--fl-focus-y, 50%);
+}
+:where(.page[data-side="right"] > .fl-l-panorama > .fl-l-panorama-image) { left: calc(-1 * var(--trim-w)); }
+:where(.fl-l-panorama[data-side="left"] > .fl-l-panorama-image) { left: 0; }
+:where(.fl-l-panorama[data-side="right"] > .fl-l-panorama-image) { left: calc(-1 * var(--trim-w)); }
+
+:where(.fl-l-typographic) { row-gap: var(--fl-space-5); }
+:where(.fl-l-typographic > .fl-l-title) { grid-column: 1 / -1; }
+:where(.fl-l-typographic > .fl-l-aside) { grid-column: 1 / span 2; }
+:where(.fl-l-typographic > .fl-l-main) { grid-column: 3 / span 4; }

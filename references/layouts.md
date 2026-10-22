@@ -47,4 +47,4 @@ CSS 放在 `project.json.styles` 列出的文件中，字体只在 project.json 
 
 默认语言写 HTML，其他语言格式为 `{"contract":1,"lang":"en","strings":{"intro-title":"…","intro-body":"…"}}`，放 `copy/en.json`。语言 CSS 在 `lang/en.css`，无需手动加入 styles。缺译和多余译文都会报错。长文见 [blocks](blocks.md)。
 
-可读真实源文件位于 `dev/samples/native/product-brochure/` 与 `dev/samples/native/nature-camp/`；家族低层原语见 `families/campus/README.md`。不要把例子的页坐标当通用模板。
+可读真实源文件位于 `dev/samples/native/product-brochure/` 与 `dev/samples/native/nature-camp/`；新项目的统一原子与可选布局见 [Folio CSS](../families/folio/README.md)，实际组合与源码见 [展示页](../dev/folio-css/index.html)。不要把例子的页坐标当通用模板。

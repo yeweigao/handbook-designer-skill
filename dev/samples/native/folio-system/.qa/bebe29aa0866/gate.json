@@ -1,0 +1,30 @@
+{
+  "contract": 1,
+  "build_id": "bebe29aa0866",
+  "fingerprint": "bebe29aa086637abfb7920b380fa14c7b626abe4c7539f5b82fb300f2f8e9970",
+  "tools": {
+    "contract": 1,
+    "playwright": "1.64.1",
+    "chromium": "149.0.7827.55",
+    "executable": "HB_CHROMIUM",
+    "node": "24",
+    "tool_hash": "27d7f967119f38e1b45e2a0b19d86c2b78d7235404bb7d486a7d12fc87b94589"
+  },
+  "languages": {
+    "zh-CN": {
+      "checks": {
+        "render": "pass",
+        "measure": "pass",
+        "postflight": "pass",
+        "raster": "pass",
+        "coverage": "pass"
+      },
+      "pdf": ".build/bebe29aa0866/zh-CN/book.pdf",
+      "pdf_sha256": "ca384f81c8149e2d60ea7603d4a5ac656813369c79d579d32da1e663f98551ad",
+      "pages": 8
+    }
+  },
+  "status": "deliverable",
+  "blocking": [],
+  "visual_review": "not-recorded"
+}

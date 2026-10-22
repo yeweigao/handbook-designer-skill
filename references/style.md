@@ -1,6 +1,6 @@
 # CSS 基因、字体与品牌
 
-家族给作品共同语言，作者决定页面构图。当前原生家族为 Campus（学院墨蓝，v1.1）；家族清单以 `python3 hb/core/family.py list` 为准。历史画廊的主题名称不表示当前存在同名可用家族。
+家族给作品共同语言，作者决定页面构图。当前推荐为 [Folio CSS](../families/folio/README.md)，与 Folio 编辑器共用品牌。文字和摄影共享原子与布局，Campus v1.1 保留作历史方案；家族清单以 `python3 hb/core/family.py list` 为准。历史画廊的主题名称不表示当前存在同名可用家族。
 
 ## 冻结与分工
 
@@ -14,7 +14,7 @@
 
 字体角色用实际本地静态文件。每个需要的字重/斜体在 project.json.fonts 声明；可变字体先用 `font_static.py` 或 `family.py fonts` 实例化。字体准备与正式 render 分开，不后台下载、不先用系统字后下轮换样。补新文字后查字形与实际使用字体，必要时显式重建项目字体。
 
-Campus 使用 Noto Serif SC / Noto Sans SC / Inter，源码字体按 family.json.source 的文件名放到 `HB_FONT_DIR` 或已有缓存。项目源包保留实际静态文件与授权文本，不依赖作者机器的缓存。准备细节见 [delivery](delivery.md)。
+Folio 使用 Noto Serif SC / Noto Sans SC / Inter，源码字体按 family.json.source 的文件名放到 `HB_FONT_DIR` 或已有缓存。项目源包保留实际静态文件与授权文本，不依赖作者机器的缓存。准备细节见 [delivery](delivery.md)。
 
 ## 用色与图形
 
@@ -23,3 +23,11 @@ Campus 使用 Noto Serif SC / Noto Sans SC / Inter，源码字体按 family.json
 品牌标志完整、正确用色且有权使用。需要延展时，用独立 SVG/CSS 从源形提炼章节锚点或背景，记录与内容的关系；不替代正式 logo，不要求每页都有。示例 [Acme](../brands/acme/README.md) 仅用于展示资源组织。
 
 可读性硬下限只有 [contract](contract.md) 定义；家族可以提高，不能降低。最终逐页判断见 [review](review.md)。
+
+## 原子、布局与组件
+
+Folio CSS 按 token → 基础规则 → 布局 → 原子组织；使用时只复制生成好的 `design.css`，不需要 CSS 构建依赖。`.fl-area` 负责纸张安全版心，`.fl-grid` 与 `.fl-l-*` 负责内部关系，两者可以独立组合。
+
+[展示页](../dev/folio-css/index.html) 展示颜色角色、字阶字重、网格跨度、节奏、图片比例与焦点，再给出布局及可复制组件。组件是普通 HTML 配方，引用与段落不自动附加侧边线或底色。照片的组图、出血和跨页也使用同一组颜色、字体与间距。
+
+可选布局是作者工具，允许替换和拆解；它们不成为运行时注册菜单。专属封面、页面节奏仍由作者在 `book.css` 实现，不能把参考中的文字、位置与装饰原样套到新材料上。

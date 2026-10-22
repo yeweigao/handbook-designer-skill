@@ -12,7 +12,7 @@
 | S4 最终 PDF 检查与验收绑定 | 完成 | 2026-10-22 | 21b4f2b |
 | S5 内容提取与原文覆盖 | 完成 | 2026-10-22 | 98e4938 |
 | S6 长文续页工具 | 完成 | 2026-10-22 | cb102a6 |
-| S7 Campus 家族与真实样册 | 完成 | 2026-10-22 | a190408 + bb57494 + 本次 S7 补验收提交 |
+| S7 家族与真实样册（Folio CSS 扩展） | 完成 | 2026-10-22 | a190408 + bb57494 + 本次 S7 补验收提交 |
 | S8 导出与离线交付 | 完成 | 2026-10-22 | ce515da |
 | S9 Folio 联动 | 完成 | 2026-10-22 | c2cff36（Folio 162a616） |
 | S10 Skill 文档与旧引擎退役 | 完成 | 2026-10-22 | 本提交（S10:） |
@@ -435,3 +435,45 @@
   - 产品第 7 页、自然营第 7/10 页的留白作为章节/阅读停顿保留。样册没有联合跨缝全景图，不冒充已完成 S11 的全景案例。
 - 下一步从哪继续：S11，审计旧 gallery 与现有视觉资产；需有可解释的内容/构图判断和反例，不把本轮作者自评或示例造型当作通用优秀标准。S12 仍未开始。
 - 提交：本记录所在的 `S7:` 补验收提交（见 git log）。
+
+### S7 · Folio CSS 统一排版系统扩展 · 进行中 · 2026-10-22
+
+- 用户明确扩展原 S7 范围：完整可组合的原子、共享布局与组件展示；Campus 与 Photo 合并为同一套能力，品牌统一为 Folio CSS，与 Folio 编辑器一致。
+- 本次归属：`families/core/**`、`families/folio/**`、`dev/folio-css/**`、`dev/build-folio-css.py`、新样册 `dev/samples/native/folio-system/**`、对应测试、作者入口与架构说明。本项不冒充 S11 全量旧资产审计或 S12 独立评测。
+- 使用者复制一份零依赖 CSS；开发源文件分层组织，无 Tailwind/npm 构建依赖。布局是可选组合，不是渲染器的枚举。
+- 现有 Campus 与两本 S7 冻结样册维持原文件；此前四处运行时/契约改动及未跟踪 `docs/family-css.md` 属于既有工作，不纳入本项。
+
+### S7 · Folio CSS 统一排版系统扩展 · 完成 · 2026-10-22
+
+- 用户决定：与 Folio 编辑器统一品牌；文字与摄影共用底层，图片比例/焦点/出血/组图/跨页属于同一套系统。Campus 作为历史方案与旧样册保持冻结。
+- 改动范围：
+  - `families/folio/`（tokens、family.json、单文件 design.css、API说明）+ `families/core/`（基础、布局、原子）：完整的有限类词表，颜色角色、实际字重、字阶、空间、六/十二轨、对齐、比例、焦点、出血和功能标记。
+  - `dev/folio-css/`：16组布局、8个纯原子/布局组件配方；规则演示、筛选、结构视图、源码复制、样册预览。配方使用实际分发CSS，无额外组件样式。
+  - `dev/build-folio-css.py`：标准库拼接与`--check`；无npm框架或浏览器端编译。
+  - `dev/samples/native/folio-system/`：原创8页中文观看练习册，四张已有授权照片，6–7页为真正连续全景；8行页面专属CSS，其余由共用规则组合。
+  - 新的7项浏览器回归、selftest生成文件一致性检查；Skill、style/layouts、new/brand入口与架构说明；分步计划记入用户追加范围。
+- 可复制命令：
+  ```sh
+  python3 dev/build-folio-css.py --check
+  export HB_CHROMIUM='/Users/apple/Library/Caches/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-mac-arm64/chrome-headless-shell'
+  export PYTHONPATH=/tmp/hb-editorial-test-deps
+  node --test dev/tests/core/family-css.test.mjs
+  node hb/core/cli.mjs check dev/samples/native/folio-system
+  node hb/core/cli.mjs verify dev/samples/native/folio-system
+  python3 dev/folio-css/update-preview.py bebe29aa0866
+  node hb/core/cli.mjs export dev/samples/native/folio-system --name folio-css-specimen
+  bash dev/tests/selftest.sh --quick
+  ```
+- 完成判定：
+  - 原子、布局、组件、可用入口：pass；build一致性检查、初始化真实字体与SHA、契约validate均通过。
+  - 组合回归：7/7 pass，检查真实computed geometry与面色，覆盖原子优先级、嵌套色面、safe镜像、字重、图框、跨页；展示页1440/390px无溢出，图片全部加载，复制结果与配方相同。
+  - 真实PDF：构建`bebe29aa0866`，8页全技术项pass；已逐页及全部面对页审稿，记录 `.qa/visual-review.md`。作者结论可交付，不评优秀、不计S12。
+  - 导出：正式PDF哈希一致、可编辑PDF/离线HTML逐页一致、源包干净重建同构建同栅格。详细产物在`out/folio-css-specimen/`，未将大体积交付包入库。
+  - quick：pass，记录`hb-native-selftest.1EhV1u`。完整既有core套件本轮未重跑；新浏览器回归与样册生产链已实际执行。
+- 修复：布局选择器降为低优先级使原子可覆盖；figure左右声明优先于page推导；图框约束自身宽度使有界组图不撑列。对应浏览器反例已回归。
+- 契约变更：无。四个既有运行时/契约改动逐字节一致并排除提交；预存未跟踪`docs/family-css.md`在工作期间有外部变化，本任务未编辑、不纳入提交；新出现的`output/`同样未触碰。
+- 偏离计划：用户已明确允许共享可选layout与组件展示，扩展了原S7文件边界及过窄的“只有低层原语”约束；没有新增运行时版式枚举或Photo第二体系。
+- 新增依赖：无。Node24.9.0/Python3.13.3/Playwright1.64.1/显式Chromium149.0.7827.55；全部素材与字体复用本地。
+- 边界：Node22/Python3.10实际运行、其他浏览器、纸样、Acrobat改字仍unverified；8页样册不代替独立人工校准。原S7两册未重写。完整证据摘要见 `dev/folio-css/verification.md`。
+- 下一步：按原计划S11审计视觉资产，再做S12独立生成与人工校准；Folio CSS已可用于新项目。
+- 提交：本条所在`S7:`提交（见git log）。

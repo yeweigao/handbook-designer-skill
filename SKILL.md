@@ -44,7 +44,7 @@ HB=<skill目录>/hb
 P=<工作目录>/<项目名>
 bash "$HB/core/setup_env.sh"
 python3 "$HB/core/family.py" list
-python3 "$HB/core/family.py" init campus "$P" --title "书名" --langs zh-CN,en --mode translate
+python3 "$HB/core/family.py" init folio "$P" --title "书名" --langs zh-CN,en --mode translate
 python3 "$HB/core/extract.py" <原稿.docx> "$P"
 # 直接编辑 book.html / book.css / copy / lang；init 只是单页骨架
 python3 "$HB/core/family.py" fonts "$P"       # 文案超出字库时显式重建
@@ -75,5 +75,5 @@ node "$HB/core/cli.mjs" export "$P" --name <文件名>
 - 长文、表格、工作册、跨页：[blocks](references/blocks.md)；图片：[images](references/images.md)。
 - 验收尺度：[review](references/review.md)；交付、多语言与重建：[delivery](references/delivery.md)。
 - 模板：[brief](templates/brief.md)、[page-plan](templates/page-plan.md)、[experience](templates/experience.md)。
-- 真实作者源：`dev/samples/native/product-brochure/`（纯文字 12 页）、`dev/samples/native/nature-camp/`（摄影 16 页中英）。家族原语：`families/campus/`。样例供阅读拆解，不是必选整页菜单。
+- 真实作者源：`dev/samples/native/product-brochure/`（纯文字 12 页）、`dev/samples/native/nature-camp/`（摄影 16 页中英）。新项目使用 [Folio CSS](families/folio/README.md)：统一原子、可选布局与组件配方，见 [展示](dev/folio-css/index.html)。摄影与文字共用底层。Campus 与旧样册保留用于历史复现；完整页面示例供拆解。
 - 维护与验证：[dev/maintenance.md](dev/maintenance.md)，`bash dev/tests/selftest.sh`。
