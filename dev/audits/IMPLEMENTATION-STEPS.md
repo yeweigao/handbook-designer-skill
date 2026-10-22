@@ -116,11 +116,11 @@ S1–S4 是地基：没有它们，后面任何页面都无法可靠渲染、测
 
 **先读**：契约、`hb/core/render.mjs` 的 manifest、旧 `hb/postflight.py`、`hb/gate.py`、`hb/lock.py`。
 
-**归属文件**：`hb/core/postflight.py`、`hb/core/gate.mjs`、`hb/core/rasterize.sh`、`dev/tests/core/gate.test.mjs`、`dev/tests/core/test_postflight.py`。
+**归属文件**：`hb/core/postflight.py`、`hb/core/gate.mjs`、`hb/core/rasterize.py`、`dev/tests/core/gate.test.mjs`。
 
 **要做**：
 - `postflight.py`：页数与 `.page` 数一致；每页 MediaBox（及有出血时的 TrimBox/BleedBox）按 mm 核对；`pdffonts` 全部嵌入且无 Type 3；抽取每页文字供 S5 覆盖检查；缺 pypdf/poppler 时该项为 unverified，不是 pass。
-- `rasterize.sh`：把**最终 PDF**栅格化为逐页图与整册缩略拼图、跨页对拼图（偶数左、奇数右），供视觉审稿。
+- `rasterize.py`：把**最终 PDF**栅格化为逐页图与整册缩略拼图、跨页对拼图（偶数左、奇数右），供视觉审稿。
 - `gate.mjs`：汇总 S3 测量、postflight、（S5 接入后）原文覆盖结果，写 `.qa/<build-id>/gate.json`：`{build_id, input_fingerprint, pdf_sha256, status, checks[]}`。任何 fail 或硬项 unverified → 状态不可交付。
 - 提供 `verify` 命令：给定项目和 PDF，重新计算指纹与哈希，与 gate.json 比对。
 

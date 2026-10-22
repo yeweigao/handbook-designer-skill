@@ -8,8 +8,8 @@
 |---|---|---|---|
 | S1 契约与最小样例 | 完成 | 2026-10-22 | 086b8b7 |
 | S2 渲染运行时 | 完成 | 2026-10-22 | c4824c5 |
-| S3 版面测量与可读性检查 | 完成 | 2026-10-22 | 见记录 |
-| S4 最终 PDF 检查与验收绑定 | 未开始 | | |
+| S3 版面测量与可读性检查 | 完成 | 2026-10-22 | adaee42 |
+| S4 最终 PDF 检查与验收绑定 | 完成 | 2026-10-22 | 见记录 |
 | S5 内容提取与原文覆盖 | 未开始 | | |
 | S6 长文续页工具 | 未开始 | | |
 | S7 Campus 家族与真实样册 | 未开始 | | |
@@ -148,3 +148,33 @@
   - 对比度采样基于屏幕截图（打印媒体模拟），与最终 PDF 栅格可能有细微差异；最终以 S4 的 PDF 审稿为准。
   - 文字互相遮挡按行框计算，行距很紧的大标题若行框相交但字形不相交，可能误报，需要用 `data-overlap` 声明。
 - 下一步：S4（验收绑定，汇总 measure.json）与 S5（内容覆盖）可并行。S5 的"内容是否可见"可直接读 `measure.json` 里的 `content.hidden` 项。
+
+### S4 · 最终 PDF 检查与验收绑定 · 完成 · 2026-10-22
+
+- 改动范围（`hb/core/`）：
+  - `postflight.py`：只看最终 PDF——哈希与渲染清单一致、页数、逐页 MediaBox/TrimBox 物理尺寸（±0.05mm）、装订页数、字体全部嵌入且无 Type 3（递归表单 XObject）；用 pdftotext 逐页抽字写 `pdf-text.json`（供 S5）。缺 pikepdf / poppler 时相应项为硬项 unverified。
+  - `rasterize.py`：最终 PDF → 逐页图（110dpi，含出血）、整册缩略图与面对页拼图（按成品裁切，左右页按 `first_page` 推出）。
+  - `gate.mjs`：`check`（渲染 → 测量 → postflight → 栅格 → 原文覆盖 → `.qa/<构建 ID>/gate.json` 与 `gate.md`）与 `verify`（重算当前源指纹与 PDF 哈希，与 gate.json 比对）。原文覆盖通过动态加载 `coverage.mjs` 接入；模块不存在时为硬项 unverified。
+  - `cli.mjs` 新增 `check`、`verify`。
+  - 测试 `dev/tests/core/gate.test.mjs`（6 项）。`.gitignore` 新增 `dev/.preview/`（本地预览图中转，因设备暂存限制 7 层目录）。
+- 可复制命令：
+  - `node hb/core/cli.mjs check dev/fixtures/contract/bilingual`
+  - `node hb/core/cli.mjs verify dev/fixtures/contract/bilingual`
+  - `node --test dev/tests/core/gate.test.mjs`（约 50 秒）
+- 完成判定逐条结果：
+  - 正例得到可交付状态：**部分** —— 渲染、测量、PDF 检查、栅格四项全部 pass；因原文覆盖（S5）尚未实现，按"未运行即阻止"如实判为 blocked，唯一阻止项是 `coverage.missing`。S5 接入后此项应转为可交付，并需把 `gate.test.mjs` 第 1 项的断言改为 `deliverable`。
+  - 改一个 CSS 后 `verify` 判失效：pass —— 报"当前源没有验收记录"。
+  - PDF 在验收后被改动：pass —— 报"PDF 在验收后被改动"。
+  - 缺 pypdf/pikepdf 时不可交付并指出 unverified 项：pass（用 `HB_POSTFLIGHT_NO_PIKEPDF=1` 模拟，4 项 unverified）。
+  - 页尺寸错误的 PDF：pass —— 报 `pdf.boxes` 与 `pdf.hash`。
+  - 额外：骑马钉 3 页报 `pdf.binding`；可变字体产生的 Type 3 被 `pdf.fonts` 查出。
+- 契约变更：无。
+- 偏离计划的决定：
+  - 栅格脚本用 Python（`rasterize.py`）而不是 shell：需要按出血精确裁切并拼图，PIL 已在依赖内。
+  - 检查器本身不依赖 pypdf，统一用 pikepdf（渲染已必需）。
+  - gate.json 预留 `visual_review: "not-recorded"`；视觉审稿记录与导出前的要求由 S8 / S10 定义。
+- 新增依赖：无。
+- 未完成与已知问题：
+  - gate 不检查视觉审稿是否完成（S8 导出前处理）。
+  - `verify` 需要启动一次浏览器读取版本号（参与指纹），约 0.5 秒。
+- 下一步：S5 原文覆盖。实现 `hb/core/coverage.mjs`，导出 `coverage(dir, buildId, lang)`，返回 `{status, items}`（契约 §7 格式），并写 `.qa/<构建 ID>/<语言>/coverage.json`；输入可用 `measure.json` 的 `content.hidden` 与 `pdf-text.json`。

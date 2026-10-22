@@ -2,9 +2,12 @@
 // 统一入口：node hb/core/cli.mjs <命令> <项目> [选项]
 //   render  <项目> [--lang zh-CN] [--out .build/xxx]   渲染快照与 PDF，写 .build/<构建 ID>/
 //   measure <项目> [--lang zh-CN] [--build <构建 ID>]  测量当前源对应构建（或指定构建），写 .qa/<构建 ID>/<语言>/measure.*
+//   check   <项目> [--lang zh-CN]                     渲染 + 测量 + 最终 PDF 检查 + 栅格 + 原文覆盖 → .qa/<构建 ID>/gate.json
+//   verify  <项目>                                    核对当前源与 PDF 是否仍与验收记录一致（导出前必跑）
 import path from 'node:path';
 import { render } from './render.mjs';
 import { measure } from './measure.mjs';
+import { check, verify } from './gate.mjs';
 
 function parse(argv) {
   const args = { _: [], langs: [] };
@@ -21,11 +24,24 @@ function parse(argv) {
 async function main() {
   const args = parse(process.argv.slice(2));
   const [cmd, project] = args._;
-  if (!['render', 'measure'].includes(cmd) || !project) {
-    console.error('用法：node hb/core/cli.mjs render|measure <项目> [--lang <语言>] [--out <项目内目录>] [--build <构建 ID>]');
+  if (!['render', 'measure', 'check', 'verify'].includes(cmd) || !project) {
+    console.error('用法：node hb/core/cli.mjs render|measure|check|verify <项目> [--lang <语言>] [--out <项目内目录>] [--build <构建 ID>]');
     return 2;
   }
   try {
+    if (cmd === 'check') {
+      const g = await check(project, { langs: args.langs });
+      console.log(`验收 ${g.build_id}：${g.status === 'deliverable' ? '可交付（技术检查）' : '不可交付'} → ${g.file}`);
+      for (const [l, v] of Object.entries(g.languages)) console.log(`  ${l}: ${Object.entries(v.checks).map(([k, s]) => `${k}=${s}`).join(' ')}`);
+      for (const b of g.blocking) console.log(`    ${String(b.status).toUpperCase()} [${b.lang}] ${b.id}${b.page ? ' ' + b.page : ''}${b.target ? ' ' + b.target : ''}: ${b.message}`);
+      return g.status === 'deliverable' ? 0 : 1;
+    }
+    if (cmd === 'verify') {
+      const v = await verify(project);
+      console.log(`${v.valid ? '有效' : '无效'}：当前构建 ${v.buildId}`);
+      for (const r of v.reasons) console.log(`  ${r}`);
+      return v.valid ? 0 : 1;
+    }
     if (cmd === 'measure') {
       const r = await measure(project, { langs: args.langs, build: args.build });
       console.log(`测量构建 ${r.buildId}`);
