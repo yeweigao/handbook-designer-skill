@@ -1,0 +1,98 @@
+{
+  "contract": 1,
+  "status": "delivered",
+  "name": "product-brochure-s7-revised",
+  "build_id": "a9f9e48c6865",
+  "fingerprint": "a9f9e48c6865f0a05094f190c4db2fab8d7f57219d043124643df93589f44d61",
+  "tools": {
+    "contract": 1,
+    "playwright": "1.64.1",
+    "chromium": "149.0.7827.55",
+    "executable": "HB_CHROMIUM",
+    "node": "24",
+    "tool_hash": "27d7f967119f38e1b45e2a0b19d86c2b78d7235404bb7d486a7d12fc87b94589"
+  },
+  "visual_review": {
+    "verdict": "deliverable",
+    "by": "Codex（作者全页复核，非独立评测）",
+    "date": "2026-10-22T08:01:47.800Z"
+  },
+  "checks": [
+    {
+      "id": "pdf.zh-CN",
+      "status": "pass",
+      "severity": "hard",
+      "message": "正式 PDF 与验收记录一致",
+      "evidence": {}
+    },
+    {
+      "id": "editable.zh-CN",
+      "status": "pass",
+      "severity": "hard",
+      "message": "可编辑 PDF：字体扩充嵌入（非子集）、无 Type 3、逐页栅格与正式版一致",
+      "evidence": {
+        "replaced": 5,
+        "fonts": [
+          "Inter-Regular",
+          "Inter-SemiBold",
+          "NotoSansSC-Bold",
+          "NotoSansSC-Regular",
+          "NotoSerifSC-Bold"
+        ],
+        "glyphs": {
+          "Inter-SemiBold": 1146,
+          "NotoSansSC-Regular": 8495,
+          "NotoSerifSC-Bold": 8493,
+          "Inter-Regular": 1146,
+          "NotoSansSC-Bold": 8495
+        },
+        "not_replaced": [],
+        "bytes": 5237652,
+        "compare": "{\"pages_a\": 12, \"pages_b\": 12, \"diff\": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], \"worst\": 0.0}"
+      }
+    },
+    {
+      "id": "offline.zh-CN",
+      "status": "pass",
+      "severity": "hard",
+      "message": "离线 HTML：无外部请求、资源全部就绪、打印结果与正式 PDF 一致",
+      "evidence": {
+        "pages_a": 12,
+        "pages_b": 12,
+        "diff": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "worst": 0
+      }
+    },
+    {
+      "id": "source.rebuild",
+      "status": "pass",
+      "severity": "hard",
+      "message": "源文件包在干净目录重建：构建 ID 相同、验收通过、逐页栅格一致",
+      "evidence": {
+        "rebuilt_build": "a9f9e48c6865"
+      }
+    }
+  ],
+  "files": {
+    "credits.md": "1bb4a40925049def9109e44356955e5f3303ba7ea2a8f495dc8fefda29de1b15",
+    "product-brochure-s7-revised.source.zip": "4accaf2ab3c6f4bb2bdc9d4e57adecfa6a2e42c4b567149dffdaa8d17148aa82",
+    "product-brochure-s7-revised.zh-CN.editable.pdf": "5b936bf9c767d75dcd235987441f7bccdeb41629ebe4f4209d994a9dbe83701e",
+    "product-brochure-s7-revised.zh-CN.html": "41669a2af886368c722d38f35f1dc1815b16d9eca1d91af7b2e7f9eccae73118",
+    "product-brochure-s7-revised.zh-CN.pdf": "4514efd813be4dd45c8aec43e7bfcb2ad4aa10e21803f38331f0e31df983db2f",
+    "product-brochure-s7-revised.zh-CN.sheet.png": "3f988a13e9b3e530607c228705d2bbd28db7a6a7b7459198638e3f10a172b127",
+    "product-brochure-s7-revised.zh-CN.spreads.png": "28eb9beb69667e00af15cc5f5582972d18dbbcd40190624219ceb1c14fa29ac3"
+  }
+}

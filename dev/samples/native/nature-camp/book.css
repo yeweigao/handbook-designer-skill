@@ -35,8 +35,8 @@ html[lang="en"] .cover-title { font-size: 84px; line-height: 1.08; letter-spacin
 .letter .area { grid-template-rows: auto auto 1fr auto; }
 .letter-body { align-self: end; margin-top: var(--s4); font-size: var(--fs-lead); line-height: var(--lh-lead); }
 .letter-body p + p { margin-top: var(--s3); }
-.letter-quote { margin-top: var(--s4); padding: var(--s3) 0 var(--s3) var(--s3); border-left: 6px solid var(--gold); background: var(--paper-deep); }
-.letter-quote .quote { font-size: 26px; line-height: 1.55; padding-right: var(--s3); }
+.letter-quote { margin-top: var(--s4); margin-bottom: var(--s3); }
+.letter-quote .quote { font-size: 30px; line-height: 1.65; color: var(--ink); }
 .letter-quote cite { display: block; margin-top: var(--s2); font: 400 var(--fs-aux)/1.4 var(--font-latin); letter-spacing: .08em; color: var(--muted); font-style: normal; }
 
 /* —— 章节页（照片满版 / 深色上半照片） —— */
@@ -50,12 +50,13 @@ html[lang="en"] .cover-title { font-size: 84px; line-height: 1.08; letter-spacin
 /* —— 六个关键词 —— */
 .hl-intro { margin-top: var(--s3); color: var(--muted); }
 .highlights .area { grid-template-rows: auto auto auto 1fr; }
-.hl-cards { margin-top: var(--s4); display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; column-gap: var(--gutter); row-gap: var(--s3); }
-.hl-card { display: flex; flex-direction: column; background: var(--paper-deep); border-top: var(--rule) solid var(--primary); padding: var(--s2) var(--s2) var(--s2); }
-.hl-card .hl-no { order: 3; margin-top: auto; text-align: right; }
-.hl-no { display: block; font: 600 88px/1 var(--font-num); letter-spacing: -.03em; color: var(--ochre); }   /* 不用描边字：-webkit-text-stroke 会把字形变成 Type 3 */
+.hl-cards { margin-top: var(--s4); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(3, 1fr); column-gap: 12mm; row-gap: var(--s3); }
+.hl-card { display: grid; grid-template-columns: 9mm minmax(0, 1fr); column-gap: 3mm; align-content: start; }
+.hl-card > :not(.hl-no) { grid-column: 2; }
+.hl-card .hl-no { grid-column: 1; grid-row: 1 / span 2; padding-top: 5px; }
+.hl-no { display: block; font: 600 23px/1 var(--font-num); color: var(--ochre); }
 .hl-card .h3 { color: var(--primary); margin-bottom: var(--s1); }
-.hl-card p { font-size: 15px; line-height: 26px; }
+.hl-card p { font-size: 16px; line-height: 28px; }
 .highlights .h1 { margin-top: var(--s2); }
 
 /* —— 三条主线：图文错位 —— */
@@ -142,6 +143,8 @@ html[lang="en"] .ly-text { font-size: 32px; line-height: 1.45; }
 /* —— 安全 —— */
 .safety .h1 { margin-top: var(--s2); }
 .safety-photo { margin-top: var(--s3); height: 128mm; }
+/* 原始照片像素横倒；在作者 CSS 中转正，保留原图与来源。旋转前的框交换宽高。 */
+.safety-photo > img { position: absolute; left: 50%; top: 50%; width: 128mm; height: calc(var(--trim-w) - var(--m-inner) - var(--m-outer)); max-width: none; object-position: left center; transform: translate(-50%, -50%) rotate(90deg); }
 .safety-secs { margin-top: var(--s3); display: grid; grid-template-columns: repeat(3, 1fr); column-gap: var(--gutter); }
 .safety-secs > div { border-top: var(--rule) solid var(--primary); padding-top: var(--s2); }
 .safety-no { display: block; font: 600 var(--fs-aux)/1.4 var(--font-latin); letter-spacing: .1em; color: var(--ochre); margin-bottom: var(--s1); }
@@ -151,10 +154,9 @@ html[lang="en"] .ly-text { font-size: 32px; line-height: 1.45; }
 /* —— 常见问题 —— */
 .faq .h1 { margin-top: var(--s2); }
 .faq .area { grid-template-rows: auto auto 1fr; }
-.faq-grid { margin-top: var(--s4); display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: 1fr 1fr; gap: var(--gutter); }
-.faq-item { background: var(--paper-deep); padding: var(--s3); border-top: var(--rule) solid var(--primary); }
-.faq-item { display: flex; flex-direction: column; }
-.faq-item .h3 { color: var(--primary); margin-bottom: var(--s2); font: 700 26px/1.4 var(--font-display); }
+.faq-grid { margin-top: var(--s4); display: grid; grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); row-gap: var(--s3); }
+.faq-item { display: grid; grid-template-columns: 9mm minmax(0, 1fr) minmax(0, 1fr); column-gap: 6mm; align-content: start; }
+.faq-item .h3 { color: var(--ink); font: 700 23px/1.5 var(--font-display); }
 .faq-item p { font-size: var(--fs-lead); line-height: var(--lh-lead); }
 
 /* —— 封底 —— */
@@ -164,5 +166,5 @@ html[lang="en"] .back-title { font-size: 76px; }
 .back-office { margin-top: var(--s4); color: var(--on-dark); }
 .back-name { margin-top: var(--s1); color: var(--gold); }
 .credits { align-self: end; border-top: var(--hair) solid rgba(228, 198, 139, .5); padding-top: var(--s2); color: var(--on-dark-muted); }
-.faq-no { font: 600 48px/1 var(--font-num); letter-spacing: -.02em; color: var(--ochre); margin-bottom: var(--s3); }
+.faq-no { font: 600 16px/1.6 var(--font-num); color: var(--ochre); padding-top: 5px; }
 html[lang="en"] .themes .h1 { font-size: 38px; }

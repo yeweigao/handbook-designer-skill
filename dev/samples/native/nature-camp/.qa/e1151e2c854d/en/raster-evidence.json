@@ -1,0 +1,93 @@
+{
+  "build_id": "e1151e2c854d",
+  "lang": "en",
+  "pdf_sha256": "336a35676b8f556f3505b075c5092912dc5b7edacb63c465985ae97a7c24f12d",
+  "raster_dpi": 110,
+  "pages": [
+    {
+      "page": 1,
+      "file": ".qa/e1151e2c854d/en/raster/page-001.png",
+      "sha256": "1c354a982d9271977fe5ac2f3b267ec3bdd0a8fd241ce4bf90f596a07c93aafb"
+    },
+    {
+      "page": 2,
+      "file": ".qa/e1151e2c854d/en/raster/page-002.png",
+      "sha256": "0b9aefd5c3302741fb8e47987e14cfa432adb267933b43cff66e3bdd015d438e"
+    },
+    {
+      "page": 3,
+      "file": ".qa/e1151e2c854d/en/raster/page-003.png",
+      "sha256": "4aa90de354bf1f9481120d9c513e4ae3e37e426b025e3fd5f5d58a9690d9af9b"
+    },
+    {
+      "page": 4,
+      "file": ".qa/e1151e2c854d/en/raster/page-004.png",
+      "sha256": "c6268681b6b5d586bff8856034d66969b748f346bd93d6b56e78472393abeabb"
+    },
+    {
+      "page": 5,
+      "file": ".qa/e1151e2c854d/en/raster/page-005.png",
+      "sha256": "13553af93c568770b949e2f603bdee01c973f19524824eddb50ca4ff2bf043b9"
+    },
+    {
+      "page": 6,
+      "file": ".qa/e1151e2c854d/en/raster/page-006.png",
+      "sha256": "09cba4f9be885047f34a60c18fd3f83ed5bcfca7c21478c99b092277ce08f6c6"
+    },
+    {
+      "page": 7,
+      "file": ".qa/e1151e2c854d/en/raster/page-007.png",
+      "sha256": "7c8aeac0feeab73ad639156e1272c0f8350861f85e7a13f2c71b06ee01d00e35"
+    },
+    {
+      "page": 8,
+      "file": ".qa/e1151e2c854d/en/raster/page-008.png",
+      "sha256": "8318ceb300560be51b65516da8739a1c517262887981601941386a78d987af77"
+    },
+    {
+      "page": 9,
+      "file": ".qa/e1151e2c854d/en/raster/page-009.png",
+      "sha256": "b2b39cb3e3ce61220d00485d9ee60f2856375f371e2e3d1c8893a93631435cef"
+    },
+    {
+      "page": 10,
+      "file": ".qa/e1151e2c854d/en/raster/page-010.png",
+      "sha256": "8d68f3d336214f6686d38edfe403a72f2f41a035d1e16df67e0054c2a00598bc"
+    },
+    {
+      "page": 11,
+      "file": ".qa/e1151e2c854d/en/raster/page-011.png",
+      "sha256": "1eb4465c1445d4209c39ccdba0c3a7701706e6896a1c9b45c57ab004463b4c46"
+    },
+    {
+      "page": 12,
+      "file": ".qa/e1151e2c854d/en/raster/page-012.png",
+      "sha256": "e4d8f0abc61925aeadd8d847537bf26555ca683c58feae15308fefe0a32d33f8"
+    },
+    {
+      "page": 13,
+      "file": ".qa/e1151e2c854d/en/raster/page-013.png",
+      "sha256": "b3002bda2c37505edf311804f5a1ea58f4ea1438bc9bf64286222e922ac3f58e"
+    },
+    {
+      "page": 14,
+      "file": ".qa/e1151e2c854d/en/raster/page-014.png",
+      "sha256": "0d4b8de5ce3f429b66cd28e1d0bd70520f5c467cb10f7981e2956a0be66bf654"
+    },
+    {
+      "page": 15,
+      "file": ".qa/e1151e2c854d/en/raster/page-015.png",
+      "sha256": "813883550a90921d8f737a715020cc88370d757f27fbcf6bf730f05643b4f188"
+    },
+    {
+      "page": 16,
+      "file": ".qa/e1151e2c854d/en/raster/page-016.png",
+      "sha256": "e1170238c32c50dfe1de5b42ea31f85882531366036dfe557d6623462a078321"
+    }
+  ],
+  "facing_groups": [
+    ".qa/e1151e2c854d/en/raster/review-groups/faces-01-03.png",
+    ".qa/e1151e2c854d/en/raster/review-groups/faces-04-06.png",
+    ".qa/e1151e2c854d/en/raster/review-groups/faces-07-09.png"
+  ]
+}

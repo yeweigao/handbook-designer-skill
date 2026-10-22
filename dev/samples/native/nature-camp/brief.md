@@ -1,6 +1,6 @@
 # 简报 · 山海自然探索营项目介绍（样册）
 
-- 材料：`sources/original/原稿.md`（中英对照的营地介绍文案，156 段）；9 张 Wikimedia Commons 公有领域照片，来源与授权见 `sources/assets.json`。
+- 材料：`sources/original/原稿.md`（中英对照的营地介绍文案，156 段）；9 张 Wikimedia Commons 真实照片（第 4 页 CC0 1.0，其余公有领域），来源与授权见 `sources/assets.json`。
 - 读者：7–9 年级学生的家长。
 - 阅读任务：翻完知道营地做什么（三条主线、五天行程）、费用包含什么、安全怎么保障、怎么报名。
 - 授权：中文原稿照搬，英文版按原稿英文翻译（translate）；可加页眉、页码、序号、照片署名。

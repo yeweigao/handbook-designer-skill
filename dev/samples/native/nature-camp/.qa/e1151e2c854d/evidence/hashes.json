@@ -1,0 +1,17 @@
+{
+  "evidence/en-p03-after.png": "4aa90de354bf1f9481120d9c513e4ae3e37e426b025e3fd5f5d58a9690d9af9b",
+  "evidence/en-p03-before.png": "d518a78305636f5b382c4351560cb1bfd8830172d9942137d68ad17b2ea3e02e",
+  "evidence/en-p05-after.png": "13553af93c568770b949e2f603bdee01c973f19524824eddb50ca4ff2bf043b9",
+  "evidence/en-p05-before.png": "995d1eae286099fe241f0005ce42391d92d6340ba78ebc41c254b2900f031a43",
+  "evidence/en-p15-after.png": "813883550a90921d8f737a715020cc88370d757f27fbcf6bf730f05643b4f188",
+  "evidence/en-p15-before.png": "031453feac7557b6306c0651272a294da1b256e6c4e6ff884b0d54d6b7782449",
+  "evidence/safety-after-en.png": "0d4b8de5ce3f429b66cd28e1d0bd70520f5c467cb10f7981e2956a0be66bf654",
+  "evidence/safety-after-zh.png": "ef7e2f5117c022313d3891f7bbddc772c914186f4717c7c6060bc6fecfdbbb8b",
+  "evidence/safety-before.png": "78d45915c380228000e731dc5223a2bdb7390a0beedb7eb92c75955462883cc0",
+  "evidence/zh-CN-p03-after.png": "db0c2f506704479f18c7a1d4519aed66df84b355d94a59b0409a21e6185e88b1",
+  "evidence/zh-CN-p03-before.png": "005b59c81c3eb4dd9de8f7f892dba78e5648b964d7040e581a5cb2ddc51374fd",
+  "evidence/zh-CN-p05-after.png": "544512a82cf7bacd487bcc282fb805709ad0add10129bb1ea05113d911ebbdf1",
+  "evidence/zh-CN-p05-before.png": "d4b1bc27b84ae7fe7a6e08f973c9c59e24a260448b4794379f9aace59e7570a6",
+  "evidence/zh-CN-p15-after.png": "046e20333d4e8feb1f94012b20e79bb7941c7ac1aaca1c6800b572ec9f7724d2",
+  "evidence/zh-CN-p15-before.png": "cfbd4dc142feaa2f68312833456b72c0b1055462a15621f2457c1a5fc5cff306"
+}

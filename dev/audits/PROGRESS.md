@@ -12,7 +12,7 @@
 | S4 最终 PDF 检查与验收绑定 | 完成 | 2026-10-22 | 21b4f2b |
 | S5 内容提取与原文覆盖 | 完成 | 2026-10-22 | 98e4938 |
 | S6 长文续页工具 | 完成 | 2026-10-22 | cb102a6 |
-| S7 Campus 家族与真实样册 | 完成 | 2026-10-22 | a190408 + 本提交 |
+| S7 Campus 家族与真实样册 | 完成 | 2026-10-22 | a190408 + bb57494 + 本次 S7 补验收提交 |
 | S8 导出与离线交付 | 完成 | 2026-10-22 | ce515da |
 | S9 Folio 联动 | 完成 | 2026-10-22 | c2cff36（Folio 162a616） |
 | S10 Skill 文档与旧引擎退役 | 完成 | 2026-10-22 | 本提交（S10:） |
@@ -391,3 +391,47 @@
   - 可编辑 PDF 在 Acrobat 等编辑器实际改字的既有 unverified 保留；本轮没有新视觉审稿或重做 S12 独立生成/人工校准。
 - 下一步：S11 视觉参考资产（审计 gallery、原生样册与反例）；S12 在 S11 后继续，不把 S10 技术回归冒充独立创作评测。
 - 提交：本记录所在的 `S10:` 提交（见 git log）。
+
+
+### S7 · 全页补验收与构图纠正 · 完成 · 2026-10-22
+
+- 重新打开的原因：旧记录标为完成，但审稿只抽看部分页面，且以公有领域照片替代了明确要求的 CC0。补审期间用户进一步指出“侧边线 + 浅底色”的引文像网页提示框、新作者源仍沿用旧 demo；旧视觉判断标准偏低。本记录补充并纠正旧结论，不改写历史记录。
+- 改动范围（仅 S7 归属与交接）：
+  - `families/campus/README.md`：明确家族原语与页面构图分工，示例不是整页模板；线/色面需有内容用途，不一概禁用。
+  - 两册 `book.html / book.css`、自然营英文版权文案及素材表/森林照片；`brief.md / page-plan.md / experience.md / design-revision.md`。
+  - 两册稳定 `.qa/visual-review.md` 入口、最终构建的 gate/visual-review、逐页栅格哈希、面对页拼图、前后证据和导出验证结果。
+- 可复制命令（仓库根目录，复用已有环境，不安装依赖）：
+  ```sh
+  export HB_CHROMIUM='/Users/apple/Library/Caches/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-mac-arm64/chrome-headless-shell'
+  export PYTHONPATH=/tmp/hb-editorial-test-deps
+  node hb/core/cli.mjs check dev/samples/native/product-brochure
+  node hb/core/cli.mjs check dev/samples/native/nature-camp
+  node hb/core/cli.mjs review dev/samples/native/product-brochure --verdict deliverable --by 'Codex（作者全页复核，非独立评测）' --notes dev/samples/native/product-brochure/.qa/a9f9e48c6865/visual-review.md
+  node hb/core/cli.mjs review dev/samples/native/nature-camp --verdict deliverable --by 'Codex（作者全页复核，非独立评测）' --notes dev/samples/native/nature-camp/.qa/e1151e2c854d/visual-review.md
+  node hb/core/cli.mjs verify dev/samples/native/product-brochure
+  node hb/core/cli.mjs verify dev/samples/native/nature-camp
+  node hb/core/cli.mjs export dev/samples/native/product-brochure --name product-brochure-s7-revised
+  node hb/core/cli.mjs export dev/samples/native/nature-camp --name nature-camp-s7-revised
+  bash dev/tests/selftest.sh --quick
+  ```
+- 完成判定逐条结果：
+  - 家族颜色/字体/字号/网格/低层原语与打印安全变量、无整页模板：pass —— 复核 `families/campus/design.css`；整页 CSS 在样册中，家族 CSS 本轮未改，两个 project.json 的冻结 SHA256 均与各自文件一致。
+  - 两本真实材料样册、其中一本 ≥16 页中英且含真实 CC0：pass —— 产品册中文 12 页；自然营中文/英文各 16 页，九张真实照片中第 4 页为 SpessiG 的 CC0 森林照片（来源文件页及 revision、许可 URL、像素、哈希登记在 assets.json），另八张维持既有公有领域来源与“仅示意”声明。原“用 PD 代替 CC0”的偏离已关闭。
+  - S2–S4 与 S5：pass —— 产品册构建 `a9f9e48c6865`；自然营构建 `e1151e2c854d`。三个语言产物 render / measure / postflight / raster / coverage 全 pass，硬项 fail=0、unverified=0，verify 有效。
+  - 最终 PDF 全页栅格审稿：pass（作者复核）—— 共 44 页、19 对真实面对页、封面/封底及整册图。用户反馈后重排产品第 3/5/6/8 页与自然营第 3/5/15 页（中英），重看 10 张物理页及全部面对页；其余 34 页与此前逐页看过的版本栅格逐字节一致，`evidence/revision-parity.json` 保存前后哈希。不是抽查，不是独立人工评测，不评为优秀。
+  - 交付补充验证：pass —— 三个语言的正式 PDF 与审稿哈希一致；可编辑 PDF 扩充字体后无 Type 3 且逐页像素一致；离线 HTML 无外部请求且打印一致；两册源包在干净目录重建为相同构建、相同栅格。结果留在各最终 `.qa/<id>/evidence/delivery.json`，交付物在 `out/*-s7-revised/`（不将大体积交付物入库）。
+  - quick 自检：pass —— 34 份活跃文档链接、4 个 Python 契约测试、语法及静态项；日志 `hb-native-selftest.b9yNCu`。quick 中浏览器项明确 unverified，本条不代替上述真实样册检查/导出。
+- 实际修复与证据：
+  - 产品封面眉标在 DOM 测量正常但最终 PDF 贴在媒体页原点；改静态网格元信息组，PDF 首字由 (0.529, 0.620)mm 回到 (22.527, 21.522)mm，安全内缩要求 11mm；`evidence/pdf-bounds.json` 与封面前后图。
+  - 产品第 12 页 Theme/Layout/Font 分组断行；封面显式标记历史文稿，旧命令不冒充当前指南。
+  - 用户截图对应第 6 页取消竖边和底色，五栏引文按语义断行；第 3/5 页取消引文装饰线，第 8 页改开放分类索引。自然营第 3 页取消提示框，第 5 页取消纸色卡/装饰大编号，第 15 页改四行并列问答。取舍与替代方向见各册 design-revision.md，前后图在 evidence/。
+  - 自然营第 14 页原照片横倒，作者 CSS 转正且保留原图；中英最终页复核照片主体与三栏安全信息，前后图留档。
+- 契约变更：无。开工时已有 `hb/core/pdfboxes.py`、`render.mjs`、`validate.py`、`references/contract.md` 四个未提交改动；逐字节保留、不纳入本次提交。本轮验证基于含这些预存改动的工作区，未单独验证仅含提交的干净 checkout。
+- 偏离计划的决定：无新增范围偏离；CC0 缺口已关闭。家族 v1/v1.1 保持冻结，没有为单本构图改动抬升家族版本；本项目视觉取舍不自动晋升全局经验。
+- 新增依赖：无。实际 Node 24.9.0 / Python 3.13.3 / Playwright 1.64.1 / 显式 Chromium 149.0.7827.55，复用既有 Python 依赖；Node 22 / Python 3.10 参考环境未实测（unverified）。
+- 未完成与已知问题：
+  - 本轮是制作执行者全页复核；用户尚未给修订版评分，未做独立人工校准/纸样或 Acrobat 实际改字，不计入 S12。
+  - 产品册原稿为旧引擎介绍，保留“五步但实际四项”等原稿疑点；自然营原稿沿用 2026 年 7 月与旧截止日、未提供具体报价/报名渠道。两者为排版样册，原稿问题在审稿中披露，不能直接当现行使用指南/招生承诺。
+  - 产品第 7 页、自然营第 7/10 页的留白作为章节/阅读停顿保留。样册没有联合跨缝全景图，不冒充已完成 S11 的全景案例。
+- 下一步从哪继续：S11，审计旧 gallery 与现有视觉资产；需有可解释的内容/构图判断和反例，不把本轮作者自评或示例造型当作通用优秀标准。S12 仍未开始。
+- 提交：本记录所在的 `S7:` 补验收提交（见 git log）。

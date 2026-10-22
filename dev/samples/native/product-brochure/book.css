@@ -1,10 +1,12 @@
 /* 《Handbook Designer 产品手册》专属构图（Campus 家族 v1）
-   主张：用六栏网格本身作为视觉母题。深色章节页是重拍，纸面页靠跨栏变化和线条组织层级。 */
+   主张：用六栏网格本身作为视觉母题。深色章节页是重拍，纸面页靠行长、字级与段落之间的距离组织层级。 */
 
 /* —— 封面：金色网格母题 + 大标题 —— */
 .cover .grid-motif { position: absolute; right: 0; top: calc(var(--bleed) + 18mm); width: 132mm; height: 92mm; }
-.cover .area { align-content: end; row-gap: 0; }
-.cover .kicker { position: absolute; top: 0; left: 0; color: var(--gold); }
+.cover .area { align-content: stretch; grid-template-rows: 1fr auto auto auto auto; row-gap: 0; }
+.cover .cover-meta { align-self: start; }
+.cover .kicker { color: var(--gold); }
+.cover .sample-context { margin-top: var(--s1); font-size: var(--fs-aux); line-height: 1.55; color: var(--on-dark-muted); }
 .cover-title { font: 700 58px/1.22 var(--font-display); color: #fff; letter-spacing: -.01em; margin-bottom: var(--s3); }
 .cover .subtitle { color: var(--gold); margin-bottom: var(--s3); }
 .cover-lead { font-size: 16px; line-height: 28px; color: var(--on-dark); margin-bottom: var(--s5); }
@@ -29,7 +31,7 @@
 /* —— 宣言 —— */
 .manifesto-title { margin-top: var(--s3); font: 700 44px/1.32 var(--font-display); text-wrap: initial; color: var(--primary); letter-spacing: -.01em; }
 .manifesto .lead { margin-top: var(--s4); }
-.manifesto-quote { margin-top: var(--s4); padding: var(--s3) var(--s3) var(--s3) 0; border-top: var(--rule) solid var(--primary); font-size: 20px; line-height: 1.7; }
+.manifesto-quote { margin: var(--s4) 0; font-size: 24px; line-height: 1.7; }
 .manifesto-body { margin-top: var(--s3); }
 
 /* —— 章节开篇（深色与纸面两种） —— */
@@ -51,22 +53,24 @@
 .layers-intro { margin-top: var(--s3); margin-bottom: var(--s4); color: var(--muted); }
 .layer .h3 { margin-bottom: var(--s1); color: var(--primary); }
 .layer-note { align-self: start; margin-top: 4px; }
-.layers-quote { margin: var(--s4) 0; padding: var(--s3) 0; border-top: var(--rule) solid var(--primary); border-bottom: var(--hair) solid var(--line); font-size: 24px; line-height: 1.55; }
+.layers-quote { margin: var(--s4) 0; max-width: 145mm; font-size: 28px; line-height: 1.65; }
 
 /* —— 阅读节拍：2+4 偏置导语，中段跨栏引语 —— */
 .rhythm .h1 { margin-top: var(--s2); }
 .rhythm-lead { margin-top: var(--s4); margin-bottom: var(--s2); }
-.rhythm-quote { margin: var(--s4) 0; padding: var(--s3) 0 var(--s3) var(--s3); border-left: 6px solid var(--gold); background: var(--paper-deep); font: 700 26px/1.55 var(--font-display); color: var(--primary); }
+.rhythm-quote { grid-column: 1 / span 5; margin: var(--s4) 0; font: 700 30px/1.65 var(--font-display); color: var(--ink); }
 .rhythm-quote cite { display: block; margin-top: var(--s2); font: 400 var(--fs-aux)/1.4 var(--font-latin); letter-spacing: .08em; color: var(--muted); font-style: normal; }
 
-/* —— 版式家族：三列卡片，两行 —— */
+/* —— 版式家族：两列分类索引；编号挂在文字外侧，不画卡片边界 —— */
 .families .h1 { margin-top: var(--s2); }
 .families .lead { margin-top: var(--s3); color: var(--muted); }
-.cards { margin-top: var(--s4); display: grid; grid-template-columns: repeat(3, 1fr); column-gap: var(--gutter); row-gap: var(--s4); }
-.card { border-top: var(--rule) solid var(--primary); padding-top: var(--s1); }
-.card-no { font: 600 40px/1.1 var(--font-num); color: var(--primary); margin: var(--s1) 0 var(--s1); }
-.card .h3 { font-size: 17px; line-height: 1.45; margin-bottom: var(--s1); }
-.card-text { font-size: 14px; line-height: 23px; color: var(--ink); }
+.cards { margin-top: var(--s4); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 10mm; row-gap: var(--s3); }
+.card { display: grid; grid-template-columns: 9mm minmax(0, 1fr); column-gap: 3mm; align-content: start; }
+.card > :not(.card-no) { grid-column: 2; }
+.card > .kicker { margin-bottom: var(--s1); }
+.card-no { grid-column: 1; grid-row: 1 / span 3; font: 600 23px/1 var(--font-num); color: var(--ochre); padding-top: 1px; }
+.card .h3 { font-size: 19px; line-height: 1.45; margin-bottom: var(--s1); }
+.card-text { font-size: 15px; line-height: 25px; color: var(--ink); }
 
 /* —— 新旧对照：3+3 同基线 —— */
 .compare .h1 { margin-top: var(--s2); }

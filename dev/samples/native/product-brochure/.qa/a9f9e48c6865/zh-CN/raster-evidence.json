@@ -1,0 +1,73 @@
+{
+  "build_id": "a9f9e48c6865",
+  "lang": "zh-CN",
+  "pdf_sha256": "4514efd813be4dd45c8aec43e7bfcb2ad4aa10e21803f38331f0e31df983db2f",
+  "raster_dpi": 110,
+  "pages": [
+    {
+      "page": 1,
+      "file": ".qa/a9f9e48c6865/zh-CN/raster/page-001.png",
+      "sha256": "381461c2dfdb4e4a7a1dbfde84244472080501807f15af8c45a92ee0ccdd34fe"
+    },
+    {
+      "page": 2,
+      "file": ".qa/a9f9e48c6865/zh-CN/raster/page-002.png",
+      "sha256": "10201a07197e9b46d66085c06287b8cc66b340e602b98e8aa1caebeae4e7dafa"
+    },
+    {
+      "page": 3,
+      "file": ".qa/a9f9e48c6865/zh-CN/raster/page-003.png",
+      "sha256": "5554723aa821e95c81a432886f64ecad4140d84a95a3f38921e0722bc6028c2b"
+    },
+    {
+      "page": 4,
+      "file": ".qa/a9f9e48c6865/zh-CN/raster/page-004.png",
+      "sha256": "f152eacd3a94863344a8ee1ddb5699aa5d28cd8b83915e09c5dd0e524f21130d"
+    },
+    {
+      "page": 5,
+      "file": ".qa/a9f9e48c6865/zh-CN/raster/page-005.png",
+      "sha256": "de5461dde510ac9d9e64c1f296772bb9da76b119a796da9dfee3bc6633b98bce"
+    },
+    {
+      "page": 6,
+      "file": ".qa/a9f9e48c6865/zh-CN/raster/page-006.png",
+      "sha256": "a4fe8138c7327c3421e2890c9004948497fb333935387037a54a5a51556dbda0"
+    },
+    {
+      "page": 7,
+      "file": ".qa/a9f9e48c6865/zh-CN/raster/page-007.png",
+      "sha256": "a79f1b5d4077f41294e7717f587b9043b27fdbc02c61d399da68afe6f1dd0bd4"
+    },
+    {
+      "page": 8,
+      "file": ".qa/a9f9e48c6865/zh-CN/raster/page-008.png",
+      "sha256": "c02f86575dd9ef8ca708b1c187010a7a347ce230d595c58ee39a52496c30dd8a"
+    },
+    {
+      "page": 9,
+      "file": ".qa/a9f9e48c6865/zh-CN/raster/page-009.png",
+      "sha256": "2e260836ee0030bb0d93f95c31f10be857d302587e7781f4bf33272c1b526b51"
+    },
+    {
+      "page": 10,
+      "file": ".qa/a9f9e48c6865/zh-CN/raster/page-010.png",
+      "sha256": "ff27ac1f9939fd33c3684fcf47099fd239e3208348d895e9440f2d8a6bfcb756"
+    },
+    {
+      "page": 11,
+      "file": ".qa/a9f9e48c6865/zh-CN/raster/page-011.png",
+      "sha256": "31b9fb134255b9997fb9a1d2a43ed7b60f8d0ff10689f83c6f31aa9911fa6ced"
+    },
+    {
+      "page": 12,
+      "file": ".qa/a9f9e48c6865/zh-CN/raster/page-012.png",
+      "sha256": "b548899d7b1908f945d1d38460feaf14949c0dd2a9df534a4fd0f48c4117e727"
+    }
+  ],
+  "facing_groups": [
+    ".qa/a9f9e48c6865/zh-CN/raster/review-groups/faces-01-03.png",
+    ".qa/a9f9e48c6865/zh-CN/raster/review-groups/faces-04-06.png",
+    ".qa/a9f9e48c6865/zh-CN/raster/review-groups/faces-07-07.png"
+  ]
+}

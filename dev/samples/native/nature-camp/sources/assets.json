@@ -1,59 +1,68 @@
 {
- "contract": 1,
- "assets": {
-  "coast-lighthouse": {
-   "file": "assets/images/coast-lighthouse.jpg",
-   "source": "Wikimedia Commons：File:Great blue heron at Yaquina Head (33033267258).jpg（https://commons.wikimedia.org/wiki/File:Great_blue_heron_at_Yaquina_Head_(33033267258).jpg）",
-   "license": "Public domain",
-   "credit": "BLM Oregon & Washington"
-  },
-  "sea-urchin": {
-   "file": "assets/images/sea-urchin.jpg",
-   "source": "Wikimedia Commons：File:Underwater life at Yaquina Head tide pools (40010898535).jpg（https://commons.wikimedia.org/wiki/File:Underwater_life_at_Yaquina_Head_tide_pools_(40010898535).jpg）",
-   "license": "Public domain",
-   "credit": "BLM Oregon & Washington"
-  },
-  "forest-meadow": {
-   "file": "assets/images/forest-meadow.jpg",
-   "source": "Wikimedia Commons：File:20220907-FS-R4-MLSNF-Mount Peale spruce fir forest (52695490220).jpg（https://commons.wikimedia.org/wiki/File:20220907-FS-R4-MLSNF-Mount_Peale_spruce_fir_forest_(52695490220).jpg）",
-   "license": "Public domain",
-   "credit": "Intermountain Region US Forest Service"
-  },
-  "fire-lookout": {
-   "file": "assets/images/fire-lookout.jpg",
-   "source": "Wikimedia Commons：File:20150803 Prescott NF, AZ R3 Spruce Mountain Lookout Tower & Picnic Site 001 (US Forest Service Photo) (48654899873).jpg（https://commons.wikimedia.org/wiki/File:20150803_Prescott_NF,_AZ_R3_Spruce_Mountain_Lookout_Tower_%26_Picnic_Site_001_(US_Forest_Service_Photo)_(48654899873).jpg）",
-   "license": "Public domain",
-   "credit": "Prescott National Forest (US Forest Service)"
-  },
-  "waterfall-moss": {
-   "file": "assets/images/waterfall-moss.jpg",
-   "source": "Wikimedia Commons：File:Clark Creek Waterfall, Olympic National Forest (22964586384).jpg（https://commons.wikimedia.org/wiki/File:Clark_Creek_Waterfall,_Olympic_National_Forest_(22964586384).jpg）",
-   "license": "Public domain",
-   "credit": "U.S. Forest Service – Pacific Northwest Region"
-  },
-  "clear-stream": {
-   "file": "assets/images/clear-stream.jpg",
-   "source": "Wikimedia Commons：File:Small Waterfall on Upper Santiam River, Willamette National Forest (23852194171).jpg（https://commons.wikimedia.org/wiki/File:Small_Waterfall_on_Upper_Santiam_River,_Willamette_National_Forest_(23852194171).jpg）",
-   "license": "Public domain",
-   "credit": "U.S. Forest Service – Pacific Northwest Region"
-  },
-  "milky-way-arch": {
-   "file": "assets/images/milky-way-arch.jpg",
-   "source": "Wikimedia Commons：File:Milky Way Over Rocky Mountain National Park (26367177284).jpg（https://commons.wikimedia.org/wiki/File:Milky_Way_Over_Rocky_Mountain_National_Park_(26367177284).jpg）",
-   "license": "Public domain",
-   "credit": "NPS/Jeremy M. White"
-  },
-  "telescope-night": {
-   "file": "assets/images/telescope-night.jpg",
-   "source": "Wikimedia Commons：File:Milky Way Rises (9514060980).jpg（https://commons.wikimedia.org/wiki/File:Milky_Way_Rises_(9514060980).jpg）",
-   "license": "Public domain",
-   "credit": "LassenNPS"
-  },
-  "autumn-leaves": {
-   "file": "assets/images/autumn-leaves.jpg",
-   "source": "Wikimedia Commons：File:Leaf on fern close up (36954847370).jpg（https://commons.wikimedia.org/wiki/File:Leaf_on_fern_close_up_(36954847370).jpg）",
-   "license": "Public domain",
-   "credit": "Superior National Forest"
+  "contract": 1,
+  "assets": {
+    "coast-lighthouse": {
+      "file": "assets/images/coast-lighthouse.jpg",
+      "source": "Wikimedia Commons：File:Great blue heron at Yaquina Head (33033267258).jpg（https://commons.wikimedia.org/wiki/File:Great_blue_heron_at_Yaquina_Head_(33033267258).jpg）",
+      "license": "Public domain",
+      "credit": "BLM Oregon & Washington"
+    },
+    "sea-urchin": {
+      "file": "assets/images/sea-urchin.jpg",
+      "source": "Wikimedia Commons：File:Underwater life at Yaquina Head tide pools (40010898535).jpg（https://commons.wikimedia.org/wiki/File:Underwater_life_at_Yaquina_Head_tide_pools_(40010898535).jpg）",
+      "license": "Public domain",
+      "credit": "BLM Oregon & Washington"
+    },
+    "fire-lookout": {
+      "file": "assets/images/fire-lookout.jpg",
+      "source": "Wikimedia Commons：File:20150803 Prescott NF, AZ R3 Spruce Mountain Lookout Tower & Picnic Site 001 (US Forest Service Photo) (48654899873).jpg（https://commons.wikimedia.org/wiki/File:20150803_Prescott_NF,_AZ_R3_Spruce_Mountain_Lookout_Tower_%26_Picnic_Site_001_(US_Forest_Service_Photo)_(48654899873).jpg）",
+      "license": "Public domain",
+      "credit": "Prescott National Forest (US Forest Service)"
+    },
+    "waterfall-moss": {
+      "file": "assets/images/waterfall-moss.jpg",
+      "source": "Wikimedia Commons：File:Clark Creek Waterfall, Olympic National Forest (22964586384).jpg（https://commons.wikimedia.org/wiki/File:Clark_Creek_Waterfall,_Olympic_National_Forest_(22964586384).jpg）",
+      "license": "Public domain",
+      "credit": "U.S. Forest Service – Pacific Northwest Region"
+    },
+    "clear-stream": {
+      "file": "assets/images/clear-stream.jpg",
+      "source": "Wikimedia Commons：File:Small Waterfall on Upper Santiam River, Willamette National Forest (23852194171).jpg（https://commons.wikimedia.org/wiki/File:Small_Waterfall_on_Upper_Santiam_River,_Willamette_National_Forest_(23852194171).jpg）",
+      "license": "Public domain",
+      "credit": "U.S. Forest Service – Pacific Northwest Region"
+    },
+    "milky-way-arch": {
+      "file": "assets/images/milky-way-arch.jpg",
+      "source": "Wikimedia Commons：File:Milky Way Over Rocky Mountain National Park (26367177284).jpg（https://commons.wikimedia.org/wiki/File:Milky_Way_Over_Rocky_Mountain_National_Park_(26367177284).jpg）",
+      "license": "Public domain",
+      "credit": "NPS/Jeremy M. White"
+    },
+    "telescope-night": {
+      "file": "assets/images/telescope-night.jpg",
+      "source": "Wikimedia Commons：File:Milky Way Rises (9514060980).jpg（https://commons.wikimedia.org/wiki/File:Milky_Way_Rises_(9514060980).jpg）",
+      "license": "Public domain",
+      "credit": "LassenNPS"
+    },
+    "autumn-leaves": {
+      "file": "assets/images/autumn-leaves.jpg",
+      "source": "Wikimedia Commons：File:Leaf on fern close up (36954847370).jpg（https://commons.wikimedia.org/wiki/File:Leaf_on_fern_close_up_(36954847370).jpg）",
+      "license": "Public domain",
+      "credit": "Superior National Forest"
+    },
+    "forest-cc0": {
+      "file": "assets/images/forest-cc0.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Landscape_of_a_wild_forest.jpg",
+      "license": "CC0-1.0",
+      "credit": "SpessiG",
+      "source_revision": "1142609642",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "verified_on": "2026-10-22",
+      "sha256": "abc8ba3272ab641dff6bc2af4a1bca434b6e7f9567210e65037fccc4de3d6e8c",
+      "pixels": [
+        2800,
+        1867
+      ],
+      "provenance": "复用 dev/proofs/shared-photography/editorial/photos/woodland.jpg；SHA256 与原有 2026-10-20 来源记录一致；本轮重读 Commons 文件许可页确认 CC0。"
+    }
   }
- }
 }

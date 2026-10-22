@@ -1,0 +1,93 @@
+{
+  "build_id": "e1151e2c854d",
+  "lang": "zh-CN",
+  "pdf_sha256": "f1e01ddd1d80e50220016e9b59a4f1eb519330d947472adf55b7eb8c4eb47d86",
+  "raster_dpi": 110,
+  "pages": [
+    {
+      "page": 1,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-001.png",
+      "sha256": "05581630ec29079da8181b23a716a94bb563affa825b102e8af7f2a1f7fd401c"
+    },
+    {
+      "page": 2,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-002.png",
+      "sha256": "7decc153e50e2e661572333eb9e13558ba84734dbe2a40f72c8d65f5ee1bb497"
+    },
+    {
+      "page": 3,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-003.png",
+      "sha256": "db0c2f506704479f18c7a1d4519aed66df84b355d94a59b0409a21e6185e88b1"
+    },
+    {
+      "page": 4,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-004.png",
+      "sha256": "9ad76f65239f5d6ba4c83be4ca3707068f572b67357c68dd2d94821f28b5be46"
+    },
+    {
+      "page": 5,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-005.png",
+      "sha256": "544512a82cf7bacd487bcc282fb805709ad0add10129bb1ea05113d911ebbdf1"
+    },
+    {
+      "page": 6,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-006.png",
+      "sha256": "9f3b60128653221e617d05da4a05bf64834c054dceeb3855b26d3ca969af6067"
+    },
+    {
+      "page": 7,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-007.png",
+      "sha256": "4f74d4f8f27c887505635af8aa39877bd8823e47582e1c61bc8275b27b1a72e5"
+    },
+    {
+      "page": 8,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-008.png",
+      "sha256": "a94b40e0650c8ff2de65298be265a5738e11f97867f61bff5999c6124dcc6a13"
+    },
+    {
+      "page": 9,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-009.png",
+      "sha256": "9030720ab1bdc9c2277f1e78214f89bcb7747ba57dff14a5dd9d9f725e408dd2"
+    },
+    {
+      "page": 10,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-010.png",
+      "sha256": "8d8051b1d8e8e15e196693e4a22a08b5c34e619906bfeaaf376fc5e488571e1f"
+    },
+    {
+      "page": 11,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-011.png",
+      "sha256": "8e632e2b8ac683ffe7563a6b90122b28d6cca485e596e72753ef0d2de890e677"
+    },
+    {
+      "page": 12,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-012.png",
+      "sha256": "a6e34b17744692d8c08cd9d3faa8a37c50a7e79612c92f2625838968d320e9af"
+    },
+    {
+      "page": 13,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-013.png",
+      "sha256": "bc4304e4b565964900533f0bfa9951581c8c82a1e41af52245bd3a0f1982fe21"
+    },
+    {
+      "page": 14,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-014.png",
+      "sha256": "ef7e2f5117c022313d3891f7bbddc772c914186f4717c7c6060bc6fecfdbbb8b"
+    },
+    {
+      "page": 15,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-015.png",
+      "sha256": "046e20333d4e8feb1f94012b20e79bb7941c7ac1aaca1c6800b572ec9f7724d2"
+    },
+    {
+      "page": 16,
+      "file": ".qa/e1151e2c854d/zh-CN/raster/page-016.png",
+      "sha256": "a1435863154c86b4ea5248fdf4b7d97609cf8f779cde77be35a4ff567e4c7e06"
+    }
+  ],
+  "facing_groups": [
+    ".qa/e1151e2c854d/zh-CN/raster/review-groups/faces-01-03.png",
+    ".qa/e1151e2c854d/zh-CN/raster/review-groups/faces-04-06.png",
+    ".qa/e1151e2c854d/zh-CN/raster/review-groups/faces-07-09.png"
+  ]
+}

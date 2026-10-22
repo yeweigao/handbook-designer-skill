@@ -1,0 +1,167 @@
+{
+  "contract": 1,
+  "status": "delivered",
+  "name": "nature-camp-s7-revised",
+  "build_id": "e1151e2c854d",
+  "fingerprint": "e1151e2c854d1cd8ef10a2be4e5db4983b0244d57f0da7f9e2cd3ebc1847779a",
+  "tools": {
+    "contract": 1,
+    "playwright": "1.64.1",
+    "chromium": "149.0.7827.55",
+    "executable": "HB_CHROMIUM",
+    "node": "24",
+    "tool_hash": "27d7f967119f38e1b45e2a0b19d86c2b78d7235404bb7d486a7d12fc87b94589"
+  },
+  "visual_review": {
+    "verdict": "deliverable",
+    "by": "Codex（作者全页复核，非独立评测）",
+    "date": "2026-10-22T08:01:48.235Z"
+  },
+  "checks": [
+    {
+      "id": "pdf.zh-CN",
+      "status": "pass",
+      "severity": "hard",
+      "message": "正式 PDF 与验收记录一致",
+      "evidence": {}
+    },
+    {
+      "id": "editable.zh-CN",
+      "status": "pass",
+      "severity": "hard",
+      "message": "可编辑 PDF：字体扩充嵌入（非子集）、无 Type 3、逐页栅格与正式版一致",
+      "evidence": {
+        "replaced": 5,
+        "fonts": [
+          "Inter-Regular",
+          "Inter-SemiBold",
+          "NotoSansSC-Bold",
+          "NotoSansSC-Regular",
+          "NotoSerifSC-Bold"
+        ],
+        "glyphs": {
+          "Inter-SemiBold": 1146,
+          "NotoSerifSC-Bold": 8493,
+          "NotoSansSC-Bold": 8495,
+          "NotoSansSC-Regular": 8495,
+          "Inter-Regular": 1146
+        },
+        "not_replaced": [],
+        "bytes": 17666467,
+        "compare": "{\"pages_a\": 16, \"pages_b\": 16, \"diff\": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], \"worst\": 0.0}"
+      }
+    },
+    {
+      "id": "offline.zh-CN",
+      "status": "pass",
+      "severity": "hard",
+      "message": "离线 HTML：无外部请求、资源全部就绪、打印结果与正式 PDF 一致",
+      "evidence": {
+        "pages_a": 16,
+        "pages_b": 16,
+        "diff": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "worst": 0
+      }
+    },
+    {
+      "id": "pdf.en",
+      "status": "pass",
+      "severity": "hard",
+      "message": "正式 PDF 与验收记录一致",
+      "evidence": {}
+    },
+    {
+      "id": "editable.en",
+      "status": "pass",
+      "severity": "hard",
+      "message": "可编辑 PDF：字体扩充嵌入（非子集）、无 Type 3、逐页栅格与正式版一致",
+      "evidence": {
+        "replaced": 4,
+        "fonts": [
+          "Inter-Regular",
+          "Inter-SemiBold",
+          "NotoSansSC-Bold",
+          "NotoSerifSC-Bold"
+        ],
+        "glyphs": {
+          "Inter-SemiBold": 1146,
+          "NotoSerifSC-Bold": 8493,
+          "Inter-Regular": 1146,
+          "NotoSansSC-Bold": 8495
+        },
+        "not_replaced": [],
+        "bytes": 16155876,
+        "compare": "{\"pages_a\": 16, \"pages_b\": 16, \"diff\": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], \"worst\": 0.0}"
+      }
+    },
+    {
+      "id": "offline.en",
+      "status": "pass",
+      "severity": "hard",
+      "message": "离线 HTML：无外部请求、资源全部就绪、打印结果与正式 PDF 一致",
+      "evidence": {
+        "pages_a": 16,
+        "pages_b": 16,
+        "diff": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "worst": 0
+      }
+    },
+    {
+      "id": "source.rebuild",
+      "status": "pass",
+      "severity": "hard",
+      "message": "源文件包在干净目录重建：构建 ID 相同、验收通过、逐页栅格一致",
+      "evidence": {
+        "rebuilt_build": "e1151e2c854d"
+      }
+    }
+  ],
+  "files": {
+    "credits.md": "dbc2a3521c1a3ff8963e94cb26b3e232b39a242a6e9b123b0b19be428ec2c44d",
+    "nature-camp-s7-revised.en.editable.pdf": "01785f3aad87c340e957761a2a2b82a64c70a2a07559e4d3936083aa8b0ea996",
+    "nature-camp-s7-revised.en.html": "0b2ca7481f1ed421017102afd604227f2a773f390625be7388f61b06c2b1b33e",
+    "nature-camp-s7-revised.en.pdf": "336a35676b8f556f3505b075c5092912dc5b7edacb63c465985ae97a7c24f12d",
+    "nature-camp-s7-revised.en.sheet.png": "6bbe36ab9bce541b7b841dfc6a5e1c5a28eb10c80bbaaf9991df26021e855505",
+    "nature-camp-s7-revised.en.spreads.png": "ddfa949f15a8d5c4d4e38d067516d5d4791f4ec4d9002cd874ca9d44cec79f11",
+    "nature-camp-s7-revised.source.zip": "bc3bd02bae365823dc4050311fa597bd84fd84f6ee0999cea7c4b252a71528ed",
+    "nature-camp-s7-revised.zh-CN.editable.pdf": "0578c57a3f7a91bc5e77de377def8e1239942df48bbbcb9101b1c27ae020d238",
+    "nature-camp-s7-revised.zh-CN.html": "060a6c0de44fc0a583728074f237872da880833cf164a8081a38e71d2bfa8b86",
+    "nature-camp-s7-revised.zh-CN.pdf": "f1e01ddd1d80e50220016e9b59a4f1eb519330d947472adf55b7eb8c4eb47d86",
+    "nature-camp-s7-revised.zh-CN.sheet.png": "6698f4cb4f5c9b809767eb5ec9d82b53924b264f168a320b8c5853302bc6a1d4",
+    "nature-camp-s7-revised.zh-CN.spreads.png": "efef27ec862b66048b64e817e62a3f8115e33aa235f2ef7d83ad0b862577f870"
+  }
+}

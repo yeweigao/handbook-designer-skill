@@ -1,0 +1,15 @@
+{
+  "before": {
+    "text": "H",
+    "x_mm": 0.5291666666666666,
+    "y_mm": 0.6201170111111111
+  },
+  "after": {
+    "text": "H",
+    "x_mm": 22.526789394444442,
+    "y_mm": 21.52219963888889
+  },
+  "required_inset_mm": 11,
+  "status": "pass",
+  "measurement": "pdftotext -bbox on final PDF, first cover kicker glyph"
+}
