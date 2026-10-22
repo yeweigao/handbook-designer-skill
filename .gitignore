@@ -9,3 +9,9 @@ node_modules/
 .build/
 dev/fixtures/**/.qa/
 dev/.preview/
+dev/samples/native/*/.qa/**
+!dev/samples/native/*/.qa/*/
+!dev/samples/native/*/.qa/*/visual-review.md
+!dev/samples/native/*/.qa/*/visual-review.json
+!dev/samples/native/*/.qa/*/gate.json
+dev/samples/native/*/out/

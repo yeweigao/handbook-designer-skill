@@ -1,0 +1,107 @@
+/* 《Handbook Designer 产品手册》专属构图（Campus 家族 v1）
+   主张：用六栏网格本身作为视觉母题。深色章节页是重拍，纸面页靠跨栏变化和线条组织层级。 */
+
+/* —— 封面：金色网格母题 + 大标题 —— */
+.cover .grid-motif { position: absolute; right: 0; top: calc(var(--bleed) + 18mm); width: 132mm; height: 92mm; }
+.cover .area { align-content: end; row-gap: 0; }
+.cover .kicker { position: absolute; top: 0; left: 0; color: var(--gold); }
+.cover-title { font: 700 58px/1.22 var(--font-display); color: #fff; letter-spacing: -.01em; margin-bottom: var(--s3); }
+.cover .subtitle { color: var(--gold); margin-bottom: var(--s3); }
+.cover-lead { font-size: 16px; line-height: 28px; color: var(--on-dark); margin-bottom: var(--s5); }
+.cover .stats { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: var(--gutter); border-top: var(--hair) solid rgba(228, 198, 139, .55); padding-top: var(--s2); }
+.cover .stats .num { font-size: 44px; color: #fff; }
+.cover .stats dd { margin-top: var(--s1); color: var(--on-dark-muted); }
+
+/* —— 目录与规格 —— */
+.contents .h1 { margin-top: var(--s2); }
+.contents .lead { margin-top: var(--s3); color: var(--muted); }
+.toc { margin-top: var(--s4); border-top: var(--rule) solid var(--primary); }
+.toc li { display: grid; grid-template-columns: 26mm 1fr; column-gap: var(--gutter); padding: var(--s3) 0; border-bottom: var(--hair) solid var(--line); }
+.toc-no { font: 600 44px/1 var(--font-num); color: var(--primary); }
+.toc-latin { font: 600 var(--fs-aux)/1.4 var(--font-latin); letter-spacing: .1em; text-transform: uppercase; color: var(--ochre); margin-bottom: 4px; }
+.toc .h2 { font-size: 26px; line-height: 1.35; }
+.toc .subtitle { margin-top: 4px; font-size: 13px; }
+.specs { margin-top: var(--s4); display: grid; grid-template-columns: repeat(3, 1fr); column-gap: var(--gutter); }
+.specs > div { border-top: var(--hair) solid var(--line); padding-top: var(--s2); }
+.spec-num { font: 600 28px/1.1 var(--font-num); color: var(--primary); }
+.specs dd { margin-top: var(--s1); color: var(--muted); }
+
+/* —— 宣言 —— */
+.manifesto-title { margin-top: var(--s3); font: 700 44px/1.32 var(--font-display); text-wrap: initial; color: var(--primary); letter-spacing: -.01em; }
+.manifesto .lead { margin-top: var(--s4); }
+.manifesto-quote { margin-top: var(--s4); padding: var(--s3) var(--s3) var(--s3) 0; border-top: var(--rule) solid var(--primary); font-size: 20px; line-height: 1.7; }
+.manifesto-body { margin-top: var(--s3); }
+
+/* —— 章节开篇（深色与纸面两种） —— */
+.chapter .area { align-content: end; }
+.chapter-no { font-size: 168px; margin-bottom: var(--s4); }
+.on-dark .chapter-no { color: var(--gold); }
+.chapter .kicker { margin-bottom: var(--s2); }
+.chapter-latin { font: 600 22px/1.3 var(--font-latin); color: var(--on-dark-muted); margin-bottom: var(--s1); }
+.chapter-title { margin-bottom: var(--s2); }
+.chapter .subtitle { margin-bottom: var(--s4); }
+.chapter-lead { color: var(--on-dark); }
+.chapter-paper { background: var(--paper); }
+.chapter-paper .chapter-no { color: var(--primary); }
+.chapter-paper::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: calc(var(--bleed) + 108mm); background: var(--paper-deep); }
+.chapter-paper .chapter-lead { color: var(--ink); }
+
+/* —— 三层分工：4+2 主文与旁注 —— */
+.layers .h1 { margin-top: var(--s2); }
+.layers-intro { margin-top: var(--s3); margin-bottom: var(--s4); color: var(--muted); }
+.layer .h3 { margin-bottom: var(--s1); color: var(--primary); }
+.layer-note { align-self: start; margin-top: 4px; }
+.layers-quote { margin: var(--s4) 0; padding: var(--s3) 0; border-top: var(--rule) solid var(--primary); border-bottom: var(--hair) solid var(--line); font-size: 24px; line-height: 1.55; }
+
+/* —— 阅读节拍：2+4 偏置导语，中段跨栏引语 —— */
+.rhythm .h1 { margin-top: var(--s2); }
+.rhythm-lead { margin-top: var(--s4); margin-bottom: var(--s2); }
+.rhythm-quote { margin: var(--s4) 0; padding: var(--s3) 0 var(--s3) var(--s3); border-left: 6px solid var(--gold); background: var(--paper-deep); font: 700 26px/1.55 var(--font-display); color: var(--primary); }
+.rhythm-quote cite { display: block; margin-top: var(--s2); font: 400 var(--fs-aux)/1.4 var(--font-latin); letter-spacing: .08em; color: var(--muted); font-style: normal; }
+
+/* —— 版式家族：三列卡片，两行 —— */
+.families .h1 { margin-top: var(--s2); }
+.families .lead { margin-top: var(--s3); color: var(--muted); }
+.cards { margin-top: var(--s4); display: grid; grid-template-columns: repeat(3, 1fr); column-gap: var(--gutter); row-gap: var(--s4); }
+.card { border-top: var(--rule) solid var(--primary); padding-top: var(--s1); }
+.card-no { font: 600 40px/1.1 var(--font-num); color: var(--primary); margin: var(--s1) 0 var(--s1); }
+.card .h3 { font-size: 17px; line-height: 1.45; margin-bottom: var(--s1); }
+.card-text { font-size: 14px; line-height: 23px; color: var(--ink); }
+
+/* —— 新旧对照：3+3 同基线 —— */
+.compare .h1 { margin-top: var(--s2); }
+.compare .lead { margin-top: var(--s3); color: var(--muted); }
+.cmp { margin-top: var(--s4); display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--gutter); }
+.cmp-head { padding-bottom: var(--s1); border-bottom: var(--rule) solid var(--primary); font-weight: 700; }
+.cmp-head.old { color: var(--muted); }
+.cmp-head.new { color: var(--primary); }
+.cmp-cell { padding: var(--s2) 0 var(--s3); border-bottom: var(--hair) solid var(--line); }
+.cmp-label { color: var(--ochre); font-weight: 700; }
+.cmp-title { margin: 4px 0 var(--s1); font: 700 18px/1.5 var(--font-body); word-break: keep-all; text-wrap: balance; }
+.cmp-cell.old .cmp-title { color: var(--muted); }
+.cmp-cell.new .cmp-title { color: var(--primary); }
+.cmp-text { font-size: 14px; line-height: 23px; }
+.cmp-cell.old .cmp-text { color: var(--muted); }
+.cmp-foot { margin-top: var(--s2); }
+
+/* —— 五步流程：竖向脊线 —— */
+.workflow .h1 { margin-top: var(--s2); }
+.workflow .lead { margin-top: var(--s3); color: var(--muted); }
+.steps { margin-top: var(--s4); position: relative; }
+.steps::before { content: ""; position: absolute; left: 31mm; top: 6px; bottom: 6px; width: 2px; background: var(--primary); }
+.steps .step { grid-template-columns: 28mm 1fr; column-gap: 9mm; padding-bottom: var(--s4); position: relative; }
+.steps .step::after { content: ""; position: absolute; left: calc(31mm - 5px); top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--paper); border: 2px solid var(--primary); box-sizing: border-box; }
+.steps .step-no { font-size: var(--fs-key); }
+.steps .h3 { color: var(--primary); margin-bottom: var(--s1); }
+
+/* —— 上手 —— */
+.start-title { margin-top: var(--s3); font-size: 44px; line-height: 1.32; text-wrap: initial; }
+.start .subtitle { margin-top: var(--s2); }
+.start-lead { margin-top: var(--s3); }
+.commands { margin-top: var(--s4); padding: var(--s3); background: var(--primary); color: var(--on-dark); }
+.commands .kicker { color: var(--gold); }
+.commands .h3 { color: #fff; margin: 4px 0 var(--s2); }
+.cmd { font-size: 13px; line-height: 1.9; color: var(--on-dark); border-top: var(--hair) solid rgba(255, 255, 255, .18); padding-top: 4px; }
+.themes { margin-top: var(--s4); }
+.themes .h3 { margin: 4px 0 var(--s2); color: var(--primary); }
+.themes li { padding: var(--s1) 0; border-top: var(--hair) solid var(--line); }
