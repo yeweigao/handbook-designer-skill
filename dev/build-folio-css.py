@@ -4,11 +4,13 @@ import argparse
 import html
 import importlib.util
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PARTS = ["families/folio/tokens.css", "families/core/base.css",
-         "families/core/layouts.css", "families/core/atoms.css"]
+         "families/core/layouts.css", "families/core/components.css",
+         "families/core/variations.css", "families/core/atoms.css"]
 
 
 def outputs():
@@ -22,6 +24,14 @@ def outputs():
     catalog = json.loads((ROOT / "dev/folio-css/catalog.json").read_text(encoding="utf-8"))
     catalog["version"] = json.loads((ROOT / "families/folio/family.json").read_text())["version"]
     catalog["components"] += json.loads((ROOT / "dev/folio-css/business-recipes.json").read_text())["components"]
+    catalog["components"] += json.loads((ROOT / "dev/folio-css/swiss-recipes.json").read_text())["components"]
+    system = json.loads((ROOT / "dev/folio-css/system-recipes.json").read_text())
+    # `variations.css` is the layer name; the catalog groups those recipes under
+    # `expressions`. Accept either key so a recipe filed under the CSS layer name
+    # is never dropped silently.
+    for section in ("atoms", "layouts", "components", "expressions", "variations"):
+        target = "expressions" if section == "variations" else section
+        catalog.setdefault(target, []).extend(system.get(section, []))
     module_spec = importlib.util.spec_from_file_location("folio_charts", ROOT / "hb/core/charts.py")
     charts = importlib.util.module_from_spec(module_spec)
     module_spec.loader.exec_module(charts)
@@ -37,17 +47,38 @@ def outputs():
             "html": '<figure>' + svg + '<figcaption class="fl-caption fl-mt-2">' + html.escape(example["caption"]) + '</figcaption></figure>',
         })
     ids = []
-    for section in ("layouts", "components"):
+    for section in ("atoms", "layouts", "components", "expressions"):
         for entry in catalog[section]:
             for key in ("id", "title", "category", "description", "grammar", "classes", "limits", "html"):
                 if key not in entry:
                     raise ValueError(f"{section}: missing {key}")
             ids.append(entry["id"])
+            entry["specimenPage"] = {"id": entry["id"], "label": entry["title"]}
     if len(ids) != len(set(ids)):
         raise ValueError("Catalog IDs must be unique across layouts and components")
+    # Public class inventory prevents new CSS capabilities disappearing from the showcase.
+    selectors = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+    public = set(re.findall(r"\.(fl-[A-Za-z0-9_-]+)", selectors))
+    class_map = {name: [] for name in sorted(public)}
+    for section in ("atoms", "layouts", "components", "expressions"):
+        for entry in catalog[section]:
+            named = set(entry["classes"])
+            unknown = named - public
+            if unknown:
+                raise ValueError(f"{entry['id']}: unknown public classes {sorted(unknown)}")
+            for name in named:
+                class_map[name].append(entry["id"])
+    missing = [name for name, entries in class_map.items() if not entries]
+    if missing:
+        raise ValueError("Public CSS missing catalog coverage: " + ", ".join(missing))
+    inventory = {"version": catalog["version"], "class_count": len(class_map),
+                 "entry_count": len(ids), "classes": class_map,
+                 "scope": "All public fl-* classes indexed by API group; representative compositions, not every permutation."}
+    catalog["coverage"] = {"classes": len(class_map), "entries": len(ids)}
     js = "// Generated from catalog.json. Plain script also works when opened as a local file.\n"
     js += "window.FOLIO_CATALOG = " + json.dumps(catalog, ensure_ascii=False, indent=2) + ";\n"
-    return {"families/folio/design.css": css, "dev/folio-css/catalog.js": js}
+    return {"families/folio/design.css": css, "dev/folio-css/catalog.js": js,
+            "dev/folio-css/api-coverage.json": json.dumps(inventory, ensure_ascii=False, indent=2) + "\n"}
 
 
 def main():

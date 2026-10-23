@@ -1,0 +1,75 @@
+/* Folio expressive tools · explicit choices, never default page decoration.
+   Use content roles for complete, readable titles. Cropped or image-filled duplicate
+   lettering needs a readable equivalent and data-role="deco" aria-hidden="true".
+   CSS filters/blends simulate an appearance; they do not create spot inks or separations.
+   Atoms follow and can override each default. No Type 3 text-stroke effects. */
+
+/* Oversized type anchored to a sheet edge. The runtime owns the page clip. */
+:where(.fl-crop) {
+  --fl-crop-offset: -.12em;
+  position: absolute; margin: 0; pointer-events: none; white-space: nowrap;
+  font-family: var(--fl-font-display); font-weight: var(--fl-weight-hero);
+  line-height: 1; letter-spacing: var(--fl-tracking-tighter);
+}
+:where(.fl-crop-top) { top: var(--fl-crop-offset); }
+:where(.fl-crop-bottom) { bottom: var(--fl-crop-offset); }
+:where(.fl-crop-left) { left: var(--fl-crop-offset); }
+:where(.fl-crop-right) { right: var(--fl-crop-offset); }
+
+/* A hard-edged type band. Compose with any surface atom for its palette. */
+:where(.fl-band) {
+  --fl-bg: var(--fl-dark); --fl-text: var(--fl-on-dark);
+  --fl-text-muted: var(--fl-on-dark-muted); --fl-text-accent: var(--fl-on-dark-accent);
+  --fl-stroke: var(--fl-line-dark);
+  display: block; width: fit-content; max-width: 100%;
+  padding: .12em .18em; background: var(--fl-bg); color: var(--fl-text);
+}
+/* Optional duplicate lettering used as an image. Local URL belongs to author CSS. */
+:where(.fl-type-photo) {
+  width: fit-content; max-width: 100%;
+  font-family: var(--fl-font-display); font-weight: var(--fl-weight-hero);
+  line-height: 1; letter-spacing: var(--fl-tracking-tighter);
+  background-color: var(--fl-text); background-repeat: no-repeat; background-size: cover;
+  background-position: var(--fl-focus-x, 50%) var(--fl-focus-y, 50%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+:where(.fl-duotone) { background: var(--fl-duotone, var(--fl-accent)); isolation: isolate; }
+:where(.fl-duotone > img) { filter: grayscale(1) contrast(var(--fl-duotone-contrast, 1.1)); mix-blend-mode: multiply; }
+:where(.fl-overprint) { mix-blend-mode: multiply; }
+:where(.fl-rotate-6) { transform: rotate(6deg); }
+:where(.fl-rotate-n6) { transform: rotate(-6deg); }
+
+/* A small bounded generative field: three inks, a five-cell colour cycle.
+   Empty decorative cells only; counts/values are not encoded by random shapes. */
+:where(.fl-programme) {
+  --fl-programme-ink: var(--fl-text);
+  --fl-programme-accent: var(--fl-text-accent);
+  --fl-programme-signal: var(--fl-signal);
+  display: grid;
+  grid-template-columns: repeat(var(--fl-programme-cols, 6), minmax(0, 1fr));
+  gap: var(--fl-programme-gap, 0px);
+}
+:where(.fl-programme > *) { aspect-ratio: 1; min-width: 0; background: var(--fl-programme-ink); }
+:where(.fl-programme > :nth-child(5n+2)) { background: var(--fl-programme-accent); }
+:where(.fl-programme > :nth-child(5n+4)) { background: var(--fl-programme-signal); }
+:where(.fl-programme > :nth-child(7n+3)) { border-radius: 0 100% 0 0; }
+:where(.fl-programme > :nth-child(7n+5)) { border-radius: 50%; }
+
+/* A route marker always carries a letter/number as well as colour. */
+:where(.fl-bullet) {
+  display: inline-grid; place-items: center; inline-size: 1.5em; block-size: 1.5em;
+  border-radius: 50%; vertical-align: middle;
+  background: var(--fl-bullet, var(--fl-text)); color: var(--fl-bullet-text, var(--fl-bg));
+  font-family: var(--fl-font-label); font-weight: var(--fl-weight-body-strong); line-height: 1;
+}
+:where(.fl-sign) { display: flex; flex-wrap: wrap; align-items: center; gap: var(--fl-space-2); padding: var(--fl-space-3); }
+/* Edge reach from a direct fl-area child. Padding keeps content in the safe area. */
+:where(.fl-bleed-right) {
+  --fl-reach-right: calc(var(--bleed, 0px) + max(var(--safe-right, 0px), var(--fl-page-right, var(--fl-margin-outer))));
+  width: auto; max-width: none; margin-right: calc(-1 * var(--fl-reach-right)); padding-right: var(--fl-reach-right);
+}
+:where(.fl-bleed-left) {
+  --fl-reach-left: calc(var(--bleed, 0px) + max(var(--safe-left, 0px), var(--fl-page-left, var(--fl-margin-inner))));
+  width: auto; max-width: none; margin-left: calc(-1 * var(--fl-reach-left)); padding-left: var(--fl-reach-left);
+}

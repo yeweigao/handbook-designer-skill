@@ -96,6 +96,13 @@ export function collectInPage(cfg) {
       const range = document.createRange();
       range.selectNodeContents(t);
       const rects = [...range.getClientRects()].filter((r) => r.width > 0.1 && r.height > 0.1).map(rel);
+      // Chrome 的 Range 矩形是字体内容盒（ascent+descent），通常高过 CSS 行距，紧行距的大字号
+      // 会因此「越界」。叠放与对比度按排版行框判断：把每个行矩形收缩到 line-height 高度，
+      // 越界与安全区仍用原始字形盒，保持保守。
+      const lh = parseFloat(cs.lineHeight);
+      const boxes = Number.isFinite(lh) && lh > 0
+        ? rects.map((r) => (r.h > lh + 0.3 ? { x: r.x, y: r.y + (r.h - lh) / 2, w: r.w, h: lh } : r))
+        : rects;
       const color = parseColor(cs.color);
       const fill = parseColor(cs.webkitTextFillColor || cs.color);
       const opacity = effOpacity(el);
@@ -108,11 +115,12 @@ export function collectInPage(cfg) {
       if (content && onPage) contentVisible.set(content, true);
       const owner = content || el;
       if (!units.has(owner)) {
-        units.set(owner, { el: owner, target: targetOf(owner), role: roleOf(owner), rects: [], allow: allowOf(owner),
+        units.set(owner, { el: owner, target: targetOf(owner), role: roleOf(owner), rects: [], boxes: [], allow: allowOf(owner),
           complex: complexOf(owner), minPx: Infinity, sample: '' });
       }
       const u = units.get(owner);
       u.rects.push(...rects);
+      u.boxes.push(...boxes);
       u.sample = (u.sample + t.textContent.trim()).slice(0, 40);
       const tag = el.tagName.toLowerCase();
       const floorRole = (tag === 'sup' || tag === 'sub' || el.closest('sup,sub')) ? 'aux' : (role === 'display' ? 'body' : role);
@@ -121,7 +129,7 @@ export function collectInPage(cfg) {
         if (px + 0.01 < minPx) u.small = { px: r2(px), min: minPx, role: floorRole };
         if (!el.hasAttribute('data-hbm-i')) el.setAttribute('data-hbm-i', String(nodeIndex++));
         textNodes.push({ page: pi, pageId, i: Number(el.getAttribute('data-hbm-i')), target: u.target, role,
-          rects, color: fill && fill.a > 0 ? fill : color, opacity,
+          rects: boxes, color: fill && fill.a > 0 ? fill : color, opacity,
           gradientText: cs.backgroundClip === 'text' || cs.webkitBackgroundClip === 'text',
           complex: u.complex, text: t.textContent });
       }
@@ -225,7 +233,7 @@ export function collectInPage(cfg) {
         if (a.complex || b.complex || a.el.contains(b.el) || b.el.contains(a.el)) continue;
         if (a.allow.has(b.target) || b.allow.has(a.target)) continue;
         let hit = null;
-        for (const ra of a.rects) { for (const rb of b.rects) { const x = inter(ra, rb); if (x && x.area > 2 && Math.min(x.w, x.h) > 1) { hit = x; break; } } if (hit) break; }
+        for (const ra of a.boxes) { for (const rb of b.boxes) { const x = inter(ra, rb); if (x && x.area > 2 && Math.min(x.w, x.h) > 1) { hit = x; break; } } if (hit) break; }
         if (hit) {
           add({ id: 'overlap.text', status: 'fail', severity: 'hard', page: pageId, target: a.target,
             evidence: { with: b.target, overlap_mm: [pxToMm(hit.w), pxToMm(hit.h)] },
@@ -266,7 +274,7 @@ export function collectInPage(cfg) {
         if (!deco) {
           for (const u of list) {
             if (u.complex || u.allow.has(target) || u.el.contains(el)) continue;
-            const x = u.rects.map((r) => inter(r, R)).find((v) => v && v.area > 2);
+            const x = u.boxes.map((r) => inter(r, R)).find((v) => v && v.area > 2);
             if (x) {
               add({ id: 'overlap.image', status: 'fail', severity: 'hard', page: pageId, target: u.target,
                 evidence: { image: target }, message: `文字「${u.sample}」压在图片 ${target} 上（有意叠放请写 data-overlap="${target}"）` });

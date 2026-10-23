@@ -1,0 +1,108 @@
+{
+  "chart-bar": {
+    "type": "bar",
+    "labels": [
+      "服务 A",
+      "服务 B",
+      "服务 C",
+      "服务 D"
+    ],
+    "values": [
+      48,
+      35,
+      28,
+      17
+    ],
+    "id": "chart-bar",
+    "title": "排名比较 · 直接标值",
+    "width": 640,
+    "height": 340
+  },
+  "chart-line": {
+    "type": "line",
+    "labels": [
+      "2022",
+      "2023",
+      "2024",
+      "2025"
+    ],
+    "series": [
+      {
+        "name": "收入 / 百万元",
+        "values": [
+          72,
+          86,
+          100,
+          128
+        ]
+      }
+    ],
+    "id": "chart-line",
+    "title": "经营趋势 · 连续期间",
+    "width": 640,
+    "height": 340
+  },
+  "chart-stacked": {
+    "type": "stacked",
+    "labels": [
+      "2024",
+      "2025"
+    ],
+    "series": [
+      {
+        "name": "订阅",
+        "values": [
+          45,
+          55
+        ]
+      },
+      {
+        "name": "项目",
+        "values": [
+          35,
+          30
+        ]
+      },
+      {
+        "name": "其他",
+        "values": [
+          20,
+          15
+        ]
+      }
+    ],
+    "id": "chart-stacked",
+    "title": "构成比较 · 每组共 100%",
+    "width": 640,
+    "height": 340
+  },
+  "chart-waterfall": {
+    "type": "waterfall",
+    "start": 25,
+    "start_label": "上年利润",
+    "changes": [
+      {
+        "label": "收入贡献",
+        "value": 12
+      },
+      {
+        "label": "效率改善",
+        "value": 4
+      },
+      {
+        "label": "研发投入",
+        "value": -6
+      },
+      {
+        "label": "其他成本",
+        "value": -3
+      }
+    ],
+    "end_label": "本年利润",
+    "expected_total": 32,
+    "id": "chart-waterfall",
+    "title": "瀑布图 · 解释增减",
+    "width": 640,
+    "height": 340
+  }
+}

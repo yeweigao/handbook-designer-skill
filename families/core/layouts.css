@@ -209,3 +209,58 @@
 :where(.fl-l-typographic > .fl-l-title) { grid-column: 1 / -1; }
 :where(.fl-l-typographic > .fl-l-aside) { grid-column: 1 / span 2; }
 :where(.fl-l-typographic > .fl-l-main) { grid-column: 3 / span 4; }
+
+/* Swiss photography and type relationships ─────────────────────
+   Sachfotografie: the photograph is a fact, shown edge to edge or cut by a hard
+   horizontal line. These layouts add no plate, shadow, radius or scrim. */
+
+/* Photograph across the top edge (Bild oben, Schrift unten). .fl-l-copy also
+   receives .fl-area and starts one baseline below the image. */
+:where(.fl-l-bleed-top) { position: absolute; inset: 0; }
+:where(.fl-l-bleed-top > .fl-l-photo) {
+  --fl-frame-position: absolute; --fl-ratio: auto;
+  position: absolute; left: 0; right: 0; top: 0;
+  height: var(--fl-image-height, 58%);
+  aspect-ratio: auto;
+}
+:where(.fl-l-bleed-top > .fl-l-copy) { top: max(calc(var(--fl-image-height, 58%) + var(--fl-space-3)), calc(var(--bleed, 0px) + max(var(--safe-top, 0px), var(--fl-margin-top)))); }
+
+/* Full-sheet photograph. .fl-l-copy (+ .fl-area) keeps type in the safe area;
+   choose its position from the actual picture. .fl-l-caption is an optional bar on
+   the bottom media edge whose text still starts on the page margins. Declare
+   data-bleed on the photo and data-overlap on every text group over it. */
+:where(.fl-l-bleed-full) { position: absolute; inset: 0; }
+:where(.fl-l-bleed-full > .fl-l-photo) {
+  --fl-frame-position: absolute; --fl-ratio: auto;
+  position: absolute; inset: 0;
+  aspect-ratio: auto;
+}
+:where(.fl-l-bleed-full > .fl-l-caption) {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding-top: var(--fl-space-2);
+  padding-bottom: calc(var(--bleed, 0px) + max(var(--safe-bottom, 0px), var(--fl-space-3)));
+  padding-left: calc(var(--bleed, 0px) + max(var(--safe-left, 0px), var(--fl-page-left, var(--fl-margin-inner))));
+  padding-right: calc(var(--bleed, 0px) + max(var(--safe-right, 0px), var(--fl-page-right, var(--fl-margin-outer))));
+}
+
+/* Horizontal chronology on one shared axis: equal tracks, DOM order = time order.
+   The axis itself is the .fl-axis component or a rule atom. */
+:where(.fl-l-timeline) {
+  display: grid;
+  grid-template-columns: repeat(var(--fl-timeline-count, 4), minmax(0, 1fr));
+  column-gap: var(--fl-gutter);
+  align-items: start;
+}
+:where(.fl-l-timeline > .fl-l-item) { display: flex; flex-direction: column; gap: var(--fl-space-1); min-width: 0; }
+:where(.fl-l-timeline > .fl-l-full) { grid-column: 1 / -1; }
+
+/* Stair typography (Treppe): each child steps one six-column pitch to the right,
+   in DOM order. Override a single step with style="--fl-step:3". Steps never
+   push text beyond the container: each line keeps the remaining width. */
+:where(.fl-l-stair) { display: flex; flex-direction: column; gap: var(--fl-stair-gap, 0px); }
+:where(.fl-l-stair > *) { margin-inline-start: calc(var(--fl-step, 0) * (100% + var(--fl-gutter)) / 6); min-width: 0; }
+:where(.fl-l-stair > :nth-child(2)) { --fl-step: 1; }
+:where(.fl-l-stair > :nth-child(3)) { --fl-step: 2; }
+:where(.fl-l-stair > :nth-child(4)) { --fl-step: 3; }
+:where(.fl-l-stair > :nth-child(5)) { --fl-step: 4; }
+:where(.fl-l-stair > :nth-child(n+6)) { --fl-step: 5; }

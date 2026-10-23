@@ -2,7 +2,7 @@
 
 > 说明性文档，不是新规则来源。硬约束仍以 `references/contract.md` + `hb/core/validate.py` 为准；
 > 可读性阈值以 `hb/core/measure.mjs` 为准；家族职责边界以 `dev/maintenance.md` 的「每条规则一个主人」为准。
-> 本文只解释**结构性写法**与**为什么这样分层**。当前推荐家族是 `families/folio/`（Folio CSS 1.0.0），
+> 本文只解释**结构性写法**与**为什么这样分层**。当前推荐家族是 `families/folio/`（Folio CSS 2.2.0），
 > `families/campus/` 保留为历史方案；两者的结构差异见第九节。
 
 ## 一、家族 CSS 是什么，不是什么
@@ -35,6 +35,8 @@ families/licenses/  # family.json 里引用的 OFL 授权文本
 families/folio/tokens.css        # 颜色、字体、字号、行距、版心、间距、线宽
 families/core/base.css           # 作用域 reset、页面基底、镜像版心 .fl-area
 families/core/layouts.css        # 可选结构关系与具名子项 .fl-l-*
+families/core/components.css     # 可拆功能器件，默认零特异性
+families/core/variations.css     # 显式表现工具
 families/core/atoms.css          # 原子、排印角色、图片、页码
         ↓  python3 dev/build-folio-css.py
 families/folio/design.css        # 单文件分发，无 @import、无运行时依赖
@@ -65,8 +67,8 @@ families/folio/design.css        # 单文件分发，无 @import、无运行时�
 }
 ```
 
-- `fonts[].source` 是**可变字体**文件名，按 `$HB_FONT_DIR` → `~/.cache/handbook-designer/fonts` → `dev/fonts` 顺序查找；
-  `weights` 里的每个值会被 `instancer` 实例化成静态字体再子集化，输出到项目 `assets/fonts/<Family>-<weight>.ttf`。
+- `fonts[].source` 是可变或静态字体文件名，按 `$HB_FONT_DIR` → `~/.cache/handbook-designer/fonts` → `dev/fonts` 与用户字体目录顺序查找；
+  可变源按 `weights` 实例化成静态字体再子集化，静态源直接子集化，输出到项目 `assets/fonts/<Family>-<weight>.ttf`。
   这就是为什么家族可以声明多个字重却只提供一份源文件，也是为什么**排版里用到的字重必须在 `weights` 里列出**——否则运行时没有这个文件，检查会报字体回退。
 - `license` 指向 `families/licenses/` 里的文件，init 时复制进项目 `assets/fonts/`。新增字体必须补授权文本。
 - `canvas` 只是 init 时写进 `project.json` 的初值，之后以项目为准（家族改画布不影响老项目）。
@@ -213,12 +215,12 @@ p { text-wrap: pretty; }
 
 ## 九、Folio 换了什么写法
 
-| 维度 | Campus v1.1（单文件） | Folio 1.0.0（模块生成） |
+| 维度 | Campus v1.1（单文件） | Folio 2.2.0（模块生成） |
 |---|---|---|
 | 命名 | `.display/.h1/.on-dark` 等语义短名 | `.fl-*` 原子 + `--fl-*` 变量，原语与原子分开 |
-| 结构 | 一个文件按十段手写 | tokens → base → layouts → atoms 四段分别维护，拼接分发 |
+| 结构 | 一个文件按十段手写 | tokens → base → layouts → components → variations → atoms 分别维护，拼接分发 |
 | 版心 | `.area` 固定六栏 + 跨栏类 | `.fl-area` 只给几何；`.fl-grid`/`.fl-cols-*` 决定栏数，可 1/2/3/4/6/12 |
-| 间距 | 全部 28px 倍数 | 0/7/14/28/42/56/84，含 1.5 倍基线 |
+| 间距 | 全部 28px 倍数 | 0/7/14/28/42/56/84/112/168，含 1.5/4/6 倍基线 |
 | 作用域 | 直接作用于 `body/.page` | 一律 `:where(.page, .fl-scope)`，默认零特异性，原子可覆盖 |
 | 明暗面 | `.on-dark` 只改色，后代逐个覆盖 | `.fl-surface-*` 一次性重绑 `--fl-text/-muted/-accent/-stroke`，可嵌套回纸面 |
 | 左右页 | 只靠 `nth-of-type(even)` | 仍是 `nth-of-type(even)`，另加 `data-side="left|right"` 显式覆盖 |

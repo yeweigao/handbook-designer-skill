@@ -1,0 +1,1011 @@
+{
+  "catalog_version": "2.2.0",
+  "catalog_sha256": "d8c73e2774c765e909d1cca2cb83076ad25a6572ab4fcfe74c3c68ce93fa0161",
+  "entries": 91,
+  "page_count": 100,
+  "mapping": {
+    "a-surface": {
+      "section": "atoms",
+      "title": "表面与前景角色",
+      "pages": [
+        4
+      ],
+      "page_ids": [
+        "a-surface"
+      ],
+      "source_sha256": "f33ae2a49bd419924f9eb6c2b80a9a642889b64bb7b4ce55477183d9ff96dae1"
+    },
+    "a-profiles": {
+      "section": "atoms",
+      "title": "两种标题结构",
+      "pages": [
+        5
+      ],
+      "page_ids": [
+        "a-profiles"
+      ],
+      "source_sha256": "c8563af90d9a711c836b9534ea8e26b71726df39c969b53e7c0b51157e1edbe7"
+    },
+    "a-roles": {
+      "section": "atoms",
+      "title": "文字的阅读任务",
+      "pages": [
+        6
+      ],
+      "page_ids": [
+        "a-roles"
+      ],
+      "source_sha256": "736da3f496c81090d3400b5ea931603a75eb7f316f4de31098cbd360410803bc"
+    },
+    "a-font": {
+      "section": "atoms",
+      "title": "字体与真实字重",
+      "pages": [
+        7
+      ],
+      "page_ids": [
+        "a-font"
+      ],
+      "source_sha256": "eb0d435307c7b544c57996fff730eec09970aa86a54528ef1d581d78d30f450d"
+    },
+    "a-scale": {
+      "section": "atoms",
+      "title": "从图注到标题的字阶",
+      "pages": [
+        8
+      ],
+      "page_ids": [
+        "a-scale"
+      ],
+      "source_sha256": "a15c4188ed35a7a55e2193b2a939929d8b348fa3fe83e423a8d19bd6e9148105"
+    },
+    "a-large": {
+      "section": "atoms",
+      "title": "大字作为画面",
+      "pages": [
+        9
+      ],
+      "page_ids": [
+        "a-large"
+      ],
+      "source_sha256": "257092e46a4b8e822278718a85f28a0294bb18bf3e3ac51bd67c00da33d48ced"
+    },
+    "a-leading": {
+      "section": "atoms",
+      "title": "行距与字距",
+      "pages": [
+        10
+      ],
+      "page_ids": [
+        "a-leading"
+      ],
+      "source_sha256": "6ae018cdaab9c68c2bf14b9d28dbb9199ea57d5c07816255a9b9cfbdd452edec"
+    },
+    "a-alignment": {
+      "section": "atoms",
+      "title": "对齐、标点与数字",
+      "pages": [
+        11
+      ],
+      "page_ids": [
+        "a-alignment"
+      ],
+      "source_sha256": "079e0b2f3dd41abba85507894147fdc6500a12b48e5224ffcee6ad6df338c4e4"
+    },
+    "a-prose": {
+      "section": "atoms",
+      "title": "连续文流与行长",
+      "pages": [
+        12
+      ],
+      "page_ids": [
+        "a-prose"
+      ],
+      "source_sha256": "189756577562940736cde06ba62cd135dc6cd5877561c54f8a10fc94f3e0d445"
+    },
+    "a-grid": {
+      "section": "atoms",
+      "title": "共同的横向网格",
+      "pages": [
+        13
+      ],
+      "page_ids": [
+        "a-grid"
+      ],
+      "source_sha256": "b2525e53e2ead8ec9c4750fa109f1d64cf6b5c4542909a91eea6e5b9926c93e5"
+    },
+    "a-span": {
+      "section": "atoms",
+      "title": "横向跨度与起点",
+      "pages": [
+        14
+      ],
+      "page_ids": [
+        "a-span"
+      ],
+      "source_sha256": "8257a16f7064381af02e841b4e1e0f9acec18abc3daa502cef8015a89c4eef2b"
+    },
+    "a-rows": {
+      "section": "atoms",
+      "title": "二维模块网格",
+      "pages": [
+        15
+      ],
+      "page_ids": [
+        "a-rows"
+      ],
+      "source_sha256": "6c9240edbd518ecd581b42a2b4864e024f7fad308af0d264fa00f4b7442158b3"
+    },
+    "a-flex": {
+      "section": "atoms",
+      "title": "流动分组",
+      "pages": [
+        16
+      ],
+      "page_ids": [
+        "a-flex"
+      ],
+      "source_sha256": "6f5d6b13f4b66999264776d70e1ff0a28c7b4bba951ebe7e6536073770b2d4db"
+    },
+    "a-align-items": {
+      "section": "atoms",
+      "title": "内容的对齐轴",
+      "pages": [
+        17
+      ],
+      "page_ids": [
+        "a-align-items"
+      ],
+      "source_sha256": "4ef55b743762c38edd78fccf5ed8efcfaf17a36933f45c4674dde8914507d829"
+    },
+    "a-grid-guide": {
+      "section": "atoms",
+      "title": "可见的结构辅助线",
+      "pages": [
+        18
+      ],
+      "page_ids": [
+        "a-grid-guide"
+      ],
+      "source_sha256": "301dda2073a612ce1bfa2bf73b4c97121fd5aa6b5f777dcb2818598f59561719"
+    },
+    "a-gaps": {
+      "section": "atoms",
+      "title": "元素间距",
+      "pages": [
+        19
+      ],
+      "page_ids": [
+        "a-gaps"
+      ],
+      "source_sha256": "4f871f5e337d028c00c2348c83bd7e75b98c7029634f428a1a77c7040da17323"
+    },
+    "a-padding": {
+      "section": "atoms",
+      "title": "容器内留白",
+      "pages": [
+        20
+      ],
+      "page_ids": [
+        "a-padding"
+      ],
+      "source_sha256": "58c0aa6c0e7547fb2a56e00df7df055042574d0b029dab9567af52c9ba280efe"
+    },
+    "a-margin": {
+      "section": "atoms",
+      "title": "段落与章节停顿",
+      "pages": [
+        21
+      ],
+      "page_ids": [
+        "a-margin"
+      ],
+      "source_sha256": "1a4cd0559c85d6abda95276cd47a8a88cbd0ed356e298906d1de0cafb258d7a9"
+    },
+    "a-sizing": {
+      "section": "atoms",
+      "title": "内容尺寸与剩余空间",
+      "pages": [
+        22
+      ],
+      "page_ids": [
+        "a-sizing"
+      ],
+      "source_sha256": "f8ef32b6a008f659e9376acef70ad3c43b8bc4380d1512060cd3d626f1890b34"
+    },
+    "a-image": {
+      "section": "atoms",
+      "title": "图像比例与原始尺寸",
+      "pages": [
+        23
+      ],
+      "page_ids": [
+        "a-image"
+      ],
+      "source_sha256": "6b63e18d82158697435742fab7fe5b42834d033b168ef0f04359bf27b9be8f95"
+    },
+    "a-crop": {
+      "section": "atoms",
+      "title": "裁切焦点与容纳",
+      "pages": [
+        24
+      ],
+      "page_ids": [
+        "a-crop"
+      ],
+      "source_sha256": "7b0207a4cc85542821bbe25a0107844a570db59d59e53127412a1d9cc36721d4"
+    },
+    "a-scrim": {
+      "section": "atoms",
+      "title": "图上文字的对比层",
+      "pages": [
+        25
+      ],
+      "page_ids": [
+        "a-scrim"
+      ],
+      "source_sha256": "ea291b117d9d3339762d53e50ad12955057eb211c28ed3edae603e0302aff7ba"
+    },
+    "a-rules": {
+      "section": "atoms",
+      "title": "线与色块的分量",
+      "pages": [
+        26
+      ],
+      "page_ids": [
+        "a-rules"
+      ],
+      "source_sha256": "7ae7c3debd53dfe8c3ba2cc8c0b9fbe40c9c8c961ab268dcbebeff020af9b5b8"
+    },
+    "a-marks": {
+      "section": "atoms",
+      "title": "查阅与书写",
+      "pages": [
+        27
+      ],
+      "page_ids": [
+        "a-marks"
+      ],
+      "source_sha256": "c1f86433520a701fd45d555f287287c2c7069d74f3e91b46121973245883406c"
+    },
+    "a-page": {
+      "section": "atoms",
+      "title": "页面几何与图层",
+      "pages": [
+        28
+      ],
+      "page_ids": [
+        "a-page"
+      ],
+      "source_sha256": "7f84618c89799f063464cc541d37e98295153aeb4c0e9d45f71560329170854f"
+    },
+    "a-direction": {
+      "section": "atoms",
+      "title": "竖排与侧向阅读",
+      "pages": [
+        29
+      ],
+      "page_ids": [
+        "a-direction"
+      ],
+      "source_sha256": "a0ed875fc7f6c22b37b69613231583a41db0c28e96e13dbc8d3fef2aba277e18"
+    },
+    "flow": {
+      "section": "layouts",
+      "title": "行间与段间",
+      "pages": [
+        31
+      ],
+      "page_ids": [
+        "flow"
+      ],
+      "source_sha256": "ffdbb7343cb6f684f0996b8c1246a2d3f7d5e147ed2a26a2e6b5da49cde6accc"
+    },
+    "split": {
+      "section": "layouts",
+      "title": "双栏阅读",
+      "pages": [
+        32
+      ],
+      "page_ids": [
+        "split"
+      ],
+      "source_sha256": "9830a96dc117bd010d9cedddec5302b8a96c0d1bc7f5efaf7e153248bf73a8a5"
+    },
+    "sidebar-offset": {
+      "section": "layouts",
+      "title": "主文与侧栏",
+      "pages": [
+        33
+      ],
+      "page_ids": [
+        "sidebar-offset"
+      ],
+      "source_sha256": "96f938da32f72bd1c452607623f0e31194efb9eb7afea3cb2cb9493e30e100d3"
+    },
+    "marginalia": {
+      "section": "layouts",
+      "title": "贴近段落的旁注",
+      "pages": [
+        34
+      ],
+      "page_ids": [
+        "marginalia"
+      ],
+      "source_sha256": "57b6cf0d2c89430e515f94050537e07e4e5e7c8760d5948226b8132ee6a634a9"
+    },
+    "hanging": {
+      "section": "layouts",
+      "title": "悬挂编号",
+      "pages": [
+        35
+      ],
+      "page_ids": [
+        "hanging"
+      ],
+      "source_sha256": "50ebdcbb0f087ed0ff06bcda8013f274ea07b3649bdfcb1cafd8eec1b7be52ac"
+    },
+    "comparison": {
+      "section": "layouts",
+      "title": "同行对照",
+      "pages": [
+        36
+      ],
+      "page_ids": [
+        "comparison"
+      ],
+      "source_sha256": "d9aa1c248c877c5aac15bc8d106c58839f12a333526f1505bf65ab27457b2c88"
+    },
+    "chronology": {
+      "section": "layouts",
+      "title": "时间与事件",
+      "pages": [
+        37
+      ],
+      "page_ids": [
+        "chronology"
+      ],
+      "source_sha256": "7fac7d2bee93d546ccdba9433aa0b54b908c26320056b97a5cf949ccf0794acf"
+    },
+    "photo-pair": {
+      "section": "layouts",
+      "title": "并置的两张照片",
+      "pages": [
+        38
+      ],
+      "page_ids": [
+        "photo-pair"
+      ],
+      "source_sha256": "a8001e0ef1903a34cc05cde097e3fa9a52f58af863c559e0290cdb627c688aa5"
+    },
+    "photo-essay": {
+      "section": "layouts",
+      "title": "主图与两个细节",
+      "pages": [
+        39
+      ],
+      "page_ids": [
+        "photo-essay"
+      ],
+      "source_sha256": "3231a516720dd2950b0e57cc890a886febd50065231eae66dbf801d9baec6fab"
+    },
+    "contact": {
+      "section": "layouts",
+      "title": "六图接触印样",
+      "pages": [
+        40
+      ],
+      "page_ids": [
+        "contact"
+      ],
+      "source_sha256": "8a6ffce4144c88af86319820ee9f54745e2156a0afc1773d4bca5444ac1a11f5"
+    },
+    "masonry": {
+      "section": "layouts",
+      "title": "有边界的组图",
+      "pages": [
+        41
+      ],
+      "page_ids": [
+        "masonry"
+      ],
+      "source_sha256": "f404bd8389b2c74a944656ef869bcf1e4e013b7863d459f142ea755baffca421"
+    },
+    "stagger": {
+      "section": "layouts",
+      "title": "错位的图像叙事",
+      "pages": [
+        42
+      ],
+      "page_ids": [
+        "stagger"
+      ],
+      "source_sha256": "75cfa1993aee91311cea0a3518fb41c4ea45865f129d9998390f506d87e9b399"
+    },
+    "edge-photo": {
+      "section": "layouts",
+      "title": "照片走到页边",
+      "pages": [
+        43
+      ],
+      "page_ids": [
+        "edge-photo"
+      ],
+      "source_sha256": "854d255c72fe60062d60973c44ded7b2d193adf910848c93a660d5262e7c72c4"
+    },
+    "overlay": {
+      "section": "layouts",
+      "title": "图文跨过边界",
+      "pages": [
+        44
+      ],
+      "page_ids": [
+        "overlay"
+      ],
+      "source_sha256": "72ab1ecd68eb298e6360288a4170ae3a1d914ce81be130884d7c32a93b940bbf"
+    },
+    "panorama": {
+      "section": "layouts",
+      "title": "同一场景的面对页",
+      "pages": [
+        46,
+        47
+      ],
+      "page_ids": [
+        "panorama-1",
+        "panorama-2"
+      ],
+      "source_sha256": "0428fe83649954ffb5b5a001d1881cc138b193221d01e0eb61a15349d661ddd4"
+    },
+    "typographic": {
+      "section": "layouts",
+      "title": "文字的停顿",
+      "pages": [
+        48
+      ],
+      "page_ids": [
+        "typographic"
+      ],
+      "source_sha256": "2724c9b416a6a36b40ddd363cf44227d0ff8bebce3683a6d05137cb8eb8f6764"
+    },
+    "bleed-top": {
+      "section": "layouts",
+      "title": "顶部通栏摄影",
+      "pages": [
+        49
+      ],
+      "page_ids": [
+        "bleed-top"
+      ],
+      "source_sha256": "5979c41c09dd1c599a561428da19be105dd8b5d76d20e537291ebe94f6f0f65c"
+    },
+    "bleed-full": {
+      "section": "layouts",
+      "title": "满版摄影",
+      "pages": [
+        50
+      ],
+      "page_ids": [
+        "bleed-full"
+      ],
+      "source_sha256": "301b65b926307e15195a1be50772814f60d6d790e698218ee5a8617fee55e06a"
+    },
+    "bleed-outer": {
+      "section": "layouts",
+      "title": "外侧出血摄影",
+      "pages": [
+        51
+      ],
+      "page_ids": [
+        "bleed-outer"
+      ],
+      "source_sha256": "98450cbb07a20d540df0892e21fb5dd34572645bb50067b5c04a9190962285ce"
+    },
+    "timeline-grid": {
+      "section": "layouts",
+      "title": "同一轴线的时间",
+      "pages": [
+        52
+      ],
+      "page_ids": [
+        "timeline-grid"
+      ],
+      "source_sha256": "30b30e29125842223f1fa595eef7bb4e8d40532b2c8e7f2fcc4fb1ba2fd0a051"
+    },
+    "stair-grid": {
+      "section": "layouts",
+      "title": "递进与阶梯",
+      "pages": [
+        53
+      ],
+      "page_ids": [
+        "stair-grid"
+      ],
+      "source_sha256": "dc9ba227403b8584ef8c7b8a9bb239c900cf802ed08917d57cf4b798d8eeb6a0"
+    },
+    "opening": {
+      "section": "components",
+      "title": "眉题、标题、导语",
+      "pages": [
+        56
+      ],
+      "page_ids": [
+        "opening"
+      ],
+      "source_sha256": "f2346a891d36d99d561d6b9e28fe348cd52350a49c03dbb714ea6cec3d68b4ae"
+    },
+    "quotation": {
+      "section": "components",
+      "title": "引文与署名",
+      "pages": [
+        57
+      ],
+      "page_ids": [
+        "quotation"
+      ],
+      "source_sha256": "a52a4ba74a13b06ad79836827c7d967be42615a786c7077f000243734c4c6570"
+    },
+    "caption": {
+      "section": "components",
+      "title": "图片与分层图注",
+      "pages": [
+        58
+      ],
+      "page_ids": [
+        "caption"
+      ],
+      "source_sha256": "55b826d7913d055c57edc5b9cb56252c6422bc89208f42099ef1b7dfe88b15a5"
+    },
+    "number-unit": {
+      "section": "components",
+      "title": "数字、单位与解释",
+      "pages": [
+        59
+      ],
+      "page_ids": [
+        "number-unit"
+      ],
+      "source_sha256": "3385a3cbb54e240e6d5076432eaa0fd8310cc70b5d52aa721aab1955b8691b06"
+    },
+    "contents": {
+      "section": "components",
+      "title": "目录条目",
+      "pages": [
+        60
+      ],
+      "page_ids": [
+        "contents"
+      ],
+      "source_sha256": "ab89a52bc6492c0bbc1f3f7b6e9aba03a92ea81164ee16bad1713230a3e01d0b"
+    },
+    "question-answer": {
+      "section": "components",
+      "title": "问答条目",
+      "pages": [
+        61
+      ],
+      "page_ids": [
+        "question-answer"
+      ],
+      "source_sha256": "c1d21839b78bfd13c06cd4274b23b8b782cf435d69b25dbcf62e724f2c3e3192"
+    },
+    "checklist": {
+      "section": "components",
+      "title": "可勾选清单",
+      "pages": [
+        62
+      ],
+      "page_ids": [
+        "checklist"
+      ],
+      "source_sha256": "11b3e911e2fa62e9e474aec7bf72598d24e418e42fb24e4310dbab73d3f1fbf6"
+    },
+    "open-table": {
+      "section": "components",
+      "title": "开放式表格",
+      "pages": [
+        63
+      ],
+      "page_ids": [
+        "open-table"
+      ],
+      "source_sha256": "3df48cf1d3dc36dfa0c7bfb0672860343ee4431e37d6609b40b057c02806cf2f"
+    },
+    "itinerary-days": {
+      "section": "components",
+      "title": "多日行程 · 张弛安排",
+      "pages": [
+        64
+      ],
+      "page_ids": [
+        "itinerary-days"
+      ],
+      "source_sha256": "2a0d4d7ddc52978192528ea888a4a41e4b68ac60b115eb13e0f1182a97c64913"
+    },
+    "timeline-vertical": {
+      "section": "components",
+      "title": "纵向 timeline · 当日时刻",
+      "pages": [
+        65
+      ],
+      "page_ids": [
+        "timeline-vertical"
+      ],
+      "source_sha256": "5ce22cd1cc80c0d704b02f423587445255b88461154b6fa81262b995b0a361dd"
+    },
+    "rhythm-band": {
+      "section": "components",
+      "title": "节奏时间带 · 按时长比例",
+      "pages": [
+        66
+      ],
+      "page_ids": [
+        "rhythm-band"
+      ],
+      "source_sha256": "50a28ecd08a3a20ba8ace8f40fdb0a41391e2a714118c3e4c517aaa2b8b20654"
+    },
+    "milestones": {
+      "section": "components",
+      "title": "横向 timeline · 阶段里程碑",
+      "pages": [
+        67
+      ],
+      "page_ids": [
+        "milestones"
+      ],
+      "source_sha256": "5d9a3172427b6241b203852213e09da670371303496d5592105960a48f2d25de"
+    },
+    "swimlane": {
+      "section": "components",
+      "title": "并行泳道 · 谁在何时做什么",
+      "pages": [
+        68
+      ],
+      "page_ids": [
+        "swimlane"
+      ],
+      "source_sha256": "d3026487da54abe88b427521b6cb9913d0adaf435f963a0ef1f7678ab0950035"
+    },
+    "kpi-evidence": {
+      "section": "components",
+      "title": "关键指标 · 数字与口径",
+      "pages": [
+        69
+      ],
+      "page_ids": [
+        "kpi-evidence"
+      ],
+      "source_sha256": "165ec1dedc7b01d96dc567326f4227b56a5665668dc216d470524fae57f5bb2b"
+    },
+    "target-actual": {
+      "section": "components",
+      "title": "目标与实际 · 差距可见",
+      "pages": [
+        70
+      ],
+      "page_ids": [
+        "target-actual"
+      ],
+      "source_sha256": "4eb76902416c83eb34aa8c25e1e7061310586231621990f153199c2952407bba"
+    },
+    "five-forces": {
+      "section": "components",
+      "title": "波特五力 · 行业结构",
+      "pages": [
+        71
+      ],
+      "page_ids": [
+        "five-forces"
+      ],
+      "source_sha256": "b9bf39cab6731c3af675180e0b0827e2b0db7035265aa00178c19ecbb097c53a"
+    },
+    "decision-matrix": {
+      "section": "components",
+      "title": "二维决策矩阵 · 取舍有轴",
+      "pages": [
+        72
+      ],
+      "page_ids": [
+        "decision-matrix"
+      ],
+      "source_sha256": "c878dcbbb90d58856bfd412bb610c96ebe71499ba5e979766cd3d5bf27c13e32"
+    },
+    "value-chain": {
+      "section": "components",
+      "title": "价值链 · 从能力到结果",
+      "pages": [
+        73
+      ],
+      "page_ids": [
+        "value-chain"
+      ],
+      "source_sha256": "811c65a1df3513b3f42e0905d15b30ad61c6eda6208a279fc9dde00810d3a14a"
+    },
+    "capability-table": {
+      "section": "components",
+      "title": "能力对照 · 可核验的主张",
+      "pages": [
+        74
+      ],
+      "page_ids": [
+        "capability-table"
+      ],
+      "source_sha256": "31e011418a7ded6270db0dbf7170ea73e42343a5ce63e01d4e019c3668421518"
+    },
+    "claim-evidence": {
+      "section": "components",
+      "title": "结论与证据 · 咨询式图文组",
+      "pages": [
+        75
+      ],
+      "page_ids": [
+        "claim-evidence"
+      ],
+      "source_sha256": "d6d25db39dbaa62bf724409fef126742c6f5d3592d62ad5e519c677eeb72709e"
+    },
+    "swiss-furniture": {
+      "section": "components",
+      "title": "页眉与页脚 · 阅读坐标",
+      "pages": [
+        76
+      ],
+      "page_ids": [
+        "swiss-furniture"
+      ],
+      "source_sha256": "2079ac566b82b585d850461721a20e789ad815865d0b8f278b84d529a5443044"
+    },
+    "swiss-index": {
+      "section": "components",
+      "title": "目录与索引 · 编号先行",
+      "pages": [
+        77
+      ],
+      "page_ids": [
+        "swiss-index"
+      ],
+      "source_sha256": "f6aa9636bb8f04839838965ded417762b3b431124dd7c6050cb9fa54b55e3777"
+    },
+    "swiss-term": {
+      "section": "components",
+      "title": "双语术语 · 同一语义层级",
+      "pages": [
+        78
+      ],
+      "page_ids": [
+        "swiss-term"
+      ],
+      "source_sha256": "f58d1f96adcb53e935358f43b51c22e1e5fb6eb8a01da172acf9b941e5458c9b"
+    },
+    "swiss-legend": {
+      "section": "components",
+      "title": "照片图注 · 编号、说明与来源",
+      "pages": [
+        79
+      ],
+      "page_ids": [
+        "swiss-legend"
+      ],
+      "source_sha256": "b134f948f6ad8d6224d6a57c0bf342c688b5de1a2055720d6ab2d8cea0311f54"
+    },
+    "swiss-dimensions": {
+      "section": "components",
+      "title": "尺寸标注 · 观察与测量",
+      "pages": [
+        80
+      ],
+      "page_ids": [
+        "swiss-dimensions"
+      ],
+      "source_sha256": "2d69ad81e9c6545081c669e032a8326688d7fec05a8451137600234c41a699d2"
+    },
+    "swiss-statistics": {
+      "section": "components",
+      "title": "关键数字 · 数值与口径",
+      "pages": [
+        81
+      ],
+      "page_ids": [
+        "swiss-statistics"
+      ],
+      "source_sha256": "038746a4bf9751f426368d27d6707c826de8193048111e846cefbccb51a4539e"
+    },
+    "swiss-data-table": {
+      "section": "components",
+      "title": "经营表格 · 文字左齐，数字右齐",
+      "pages": [
+        82
+      ],
+      "page_ids": [
+        "swiss-data-table"
+      ],
+      "source_sha256": "ef162f74c4721d2d0d334b2176e9fd72c453f02aeec424f1d2b0952b6db18535"
+    },
+    "swiss-hanging-list": {
+      "section": "components",
+      "title": "悬挂列表 · 保持左边界",
+      "pages": [
+        83
+      ],
+      "page_ids": [
+        "swiss-hanging-list"
+      ],
+      "source_sha256": "9b0eacbec752193d0f117e1527f887bdb63cbdfac5f099cdb260d952ffaa4583"
+    },
+    "swiss-event-axis": {
+      "section": "components",
+      "title": "时间轴 · 节点与当前阶段",
+      "pages": [
+        84
+      ],
+      "page_ids": [
+        "swiss-event-axis"
+      ],
+      "source_sha256": "db67a8fbe0cde832af546c4e2b033d3655e09ffb265f7a20bc9b4cc182804a6f"
+    },
+    "swiss-stair-heading": {
+      "section": "components",
+      "title": "阶梯标题 · 按阅读顺序递进",
+      "pages": [
+        85
+      ],
+      "page_ids": [
+        "swiss-stair-heading"
+      ],
+      "source_sha256": "4931af43fa678e1601ee34af56c9b1985d7eeb7d371724d274c79fe8771001ec"
+    },
+    "swiss-negative-space": {
+      "section": "components",
+      "title": "留白构图 · 空轨也有作用",
+      "pages": [
+        86
+      ],
+      "page_ids": [
+        "swiss-negative-space"
+      ],
+      "source_sha256": "71bb09b41e2808b43a962c6db19ae205941e4e521d5d5fe32003755615f5dc6a"
+    },
+    "swiss-type-image": {
+      "section": "components",
+      "title": "字即构图 · 巨字与真实标题",
+      "pages": [
+        87
+      ],
+      "page_ids": [
+        "swiss-type-image"
+      ],
+      "source_sha256": "7b7ccf66f31568371b7f6f1b3e90d7131ec3d7a3722a38b362431a2606abddf3"
+    },
+    "chart-bar": {
+      "section": "components",
+      "title": "排名比较 · 直接标值",
+      "pages": [
+        88
+      ],
+      "page_ids": [
+        "chart-bar"
+      ],
+      "source_sha256": "fc0daee9907f2b3fe54a3b52b5c2d017b5b2a609028a72b005ac2d7c460ce183"
+    },
+    "chart-line": {
+      "section": "components",
+      "title": "经营趋势 · 连续期间",
+      "pages": [
+        89
+      ],
+      "page_ids": [
+        "chart-line"
+      ],
+      "source_sha256": "700533032fd861a7a5279cebb7f09b0c7a546d80dc9bf2ecc611a84232feba18"
+    },
+    "chart-stacked": {
+      "section": "components",
+      "title": "构成比较 · 每组共 100%",
+      "pages": [
+        90
+      ],
+      "page_ids": [
+        "chart-stacked"
+      ],
+      "source_sha256": "f2ba58740db97c6b7a3aa81755f37b4eb3427d74caba756b0003f6d9ae8ce0ab"
+    },
+    "chart-waterfall": {
+      "section": "components",
+      "title": "瀑布图 · 解释增减",
+      "pages": [
+        91
+      ],
+      "page_ids": [
+        "chart-waterfall"
+      ],
+      "source_sha256": "892127e47be4029511ca5c0177cc6fdc4133eb3d038fa08f1ffd8e0f78f201d0"
+    },
+    "x-band": {
+      "section": "expressions",
+      "title": "硬边字带与反白",
+      "pages": [
+        93
+      ],
+      "page_ids": [
+        "x-band"
+      ],
+      "source_sha256": "16f1acccdd03b0b14899dc2318f75a4b891e3e19902dd46cc8df02ec9017c885"
+    },
+    "x-crop": {
+      "section": "expressions",
+      "title": "裁字与页边",
+      "pages": [
+        94
+      ],
+      "page_ids": [
+        "x-crop"
+      ],
+      "source_sha256": "41ca7d078275198805682dcce8b0f3e04d7a884a0ffe033c646fc15948ce58c5"
+    },
+    "x-photo-type": {
+      "section": "expressions",
+      "title": "照片进入字形",
+      "pages": [
+        95
+      ],
+      "page_ids": [
+        "x-photo-type"
+      ],
+      "source_sha256": "aa10689ef3c207f037448c3c57f4cb6516f8f024906e9ee64ed18ee1ee845f40"
+    },
+    "x-duotone": {
+      "section": "expressions",
+      "title": "双色摄影与原色",
+      "pages": [
+        96
+      ],
+      "page_ids": [
+        "x-duotone"
+      ],
+      "source_sha256": "eb9f275e5b0f35306602c3e99b2d156f5e781257550282c484d0ec6951fde76b"
+    },
+    "x-overprint": {
+      "section": "expressions",
+      "title": "交叠与方向",
+      "pages": [
+        97
+      ],
+      "page_ids": [
+        "x-overprint"
+      ],
+      "source_sha256": "d54491b3a8919d1c481548174c2a74e660f031f7cb4bd7ebed89e0506236e012"
+    },
+    "x-programme": {
+      "section": "expressions",
+      "title": "规则生成的图形",
+      "pages": [
+        98
+      ],
+      "page_ids": [
+        "x-programme"
+      ],
+      "source_sha256": "3b210100692cc614cdfe3fc9ac3fbd00703aa4720765396bf7e67a2fbeb53117"
+    },
+    "x-sign": {
+      "section": "expressions",
+      "title": "导向与路线标识",
+      "pages": [
+        99
+      ],
+      "page_ids": [
+        "x-sign"
+      ],
+      "source_sha256": "a9ea0cd42a0309e70d15163808558f71ee84506869aa916cff8980af17c0d89a"
+    },
+    "x-edge": {
+      "section": "expressions",
+      "title": "色面抵达纸边",
+      "pages": [
+        100
+      ],
+      "page_ids": [
+        "x-edge"
+      ],
+      "source_sha256": "3fdfaf3538984fef3f32e59e0efcfb0328d199bdd80d0064ddd4ece5d1f446ab"
+    }
+  }
+}

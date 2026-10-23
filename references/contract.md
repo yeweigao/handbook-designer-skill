@@ -134,6 +134,22 @@ PDF 页面框：MediaBox = CropBox = BleedBox = 媒体尺寸（成品 + 出血�
 
 字号以 CSS px 计（1px = 1/96 英寸 = 0.75pt），是印刷物理尺寸，不随纸张大小缩放。`project.json` 的 `readability` 可用 `body_px`、`key_px`、`aux_px`、`body_contrast`、`key_contrast`、`aux_contrast`、`display_contrast` 提高下限，不能降低。确需降低（例如屏幕用的社交媒体画布）时，须用户明确授权并写入 brief 与 `readability_waiver`。
 
+文字遮挡与对比度按**排版行框**（CSS `line-height` 高度）判断，因此 `--fl-leading-tight/display/hero` 这类紧行距不会因为字体内容盒（ascent+descent）高于行距而被误报，背景对比度也只在行框内采样。越界、安全区与容器裁切仍按字形盒测量，保持保守。真正的位置重叠、负外边距造成的触碰仍会被报出；有意叠放写 `data-overlap`。
+
+### 3.6 样式一致性（家族基因）
+
+`project.json.styles` 的第一个文件是家族 CSS（`design.css`），它是本项目的冻结基因；其余 CSS 是本书自己的页面 CSS。校验器静态检查三件事，不需要浏览器：
+
+| 检查 | 规则 | 级别 |
+|---|---|---|
+| `style.token` | 字号、间距、行距、字距、基线、栏距、版心这类**节奏 token**（`--fl-size-*`、`--fl-space-*`、`--fl-leading-*`、`--fl-tracking-*`、`--fl-baseline`、`--fl-gutter`、`--fl-margin-*`）不得在本书 CSS 重定义 | error |
+| `style.offladder` | `font-size` 只能取字阶值；裁字、填图字这类显式放大的装饰字可以取最大字阶的 2 倍或 3 倍。内联 `style` 里的 px 同样计算 | error |
+| `style.brand` / `style.decor` / `style.custom` | 颜色 token 覆写、渐变/圆角/阴影/滤镜、自定义类数量会被记下，供审稿判断"是不是换了一套视觉语言" | warning |
+
+品牌适配仍然允许：颜色 token 可以覆写，但要在 `brief.md` 记明理由并重新测量对比度（`measure` 会给实测值）。把整套排印与间距换掉的，不是品牌适配，是另起一套系统。确需保留旧行为时，在 `project.json` 写 `style_waiver`（附理由），硬项降为警告；没有理由的空白字符串不算放宽。
+
+本条自家族 2.2.0 起生效；更早冻结的项目按其当时版本审，不被追溯。
+
 ## 4. 多语言
 
 - 默认语言的文案直接写在 `book.html`。

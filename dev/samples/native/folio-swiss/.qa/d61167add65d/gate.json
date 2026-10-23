@@ -1,0 +1,70 @@
+{
+  "contract": 1,
+  "build_id": "d61167add65d",
+  "fingerprint": "d61167add65d886b515ee99368e5b56c783b177e2873c6129d97b7e2bd019216",
+  "tools": {
+    "contract": 1,
+    "playwright": "1.64.1",
+    "chromium": "149.0.7827.55",
+    "executable": "HB_CHROMIUM",
+    "node": "22",
+    "tool_hash": "924e7e0ab586a377e90d02f9928f3a96f6ba143b2fb3949c8d5316cb3ff4ae1e"
+  },
+  "languages": {
+    "zh-CN": {
+      "checks": {
+        "render": "pass",
+        "measure": "fail",
+        "postflight": "pass",
+        "raster": "fail",
+        "coverage": "pass"
+      },
+      "pdf": ".build/d61167add65d/zh-CN/book.pdf",
+      "pdf_sha256": "6157a572de98226a537f0d90430ad6a273bdefe78de5251b0f186688be9ebd26",
+      "pages": 100
+    }
+  },
+  "status": "blocked",
+  "blocking": [
+    {
+      "lang": "zh-CN",
+      "id": "readability.size",
+      "status": "fail",
+      "severity": "hard",
+      "page": "x-band",
+      "target": "x-band-006",
+      "evidence": {
+        "font_px": 12.87,
+        "min_px": 14,
+        "role": "body",
+        "text": "形体越鲜明01"
+      },
+      "message": "body 文字 12.87px 低于下限 14px：「形体越鲜明01」"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "readability.contrast",
+      "status": "fail",
+      "severity": "hard",
+      "page": "x-crop",
+      "target": "x-crop-005",
+      "evidence": {
+        "contrast_p05": 2.99,
+        "contrast_min": 2.99,
+        "contrast_median": 2.99,
+        "min": 3,
+        "role": "aux",
+        "text": "被切断的字只是重复的图形；完整名称写在左上，标题不能靠裁切隐"
+      },
+      "message": "aux 文字对比度 2.99:1（按背景最差 5% 计）低于 3:1：「被切断的字只是重复的图形；完整名称写在左上，标题不能靠裁切隐」"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "raster",
+      "status": "unverified",
+      "severity": "hard",
+      "message": "最终 PDF 栅格化失败，无法视觉审稿：[safe-delete][SAFE_DELETE_BULK_CONFIRM_REQUIRED] {\"count\":103,\"threshold\":50,\"scope\":\"turn\",\"targets\":[\"/Users/apple/Documents/GitHub/handbook-designer-skill/dev/samples/native/folio-swiss/.qa/d61167add65d/zh-CN/raster\"],\"targetCount\":1}"
+    }
+  ],
+  "visual_review": "not-recorded"
+}

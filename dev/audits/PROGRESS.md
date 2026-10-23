@@ -12,7 +12,7 @@
 | S4 最终 PDF 检查与验收绑定 | 完成 | 2026-10-22 | 21b4f2b |
 | S5 内容提取与原文覆盖 | 完成 | 2026-10-22 | 98e4938 |
 | S6 长文续页工具 | 完成 | 2026-10-22 | cb102a6 |
-| S7 家族与真实样册（Folio CSS 扩展） | 完成 | 2026-10-23 | f8be1a6 + 本次 S7 视觉与组件扩展提交 |
+| S7 家族与真实样册（Folio CSS 扩展） | 进行中（Swiss 底座迭代） | 2026-10-23 | 既有版本完成；本轮用户追加 |
 | S8 导出与离线交付 | 完成 | 2026-10-22 | ce515da |
 | S9 Folio 联动 | 完成 | 2026-10-22 | c2cff36（Folio 162a616） |
 | S10 Skill 文档与旧引擎退役 | 完成 | 2026-10-22 | 本提交（S10:） |
@@ -523,3 +523,135 @@
 - 边界：图表是有限类输入的构造工具，无自动避让、地图、桑基、关键路径或统计区间；覆盖清单明确标出。企业数字为示例，五力不虚构行业结论。未做纸样、其他浏览器、Node22/Python3.10实际运行或独立用户评分。
 - 下一步：S11视觉资产审计、S12独立生成与人工校准仍待开展；本轮交付不冒充这两步完成。
 - 提交：本记录所在的S7提交（见git log）。
+
+### S7 · Folio Swiss 底座与双结构融合 · 进行中 · 2026-10-23
+
+- 用户提供 Downloads 中新版参考包，要求吸收至本仓库；明确保留 bold 衬线 / light 无衬线阶梯、Tahoma 数字，将摄影纳入同一 Swiss 结构。
+- 归属：Folio 源 CSS、文档与工作流、展示配方、新 folio-swiss 原生样册及相关验证。保留已有未提交排印修订；不整包覆盖运行时、契约或历史样册。
+- 方案：吸收网格、左齐右松、比例、留白、功能性印刷组件与显式表现工具；去掉一页只能一点红、摄影只能两种构图等限制。样册与新代码重新验证，不沿用参考包的验收声明。
+- 新依赖：无。Downloads 只读。
+
+### S7 · Swiss 底座调试轮 · 完成 · 2026-10-23
+
+- 触发：用户要求按工作区当前状态（含未提交改动）调试最新 skill 功能，先读懂 workflow 再动手。上一轮停在样册「已 render+measure、未出 gate」，契约校验即失败。
+- 改动范围：
+  - `hb/core/checks/collect.mjs`：文字叠放与对比度采样改用 CSS 行框（`line-height`）矩形；越界、安全区、容器裁切仍用字形盒。
+  - `dev/folio-css/build-specimen.py`：`data-overlap` 只在确有图片时写入；索引页按目录项均分而非固定 24 条切分；示例在全页剩余空间内垂直居中；`annotate()` 补 `fl-size-aux → aux`；`mkdir` 改为先判断存在（受限环境下 `exist_ok` 会失败）。
+  - `dev/folio-css/system-recipes.json`：`a-scrim` 按遮罩方向重排标签并声明图片叠放；`a-page`、`bleed-top/full/outer` 补 `data-overlap` / `data-bleed`；`a-sizing` 标题显式断行；`x-edge` 纵向居中。
+  - `dev/folio-css/index.html`：当前 2.2 样册补缩略图与审稿记录链接（与历史册一致）。
+  - `families/folio/README.md`：补充 `--fl-signal`、网格层两个变量及其适用范围。
+  - `references/contract.md`：§3.4 写明行框与字形盒各自的用途。
+  - `dev/folio-css/verification.md`：新增 2.2.0 记录；样册 `.qa/visual-review.md` 与 `evidence/raster-hashes.json`。
+- 可复制命令（仓库根目录，复用本机既有 Chromium 与 Python 依赖）：
+  ```sh
+  export PATH="/Users/apple/.workbuddy/binaries/python/envs/default/bin:$PATH"
+  export HB_CHROMIUM='/Users/apple/Library/Caches/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-mac-arm64/chrome-headless-shell'
+  python3 dev/build-folio-css.py --check
+  python3 dev/tests/core/test_charts.py && python3 -m unittest dev.tests.core.test_validate
+  node --test --test-concurrency=1 dev/tests/core/family-css.test.mjs dev/tests/core/family-css-extended.test.mjs dev/tests/core/family-css-swiss.test.mjs
+  node --test dev/tests/core/measure.test.mjs
+  python3 dev/folio-css/build-specimen.py
+  node hb/core/cli.mjs check dev/samples/native/folio-swiss
+  node hb/core/cli.mjs review dev/samples/native/folio-swiss --verdict deliverable --by 'WorkBuddy（作者全页复核，非独立评测）' --notes dev/samples/native/folio-swiss/.qa/visual-review.md
+  python3 dev/folio-css/update-preview.py 1c7fd89da91e --project folio-swiss
+  node hb/core/cli.mjs export dev/samples/native/folio-swiss --name folio-swiss-v2.2
+  ```
+- 完成判定逐条结果：
+  - 契约校验：pass —— 修复空 `data-overlap` 后 0 错 0 警。
+  - 样册技术验收：pass —— 构建 `1c7fd89da91e`，100 页，五项全 pass，硬项 fail 0 / blocking 0；4 条 hint 为悬挂列表伪元素，已目检。
+  - 检查器没有靠放宽通过：pass —— 行框改动后 `measure.test.mjs` 21/21，18 个反例（重叠、压图、对比度、出血、裁切、隐藏）全部仍被判定。
+  - 浏览器与展示：pass —— 19/19，含展示页筛选、源码复制、结构视图与 390px。
+  - 视觉审稿：pass（作者自评）—— 整册缩略 + 13 页阅读尺度 + 3 组面对页；最后构建与前一次构建仅目标页栅格不同（逐页哈希留档）。
+  - 导出：见 `out/folio-swiss-v2.2/`（正式 PDF、可编辑 PDF、离线 HTML、源包与 `delivery.json`）。
+- 契约变更：无。§3.4 只补充了「叠放/对比度按行框、越界/安全区按字形盒」的口径说明，未放宽任何下限。
+- 偏离计划的决定：
+  - 修检查器而不是逐页加 `data-overlap`：紧行距是 Folio 自身的设计选择（`--fl-leading-tight/display/hero`），按字体内容盒判定会让整套系统无法通过自己的检查，且掩盖真实位置重叠。
+  - 样册短页示例改为垂直居中：属于样册框（`BOOK_CSS`）的构图决定，不改家族 CSS、不缩放、不改字号。
+- 新增依赖：无。
+- 未完成与已知问题：
+  - `.gitignore` 忽略 `dev/samples/native/*/.qa/**`（只放行 gate/visual-review），本轮 `evidence/raster-hashes.json` 与 `visual-review.md` 入口需 `git add -f` 才会入库。
+  - 旧样册（folio-system / folio-business）本轮未重跑，仍为 1.1 冻结状态。
+  - `a-leading` 页在小字号演示 `leading-hero` 时两行字形相接，属示例意图并在页内说明，未改 API。
+- 下一步：S11 视觉资产审计与 S12 独立生成/人工校准仍未开始；本轮不冒充。
+- 提交：本轮未提交，改动留在工作区待审。
+
+### S7 · 变奏 8 页重做（93–100）· 完成 · 2026-10-23 晚
+
+- 触发：用户看过样册后指出「没看到变奏的应用」「变奏不够帅气」。审计确认：`variations.css` 的 16 个类只在 93–100 页的 8 张样张出现，92 页阅读页一次没用；展示页把这一章叫「表现」，与 CSS 层名 `variations`、书里章节名「表现与变奏」三处不一致。
+- 可发现性：`index.html` 导航改「变奏」、05 章标题改「表现与变奏」并写明「16 类 → 8 配方」；`build-folio-css.py` 接受 `variations` 键并入 `expressions`（临时配方验证不再静默丢弃）；`build-specimen.py` 同键合并避免同名双章；`families/folio/README.md`、`dev/folio-css/coverage.md` 补映射与页码。
+- 重做：8 个配方重写（详见 `dev/folio-css/verification.md` 2.2.0 与样册 `.qa/visual-review.md` 第二节），四轮迭代，每轮渲染后在阅读尺度看 8 页。
+- 过程中修掉的真问题：
+  - display 字带里放 13px 编号 → display 下限 14px 失败；编号移到 key 带。
+  - 裁字页说明文字压在白色裁字上 → aux 对比度 2.99:1；改由纸面板承载。
+  - multiply 图层内的白字会被一起混合 → 文字移到未混合图层，色面单独承担叠印。
+  - 导视页站名被 space-between 推到中间 → 编号与名称成组左对齐，距离 `margin-left:auto`。
+  - 填图字 200 字重 + 浅色照片笔画细弱 → 900 字重 + 瀑布照片。
+- 结果：构建 `1546c1d29070`，100 页，五项全 pass，硬项 fail 0、blocking 0；11 条提示（伪元素 4、旋转 7）已目检；review = 可交付（作者自评）；`out/folio-swiss-v2.2/` 已按新构建重新导出。
+- 未做：变奏仍未进入前 92 页的阅读页（章节扉页/封面/摄影跨页），若要「应用而非展示」需另开一轮并重新审稿。
+
+### S7 · 变奏章按视觉主张重排（canvas-design 流程）· 完成 · 2026-10-23
+
+- 触发：用户给出 canvas-design 的「先立视觉主张、再表达」流程，要求结合 Folio 底座重出 93–100。
+- 新增 `dev/samples/native/folio-swiss/philosophy-variations.md`（受控变量 · Controlled Variance，五段）：只变一个量、其余锁死；空间先于形式；色彩是纪律；尺度悬殊；工艺不可伪造。主张不进成品。
+- 落版：八页共用 600px 图版骨架 = 520px 手势区 + 底部署名带（`PLATE 0N · 术语` / `VAR · 类名`，11px、1px 细线）。`x-edge` 由原生整页改回图版，使八页同构；色面宽度用 `calc(100% + var(--fl-reach-*))` 补到纸边。
+- 本轮修掉：98 五行超高被署名线切掉（网格收到 625px）；100 色面未到纸边；95 下方空 140px（块内居中）。
+- 结果：`1d36b083aba2`，100 页，五项全 pass，硬项 0、blocking 0，11 条提示已目检；review 可交付；源包与离线 HTML 全通过；样册 README 增加主张出处。
+- 备注：`philosophy-variations.md` 只留在项目目录，导出源包（`export` 的固定文件清单）不含它；如要随包交付需改 `hb/core/export.mjs` 的清单并补导出测试。
+
+### S7 · 变奏章回到系统数值 · 完成 · 2026-10-23
+
+- 触发：用户反馈「加了设计哲学之后感觉变差」「破坏了 design.css 的规则」。
+- 审计确认：这一章的排版数值确实绕过了底座——字号出现 640 / 330 / 320 / 38（字阶表最大 280），高度出现 600 / 520（28px 基线的 21.43 / 18.57 行），
+  间距出现 26 / 34 / 158 / 190，并且手搓了一条 `div + 1px 线 + 两段 11px` 的「署名带」，而系统已有 `fl-meta / fl-foot / fl-legend`。
+- 撤回：统一的 600px 图版 + 520px 手势区 + 署名带。它压小了每个手势，把 100 页由整页构图降级成短图版，并与页脚说明重复；`x-edge` 恢复整页。
+- 重排（当前）：字号只用 11/13/14/16/20/24/32/46/64/112/196/280；高度用 196/112/84/588（28 的倍数）；间距 0/7/14/28/42/56；
+  内边距改用 `fl-p-3` / `fl-p-2` 原子；组件不新增。唯一例外是裁字/填图字取 2×280 = 560，并写进 `philosophy-variations.md` 的「落版约定」。
+- 结果：`542d0d250eb9`，100 页，五项全 pass，硬项 0、blocking 0；中间一次 `x-band` 的 13px 编号低于 display 下限，已删。
+- 教训：主张（judgment）与模数（modulus）必须分开；把"一页只变一个量"落成"八页同一个 600px 模数"，就是把主张做成了模板。
+
+### S13 · 样式一致性检查（AI 漂移的缺口）· 完成 · 2026-10-23
+
+- 触发：用户引用另一册的复盘——「book.css 重定义了整套 --fl-* 颜色和字体，又写死字号、渐变、圆角卡片」「Skill 的检查不会拦下这件事」。核对仓库属实：
+  `hb/core/validate.py` 里对 `--fl-` / `font-size` / gradient 的匹配数为 0，`hb/core/gate.mjs` 也不调用 validate。物理与内容有硬项，视觉语言没有任何硬项。
+- 新增 `hb/core/adherence.py`（纯标准库、静态、不启浏览器），接入 `validate()`：
+  - `style.token`（error）：字号/间距/行距/字距/基线/栏距/版心 token 被本书 CSS 覆写。
+  - `style.offladder`（error）：`font-size` 越出字阶；裁字/填图字允许最大字阶的 2/3 倍；内联 style 同样检查。
+  - `style.brand / style.decor / style.custom`（warning）：颜色 token 覆写、渐变/圆角/阴影/滤镜计数、自定义类 ≥12 时报出。
+  - `project.json.style_waiver` 附理由可把硬项降为警告；不填理由不生效。≥2.2.0 的家族才启用，1.x 冻结册不追溯。
+- 文档：contract 新增 §3.6；SKILL.md 作者边界加一条；review.md 增加"系统一致性"检查行与"AI 味是系统缺席"的判断段。
+- 测试：`dev/tests/core/test_adherence.py` 11 项（正例、越阶、内联、token、颜色、装饰、自定义类、waiver、旧版本、lang/*.css）；全套 29 项 pass。
+- 证据：`/tmp/drifted` 模拟漂移册被判 52/34px 越阶 + 4 个节奏 token 覆写 + 3 渐变 8 圆角 2 阴影；当前样册 `542d0d250eb9` 0 错误。
+
+### S14 · 把风格约束前移到工作流 + 字体供给 · 完成 · 2026-10-23
+
+- 触发：用户指出"gate 检查太晚"——100 页做完才报错等于返工整本；应在工作流一开始交代 design.css / book.css 的分工，
+  并用"两三版、三页纸小样"先定风格。字体也不该依赖仓库 dev/fonts，应可下载并装进用户字体目录。
+- 工作流改动：
+  - `workflows/new.md` 第 4 步写清两个 CSS 的分工（家族基因只读 / book.css 只做页面几何与克制品牌适配 / 非必要不新增）；
+    新增第 5 步"风格锁定：三页小样，最多三轮"，要求把决定写进 `style-lock.md`，小样没定不铺全册；后续步骤顺延重编号。
+  - `workflows/quick.md`：无人值守也要先写 style-lock，数值只用字阶与基线。
+  - `workflows/brand.md`：品牌适配的边界（颜色可换、节奏不可换）+ 试作结论落 style-lock。
+  - `SKILL.md`：作者边界加一条"三页小样"；命令区加 `fonts.py status`。
+  - 新增 `templates/style-lock.md`（骨架来源 / 非必要不新增 / 三页表 / 不做什么 / 用户确认）。
+  - `validate` 新增 `process.style-lock` 提示：≥12 页且无 `style-lock.md` 时警告。
+  - 样册补 `dev/samples/native/folio-swiss/style-lock.md`，作为实例。
+- 字体供给：新增 `hb/core/fonts.py`（status / install / install --system）。只下载可再分发的 OFL 字面
+  （Noto Serif SC、Noto Sans SC、Inter），校验字形表并写 SHA256SUMS 与许可；专有字体（Tahoma）只报告"需自备"。
+  查找顺序加入 `~/Library/Fonts` 等用户字体目录与 Tahoma 系统回退。已在用户字体目录装好三套开源字面（Inter 876KB + 两个 Noto VF）。
+  `references/delivery.md` 同步命令与边界：构建时不联网。
+- 测试：`test_adherence.py` 增 2 项流程测试，全套 **31 项 pass**；`selftest --quick` PASS。
+- 注意：工具指纹包含 hb/core 全部 .mjs/.py，新增模块会改变所有项目的构建 ID；样册因此重新 check/review/export。
+
+### S15 · 移除 Tahoma，数字改用 Inter · 完成 · 2026-10-23
+
+- 触发：用户指出专有字体不能装、也不该要求自备——"那就放弃这个 number，用回 Inter，像其他一样"。
+- 家族改动：`families/folio/tokens.css` 的 `--fl-font-number` 改为 Inter；`--fl-weight-number*` 变成 body 字重的别名，
+  删除 bold/light 两处 700/400 覆盖；`families/core/atoms.css` 的 `.fl-number` 改用 display 档字重，`.fl-font-number` 只设字体不设字重，
+  `.fl-folio` 用 aux 字重。`family.json` 删除两条 Tahoma 记录，描述改为"数字与正文同族"；删除 `families/licenses/tahoma-system-font-note.txt`。
+- 运行时：`family.py` 去掉 Tahoma 系统字体分支（find_source 只剩 SEARCH）；`fonts.py` 去掉 Tahoma 系统回退，状态只剩三个 OFL 字面。
+- 文档与展示：README / style.md / SKILL.md / delivery.md / review.md / docs/family-css.md / docs/plans / index.html 的字体说明、
+  配方 grammar 文本与样刊封面标语全部改为同族表述；`index.html` 的字阶演示标注由 `Tahoma / 700|400` 改为 `Inter / 900|200`。
+- 测试：`family-css.test.mjs` 与 `family-css-swiss.test.mjs` 的字重/字族断言改写（数字随档位、家族断言 Inter）；19/19 pass。
+- 样册：重建后 27 个静态字面（原 29），构建 `7b049e159e72`，五项全 pass；审稿记录新增"数字字族改成 Inter"一节，
+  KPI 对照图存 `.qa/7b049e159e72/evidence/number-face.png`。
+- 取舍记录：light 模式下 KPI 数字随 display 档变轻（与同页标题一致）；需要更实的数字时应在该组件显式选 bold 模式，而不是给数字开小灶。

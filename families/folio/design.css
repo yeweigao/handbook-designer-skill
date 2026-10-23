@@ -2,40 +2,71 @@
    Edit the source modules listed below; projects freeze a copy of this file. */
 
 /* ── families/folio/tokens.css ── */
-/* Folio 1.1.0 · shared print design tokens.
+/* Folio 2.2.0 · Swiss structure with bold/light typography.
    Edit these source modules, then regenerate design.css with dev/build-folio-css.py.
    CSS px are physical print sizes; changing paper dimensions does not scale type. */
 :root {
-  --fl-paper: #FFFEFA;
-  --fl-soft: #F0EEE8;
-  --fl-ink: #202B32;
-  --fl-muted: #56616A;
-  --fl-accent: #164BE8;
-  --fl-dark: #182238;
-  --fl-on-dark: #FFFEFA;
-  --fl-on-dark-muted: #CDD5E2;
-  --fl-on-dark-accent: #B7CCFF;
-  --fl-line: #B7BEC6;
-  --fl-line-dark: #78869E;
-  --fl-scrim-color: rgb(8 18 30 / .88);
+  --fl-paper: #FFFFFF;
+  --fl-soft: #F2F0EB;
+  --fl-ink: #111111;
+  --fl-muted: #625F59;
+  --fl-accent: #C83024;
+  --fl-dark: #141414;
+  --fl-on-dark: #FFFFFF;
+  --fl-on-dark-muted: #C4C1BA;
+  --fl-on-dark-accent: #FF8B7F;
+  --fl-line: #C5C2BC;
+  --fl-line-dark: #77736D;
+  --fl-scrim-color: rgb(14 14 14 / .88);
   --fl-scrim-stop: 72%;
+  /* A signal palette, not a required red decoration on every page. */
+  --fl-grid-tint: rgb(200 48 36 / .08);
+  --fl-grid-line: rgb(200 48 36 / .32);
+  --fl-signal: #F5C84B;
 
-  --fl-font-display: "Noto Serif SC", serif;
+  --fl-font-display-bold: "Noto Serif SC", serif;
+  --fl-font-display-light: "Noto Sans SC", sans-serif;
+  --fl-font-display: var(--fl-font-display-bold);
   --fl-font-reading: "Noto Serif SC", serif;
   --fl-font-body: "Noto Sans SC", sans-serif;
   --fl-font-label: "Inter", "Noto Sans SC", sans-serif;
   --fl-font-number: "Inter", "Noto Sans SC", sans-serif;
-  --fl-weight-display: 700;
+
+  /* A4 scale, restored from the shared bold/light typography rules.
+     Bold emphasis advances by 200 (capped at 900); light keeps its size weight. */
+  --fl-weight-hero: 900;
+  --fl-weight-hero-strong: 900;
+  --fl-weight-display: 900;
+  --fl-weight-display-strong: 900;
+  --fl-weight-h1: 700;
+  --fl-weight-h1-strong: 900;
+  --fl-weight-h2: 700;
+  --fl-weight-h2-strong: 900;
+  --fl-weight-h3: 600;
+  --fl-weight-h3-strong: 800;
+  --fl-weight-lead: 600;
+  --fl-weight-lead-strong: 800;
+  --fl-weight-body: 400;
+  --fl-weight-body-strong: 600;
+  --fl-weight-small: 500;
+  --fl-weight-small-strong: 700;
+  --fl-weight-key: 600;
+  --fl-weight-key-strong: 800;
+  --fl-weight-aux: 600;
+  --fl-weight-aux-strong: 800;
+
+  /* Font-role defaults apply when no size atom is present. */
   --fl-weight-reading: 400;
   --fl-weight-reading-strong: 700;
-  --fl-weight-body: 400;
-  --fl-weight-body-strong: 700;
   --fl-weight-label: 400;
   --fl-weight-label-strong: 600;
-  --fl-weight-number: 600;
+  /* 数字与正文同族；字重跟随字号档位，不再保留专用字面。 */
+  --fl-weight-number: var(--fl-weight-body);
+  --fl-weight-number-strong: var(--fl-weight-body-strong);
 
   --fl-size-aux: 11px;
   --fl-size-key: 13px;
+  --fl-size-small: 14px;
   --fl-size-body: 16px;
   --fl-size-lead: 20px;
   --fl-size-h3: 24px;
@@ -43,11 +74,15 @@
   --fl-size-h1: 46px;
   --fl-size-display: 64px;
   --fl-size-hero: 112px;
+  --fl-size-giant: 196px;
+  --fl-size-colossal: 280px;
   --fl-leading-body: 1.75;
   --fl-leading-reading: 1.5;
   --fl-leading-lead: 1.6;
   --fl-leading-tight: 1.25;
   --fl-leading-display: 1.12;
+  --fl-leading-hero: 1;
+  --fl-tracking-tighter: -.04em;
   --fl-tracking-tight: -.02em;
   --fl-tracking-normal: 0;
   --fl-tracking-wide: .12em;
@@ -60,6 +95,8 @@
   --fl-space-4: 42px;
   --fl-space-5: 56px;
   --fl-space-6: 84px;
+  --fl-space-7: 112px;
+  --fl-space-8: 168px;
   --fl-gutter: 6mm;
   --fl-margin-top: 18mm;
   --fl-margin-bottom: 21mm;
@@ -67,7 +104,41 @@
   --fl-margin-outer: 15mm;
   --fl-hair: 1px;
   --fl-rule: 2px;
+  --fl-rule-heavy: 8px;
   --fl-measure: 34ic;
+}
+
+/* Typography is a page-level switch, independent of layouts and components.
+   The default is bold; either class can also scope a section of a page. */
+.fl-type-bold {
+  --fl-font-display: var(--fl-font-display-bold);
+  --fl-weight-hero: 900; --fl-weight-hero-strong: 900;
+  --fl-weight-display: 900; --fl-weight-display-strong: 900;
+  --fl-weight-h1: 700; --fl-weight-h1-strong: 900;
+  --fl-weight-h2: 700; --fl-weight-h2-strong: 900;
+  --fl-weight-h3: 600; --fl-weight-h3-strong: 800;
+  --fl-weight-lead: 600; --fl-weight-lead-strong: 800;
+  --fl-weight-body: 400; --fl-weight-body-strong: 600;
+  --fl-weight-small: 500; --fl-weight-small-strong: 700;
+  --fl-weight-key: 600; --fl-weight-key-strong: 800;
+  --fl-weight-aux: 600; --fl-weight-aux-strong: 800;
+  --fl-weight-reading: 400; --fl-weight-reading-strong: 700;
+  --fl-weight-label: 400; --fl-weight-label-strong: 600;
+}
+.fl-type-light {
+  --fl-font-display: var(--fl-font-display-light);
+  --fl-weight-hero: 200; --fl-weight-hero-strong: 200;
+  --fl-weight-display: 200; --fl-weight-display-strong: 200;
+  --fl-weight-h1: 250; --fl-weight-h1-strong: 250;
+  --fl-weight-h2: 300; --fl-weight-h2-strong: 300;
+  --fl-weight-h3: 400; --fl-weight-h3-strong: 400;
+  --fl-weight-lead: 400; --fl-weight-lead-strong: 400;
+  --fl-weight-body: 400; --fl-weight-body-strong: 400;
+  --fl-weight-small: 500; --fl-weight-small-strong: 500;
+  --fl-weight-key: 600; --fl-weight-key-strong: 600;
+  --fl-weight-aux: 600; --fl-weight-aux-strong: 600;
+  --fl-weight-reading: 400; --fl-weight-reading-strong: 400;
+  --fl-weight-label: 400; --fl-weight-label-strong: 400;
 }
 
 /* ── families/core/base.css ── */
@@ -77,13 +148,14 @@
 :where(.page, .fl-scope),
 :where(.page, .fl-scope) :where(*, *::before, *::after) { box-sizing: border-box; }
 :where(.page, .fl-scope) {
+  --fl-bg: var(--fl-paper);
   --fl-text: var(--fl-ink);
   --fl-text-muted: var(--fl-muted);
   --fl-text-accent: var(--fl-accent);
   --fl-stroke: var(--fl-line);
   --fl-current-weight: var(--fl-weight-body);
   --fl-current-strong: var(--fl-weight-body-strong);
-  background: var(--fl-paper);
+  background: var(--fl-bg);
   color: var(--fl-text);
   font-family: var(--fl-font-body);
   font-size: var(--fl-size-body);
@@ -91,13 +163,15 @@
   line-height: var(--fl-leading-body);
   font-synthesis: none;
   font-kerning: normal;
+  text-align: start;
+  text-autospace: normal;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 :where(.page) {
   --fl-page-left: var(--fl-margin-inner);
   --fl-page-right: var(--fl-margin-outer);
-  background: var(--fl-paper);
+  background: var(--fl-bg);
 }
 :where(.page:nth-of-type(even)) {
   --fl-page-left: var(--fl-margin-outer);
@@ -356,6 +430,317 @@
 :where(.fl-l-typographic > .fl-l-aside) { grid-column: 1 / span 2; }
 :where(.fl-l-typographic > .fl-l-main) { grid-column: 3 / span 4; }
 
+/* Swiss photography and type relationships ─────────────────────
+   Sachfotografie: the photograph is a fact, shown edge to edge or cut by a hard
+   horizontal line. These layouts add no plate, shadow, radius or scrim. */
+
+/* Photograph across the top edge (Bild oben, Schrift unten). .fl-l-copy also
+   receives .fl-area and starts one baseline below the image. */
+:where(.fl-l-bleed-top) { position: absolute; inset: 0; }
+:where(.fl-l-bleed-top > .fl-l-photo) {
+  --fl-frame-position: absolute; --fl-ratio: auto;
+  position: absolute; left: 0; right: 0; top: 0;
+  height: var(--fl-image-height, 58%);
+  aspect-ratio: auto;
+}
+:where(.fl-l-bleed-top > .fl-l-copy) { top: max(calc(var(--fl-image-height, 58%) + var(--fl-space-3)), calc(var(--bleed, 0px) + max(var(--safe-top, 0px), var(--fl-margin-top)))); }
+
+/* Full-sheet photograph. .fl-l-copy (+ .fl-area) keeps type in the safe area;
+   choose its position from the actual picture. .fl-l-caption is an optional bar on
+   the bottom media edge whose text still starts on the page margins. Declare
+   data-bleed on the photo and data-overlap on every text group over it. */
+:where(.fl-l-bleed-full) { position: absolute; inset: 0; }
+:where(.fl-l-bleed-full > .fl-l-photo) {
+  --fl-frame-position: absolute; --fl-ratio: auto;
+  position: absolute; inset: 0;
+  aspect-ratio: auto;
+}
+:where(.fl-l-bleed-full > .fl-l-caption) {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding-top: var(--fl-space-2);
+  padding-bottom: calc(var(--bleed, 0px) + max(var(--safe-bottom, 0px), var(--fl-space-3)));
+  padding-left: calc(var(--bleed, 0px) + max(var(--safe-left, 0px), var(--fl-page-left, var(--fl-margin-inner))));
+  padding-right: calc(var(--bleed, 0px) + max(var(--safe-right, 0px), var(--fl-page-right, var(--fl-margin-outer))));
+}
+
+/* Horizontal chronology on one shared axis: equal tracks, DOM order = time order.
+   The axis itself is the .fl-axis component or a rule atom. */
+:where(.fl-l-timeline) {
+  display: grid;
+  grid-template-columns: repeat(var(--fl-timeline-count, 4), minmax(0, 1fr));
+  column-gap: var(--fl-gutter);
+  align-items: start;
+}
+:where(.fl-l-timeline > .fl-l-item) { display: flex; flex-direction: column; gap: var(--fl-space-1); min-width: 0; }
+:where(.fl-l-timeline > .fl-l-full) { grid-column: 1 / -1; }
+
+/* Stair typography (Treppe): each child steps one six-column pitch to the right,
+   in DOM order. Override a single step with style="--fl-step:3". Steps never
+   push text beyond the container: each line keeps the remaining width. */
+:where(.fl-l-stair) { display: flex; flex-direction: column; gap: var(--fl-stair-gap, 0px); }
+:where(.fl-l-stair > *) { margin-inline-start: calc(var(--fl-step, 0) * (100% + var(--fl-gutter)) / 6); min-width: 0; }
+:where(.fl-l-stair > :nth-child(2)) { --fl-step: 1; }
+:where(.fl-l-stair > :nth-child(3)) { --fl-step: 2; }
+:where(.fl-l-stair > :nth-child(4)) { --fl-step: 3; }
+:where(.fl-l-stair > :nth-child(5)) { --fl-step: 4; }
+:where(.fl-l-stair > :nth-child(n+6)) { --fl-step: 5; }
+
+/* ── families/core/components.css ── */
+/* Folio components · functional devices for Swiss-based print composition (Folio 2.2).
+   Each is optional and decomposable: it paints only rules, hairlines or text colour
+   from the current surface roles, never clips, hides or shrinks text, and creates no
+   page geometry. Atoms load after this module and override any default.
+   Copyable recipes: dev/folio-css/catalog.json. */
+
+/* Kopfzeile · furniture row: series · topic · number … page.
+   Children sit on the six page tracks; the last item closes the row on the right. */
+:where(.fl-meta) {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  column-gap: var(--fl-gutter);
+  align-items: baseline;
+  padding-bottom: var(--fl-space-1);
+  border-bottom: var(--fl-rule) solid var(--fl-text);
+  --fl-current-weight: var(--fl-weight-aux);
+  --fl-current-strong: var(--fl-weight-aux-strong);
+  font-family: var(--fl-font-label);
+  font-size: var(--fl-size-aux);
+  font-weight: var(--fl-current-weight);
+  line-height: var(--fl-leading-tight);
+  font-variant-numeric: lining-nums;
+  color: var(--fl-text);
+}
+:where(.fl-meta > *) { min-width: 0; }
+:where(.fl-meta > :first-child) { font-weight: var(--fl-weight-aux-strong); }
+:where(.fl-meta > :last-child:not(:first-child)) { grid-column-end: -1; text-align: end; }
+
+/* Fusszeile · foot line: a rule number and one sentence on a hairline.
+   The second item starts on the second track; .fl-foot-end closes the line. */
+:where(.fl-foot) {
+  display: flex;
+  align-items: baseline;
+  gap: var(--fl-gutter);
+  padding-top: var(--fl-space-1);
+  border-top: var(--fl-hair) solid var(--fl-text);
+  --fl-current-weight: var(--fl-weight-aux);
+  --fl-current-strong: var(--fl-weight-aux-strong);
+  font-family: var(--fl-font-label);
+  font-size: var(--fl-size-aux);
+  font-weight: var(--fl-current-weight);
+  line-height: var(--fl-leading-tight);
+  color: var(--fl-text);
+}
+:where(.fl-foot > :first-child) { flex: none; min-width: calc((100% + var(--fl-gutter)) / 6 - var(--fl-gutter)); font-weight: var(--fl-weight-aux-strong); }
+:where(.fl-foot > .fl-foot-end) { margin-inline-start: auto; color: var(--fl-text-muted); }
+
+/* Fachbegriff · the Latin term beside or under a Chinese title, in the current surface accent. */
+:where(.fl-term) {
+  --fl-current-weight: var(--fl-weight-h3);
+  --fl-current-strong: var(--fl-weight-h3-strong);
+  font-family: var(--fl-font-display);
+  font-weight: var(--fl-current-weight);
+  font-size: var(--fl-size-h3);
+  line-height: var(--fl-leading-tight);
+  letter-spacing: var(--fl-tracking-tight);
+  color: var(--fl-text-accent);
+}
+
+/* Verzeichnis · numbered rows on hairlines: contents, rules, steps, credits.
+   ol/ul.fl-index > li > .fl-index-n + entry + optional .fl-index-end (page, date). */
+:where(.fl-index) { list-style: none; margin: 0; padding: 0; border-top: var(--fl-rule) solid var(--fl-text); }
+:where(.fl-index > li) {
+  display: grid;
+  grid-template-columns: var(--fl-index-n, 3em) minmax(0, 1fr) auto;
+  column-gap: var(--fl-gutter);
+  align-items: baseline;
+  padding-block: var(--fl-space-1);
+  border-bottom: var(--fl-hair) solid var(--fl-stroke);
+}
+:where(.fl-index-n) { grid-column: 1; font-family: var(--fl-font-number); font-weight: var(--fl-weight-number); font-variant-numeric: lining-nums tabular-nums; }
+:where(.fl-index-end) { grid-column: 3; text-align: end; font-family: var(--fl-font-number); font-weight: var(--fl-weight-number); font-variant-numeric: tabular-nums; color: var(--fl-text-muted); }
+
+/* Bemassung · dimension line. The element's own box is the measured length: place it
+   on the grid it describes. End ticks and a centred value that stays real text.
+   .fl-dim-v measures height (give it a definite height or stretch it in a grid). */
+:where(.fl-dim), :where(.fl-dim-v) {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 1.6em;
+  --fl-current-weight: var(--fl-weight-aux);
+  --fl-current-strong: var(--fl-weight-aux-strong);
+  font-family: var(--fl-font-label);
+  font-size: var(--fl-size-aux);
+  font-weight: var(--fl-current-weight);
+  line-height: 1;
+  font-variant-numeric: lining-nums;
+  color: var(--fl-dim-color, var(--fl-text-accent));
+}
+:where(.fl-dim-v) { writing-mode: vertical-rl; }
+:where(.fl-dim)::before, :where(.fl-dim-v)::before {
+  content: ""; position: absolute; inset-inline: 0; inset-block-start: 50%;
+  border-block-start: var(--fl-hair) solid currentColor;
+}
+:where(.fl-dim)::after, :where(.fl-dim-v)::after {
+  content: ""; position: absolute; inset-inline: 0; inset-block: calc(50% - 5px);
+  border-inline: var(--fl-hair) solid currentColor;
+}
+:where(.fl-dim > *), :where(.fl-dim-v > *) { position: relative; z-index: 1; padding-inline: .5em; background: var(--fl-bg, var(--fl-paper)); }
+
+/* Abbildung · the figure number leads its caption, same size, strong, in ink. */
+:where(.fl-abb) { color: var(--fl-text); font-weight: var(--fl-current-strong, var(--fl-weight-label-strong)); margin-inline-end: .65em; }
+
+/* Bildlegende · caption on six tracks: number | text (four tracks) | credit. */
+:where(.fl-legend) {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  column-gap: var(--fl-gutter);
+  align-items: baseline;
+  --fl-current-weight: var(--fl-weight-aux);
+  --fl-current-strong: var(--fl-weight-aux-strong);
+  font-family: var(--fl-font-label);
+  font-size: var(--fl-size-aux);
+  font-weight: var(--fl-current-weight);
+  line-height: var(--fl-leading-lead);
+  color: var(--fl-text);
+}
+:where(.fl-legend > :nth-child(1)) { grid-column: 1; font-weight: var(--fl-weight-aux-strong); }
+:where(.fl-legend > :nth-child(2)) { grid-column: 2 / span 4; }
+:where(.fl-legend > :nth-child(3)) { grid-column: 6; text-align: end; color: var(--fl-text-muted); }
+
+/* Kennzahl · a figure, its unit, its label, hung from a 2px rule. Inside a stat the
+   figure is set at leading 1 (not .9), so up to display size its glyph box clears the
+   rule and the label; a hero-size figure also needs .fl-pt-3. */
+:where(.fl-stat) { --fl-number-leading: var(--fl-leading-hero); display: flex; flex-direction: column; gap: var(--fl-space-2); min-width: 0; padding-top: var(--fl-space-2); border-top: var(--fl-rule) solid var(--fl-text); }
+:where(.fl-unit) { font-size: .32em; letter-spacing: 0; margin-inline-start: .12em; }
+
+/* Zeitachse · one continuous 2px axis with a tick at the start of each item.
+   Put on .fl-l-timeline (or any row); .fl-axis-now marks a single item in red. */
+:where(.fl-axis) { border-top: var(--fl-rule) solid var(--fl-text); }
+:where(.fl-axis > :not(.fl-l-full)) { position: relative; padding-top: var(--fl-space-3); }
+:where(.fl-axis > :not(.fl-l-full))::before { content: ""; position: absolute; top: 0; inset-inline-start: 0; width: var(--fl-rule); height: var(--fl-space-2); background: var(--fl-text); }
+:where(.fl-axis > .fl-axis-now)::before { width: var(--fl-space-1); background: var(--fl-text-accent); }
+
+/* Tabelle · 2px rule opens, hairlines separate, a thin ink rule closes. Cells of
+   different sizes share one baseline per row.
+   .fl-num right-aligns a figure column and makes it tabular. Only figure columns:
+   Inter's tnum also widens - . , : to figure width, which spaces out code and prose. */
+:where(.fl-table) { width: 100%; border-top: var(--fl-rule) solid var(--fl-text); border-bottom: var(--fl-hair) solid var(--fl-text); font-variant-numeric: lining-nums; }
+:where(.fl-table :where(th)) {
+  padding: var(--fl-space-1) var(--fl-space-2) var(--fl-space-1) 0;
+  border-bottom: var(--fl-hair) solid var(--fl-text);
+  --fl-current-weight: var(--fl-weight-aux);
+  --fl-current-strong: var(--fl-weight-aux-strong);
+  font-family: var(--fl-font-label); font-size: var(--fl-size-aux); font-weight: var(--fl-weight-aux-strong);
+  line-height: var(--fl-leading-tight); text-align: start; vertical-align: bottom;
+}
+:where(.fl-table :where(td)) { padding: var(--fl-space-1) var(--fl-space-2) var(--fl-space-1) 0; border-bottom: var(--fl-hair) solid var(--fl-stroke); vertical-align: baseline; }
+:where(.fl-table :where(tr:last-child > td)) { border-bottom: 0; }
+:where(.fl-table th:last-child, .fl-table td:last-child) { padding-inline-end: 0; }
+:where(.fl-table :where(.fl-num)) { font-family: var(--fl-font-number); font-weight: var(--fl-weight-number); text-align: end; font-variant-numeric: lining-nums tabular-nums; }
+
+/* Aufzählung · en-dash list, hanging, half-baseline apart. */
+:where(.fl-list) { list-style: none; margin: 0; padding: 0; }
+:where(.fl-list > li) { position: relative; padding-inline-start: 1.2em; }
+:where(.fl-list > li + li) { margin-top: var(--fl-space-1); }
+:where(.fl-list > li)::before { content: "–"; position: absolute; inset-inline-start: 0; }
+
+/* Signal · one small red square: a functional cue; never a required ornament. */
+:where(.fl-mark) { display: inline-block; inline-size: .72em; block-size: .72em; background: var(--fl-text-accent); vertical-align: baseline; }
+
+/* Raster sichtbar · visible structure on purpose (先画格子): column fields and/or
+   baselines on the element's content box. Content stays in normal flow above it.
+   The two layers do not inherit, so a baseline field nested in a column overlay
+   draws only its own lines over the parent's columns. */
+/* Reset both layers at the diagnostic element to prevent nested overlays inheriting. */
+:where(.fl-show-columns, .fl-show-columns-12, .fl-show-baseline) {
+  --fl-show-cols: linear-gradient(transparent, transparent);
+  --fl-show-base: linear-gradient(transparent, transparent);
+  background-image: var(--fl-show-cols), var(--fl-show-base);
+  background-origin: content-box; background-clip: content-box;
+}
+.fl-show-columns { --fl-show-cols: repeating-linear-gradient(to right, var(--fl-grid-tint) 0 calc((100% - 5 * var(--fl-gutter)) / 6), transparent 0 calc((100% + var(--fl-gutter)) / 6)); }
+.fl-show-columns-12 { --fl-show-cols: repeating-linear-gradient(to right, var(--fl-grid-tint) 0 calc((100% - 11 * var(--fl-gutter)) / 12), transparent 0 calc((100% + var(--fl-gutter)) / 12)); }
+.fl-show-baseline { --fl-show-base: repeating-linear-gradient(to bottom, transparent 0 calc(var(--fl-baseline) - var(--fl-hair)), var(--fl-grid-line) 0 var(--fl-baseline)); }
+
+/* ── families/core/variations.css ── */
+/* Folio expressive tools · explicit choices, never default page decoration.
+   Use content roles for complete, readable titles. Cropped or image-filled duplicate
+   lettering needs a readable equivalent and data-role="deco" aria-hidden="true".
+   CSS filters/blends simulate an appearance; they do not create spot inks or separations.
+   Atoms follow and can override each default. No Type 3 text-stroke effects. */
+
+/* Oversized type anchored to a sheet edge. The runtime owns the page clip. */
+:where(.fl-crop) {
+  --fl-crop-offset: -.12em;
+  position: absolute; margin: 0; pointer-events: none; white-space: nowrap;
+  font-family: var(--fl-font-display); font-weight: var(--fl-weight-hero);
+  line-height: 1; letter-spacing: var(--fl-tracking-tighter);
+}
+:where(.fl-crop-top) { top: var(--fl-crop-offset); }
+:where(.fl-crop-bottom) { bottom: var(--fl-crop-offset); }
+:where(.fl-crop-left) { left: var(--fl-crop-offset); }
+:where(.fl-crop-right) { right: var(--fl-crop-offset); }
+
+/* A hard-edged type band. Compose with any surface atom for its palette. */
+:where(.fl-band) {
+  --fl-bg: var(--fl-dark); --fl-text: var(--fl-on-dark);
+  --fl-text-muted: var(--fl-on-dark-muted); --fl-text-accent: var(--fl-on-dark-accent);
+  --fl-stroke: var(--fl-line-dark);
+  display: block; width: fit-content; max-width: 100%;
+  padding: .12em .18em; background: var(--fl-bg); color: var(--fl-text);
+}
+/* Optional duplicate lettering used as an image. Local URL belongs to author CSS. */
+:where(.fl-type-photo) {
+  width: fit-content; max-width: 100%;
+  font-family: var(--fl-font-display); font-weight: var(--fl-weight-hero);
+  line-height: 1; letter-spacing: var(--fl-tracking-tighter);
+  background-color: var(--fl-text); background-repeat: no-repeat; background-size: cover;
+  background-position: var(--fl-focus-x, 50%) var(--fl-focus-y, 50%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+:where(.fl-duotone) { background: var(--fl-duotone, var(--fl-accent)); isolation: isolate; }
+:where(.fl-duotone > img) { filter: grayscale(1) contrast(var(--fl-duotone-contrast, 1.1)); mix-blend-mode: multiply; }
+:where(.fl-overprint) { mix-blend-mode: multiply; }
+:where(.fl-rotate-6) { transform: rotate(6deg); }
+:where(.fl-rotate-n6) { transform: rotate(-6deg); }
+
+/* A small bounded generative field: three inks, a five-cell colour cycle.
+   Empty decorative cells only; counts/values are not encoded by random shapes. */
+:where(.fl-programme) {
+  --fl-programme-ink: var(--fl-text);
+  --fl-programme-accent: var(--fl-text-accent);
+  --fl-programme-signal: var(--fl-signal);
+  display: grid;
+  grid-template-columns: repeat(var(--fl-programme-cols, 6), minmax(0, 1fr));
+  gap: var(--fl-programme-gap, 0px);
+}
+:where(.fl-programme > *) { aspect-ratio: 1; min-width: 0; background: var(--fl-programme-ink); }
+:where(.fl-programme > :nth-child(5n+2)) { background: var(--fl-programme-accent); }
+:where(.fl-programme > :nth-child(5n+4)) { background: var(--fl-programme-signal); }
+:where(.fl-programme > :nth-child(7n+3)) { border-radius: 0 100% 0 0; }
+:where(.fl-programme > :nth-child(7n+5)) { border-radius: 50%; }
+
+/* A route marker always carries a letter/number as well as colour. */
+:where(.fl-bullet) {
+  display: inline-grid; place-items: center; inline-size: 1.5em; block-size: 1.5em;
+  border-radius: 50%; vertical-align: middle;
+  background: var(--fl-bullet, var(--fl-text)); color: var(--fl-bullet-text, var(--fl-bg));
+  font-family: var(--fl-font-label); font-weight: var(--fl-weight-body-strong); line-height: 1;
+}
+:where(.fl-sign) { display: flex; flex-wrap: wrap; align-items: center; gap: var(--fl-space-2); padding: var(--fl-space-3); }
+/* Edge reach from a direct fl-area child. Padding keeps content in the safe area. */
+:where(.fl-bleed-right) {
+  --fl-reach-right: calc(var(--bleed, 0px) + max(var(--safe-right, 0px), var(--fl-page-right, var(--fl-margin-outer))));
+  width: auto; max-width: none; margin-right: calc(-1 * var(--fl-reach-right)); padding-right: var(--fl-reach-right);
+}
+:where(.fl-bleed-left) {
+  --fl-reach-left: calc(var(--bleed, 0px) + max(var(--safe-left, 0px), var(--fl-page-left, var(--fl-margin-inner))));
+  width: auto; max-width: none; margin-left: calc(-1 * var(--fl-reach-left)); padding-left: var(--fl-reach-left);
+}
+
 /* ── families/core/atoms.css ── */
 /* Folio atoms · finite, composable vocabulary for physical pages.
    Layout recipes precede this file, so a single atom can override their default.
@@ -364,24 +749,28 @@
 /* Surface roles: each surface resets every foreground role, so nested paper in
    dark (and dark in paper) inherits a complete, readable palette. */
 .fl-surface-paper {
+  --fl-bg: var(--fl-paper);
   --fl-text: var(--fl-ink); --fl-text-muted: var(--fl-muted);
   --fl-text-accent: var(--fl-accent); --fl-stroke: var(--fl-line);
-  background: var(--fl-paper); color: var(--fl-text);
+  background: var(--fl-bg); color: var(--fl-text);
 }
 .fl-surface-soft {
+  --fl-bg: var(--fl-soft);
   --fl-text: var(--fl-ink); --fl-text-muted: var(--fl-muted);
   --fl-text-accent: var(--fl-accent); --fl-stroke: var(--fl-line);
-  background: var(--fl-soft); color: var(--fl-text);
+  background: var(--fl-bg); color: var(--fl-text);
 }
 .fl-surface-dark {
+  --fl-bg: var(--fl-dark);
   --fl-text: var(--fl-on-dark); --fl-text-muted: var(--fl-on-dark-muted);
   --fl-text-accent: var(--fl-on-dark-accent); --fl-stroke: var(--fl-line-dark);
-  background: var(--fl-dark); color: var(--fl-text);
+  background: var(--fl-bg); color: var(--fl-text);
 }
 .fl-surface-accent {
+  --fl-bg: var(--fl-accent);
   --fl-text: var(--fl-on-dark); --fl-text-muted: var(--fl-on-dark);
   --fl-text-accent: var(--fl-on-dark); --fl-stroke: var(--fl-on-dark-muted);
-  background: var(--fl-accent); color: var(--fl-text);
+  background: var(--fl-bg); color: var(--fl-text);
 }
 /* Foreground roles only, for a photograph or another authored dark background.
    This neither paints a plate nor guarantees contrast; inspect the actual image. */
@@ -392,11 +781,22 @@
 }
 
 /* Semantic type recipes: independent font/size/weight/leading atoms follow.
-   No recipe draws a border or fills a box. Keep data-role in the HTML. */
-.fl-display, :where(.page, .fl-scope) .display,
-.fl-h1, .fl-h2 {
+   All heading levels use the selected display family. No recipe decorates a box. */
+.fl-display, :where(.page, .fl-scope) .display {
   --fl-current-weight: var(--fl-weight-display);
-  --fl-current-strong: var(--fl-weight-display);
+  --fl-current-strong: var(--fl-weight-display-strong);
+  font-family: var(--fl-font-display); font-weight: var(--fl-current-weight);
+  color: var(--fl-text); text-wrap: balance;
+}
+.fl-h1 {
+  --fl-current-weight: var(--fl-weight-h1);
+  --fl-current-strong: var(--fl-weight-h1-strong);
+  font-family: var(--fl-font-display); font-weight: var(--fl-current-weight);
+  color: var(--fl-text); text-wrap: balance;
+}
+.fl-h2 {
+  --fl-current-weight: var(--fl-weight-h2);
+  --fl-current-strong: var(--fl-weight-h2-strong);
   font-family: var(--fl-font-display); font-weight: var(--fl-current-weight);
   color: var(--fl-text); text-wrap: balance;
 }
@@ -406,64 +806,94 @@
 }
 .fl-h1 { font-size: var(--fl-size-h1); line-height: var(--fl-leading-tight); }
 .fl-h2 { font-size: var(--fl-size-h2); line-height: var(--fl-leading-tight); }
-.fl-h3, .fl-body, .fl-lead, .fl-key {
+.fl-h3 {
+  --fl-current-weight: var(--fl-weight-h3);
+  --fl-current-strong: var(--fl-weight-h3-strong);
+  font-family: var(--fl-font-display); font-weight: var(--fl-current-weight);
+  font-size: var(--fl-size-h3); line-height: var(--fl-leading-tight);
+  color: var(--fl-text); text-wrap: balance;
+}
+.fl-body {
   --fl-current-weight: var(--fl-weight-body);
   --fl-current-strong: var(--fl-weight-body-strong);
   font-family: var(--fl-font-body); font-weight: var(--fl-current-weight);
   color: var(--fl-text);
+  font-size: var(--fl-size-body); line-height: var(--fl-leading-body);
 }
-.fl-h3 { font-size: var(--fl-size-h3); font-weight: var(--fl-current-strong); line-height: var(--fl-leading-tight); text-wrap: balance; }
-.fl-body { font-size: var(--fl-size-body); line-height: var(--fl-leading-body); }
+.fl-lead, .fl-key {
+  --fl-current-weight: var(--fl-weight-lead);
+  --fl-current-strong: var(--fl-weight-lead-strong);
+  font-family: var(--fl-font-body); font-weight: var(--fl-current-weight);
+  color: var(--fl-text);
+}
 .fl-lead { font-size: var(--fl-size-lead); line-height: var(--fl-leading-lead); }
-.fl-key { font-size: var(--fl-size-key); line-height: var(--fl-leading-lead); }
+.fl-key {
+  --fl-current-weight: var(--fl-weight-key);
+  --fl-current-strong: var(--fl-weight-key-strong);
+  font-size: var(--fl-size-key); line-height: var(--fl-leading-lead);
+}
 .fl-aux, .fl-caption, .fl-kicker {
-  --fl-current-weight: var(--fl-weight-label);
-  --fl-current-strong: var(--fl-weight-label-strong);
+  --fl-current-weight: var(--fl-weight-aux);
+  --fl-current-strong: var(--fl-weight-aux-strong);
   font-family: var(--fl-font-label); font-weight: var(--fl-current-weight);
   font-size: var(--fl-size-aux); line-height: var(--fl-leading-lead);
   color: var(--fl-text-muted);
 }
 .fl-kicker { font-weight: var(--fl-current-strong); letter-spacing: var(--fl-tracking-wide); color: var(--fl-text-accent); }
 .fl-number {
-  --fl-current-weight: var(--fl-weight-number);
-  --fl-current-strong: var(--fl-weight-number);
+  --fl-current-weight: var(--fl-weight-display);
+  --fl-current-strong: var(--fl-weight-display-strong);
   font-family: var(--fl-font-number); font-weight: var(--fl-current-weight);
-  font-size: var(--fl-size-display); line-height: var(--fl-leading-display);
+  font-size: var(--fl-size-display); line-height: var(--fl-number-leading, var(--fl-leading-display));
   color: var(--fl-text); font-variant-numeric: lining-nums tabular-nums;
 }
 
-/* Font role and weight are separate: only real generated weights are requested.
-   Display regular/strong both map to 700; number both map to 600. */
-.fl-font-display { --fl-current-weight: var(--fl-weight-display); --fl-current-strong: var(--fl-weight-display); font-family: var(--fl-font-display); font-weight: var(--fl-current-weight); }
+/* Font role, size and weight remain separate. A size atom selects its ladder
+   band; .fl-weight-regular/strong can then choose that band's actual face. */
+.fl-font-display { --fl-current-weight: var(--fl-weight-display); --fl-current-strong: var(--fl-weight-display-strong); font-family: var(--fl-font-display); font-weight: var(--fl-current-weight); }
 .fl-font-reading { --fl-current-weight: var(--fl-weight-reading); --fl-current-strong: var(--fl-weight-reading-strong); font-family: var(--fl-font-reading); font-weight: var(--fl-current-weight); }
 .fl-font-body { --fl-current-weight: var(--fl-weight-body); --fl-current-strong: var(--fl-weight-body-strong); font-family: var(--fl-font-body); font-weight: var(--fl-current-weight); }
 .fl-font-label { --fl-current-weight: var(--fl-weight-label); --fl-current-strong: var(--fl-weight-label-strong); font-family: var(--fl-font-label); font-weight: var(--fl-current-weight); }
-.fl-font-number { --fl-current-weight: var(--fl-weight-number); --fl-current-strong: var(--fl-weight-number); font-family: var(--fl-font-number); font-weight: var(--fl-current-weight); }
-.fl-size-aux { font-size: var(--fl-size-aux); }
-.fl-size-key { font-size: var(--fl-size-key); }
-.fl-size-body { font-size: var(--fl-size-body); }
-.fl-size-lead { font-size: var(--fl-size-lead); }
-.fl-size-h3 { font-size: var(--fl-size-h3); }
-.fl-size-h2 { font-size: var(--fl-size-h2); }
-.fl-size-h1 { font-size: var(--fl-size-h1); }
-.fl-size-display { font-size: var(--fl-size-display); }
-.fl-size-hero { font-size: var(--fl-size-hero); }
+.fl-font-number { font-family: var(--fl-font-number); }
+.fl-size-aux { --fl-current-weight: var(--fl-weight-aux); --fl-current-strong: var(--fl-weight-aux-strong); font-size: var(--fl-size-aux); }
+.fl-size-key { --fl-current-weight: var(--fl-weight-key); --fl-current-strong: var(--fl-weight-key-strong); font-size: var(--fl-size-key); }
+.fl-size-small { --fl-current-weight: var(--fl-weight-small); --fl-current-strong: var(--fl-weight-small-strong); font-size: var(--fl-size-small); }
+.fl-size-body { --fl-current-weight: var(--fl-weight-body); --fl-current-strong: var(--fl-weight-body-strong); font-size: var(--fl-size-body); }
+.fl-size-lead { --fl-current-weight: var(--fl-weight-lead); --fl-current-strong: var(--fl-weight-lead-strong); font-size: var(--fl-size-lead); }
+.fl-size-h3 { --fl-current-weight: var(--fl-weight-h3); --fl-current-strong: var(--fl-weight-h3-strong); font-size: var(--fl-size-h3); }
+.fl-size-h2 { --fl-current-weight: var(--fl-weight-h2); --fl-current-strong: var(--fl-weight-h2-strong); font-size: var(--fl-size-h2); }
+.fl-size-h1 { --fl-current-weight: var(--fl-weight-h1); --fl-current-strong: var(--fl-weight-h1-strong); font-size: var(--fl-size-h1); }
+.fl-size-display { --fl-current-weight: var(--fl-weight-display); --fl-current-strong: var(--fl-weight-display-strong); font-size: var(--fl-size-display); }
+.fl-size-hero { --fl-current-weight: var(--fl-weight-hero); --fl-current-strong: var(--fl-weight-hero-strong); font-size: var(--fl-size-hero); }
+.fl-size-giant { --fl-current-weight: var(--fl-weight-hero); --fl-current-strong: var(--fl-weight-hero-strong); font-size: var(--fl-size-giant); }
+.fl-size-colossal { --fl-current-weight: var(--fl-weight-hero); --fl-current-strong: var(--fl-weight-hero-strong); font-size: var(--fl-size-colossal); }
+.fl-size-aux, .fl-size-key, .fl-size-small, .fl-size-body, .fl-size-lead, .fl-size-h3, .fl-size-h2, .fl-size-h1, .fl-size-display, .fl-size-hero, .fl-size-giant, .fl-size-colossal { font-weight: var(--fl-current-weight); }
+/* Numbers use the same ladder as text: the size atom decides weight, strong adds 200 in bold. */
+
 .fl-weight-regular { font-weight: var(--fl-current-weight, var(--fl-weight-body)); }
 .fl-weight-strong { font-weight: var(--fl-current-strong, var(--fl-weight-body-strong)); }
 .fl-leading-body { line-height: var(--fl-leading-body); }
 .fl-leading-reading { line-height: var(--fl-leading-reading); }
 .fl-leading-lead { line-height: var(--fl-leading-lead); }
 .fl-leading-tight { line-height: var(--fl-leading-tight); }
+.fl-leading-hero { line-height: var(--fl-leading-hero); }
 .fl-leading-display { line-height: var(--fl-leading-display); }
+.fl-tracking-tighter { letter-spacing: var(--fl-tracking-tighter); }
 .fl-tracking-tight { letter-spacing: var(--fl-tracking-tight); }
 .fl-tracking-normal { letter-spacing: var(--fl-tracking-normal); }
 .fl-tracking-wide { letter-spacing: var(--fl-tracking-wide); }
+.fl-text-start { text-align: start; }
+.fl-text-end { text-align: end; }
 .fl-text-left { text-align: left; }
 .fl-text-center { text-align: center; }
 .fl-text-right { text-align: right; }
 .fl-text-main { color: var(--fl-text); }
 .fl-text-muted { color: var(--fl-text-muted); }
 .fl-text-accent { color: var(--fl-text-accent); }
+.fl-proportional { font-variant-numeric: lining-nums proportional-nums; }
+.fl-hang { text-indent: -.5em; text-spacing-trim: trim-start; }
+.fl-optical { margin-inline-start: -.055em; }
+.fl-caps { text-transform: uppercase; letter-spacing: var(--fl-tracking-wide); }
 .fl-tabular { font-variant-numeric: lining-nums tabular-nums; }
 .fl-balance { text-wrap: balance; }
 .fl-measure { max-inline-size: var(--fl-measure); }
@@ -559,7 +989,7 @@
 .fl-content-center { align-content: center; }
 .fl-content-between { align-content: space-between; }
 
-/* Spacing is a baseline family: 0 / ¼ / ½ / 1 / 1½ / 2 / 3 lines. */
+/* Spacing is a baseline family: 0 / ¼ / ½ / 1 / 1½ / 2 / 3 / 4 / 6 lines. */
 .fl-gap-0 { gap: var(--fl-space-0); }
 .fl-gap-1 { gap: var(--fl-space-1); }
 .fl-gap-2 { gap: var(--fl-space-2); }
@@ -567,6 +997,8 @@
 .fl-gap-4 { gap: var(--fl-space-4); }
 .fl-gap-5 { gap: var(--fl-space-5); }
 .fl-gap-6 { gap: var(--fl-space-6); }
+.fl-gap-7 { gap: var(--fl-space-7); }
+.fl-gap-8 { gap: var(--fl-space-8); }
 .fl-gap-x-0 { column-gap: var(--fl-space-0); }
 .fl-gap-x-1 { column-gap: var(--fl-space-1); }
 .fl-gap-x-2 { column-gap: var(--fl-space-2); }
@@ -574,6 +1006,8 @@
 .fl-gap-x-4 { column-gap: var(--fl-space-4); }
 .fl-gap-x-5 { column-gap: var(--fl-space-5); }
 .fl-gap-x-6 { column-gap: var(--fl-space-6); }
+.fl-gap-x-7 { column-gap: var(--fl-space-7); }
+.fl-gap-x-8 { column-gap: var(--fl-space-8); }
 .fl-gap-y-0 { row-gap: var(--fl-space-0); }
 .fl-gap-y-1 { row-gap: var(--fl-space-1); }
 .fl-gap-y-2 { row-gap: var(--fl-space-2); }
@@ -581,6 +1015,8 @@
 .fl-gap-y-4 { row-gap: var(--fl-space-4); }
 .fl-gap-y-5 { row-gap: var(--fl-space-5); }
 .fl-gap-y-6 { row-gap: var(--fl-space-6); }
+.fl-gap-y-7 { row-gap: var(--fl-space-7); }
+.fl-gap-y-8 { row-gap: var(--fl-space-8); }
 .fl-p-0 { padding: var(--fl-space-0); }
 .fl-p-1 { padding: var(--fl-space-1); }
 .fl-p-2 { padding: var(--fl-space-2); }
@@ -588,6 +1024,8 @@
 .fl-p-4 { padding: var(--fl-space-4); }
 .fl-p-5 { padding: var(--fl-space-5); }
 .fl-p-6 { padding: var(--fl-space-6); }
+.fl-p-7 { padding: var(--fl-space-7); }
+.fl-p-8 { padding: var(--fl-space-8); }
 .fl-px-0 { padding-inline: var(--fl-space-0); }
 .fl-px-1 { padding-inline: var(--fl-space-1); }
 .fl-px-2 { padding-inline: var(--fl-space-2); }
@@ -595,6 +1033,8 @@
 .fl-px-4 { padding-inline: var(--fl-space-4); }
 .fl-px-5 { padding-inline: var(--fl-space-5); }
 .fl-px-6 { padding-inline: var(--fl-space-6); }
+.fl-px-7 { padding-left: var(--fl-space-7); padding-right: var(--fl-space-7); }
+.fl-px-8 { padding-left: var(--fl-space-8); padding-right: var(--fl-space-8); }
 .fl-py-0 { padding-block: var(--fl-space-0); }
 .fl-py-1 { padding-block: var(--fl-space-1); }
 .fl-py-2 { padding-block: var(--fl-space-2); }
@@ -602,6 +1042,8 @@
 .fl-py-4 { padding-block: var(--fl-space-4); }
 .fl-py-5 { padding-block: var(--fl-space-5); }
 .fl-py-6 { padding-block: var(--fl-space-6); }
+.fl-py-7 { padding-top: var(--fl-space-7); padding-bottom: var(--fl-space-7); }
+.fl-py-8 { padding-top: var(--fl-space-8); padding-bottom: var(--fl-space-8); }
 .fl-pt-0 { padding-top: var(--fl-space-0); }
 .fl-pt-1 { padding-top: var(--fl-space-1); }
 .fl-pt-2 { padding-top: var(--fl-space-2); }
@@ -609,6 +1051,8 @@
 .fl-pt-4 { padding-top: var(--fl-space-4); }
 .fl-pt-5 { padding-top: var(--fl-space-5); }
 .fl-pt-6 { padding-top: var(--fl-space-6); }
+.fl-pt-7 { padding-top: var(--fl-space-7); }
+.fl-pt-8 { padding-top: var(--fl-space-8); }
 .fl-pb-0 { padding-bottom: var(--fl-space-0); }
 .fl-pb-1 { padding-bottom: var(--fl-space-1); }
 .fl-pb-2 { padding-bottom: var(--fl-space-2); }
@@ -616,6 +1060,8 @@
 .fl-pb-4 { padding-bottom: var(--fl-space-4); }
 .fl-pb-5 { padding-bottom: var(--fl-space-5); }
 .fl-pb-6 { padding-bottom: var(--fl-space-6); }
+.fl-pb-7 { padding-bottom: var(--fl-space-7); }
+.fl-pb-8 { padding-bottom: var(--fl-space-8); }
 .fl-mt-0 { margin-top: var(--fl-space-0); }
 .fl-mt-1 { margin-top: var(--fl-space-1); }
 .fl-mt-2 { margin-top: var(--fl-space-2); }
@@ -623,6 +1069,8 @@
 .fl-mt-4 { margin-top: var(--fl-space-4); }
 .fl-mt-5 { margin-top: var(--fl-space-5); }
 .fl-mt-6 { margin-top: var(--fl-space-6); }
+.fl-mt-7 { margin-top: var(--fl-space-7); }
+.fl-mt-8 { margin-top: var(--fl-space-8); }
 .fl-mb-0 { margin-bottom: var(--fl-space-0); }
 .fl-mb-1 { margin-bottom: var(--fl-space-1); }
 .fl-mb-2 { margin-bottom: var(--fl-space-2); }
@@ -630,6 +1078,8 @@
 .fl-mb-4 { margin-bottom: var(--fl-space-4); }
 .fl-mb-5 { margin-bottom: var(--fl-space-5); }
 .fl-mb-6 { margin-bottom: var(--fl-space-6); }
+.fl-mb-7 { margin-bottom: var(--fl-space-7); }
+.fl-mb-8 { margin-bottom: var(--fl-space-8); }
 .fl-mt-auto { margin-top: auto; }
 .fl-w-full { width: 100%; }
 .fl-h-full { height: 100%; }
@@ -692,7 +1142,7 @@
   letter-spacing: var(--fl-tracking-wide); color: var(--fl-text-muted);
   right: calc(var(--bleed, 0px) + max(var(--safe-right, 0px), var(--fl-margin-outer)));
 }
-.fl-folio { bottom: calc(var(--bleed, 0px) + max(var(--safe-bottom, 0px), 10mm)); }
+.fl-folio { font-family: var(--fl-font-number); font-weight: var(--fl-weight-aux); bottom: calc(var(--bleed, 0px) + max(var(--safe-bottom, 0px), 10mm)); }
 .fl-folio::after { content: counter(page-n); }
 .fl-running { top: calc(var(--bleed, 0px) + max(var(--safe-top, 0px), 9mm)); }
 :where(.page:nth-of-type(even), .page[data-side="left"]) :is(.fl-folio, .fl-running) {
@@ -701,3 +1151,17 @@
 :where(.page[data-side="right"]) :is(.fl-folio, .fl-running) {
   right: calc(var(--bleed, 0px) + max(var(--safe-right, 0px), var(--fl-margin-outer))); left: auto;
 }
+
+/* Explicit optical/photo tools, with no automatic decoration. */
+.fl-mono { filter: grayscale(1); }
+.fl-scrim-start { background-image: linear-gradient(to right, var(--fl-scrim-color) 0%, transparent var(--fl-scrim-stop)); }
+.fl-scrim-end { background-image: linear-gradient(to left, var(--fl-scrim-color) 0%, transparent var(--fl-scrim-stop)); }
+.fl-rule-heavy { border-top: var(--fl-rule-heavy) solid var(--fl-text); }
+.fl-rule-accent { border-top: var(--fl-rule) solid var(--fl-text-accent); }
+.fl-rule-bottom { border-bottom: var(--fl-hair) solid var(--fl-stroke); }
+.fl-rule-none { border: 0; }
+.fl-fill-accent { background: var(--fl-text-accent); }
+.fl-fill-ink { background: var(--fl-text); }
+.fl-fill-soft { background: var(--fl-soft); }
+.fl-vertical { writing-mode: vertical-rl; text-orientation: mixed; }
+.fl-sideways { writing-mode: sideways-lr; }

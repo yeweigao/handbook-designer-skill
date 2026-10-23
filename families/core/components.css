@@ -1,0 +1,177 @@
+/* Folio components · functional devices for Swiss-based print composition (Folio 2.2).
+   Each is optional and decomposable: it paints only rules, hairlines or text colour
+   from the current surface roles, never clips, hides or shrinks text, and creates no
+   page geometry. Atoms load after this module and override any default.
+   Copyable recipes: dev/folio-css/catalog.json. */
+
+/* Kopfzeile · furniture row: series · topic · number … page.
+   Children sit on the six page tracks; the last item closes the row on the right. */
+:where(.fl-meta) {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  column-gap: var(--fl-gutter);
+  align-items: baseline;
+  padding-bottom: var(--fl-space-1);
+  border-bottom: var(--fl-rule) solid var(--fl-text);
+  --fl-current-weight: var(--fl-weight-aux);
+  --fl-current-strong: var(--fl-weight-aux-strong);
+  font-family: var(--fl-font-label);
+  font-size: var(--fl-size-aux);
+  font-weight: var(--fl-current-weight);
+  line-height: var(--fl-leading-tight);
+  font-variant-numeric: lining-nums;
+  color: var(--fl-text);
+}
+:where(.fl-meta > *) { min-width: 0; }
+:where(.fl-meta > :first-child) { font-weight: var(--fl-weight-aux-strong); }
+:where(.fl-meta > :last-child:not(:first-child)) { grid-column-end: -1; text-align: end; }
+
+/* Fusszeile · foot line: a rule number and one sentence on a hairline.
+   The second item starts on the second track; .fl-foot-end closes the line. */
+:where(.fl-foot) {
+  display: flex;
+  align-items: baseline;
+  gap: var(--fl-gutter);
+  padding-top: var(--fl-space-1);
+  border-top: var(--fl-hair) solid var(--fl-text);
+  --fl-current-weight: var(--fl-weight-aux);
+  --fl-current-strong: var(--fl-weight-aux-strong);
+  font-family: var(--fl-font-label);
+  font-size: var(--fl-size-aux);
+  font-weight: var(--fl-current-weight);
+  line-height: var(--fl-leading-tight);
+  color: var(--fl-text);
+}
+:where(.fl-foot > :first-child) { flex: none; min-width: calc((100% + var(--fl-gutter)) / 6 - var(--fl-gutter)); font-weight: var(--fl-weight-aux-strong); }
+:where(.fl-foot > .fl-foot-end) { margin-inline-start: auto; color: var(--fl-text-muted); }
+
+/* Fachbegriff · the Latin term beside or under a Chinese title, in the current surface accent. */
+:where(.fl-term) {
+  --fl-current-weight: var(--fl-weight-h3);
+  --fl-current-strong: var(--fl-weight-h3-strong);
+  font-family: var(--fl-font-display);
+  font-weight: var(--fl-current-weight);
+  font-size: var(--fl-size-h3);
+  line-height: var(--fl-leading-tight);
+  letter-spacing: var(--fl-tracking-tight);
+  color: var(--fl-text-accent);
+}
+
+/* Verzeichnis · numbered rows on hairlines: contents, rules, steps, credits.
+   ol/ul.fl-index > li > .fl-index-n + entry + optional .fl-index-end (page, date). */
+:where(.fl-index) { list-style: none; margin: 0; padding: 0; border-top: var(--fl-rule) solid var(--fl-text); }
+:where(.fl-index > li) {
+  display: grid;
+  grid-template-columns: var(--fl-index-n, 3em) minmax(0, 1fr) auto;
+  column-gap: var(--fl-gutter);
+  align-items: baseline;
+  padding-block: var(--fl-space-1);
+  border-bottom: var(--fl-hair) solid var(--fl-stroke);
+}
+:where(.fl-index-n) { grid-column: 1; font-family: var(--fl-font-number); font-weight: var(--fl-weight-number); font-variant-numeric: lining-nums tabular-nums; }
+:where(.fl-index-end) { grid-column: 3; text-align: end; font-family: var(--fl-font-number); font-weight: var(--fl-weight-number); font-variant-numeric: tabular-nums; color: var(--fl-text-muted); }
+
+/* Bemassung · dimension line. The element's own box is the measured length: place it
+   on the grid it describes. End ticks and a centred value that stays real text.
+   .fl-dim-v measures height (give it a definite height or stretch it in a grid). */
+:where(.fl-dim), :where(.fl-dim-v) {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 1.6em;
+  --fl-current-weight: var(--fl-weight-aux);
+  --fl-current-strong: var(--fl-weight-aux-strong);
+  font-family: var(--fl-font-label);
+  font-size: var(--fl-size-aux);
+  font-weight: var(--fl-current-weight);
+  line-height: 1;
+  font-variant-numeric: lining-nums;
+  color: var(--fl-dim-color, var(--fl-text-accent));
+}
+:where(.fl-dim-v) { writing-mode: vertical-rl; }
+:where(.fl-dim)::before, :where(.fl-dim-v)::before {
+  content: ""; position: absolute; inset-inline: 0; inset-block-start: 50%;
+  border-block-start: var(--fl-hair) solid currentColor;
+}
+:where(.fl-dim)::after, :where(.fl-dim-v)::after {
+  content: ""; position: absolute; inset-inline: 0; inset-block: calc(50% - 5px);
+  border-inline: var(--fl-hair) solid currentColor;
+}
+:where(.fl-dim > *), :where(.fl-dim-v > *) { position: relative; z-index: 1; padding-inline: .5em; background: var(--fl-bg, var(--fl-paper)); }
+
+/* Abbildung · the figure number leads its caption, same size, strong, in ink. */
+:where(.fl-abb) { color: var(--fl-text); font-weight: var(--fl-current-strong, var(--fl-weight-label-strong)); margin-inline-end: .65em; }
+
+/* Bildlegende · caption on six tracks: number | text (four tracks) | credit. */
+:where(.fl-legend) {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  column-gap: var(--fl-gutter);
+  align-items: baseline;
+  --fl-current-weight: var(--fl-weight-aux);
+  --fl-current-strong: var(--fl-weight-aux-strong);
+  font-family: var(--fl-font-label);
+  font-size: var(--fl-size-aux);
+  font-weight: var(--fl-current-weight);
+  line-height: var(--fl-leading-lead);
+  color: var(--fl-text);
+}
+:where(.fl-legend > :nth-child(1)) { grid-column: 1; font-weight: var(--fl-weight-aux-strong); }
+:where(.fl-legend > :nth-child(2)) { grid-column: 2 / span 4; }
+:where(.fl-legend > :nth-child(3)) { grid-column: 6; text-align: end; color: var(--fl-text-muted); }
+
+/* Kennzahl · a figure, its unit, its label, hung from a 2px rule. Inside a stat the
+   figure is set at leading 1 (not .9), so up to display size its glyph box clears the
+   rule and the label; a hero-size figure also needs .fl-pt-3. */
+:where(.fl-stat) { --fl-number-leading: var(--fl-leading-hero); display: flex; flex-direction: column; gap: var(--fl-space-2); min-width: 0; padding-top: var(--fl-space-2); border-top: var(--fl-rule) solid var(--fl-text); }
+:where(.fl-unit) { font-size: .32em; letter-spacing: 0; margin-inline-start: .12em; }
+
+/* Zeitachse · one continuous 2px axis with a tick at the start of each item.
+   Put on .fl-l-timeline (or any row); .fl-axis-now marks a single item in red. */
+:where(.fl-axis) { border-top: var(--fl-rule) solid var(--fl-text); }
+:where(.fl-axis > :not(.fl-l-full)) { position: relative; padding-top: var(--fl-space-3); }
+:where(.fl-axis > :not(.fl-l-full))::before { content: ""; position: absolute; top: 0; inset-inline-start: 0; width: var(--fl-rule); height: var(--fl-space-2); background: var(--fl-text); }
+:where(.fl-axis > .fl-axis-now)::before { width: var(--fl-space-1); background: var(--fl-text-accent); }
+
+/* Tabelle · 2px rule opens, hairlines separate, a thin ink rule closes. Cells of
+   different sizes share one baseline per row.
+   .fl-num right-aligns a figure column and makes it tabular. Only figure columns:
+   Inter's tnum also widens - . , : to figure width, which spaces out code and prose. */
+:where(.fl-table) { width: 100%; border-top: var(--fl-rule) solid var(--fl-text); border-bottom: var(--fl-hair) solid var(--fl-text); font-variant-numeric: lining-nums; }
+:where(.fl-table :where(th)) {
+  padding: var(--fl-space-1) var(--fl-space-2) var(--fl-space-1) 0;
+  border-bottom: var(--fl-hair) solid var(--fl-text);
+  --fl-current-weight: var(--fl-weight-aux);
+  --fl-current-strong: var(--fl-weight-aux-strong);
+  font-family: var(--fl-font-label); font-size: var(--fl-size-aux); font-weight: var(--fl-weight-aux-strong);
+  line-height: var(--fl-leading-tight); text-align: start; vertical-align: bottom;
+}
+:where(.fl-table :where(td)) { padding: var(--fl-space-1) var(--fl-space-2) var(--fl-space-1) 0; border-bottom: var(--fl-hair) solid var(--fl-stroke); vertical-align: baseline; }
+:where(.fl-table :where(tr:last-child > td)) { border-bottom: 0; }
+:where(.fl-table th:last-child, .fl-table td:last-child) { padding-inline-end: 0; }
+:where(.fl-table :where(.fl-num)) { font-family: var(--fl-font-number); font-weight: var(--fl-weight-number); text-align: end; font-variant-numeric: lining-nums tabular-nums; }
+
+/* Aufzählung · en-dash list, hanging, half-baseline apart. */
+:where(.fl-list) { list-style: none; margin: 0; padding: 0; }
+:where(.fl-list > li) { position: relative; padding-inline-start: 1.2em; }
+:where(.fl-list > li + li) { margin-top: var(--fl-space-1); }
+:where(.fl-list > li)::before { content: "–"; position: absolute; inset-inline-start: 0; }
+
+/* Signal · one small red square: a functional cue; never a required ornament. */
+:where(.fl-mark) { display: inline-block; inline-size: .72em; block-size: .72em; background: var(--fl-text-accent); vertical-align: baseline; }
+
+/* Raster sichtbar · visible structure on purpose (先画格子): column fields and/or
+   baselines on the element's content box. Content stays in normal flow above it.
+   The two layers do not inherit, so a baseline field nested in a column overlay
+   draws only its own lines over the parent's columns. */
+/* Reset both layers at the diagnostic element to prevent nested overlays inheriting. */
+:where(.fl-show-columns, .fl-show-columns-12, .fl-show-baseline) {
+  --fl-show-cols: linear-gradient(transparent, transparent);
+  --fl-show-base: linear-gradient(transparent, transparent);
+  background-image: var(--fl-show-cols), var(--fl-show-base);
+  background-origin: content-box; background-clip: content-box;
+}
+.fl-show-columns { --fl-show-cols: repeating-linear-gradient(to right, var(--fl-grid-tint) 0 calc((100% - 5 * var(--fl-gutter)) / 6), transparent 0 calc((100% + var(--fl-gutter)) / 6)); }
+.fl-show-columns-12 { --fl-show-cols: repeating-linear-gradient(to right, var(--fl-grid-tint) 0 calc((100% - 11 * var(--fl-gutter)) / 12), transparent 0 calc((100% + var(--fl-gutter)) / 12)); }
+.fl-show-baseline { --fl-show-base: repeating-linear-gradient(to bottom, transparent 0 calc(var(--fl-baseline) - var(--fl-hair)), var(--fl-grid-line) 0 var(--fl-baseline)); }

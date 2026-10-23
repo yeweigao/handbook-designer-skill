@@ -17,3 +17,20 @@ dev/samples/native/*/.qa/**
 dev/samples/native/*/out/
 /output/*/.qa/
 /output/*/out/
+
+# ── 体积资产不入库 ────────────────────────────────────────────────
+# 仓库只放可读的源码与文档：字阶、CSS、HTML、测试、审计记录。
+# 照片、字体、构建产物、导出包留在本地（或由脚本恢复），不进 git。
+# 恢复方式见 dev/samples/README.md 与 hb/core/fonts.py。
+dev/fonts/
+dev/sample_photos/
+dev/gallery/
+dev/demos/
+dev/previews/
+dev/samples/themes/
+dev/samples/layouts-24/
+dev/samples/lab_assets/
+dev/samples/product-brochure/
+dev/samples/native/*/assets/
+dev/folio-css/fonts/
+output/

@@ -6,7 +6,7 @@
 
 init 从 families/<家族>/ 复制 design.css（记录版本与哈希到 project.json），生成静态字体与授权文本、
 最小作者源骨架（一页封面）、brief.md / page-plan.md 模板与 sources/ 目录。不覆盖已存在的项目文件。
-字体来源（按顺序查找可变字体）：$HB_FONT_DIR、~/.cache/handbook-designer/fonts、仓库 dev/fonts。
+字体来源（按顺序查找）：$HB_FONT_DIR、~/.cache/handbook-designer/fonts、用户字体目录、仓库 dev/fonts。开源字面可用 `fonts.py install` 补齐。
 """
 import glob
 import hashlib
@@ -53,6 +53,23 @@ def find_source(name):
     raise SystemExit(f"找不到字体 {name}：将已授权源字体放到 $HB_FONT_DIR 或 ~/.cache/handbook-designer/fonts（见 references/delivery.md）")
 
 
+def name_static_instance(font, family, weight):
+    """Give each static variable-font instance a unique, standards-safe PS name."""
+    labels = {200: "ExtraLight", 250: "Weight250", 300: "Light", 400: "Regular", 500: "Medium",
+              600: "SemiBold", 700: "Bold", 800: "ExtraBold", 900: "Black"}
+    subfamily = labels.get(int(weight), f"Weight{weight}")
+    full = f"{family} {subfamily}"
+    compact = re.sub(r"[^A-Za-z0-9-]", "", family.replace(" ", ""))
+    ps_name = f"{compact}-{weight}"
+    unique_id = f"Folio {family} {weight}"
+    names = font["name"]
+    replacements = {1: family, 2: subfamily, 3: unique_id, 4: full, 6: ps_name, 16: family, 17: subfamily}
+    for name_id, value in replacements.items():
+        names.names = [record for record in names.names if record.nameID != name_id]
+        names.setName(value, name_id, 3, 1, 0x409)
+        names.setName(value, name_id, 1, 0, 0)
+
+
 def build_fonts(project, fam, text):
     out = []
     os.makedirs(os.path.join(project, "assets", "fonts"), exist_ok=True)
@@ -75,12 +92,17 @@ def build_fonts(project, fam, text):
             if "fvar" in font:
                 loc = {a.axisTag: a.defaultValue for a in font["fvar"].axes}
                 loc["wght"] = float(w)
-                font = instancer.instantiateVariableFont(font, loc, updateFontNames="STAT" in font)
+                # STAT tables usually omit intermediate weights such as 250;
+                # instance without STAT-name lookup, then assign unique static names.
+                font = instancer.instantiateVariableFont(font, loc, updateFontNames=False)
+                name_static_instance(font, f["family"], w)
             font.save(os.path.join(project, rel))
             out.append({"family": f["family"], "file": rel, "weight": str(w), "style": "normal"})
             print(f"  {rel}  {os.path.getsize(os.path.join(project, rel)) // 1024} KB")
-        lic = os.path.join(FAMILIES, "licenses", f["license"])
-        shutil.copyfile(lic, os.path.join(project, "assets", "fonts", f["license"]))
+        license_name = f.get("license")
+        if license_name:
+            lic = os.path.join(FAMILIES, "licenses", license_name)
+            shutil.copyfile(lic, os.path.join(project, "assets", "fonts", license_name))
     return out
 
 

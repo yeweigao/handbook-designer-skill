@@ -1,4 +1,39 @@
-# Folio CSS 1.1.0 验证记录
+# Folio CSS 验证记录
+
+## 2.2.0 · Swiss 底座调试轮（2026-10-23）
+
+承接 Swiss 底座融合，本轮把「样册必须真的过契约」跑通：91 个目录项 → 100 页 A4 样刊。
+
+| 项目 | 实际结果 |
+|---|---|
+| 生成一致性 | `python3 dev/build-folio-css.py --check` pass；`design.css`、`catalog.js`、`api-coverage.json` 与源模块一致。 |
+| 契约 | `python3 hb/core/validate.py dev/samples/native/folio-swiss` 通过（0 错 0 警）。 |
+| 浏览器回归 | `family-css` 8 + `family-css-extended` 4 + `family-css-swiss` 7 = **19/19 pass**；含展示页筛选、源码、结构视图与 390px 宽度。 |
+| 度量回归 | `node --test dev/tests/core/measure.test.mjs` **21/21 pass**；18 个反例（含文字重叠、压图、对比度、出血）仍全部命中。 |
+| Python | `python3 -m unittest discover -s dev/tests/core -p 'test_*.py'` **31 项全 pass**（含新增 `test_adherence.py` 13 项）。 |
+| 样式一致性 | `validate` 新增 `style.token / style.offladder / style.brand / style.decor / style.custom`；节奏 token 覆写与越阶字号为硬项。样册为 0 错误；模拟漂移册（覆写 4 个节奏 token、52/34px、3 渐变 8 圆角 2 阴影）被判不通过。 |
+| 样册技术验收 | 构建 `7b049e159e72`，100 页：render / measure / postflight / raster / coverage 全 pass，硬项 fail 0、blocking 0；11 条提示（悬挂列表伪元素 ×4、旋转内容 ×7）已目检。 |
+| 视觉审稿 | 整册缩略、93–100 页逐页阅读尺度（四轮）、13 页其他单页、3 组真实面对页；结论「可交付」（作者自评，不评优秀、不计 S12）。记录见 [样册审稿](../samples/native/folio-swiss/.qa/visual-review.md)。 |
+| 流程前置 | `workflows/new.md` 第 4 步写清 design.css / book.css 分工与「非必要不新增」；第 5 步为「三页小样，最多三轮」，结论落 `style-lock.md`。`validate` 新增 `process.style-lock`：≥12 页且无锁定记录时提示。 |
+| 字体供给 | `hb/core/fonts.py status / install / install --system`：只下载可再分发的 OFL 字面，校验字形表并写 SHA256SUMS 与许可；Tahoma 等专有字体只报告「需自备」。本机已装 Inter / Noto Sans SC / Noto Serif SC 到 `~/Library/Fonts`。 |
+| 导出 | `out/folio-swiss-v2.2/`；正式 PDF 与验收哈希一致、可编辑 PDF 字体完整嵌入且逐页一致、离线 HTML 无外部请求且打印一致、源包干净重建为同构建同栅格。 |
+
+本轮修掉的实际缺陷（都不是放宽检查换来的通过）：
+
+- **契约硬错**：生成器在无图页面写出 `data-overlap=""`，`validate` 直接拒绝。改为只在确有图片时声明。
+- **检查器误报**：Chrome 的 Range 矩形是字体内容盒（ascent+descent），紧行距（`leading-tight/display/hero`）时高于 CSS `line-height`，导致 15 处「文字重叠」与 1 处反白色带「1:1 对比度」的假失败。叠放与对比度改用 CSS 行框判断，越界与安全区仍用字形盒；18 个反例不受影响。
+- **公开配方缺声明**：`a-scrim`（标签落在未压暗一侧，实测 1.97:1）、`a-page`、`bleed-top/full/outer` 缺少 `data-overlap` / `data-bleed`，照抄即违反契约。已补，并按遮罩方向重排 scrim 标签。
+- **角色映射**：生成器把 `.fl-size-aux` 示例标成 body，11px 低于 14px 下限；`annotate()` 补上 `fl-size-aux → aux`。
+- **版面**：原子索引续页只剩 2 条（整页 85% 空白）改为均分；短页示例在剩余空间内垂直居中；`a-sizing` 标题改显式断行；`x-edge` 色面页改纵向居中。
+- **去掉 Tahoma**：`family.json` 只剩 Noto Serif SC / Noto Sans SC / Inter 三个 OFL 家族；数字与正文同族（Inter），不再有数字专用字重（bold 900 / light 200 跟随字号档位）。`family.py` 的 Tahoma 分支、`fonts.py` 的系统回退、`tahoma-system-font-note.txt` 与全部文档表述一并移除；两份 CSS 测试改为断言 Inter 与阶梯字重。
+- **变奏章按主张落版**：先写 [philosophy-variations.md](../samples/native/folio-swiss/philosophy-variations.md)（受控变量 · Controlled Variance），主张只管判断、不定模数。八页的数值只用系统已有的：字号 11–280 字阶（裁字/填图字取 2×280），高度取 28 的倍数（196 / 112 / 84 / 588），间距 0/7/14/28/42/56，内边距走 `fl-p-3` 等原子。中途试过把八页塞进统一的 600px 图版 + 署名带，因压小手势、与页脚说明重复、把 100 页由整页降级成短图版而撤回。
+- **变奏 8 页重做**（93–100）：原稿是「小样 + 大留白」的说明卡，同构且分量不足；改为每页一个构图主张——五条通栏字带按比例分配高度、640px 巨字被右侧纸边切断并用纸面板保留完整名称、320px 粗字重填图字、2:3 竖幅原色/乘色并置、银河照片上的乘色块与不透明纸面对照、6 轨 24 单元的程序图形、三条通栏导视牌、两面 196px 色面向左右纸边展开。修掉四个真问题：display 带里的 13px 编号低于下限、纸面说明压白字 2.99:1、multiply 图层把白字一起混掉、站名被 space-between 推到中间。
+
+未覆盖：纸样、其他浏览器、Node 22 / Python 3.10 实跑、Acrobat 内改字、独立人工校准。
+
+---
+
+## 1.1.0 · 16 页编辑样刊与企业册
 
 2026-10-23。16组布局、24个组件：基础8组 + 行程/经营/分析12组 + 数据图表4组。共40个预览。
 

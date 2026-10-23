@@ -1,0 +1,19 @@
+/* Generated specimen framing; recipe typography and geometry come from design.css.
+No scale(), zoom, fit-to-page or text shrinking is used in printed pages. */
+.specimen-area { display:flex; flex-direction:column; }
+.specimen-heading { margin-bottom:28px; }
+.specimen-heading h1 { margin-top:14px; }
+.specimen-heading .specimen-summary { margin-top:14px; max-width:42em; }
+.specimen-example { position:relative; min-width:0; flex:none; margin-block:auto; }
+.specimen-notes { margin-top:auto; padding-top:28px; display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+.specimen-notes p { overflow-wrap:anywhere; }
+.specimen-notes .specimen-classes { grid-column:1/-1; font-size:11px; line-height:1.5; }
+.specimen-footer { display:flex; justify-content:space-between; gap:28px; margin-top:21px; padding-top:7px; border-top:1px solid var(--fl-stroke); }
+.specimen-native-meta { position:absolute; left:calc(var(--bleed) + 19mm); right:calc(var(--bleed) + 19mm); bottom:calc(var(--bleed) + 9mm); display:flex; justify-content:space-between; gap:14px; padding:7px 10px; background:var(--fl-paper); color:var(--fl-ink); }
+.specimen-native-meta * { color:inherit; }
+.specimen-native-note { position:absolute; left:calc(var(--bleed) + 19mm); right:calc(var(--bleed) + 19mm); top:calc(var(--bleed) + 9mm); }
+.specimen-cover-title { margin-top:84px; }
+.specimen-cover-copy { margin-top:auto; max-width:32em; }
+.specimen-index { list-style:none; padding:0!important; display:grid; grid-template-columns:1fr 1fr; gap:14px 28px; }
+.specimen-index li { display:flex; align-items:baseline; justify-content:space-between; gap:14px; border-bottom:1px solid var(--fl-stroke); padding-bottom:7px; }
+.specimen-section-no { margin-top:84px; }

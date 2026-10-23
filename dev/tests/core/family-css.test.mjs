@@ -29,7 +29,16 @@ test('layout slots align to six tracks and ordinary atoms override layout defaul
 
 test('font and weight atoms request declared role weights without synthetic alternatives',async()=>{
  const weights=await fixture(`<div class="fl-scope"><p class="fl-font-body fl-weight-strong">Body<strong>x</strong></p><p class="fl-font-label fl-weight-strong">Label<strong>x</strong></p><p class="fl-font-display fl-weight-regular">Display<strong>x</strong></p><p class="fl-font-number fl-weight-strong">123<strong>x</strong></p></div>`,page=>page.evaluate(()=>[...document.querySelectorAll('p')].map(el=>[getComputedStyle(el).fontWeight,getComputedStyle(el.firstChild.nextSibling).fontWeight,getComputedStyle(el).fontSynthesis])));
- assert.deepEqual(weights,[['700','700','none'],['600','600','none'],['700','700','none'],['600','600','none']]);
+ assert.deepEqual(weights,[['600','600','none'],['600','600','none'],['900','900','none'],['600','600','none']]);
+});
+
+test('bold and light restore the size ladder, heading families and number family',async()=>{
+ const rows=await fixture(`<div class="fl-scope fl-type-bold"><span id="b-display" class="fl-display">Display</span><span id="b-h1" class="fl-h1">H1</span><span id="b-h2" class="fl-h2">H2</span><span id="b-h3" class="fl-h3">H3</span><span id="b-lead" class="fl-lead">Lead</span><span id="b-body" class="fl-body">Body<strong> emphasized</strong></span><span id="b-small" class="fl-body fl-size-small">Small</span><span id="b-key" class="fl-key">Key</span><span id="b-aux" class="fl-aux">Aux</span><span id="b-number" class="fl-number">2026</span></div><div class="fl-scope fl-type-light"><span id="l-display" class="fl-display">Display</span><span id="l-h1" class="fl-h1">H1</span><span id="l-h2" class="fl-h2">H2</span><span id="l-h3" class="fl-h3">H3</span><span id="l-lead" class="fl-lead">Lead</span><span id="l-body" class="fl-body">Body<strong> emphasized</strong></span><span id="l-small" class="fl-body fl-size-small">Small</span><span id="l-key" class="fl-key">Key</span><span id="l-aux" class="fl-aux">Aux</span><span id="l-number" class="fl-number">2026</span></div>`,page=>page.evaluate(()=>['display','h1','h2','h3','lead','body','small','key','aux','number'].flatMap(role=>['b','l'].map(mode=>{const el=document.getElementById(`${mode}-${role}`),style=getComputedStyle(el);return {id:el.id,weight:style.fontWeight,family:style.fontFamily,strong:el.querySelector('strong')&&getComputedStyle(el.querySelector('strong')).fontWeight};}))));
+ assert.deepEqual(rows.map(x=>x.weight),['900','200','700','250','700','300','600','400','600','400','400','400','500','500','600','600','600','600','900','200']);
+ for(const row of rows.filter(x=>['display','h1','h2','h3'].some(role=>x.id.endsWith(role))))
+  assert.match(row.family,row.id.startsWith('b-')?/Noto Serif SC/:/Noto Sans SC/);
+ assert.match(rows.find(x=>x.id==='b-number').family,/Inter/);assert.match(rows.find(x=>x.id==='l-number').family,/Inter/);
+ assert.equal(rows.find(x=>x.id==='b-body').strong,'600');assert.equal(rows.find(x=>x.id==='l-body').strong,'400');
 });
 
 test('image ratios, fit and focus compose; bounded masonry keeps every crop within its column',async()=>{
@@ -50,8 +59,9 @@ test('local showcase filters recipes, opens source, preserves layout in structur
  try{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(new URL('../../folio-css/index.html',import.meta.url).href);await page.evaluate(()=>document.fonts.ready);
-  assert.equal(await page.locator('.recipe-card').count(),await page.evaluate(()=>FOLIO_CATALOG.layouts.length+FOLIO_CATALOG.components.length));
-  await page.locator('button[data-category=photography]').click();assert.equal(await page.locator('#layout-gallery .recipe-card:visible').count(),8);
+  assert.deepEqual(await page.evaluate(()=>[document.fonts.check("900 24px 'Noto Serif SC'"),document.fonts.check("250 24px 'Noto Sans SC'"),document.fonts.check('900 14px Inter')]),[true,true,true]);
+  assert.equal(await page.locator('.recipe-card').count(),await page.evaluate(()=>['atoms','layouts','components','expressions'].reduce((n,k)=>n+FOLIO_CATALOG[k].length,0)));
+  await page.locator('button[data-category=photography]').click();assert.equal(await page.locator('#layout-gallery .recipe-card:visible').count(),await page.evaluate(()=>FOLIO_CATALOG.layouts.filter(e=>e.category==='photography').length));
   const geometry=()=>page.locator('#layout-gallery .recipe-card:visible .preview-sheet').first().evaluate(e=>[e.scrollWidth,e.scrollHeight]);
   const before=await geometry();await page.locator('#structure-toggle').check();assert.deepEqual(await geometry(),before);
   await page.locator('#layout-gallery .recipe-card:visible button').first().click();assert.equal(await page.locator('dialog').evaluate(e=>e.open),true);assert.match(await page.locator('#dialog-code').innerText(),/fl-l-photo-pair/);

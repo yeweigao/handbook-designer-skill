@@ -11,6 +11,7 @@ import re
 import struct
 import sys
 from html.parser import HTMLParser
+import adherence  # noqa: E402  同目录模块：样式一致性（家族基因是否被套掉）
 
 CONTRACT = 1
 DEFAULT_FLOORS = {
@@ -609,6 +610,21 @@ def check_copy(rep, root, p, ap):
 
 # ---------------------------------------------------------------- 入口
 
+
+def check_process(rep, root, p):
+    """流程提示：长册应先有三页小样的风格锁定，而不是整本做完再返工。"""
+    entry = p.get("entry") or "book.html"
+    path = os.path.join(root, entry)
+    if not os.path.isfile(path):
+        return
+    with open(path, encoding="utf-8") as f:
+        pages = f.read().count('data-page-id="')
+    if pages >= 12 and not os.path.isfile(os.path.join(root, "style-lock.md")):
+        rep.warn("process.style-lock", "style-lock.md",
+                 f"本书 {pages} 页，没有风格锁定记录：先在开场/密集页/最难页上做三页小样，"
+                 "把字阶、网格、颜色角色与\"不做什么\"写进 style-lock.md 再铺全册（模板见 templates/style-lock.md）")
+
+
 def validate(root):
     rep = Report()
     root = os.path.abspath(root)
@@ -626,6 +642,8 @@ def validate(root):
     if os.path.isfile(os.path.join(root, "edits.css")):
         check_css(rep, root, "edits.css", seen)
     check_copy(rep, root, p, ap)
+    adherence.check_style(rep, root, p)
+    check_process(rep, root, p)
     return rep
 
 

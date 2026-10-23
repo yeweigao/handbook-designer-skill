@@ -1,0 +1,46 @@
+{
+  "contract": 1,
+  "build_id": "b9f16cc9729b",
+  "fingerprint": "b9f16cc9729b7bbaa947d05b3d1338655040360df0981bfa28f36ff51cbb9b25",
+  "tools": {
+    "contract": 1,
+    "playwright": "1.64.1",
+    "chromium": "149.0.7827.55",
+    "executable": "HB_CHROMIUM",
+    "node": "22",
+    "tool_hash": "924e7e0ab586a377e90d02f9928f3a96f6ba143b2fb3949c8d5316cb3ff4ae1e"
+  },
+  "languages": {
+    "zh-CN": {
+      "checks": {
+        "render": "pass",
+        "measure": "fail",
+        "postflight": "pass",
+        "raster": "pass",
+        "coverage": "pass"
+      },
+      "pdf": ".build/b9f16cc9729b/zh-CN/book.pdf",
+      "pdf_sha256": "8b29df702c93af2672f49f24b11a1a27e75308fc8fcaf63fe4585aab097712c2",
+      "pages": 100
+    }
+  },
+  "status": "blocked",
+  "blocking": [
+    {
+      "lang": "zh-CN",
+      "id": "readability.size",
+      "status": "fail",
+      "severity": "hard",
+      "page": "x-band",
+      "target": "x-band-006",
+      "evidence": {
+        "font_px": 12.87,
+        "min_px": 14,
+        "role": "body",
+        "text": "形体越鲜明02"
+      },
+      "message": "body 文字 12.87px 低于下限 14px：「形体越鲜明02」"
+    }
+  ],
+  "visual_review": "not-recorded"
+}

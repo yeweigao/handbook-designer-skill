@@ -2,7 +2,7 @@
 name: handbook-designer
 metadata:
   agent_created: true
-description: 将 Word、PDF、PPT、Markdown 或文字材料制作为多页手册、宣传册、画册、指南或任务册，支持系列复用、品牌适配与改版。直接创作 HTML/CSS/SVG，检查最终 PDF，交付可编辑 PDF、离线 HTML 和可重建源包。不用于幻灯片、单页海报或网站。
+description: 将 Word、PDF、PPT、Markdown 或文字材料制作为多页手册、宣传册、画册、指南或任务册，支持系列复用、品牌适配与改版。使用 Folio 瑞士主义底座，统一网格、双结构排印、摄影与信息图表。直接创作 HTML/CSS/SVG，检查最终 PDF，交付可编辑 PDF、离线 HTML 和可重建源包。不用于幻灯片、单页海报或网站。
 ---
 
 # 手册设计
@@ -30,10 +30,21 @@ description: 将 Word、PDF、PPT、Markdown 或文字材料制作为多页手�
 - 原稿保留在 `sources/original/`；提取内容及稳定段 ID 写入 `sources/source.md`、`segments.json`。先读 [文案适配](references/adaptation.md) 和 [编辑审阅](references/editorial-advisor.md)，完成简短的页面任务与整册节奏，再落版。
 - `content_mode` 选 `carry`（搬运）、`polish`（授权润色）、`translate`（授权翻译）、`frozen`（冻结）。事实、数字、限定条件不因排版改变；缺失信息照实保留。不能通过改原稿、隐藏文字或声明装饰消除内容错误。
 - 唯一作者源是 `book.html` + `book.css`。`design.css` 是本项目冻结的家族基因；家族升级须主动审阅，不能构建时静默替换。原生 Grid、Flex、普通流、定位与页面专属 CSS 都可用，无需新增布局注册项。
+- 铺全册前先做**三页小样**（开场、正文密集页、最难页），最多三轮，结论写进 `style-lock.md`；小样没定不写第 4 页。
+- 本书 CSS 只做克制的品牌适配：颜色 token 可以覆写并在 `brief.md` 记明；字号、间距、行距、基线属于家族基因，不在本书 CSS 或内联样式里另造。`validate` 检查 `style.token / style.offladder`，硬项失败即不得继续构建。
 - 一页一个 `.page`、稳定的 `data-page-id`；内容写 `data-source-id`，图片编辑用 `data-edit-id`。多语言共用一份作者源：默认语言在 HTML，其余在 `copy/<lang>.json`，长度差异用 `lang/<lang>.css`。格式与白名单见 [契约](references/contract.md)。
 - 尺寸、出血、安全边距和装订只在 `project.json` 维护。打印 CSS 与字体声明由运行时生成，作者不重复声明。字体、图片等资源先本地化；正式渲染不下载资源，不依赖系统字体替换。
 - 运行时只测量，不自动缩字、压行距、删书写区或重裁图片。放不下先改分组、栏宽与分页；长文用 `paginate` 写回作者源并审阅 diff。物理可读性下限与局部叠放声明见契约。
 - 图片来源、授权及作者记入 `sources/assets.json`。真实照片不能由合成色带代替；主题、人物、裁切与图注关系须审稿。没有照片可以用纯文字设计，不编事实、不用无关图填空。
+
+## 共同设计语言：Folio
+
+新项目从 `init folio` 起步，使用 [瑞士主义底座](references/swiss.md)：先确定阅读路径和网格，用字号、比例与留白组织层级，连续阅读默认左齐右松。颜色按角色使用，以一种强调色起步，品牌可覆盖；线条、色面和图形要承担分隔、导航或表达任务，不给每页自动套横线和底块。
+
+- **排印双结构**：`fl-type-bold` 的标题用 Noto Serif SC，`fl-type-light` 用 Noto Sans SC；light 大字更轻。两者共享字号、节奏和布局，按 [字阶表](references/style.md#排印双结构) 配字重。数字与正文同族（Inter），字重跟随字号档位，实际字体随项目交付。
+- **摄影属于同一系统**：满版/局部出血、跨页、网格内单图与序列均可。先选主体、裁切与图注关系，再定图文比例；图像不必黑白，文字也不必压图。见 [images](references/images.md)。
+- **原子到页面**：共用 token 和原子定义尺度、颜色、间距、网格与图像；可选布局安排关系，组件提供可拆的内容结构。页面根据真实材料组合，可自主写 CSS，不把展示样册当模板目录。
+- **信息表达**：时间轴、行程、图表与分析框架也遵循同一对齐、字阶和强调规则。定量图表保留单位、口径和来源，定性分析不伪装成精确数值。详见 [composition](references/composition.md)。
 
 ## 命令
 
@@ -43,6 +54,7 @@ description: 将 Word、PDF、PPT、Markdown 或文字材料制作为多页手�
 HB=<skill目录>/hb
 P=<工作目录>/<项目名>
 bash "$HB/core/setup_env.sh"
+python3 "$HB/core/fonts.py" status          # 家族字体是否就位；install --system 装进用户字体目录
 python3 "$HB/core/family.py" list
 python3 "$HB/core/family.py" init folio "$P" --title "书名" --langs zh-CN,en --mode translate
 python3 "$HB/core/extract.py" <原稿.docx> "$P"
@@ -71,7 +83,7 @@ node "$HB/core/cli.mjs" export "$P" --name <文件名>
 
 ## 按需参考
 
-- 开始构图：[composition](references/composition.md)、[layouts](references/layouts.md)、[style](references/style.md)、[rhythms](references/rhythms.md)。
+- 开始构图：[瑞士主义底座](references/swiss.md)、[composition](references/composition.md)、[layouts](references/layouts.md)、[style](references/style.md)、[rhythms](references/rhythms.md)。
 - 长文、表格、工作册、跨页：[blocks](references/blocks.md)；图片：[images](references/images.md)。
 - 验收尺度：[review](references/review.md)；交付、多语言与重建：[delivery](references/delivery.md)。
 - 模板：[brief](templates/brief.md)、[page-plan](templates/page-plan.md)、[experience](templates/experience.md)。

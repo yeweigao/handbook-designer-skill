@@ -1,6 +1,6 @@
-# Folio CSS · 1.1.0
+# Folio CSS · 2.2.0
 
-一套供印刷页面使用的 CSS 语言。相同的颜色角色、字体、网格和节奏可以组合出纯文字、摄影、信息查阅和混合页面。普通 HTML/CSS 是作者源，布局类是可选起点，组件是可拆开的组合示例。
+以 Swiss 网格、对齐、比例和留白为共同底座的印刷 CSS 语言。相同的颜色角色、字体、网格和节奏可以组合出纯文字、摄影、信息查阅和混合页面。普通 HTML/CSS 是作者源，布局类是可选起点，组件是可拆开的组合示例。
 
 [交互展示](../../dev/folio-css/index.html) 展示原子、布局及组件；[示例目录](../../dev/folio-css/catalog.json) 保存真实 HTML 配方。示例中的代码使用本家族实际 CSS，展示网页的导航和缩放不进入印刷文件。
 
@@ -11,17 +11,19 @@
 | `tokens.css` | 颜色、字体、字号、行距、版心和间距的统一数值 |
 | `../core/base.css` | 作用域 reset、页面基底、镜像版心 |
 | `../core/layouts.css` | 可选的结构关系与具名子项 |
+| `../core/components.css` | 页眉、索引、图注、表格、KPI、尺寸线等功能器件 |
+| `../core/variations.css` | 显式选用的字带、裁字、双色摄影和程序图形 |
 | `../core/atoms.css` | 独立原子、排印角色、图片与功能标记 |
 | `design.css` | 按上述顺序生成的完整单文件，供项目冻结复制 |
 | `family.json` | 名称、版本、画布与实际字体资源 |
 
-修改源模块后执行 `python3 dev/build-folio-css.py` 重建 `design.css`。项目初始化仍只复制一个 CSS 文件，不在运行时加载共享模块，不需要浏览器端构建或 CSS 框架依赖。
+修改源模块后执行 `python3 dev/build-folio-css.py` 重建 `design.css`。展示页使用的压缩可变字体子集可用 `python3 dev/folio-css/build-demo-fonts.py` 重建。项目初始化仍只复制一个 CSS 文件，不在运行时加载共享模块，不需要浏览器端构建或 CSS 框架依赖。
 
 ```sh
 python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh-CN,en
 ```
 
-初始化后，`project.json.styles` 依次加载 `design.css` 和本书 `book.css`；语言覆盖、Folio 编辑覆盖由现有运行时追加。项目保存来源版本与 CSS 哈希，已建项目保持自己的冻结副本。升级时主动比较与重审受影响页面，不替换旧验收证据。
+初始化后，`project.json.styles` 依次加载 `design.css` 和本书 `book.css`；语言覆盖、Folio 编辑覆盖由现有运行时追加。项目保存来源版本与 CSS 哈希，已建项目保持自己的冻结副本。升级时主动比较与重审受影响页面，不替换旧验收证据。Folio 会从本机读取 Noto Serif SC / Noto Sans SC / Inter 的源文件并生成本项目字体子集（OFL，可再分发）；字体文件不随本仓库分发。
 
 ## 组合层次
 
@@ -31,18 +33,30 @@ python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh
 4. **组件配方** 组合前三层，例如人物署名、图与图注、目录、统计和引文。
 5. **完整页面** 依据材料组合，具体文字、照片、分页和跨页关系由作者负责。
 
-无需选整页模板才能开始。可保留布局的结构，调整原子或使用本书 CSS；也可直接写新的原生 Grid/Flex。组件不自动附送底色、边框或装饰。
+无需选整页模板才能开始。可保留布局的结构，调整原子或使用本书 CSS；也可直接写新的原生 Grid/Flex。普通段落不附送底色或边框；功能组件显式提供必要轴线与分隔，可用原子移除。
 
 ## 统一规则
 
-- **颜色**：纸面 `#FFFEFA`，次级纸面 `#F0EEE8`，正文 `#202B32`，辅助 `#56616A`，强调蓝 `#164BE8`，深色面 `#182238`。文字使用语义角色，而非在子元素里写死纸面颜色。
-- **字体**：展示 Noto Serif SC 700；阅读衬线 Noto Serif SC 400/700；正文 Noto Sans SC 400/700；标签 Inter 400/600；数字 Inter 600。标签和数字的中文回退为已声明 Noto Sans SC。没有假斜体或模拟 900 字重。
-- **字号**：aux 11、key 13、body 16、lead 20、h3 24、h2 32、h1 46、display 64、hero 112px。1 CSS px = 0.75pt；改变纸张不等比缩小文字。
+- **颜色**：纸面 `#FFFFFF`，次级纸面 `#F2F0EB`，正文 `#111111`，辅助 `#625F59`，强调红 `#C83024`，深色面 `#141414`。文字使用语义角色，而非在子元素里写死纸面颜色。另有信号黄 `--fl-signal: #F5C84B` 与由强调色派生的网格层（`--fl-grid-tint` 8%、`--fl-grid-line` 32%），只服务 `.fl-programme` 的程序图形和 `.fl-show-columns` 诊断层，不替代正文色或强调色；品牌可整组覆写并重新测对比度。
+- **字体**：标题随排印模式切换：默认 `bold` 用 Noto Serif SC，`light` 用 Noto Sans SC；阅读用 Noto Serif SC，正文用 Noto Sans SC，标签与数字用 Inter。标签、数字的中文回退到 Noto Sans SC。家族生成的每个声明字重都是静态真实字形，不合成粗体或斜体。
+- **字号与字重**：默认 `bold`；在 `.page` 或任意片段上加 `.fl-type-light` 可切换，`.fl-type-bold` 可显式恢复。1 CSS px = 0.75pt；改变纸张不等比缩小文字。
+
+  | 实际字号 | `bold` 字重 | `light` 字重 |
+  |---|---:|---:|
+  | ≥64px（display / hero） | 900 | 200 |
+  | 44–63px（h1） | 700 | 250 |
+  | 32–43px（h2） | 700 | 300 |
+  | 20–31px（h3 / lead） | 600 | 400 |
+  | 16–19px（body） | 400 | 400 |
+  | 14–15px（small） | 500 | 500 |
+  | <14px（key / aux） | 600 | 600 |
+
+  `bold` 的内联强调在该字号字重上加 200、最高到 900；`light` 强调不跳字重。h1–h3 与 display 都跟随标题字体模式。数字角色与正文同族（Inter），字重跟随字号档位；不再保留专用数字字面。
 - **行距**：body 1.75，reading 1.5，lead 1.6，tight 1.25，display 1.12。基线 28px 是正文的起点，字号与行距可独立组合。
-- **间距**：0–6 对应 0/7/14/28/42/56/84px，即基线的 0、¼、½、1、1½、2、3 倍。段落默认半基线间距。
+- **间距**：0–8 对应 0/7/14/28/42/56/84/112/168px，即基线的 0、¼、½、1、1½、2、3、4、6 倍。段落默认半基线间距。
 - **版心**：上18、下21、内19、外15mm；六栏/十二栏共用6mm栏距。版心取家族边距与当前印刷安全边距的较大值，另加出血。
 
-明暗面重新绑定 `--fl-text / --fl-text-muted / --fl-text-accent / --fl-stroke`。纸面嵌在深色面中时四个角色全部恢复；深色面嵌在纸面中时同理。任意改品牌色后仍需测量实际对比度。
+明暗面重新绑定 `--fl-bg / --fl-text / --fl-text-muted / --fl-text-accent / --fl-stroke`。纸面嵌在深色面中时所有角色全部恢复；深色面嵌在纸面中时同理。任意改品牌色后仍需测量实际对比度。
 
 ## 原子 API
 
@@ -63,17 +77,18 @@ python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh
 | `.fl-justify-self-{start,center,end,stretch}` | Grid 子项沿行内轴独立对齐；对 Flex 子项无效 |
 | `.fl-justify-{start,center,end,between}` | 主轴内容分布 |
 | `.fl-content-{start,center,end,between}` | 多行/多轨道内容分布 |
-| `.fl-gap-{0…6}`、`.fl-gap-x-{0…6}`、`.fl-gap-y-{0…6}` | 全部、列、行间距 |
-| `.fl-p-{0…6}`、`.fl-px-{0…6}`、`.fl-py-{0…6}` | 全部、左右、上下内边距 |
-| `.fl-pt-{0…6}`、`.fl-pb-{0…6}`、`.fl-mt-{0…6}`、`.fl-mb-{0…6}` | 上下内/外边距 |
+| `.fl-gap-{0…8}`、`.fl-gap-x-{0…8}`、`.fl-gap-y-{0…8}` | 全部、列、行间距 |
+| `.fl-p-{0…8}`、`.fl-px-{0…8}`、`.fl-py-{0…8}` | 全部、左右、上下内边距 |
+| `.fl-pt-{0…8}`、`.fl-pb-{0…8}`、`.fl-mt-{0…8}`、`.fl-mb-{0…8}` | 上下内/外边距 |
 | `.fl-mt-auto` | 在剩余空间中把当前组推向底部，通常用于纵向Flex |
 | `.fl-w-full`、`.fl-h-full`、`.fl-min-w-0` | 填满已定容器，或允许网格/Flex子项合理收缩 |
-| `.fl-font-{display,reading,body,label,number}` | 字体角色及它对应的真实常规/强调字重 |
-| `.fl-size-{aux,key,body,lead,h3,h2,h1,display,hero}` | 只改变字号 |
-| `.fl-weight-{regular,strong}` | 按当前字体角色选实际字重；display两者均700，number两者均600 |
-| `.fl-leading-{body,reading,lead,tight,display}` | 独立行距 |
-| `.fl-tracking-{tight,normal,wide}` | 字距 −.02em / 0 / .12em |
-| `.fl-text-{left,center,right}` | 文字对齐 |
+| `.fl-type-{bold,light}` | 在页面或片段切换共享字重阶梯与标题字体；默认 bold |
+| `.fl-font-{display,reading,body,label,number}` | 字体角色；数字角色用 Inter 并保留等宽数字 |
+| `.fl-size-{aux,key,small,body,lead,h3,h2,h1,display,hero,giant,colossal}` | 改变字号并选中对应的排印阶梯字重；可与字体角色组合 |
+| `.fl-weight-{regular,strong}` | 选择当前字号档的常规/强调字重；light强调不加粗，bold按阶梯加200至多900 |
+| `.fl-leading-{body,reading,lead,tight,display,hero}` | 独立行距 |
+| `.fl-tracking-{tighter,tight,normal,wide}` | 字距 −.04em / −.02em / 0 / .12em |
+| `.fl-text-{start,end,left,center,right}` | 文字对齐 |
 | `.fl-text-{main,muted,accent}` | 当前表面下的语义文字色 |
 | `.fl-tabular`、`.fl-balance` | 等宽数字、标题均衡换行 |
 | `.fl-measure` | 行长上限，默认34ic，可用`--fl-measure`按内容调整 |
@@ -156,6 +171,8 @@ python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh
 
 ## 版本
 
+- **2.2.0**：选择性吸收用户提供的2.1参考包；Swiss结构、双排印、数字与正文同族；增加可覆写功能组件、摄影布局、显式表现工具与新样刊。
+- **1.2.0**：恢复共享 bold/light 字重阶梯；标题字族随模式切换衬线/无衬线；字号原子同时选择字重。
 - **1.1.0**：增加有界二维网格、填满图框、Grid单项横向对齐、镜像外侧出血、连续双栏/缩进、真实400衬线阅读字体、1.5行距、透明反白上下文与显式摄影渐变。布局与原子不改变检查下限；旧项目保留冻结副本。
 - **1.0.0**：统一 tokens、作用域基底、组合原子、可选布局和可拆解组件示例。保留`.area`与`.display`两项最小初始化兼容别名；新写页面使用`.fl-*`。
 
@@ -164,3 +181,45 @@ python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh
 展示目录同时包括多日行程、纵向时刻、比例节奏带、里程碑、并行泳道、KPI、目标对照、五力、定性矩阵、价值链与能力证据。完整范围见 [覆盖清单](../../dev/folio-css/coverage.md)。四种定量图表通过 [数据构造工具](../../dev/folio-css/charts.md) 输出，HTML标签接受原生印刷审计；CSS不承担数学计算。
 
 图框默认 `--fl-frame-width:100%`、`--fl-frame-position:relative`；侧向出血布局在槽位中设定这两个变量，避免通用 `.fl-frame` 覆盖布局几何。直接尺寸原子或本书CSS仍可明确覆盖。
+
+
+## Swiss 基础与新增 API（2.2）
+
+参见[构图原则](../../references/swiss.md)。Swiss 决定共同的对齐与层级；标题继续使用 **bold 衬线 / light 无衬线**。摄影、企业数据和文字使用同一套类。默认纸白 #FFFFFF、墨黑 #111111、强调 #C83024、软纸 #F2F0EB；没有「每页必须一个红色块」的规则。
+
+新增 `fl-size-giant` 196px、`fl-size-colossal` 280px，沿用 hero 的字重（bold900/light200）；大字仍用内容任务与实际页宽决定，不自动缩放。`fl-number / fl-font-number` 只换字体与数字特性，不覆盖字号阶梯的字重：字重仍由字号档位与 `fl-weight-*` 决定。数值表列使用 `fl-num`，混合文本中的纯数字可单独套 `fl-font-number`。没有自动扫描并替换所有数字。
+
+| 组合 | 结构与边界 |
+|---|---|
+| `fl-meta / fl-foot / fl-foot-end` | 共用页眉/页脚轴线；线条可用 `fl-rule-none` 移除，不强制每页重复 |
+| `fl-term` | 24px标题的对应术语，服从h3阶梯；可用字号/颜色原子覆盖 |
+| `fl-index > li` + `fl-index-n / fl-index-end` | 编号、条目、页码/日期三列；前后数字与正文同族，可用 `fl-font-number` 等宽 |
+| `fl-legend / fl-abb` | 编号—说明—来源的六轨图注，或普通行内编号 |
+| `fl-dim / fl-dim-v` | 横/竖尺寸线，长度是容器尺寸；文字用子span，标注值由作者核实 |
+| `fl-stat / fl-unit` | 数值、单位、解释；配fl-number，长数字改分栏，不挤压字宽 |
+| `fl-table` + `fl-num` | 实际table结构、数值右齐；保留标题、单位、来源与th scope |
+| `fl-list / fl-mark` | 悬挂列表、可选信号方点；不代替语义标签 |
+| `fl-l-timeline / fl-l-item / fl-l-full` | `--fl-timeline-count`明确列数（默认4）；通栏说明不会新增隐式轨道 |
+| `fl-axis / fl-axis-now` | 可选共享横轴与当前节点，强调色取当前表面角色 |
+| `fl-l-bleed-top / fl-l-bleed-full` | `fl-l-photo`与`fl-l-copy fl-area`组合；顶部图高由`--fl-image-height`指定 |
+| `fl-l-stair` | 每行依六轨错位，`--fl-step`可逐行指定；真实阅读顺序仍为DOM顺序 |
+| `fl-show-columns / fl-show-columns-12 / fl-show-baseline` | 显式网格诊断层，可同时或嵌套使用；出成品前按页面目的决定是否移除 |
+| `fl-hang / fl-optical` | 悬挂开头标点、微调大字左侧视觉对齐；检查安全区和真实字形 |
+| `fl-proportional / fl-caps / fl-mono` | 比例数字、拉丁大写、灰度照片 |
+| `fl-rule-heavy / fl-rule-accent / fl-rule-bottom / fl-rule-none` | 8px/强调色/下边线/移除边线，均显式选择 |
+| `fl-scrim-start / fl-scrim-end` | 左/右摄影对比层；须检查实际照片文字，不保证可读性 |
+
+## 显式表现工具
+
+`variations.css` 在原子之前加载，默认值均可覆盖。不把装饰加入常规段落、引用或照片。展示页第 05 章与样册末章「表现与变奏」是同一批配方；目录里的分组键仍叫 `expressions`，写 `variations` 也会并入同一章，不会丢配方。
+
+- `fl-band`：紧贴文字的硬边字带，可与任意 `fl-surface-*` 组合；完整可读标题仍是内容。
+- `fl-crop` + `fl-crop-{top,bottom,left,right}`：锚定页边的巨字，偏移 `--fl-crop-offset`。被裁文字只能是重复装饰，需另有完整内容。
+- `fl-type-photo`：本地照片填字；仅限重复装饰字，提供真实照片/等价标题，最终PDF检查字形和图片。
+- `fl-duotone`：灰度照片乘色，变量 `--fl-duotone`；`fl-overprint`：CSS混合。两者不创建专色、印刷叠印或保证输出分辨率。
+- `fl-programme`：显式空单元构成的程序纹样，可定列数/三色/间距；不是数据图，不能赋予随机单元业务含义。
+- `fl-sign / fl-bullet`：导向组和字母/数字路线圆点，颜色必须伴随文字。底面另用surface原子。
+- `fl-rotate-{6,n6} / fl-vertical / fl-sideways`：显式方向；旋转可能产生几何未验证，最终内容须满足契约，不能靠deco标签绕过检查。
+- `fl-bleed-left / fl-bleed-right`：从版心边缘延伸到纸边，内部补偿留白；仅放在版心边缘，配真实data-bleed声明。
+
+重建后对颜色嵌套、原子优先级、字体组合、时间轴和镜像摄影做浏览器回归。当前新样册与历史样册的实际验证范围见[验证记录](../../dev/folio-css/verification.md)。

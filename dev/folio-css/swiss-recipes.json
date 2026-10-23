@@ -1,0 +1,254 @@
+{
+  "components": [
+    {
+      "id": "swiss-furniture",
+      "title": "页眉与页脚 · 阅读坐标",
+      "category": "information",
+      "description": "系列、主题与页码建立阅读位置，细线用于分隔元信息。",
+      "grammar": "fl-meta 六轨页眉；fl-foot 以共同的首轨宽度对齐内容。",
+      "classes": [
+        "fl-foot",
+        "fl-foot-end",
+        "fl-gap-5",
+        "fl-h1",
+        "fl-key",
+        "fl-l-aside",
+        "fl-l-main",
+        "fl-l-sidebar",
+        "fl-l-stack",
+        "fl-meta",
+        "fl-pt-4",
+        "fl-text-muted"
+      ],
+      "limits": "元信息保持简短；页码须由实际页序核对。页眉与页脚放入安全区，不能当作出血元素。",
+      "html": "<article class=\"fl-l-stack fl-gap-5\">\n  <header class=\"fl-meta\"><span>FOLIO</span><span>方法与现场</span><span>第二章</span><span>08 / 24</span></header>\n  <div class=\"fl-l-sidebar\"><h2 class=\"fl-l-main fl-h1\">为阅读<br>建立坐标。</h2><p class=\"fl-l-aside fl-key fl-text-muted fl-pt-4\">系列与页码回答“我在哪里”，正文获得自己的空间。</p></div>\n  <footer class=\"fl-foot\"><span>第二章</span><span>从观察开始</span><span class=\"fl-foot-end\">08</span></footer>\n</article>"
+    },
+    {
+      "id": "swiss-index",
+      "title": "目录与索引 · 编号先行",
+      "category": "information",
+      "description": "编号、条目与终点各占一列，长标题自然换行。",
+      "grammar": "fl-index + fl-index-n + fl-index-end；序号与正文同族，可加 fl-font-number 保持等宽数字。",
+      "classes": [
+        "fl-body",
+        "fl-gap-4",
+        "fl-h1",
+        "fl-index",
+        "fl-index-end",
+        "fl-index-n",
+        "fl-l-stack"
+      ],
+      "limits": "页码和日期是作者提供的数据。目录顺序须与书页一致；行线只分隔条目，不充当装饰边框。",
+      "html": "<section class=\"fl-l-stack fl-gap-4\"><h2 class=\"fl-h1\">阅读路径</h2><ol class=\"fl-index fl-body\">\n  <li><span class=\"fl-index-n\">01</span><span>一个地方，一组问题</span><span class=\"fl-index-end\">04</span></li>\n  <li><span class=\"fl-index-n\">02</span><span>把细节放回整体</span><span class=\"fl-index-end\">12</span></li>\n  <li><span class=\"fl-index-n\">03</span><span>让证据支持判断</span><span class=\"fl-index-end\">20</span></li>\n  <li><span class=\"fl-index-n\">04</span><span>材料、方法与来源</span><span class=\"fl-index-end\">28</span></li>\n</ol></section>"
+    },
+    {
+      "id": "swiss-term",
+      "title": "双语术语 · 同一语义层级",
+      "category": "reading",
+      "description": "中文标题与外文术语形成相邻关系，定义独立展开。",
+      "grammar": "fl-term 使用当前标题字族；正文回到 fl-body。",
+      "classes": [
+        "fl-body",
+        "fl-display",
+        "fl-gap-2",
+        "fl-key",
+        "fl-l-aside",
+        "fl-l-main",
+        "fl-l-offset",
+        "fl-l-stack",
+        "fl-mt-4",
+        "fl-term",
+        "fl-text-muted"
+      ],
+      "limits": "翻译须经校对。外文术语提供对应概念，不能仅为装饰。切换 bold/light 时，两种语言的标题一同切换。",
+      "html": "<section class=\"fl-l-stack fl-gap-2\"><p class=\"fl-key fl-text-muted\">方法词典 / 03</p><h2 class=\"fl-display\">观察</h2><p class=\"fl-term\" lang=\"en\">Observation</p><div class=\"fl-l-offset fl-mt-4\"><p class=\"fl-l-aside fl-key fl-text-muted\">先描述，<br>再解释。</p><p class=\"fl-l-main fl-body\">把可见的形态、位置和变化记录下来。一个判断成立之前，应当能指出支撑它的具体细节。</p></div></section>"
+    },
+    {
+      "id": "swiss-legend",
+      "title": "照片图注 · 编号、说明与来源",
+      "category": "photography",
+      "description": "照片保留主场，图注按六轨组织可检索信息。",
+      "grammar": "fl-frame + fl-ratio-wide；fl-legend 的编号、四轨说明与来源各就各位。",
+      "classes": [
+        "fl-frame",
+        "fl-gap-2",
+        "fl-l-stack",
+        "fl-legend",
+        "fl-ratio-wide"
+      ],
+      "limits": "图注只描述看得见或有来源支持的事实。AI 生成图须明确标为非实拍，素材授权单独登记。",
+      "html": "<figure class=\"fl-l-stack fl-gap-2\"><div class=\"fl-frame fl-ratio-wide\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" alt=\"礁岩、潮池与远处海岬上的灯塔\"></div><figcaption class=\"fl-legend\"><span>图 03</span><span>礁岩与潮池构成前景，灯塔位于远处海岬。图注接续照片的阅读方向。</span><span>Folio<br>素材登记</span></figcaption></figure>"
+    },
+    {
+      "id": "swiss-dimensions",
+      "title": "尺寸标注 · 观察与测量",
+      "category": "information",
+      "description": "水平与垂直标线把测量值留为真实文字。",
+      "grammar": "fl-dim / fl-dim-v 由容器决定测量线长度；数字内容由作者填写。",
+      "classes": [
+        "fl-abb",
+        "fl-caption",
+        "fl-dim",
+        "fl-dim-v",
+        "fl-frame",
+        "fl-gap-3",
+        "fl-grid",
+        "fl-h2",
+        "fl-l-stack",
+        "fl-ratio-wide"
+      ],
+      "limits": "标线不会读取物体尺寸。用于产品或工程资料时，必须以实测值替换示例，并注明单位与测量条件。",
+      "html": "<section class=\"fl-l-stack fl-gap-3\"><h2 class=\"fl-h2\">对象与尺度</h2><div class=\"fl-grid\" style=\"grid-template-columns:42px minmax(0,1fr)\"><div></div><div class=\"fl-dim\"><span>横向实测值 / 单位</span></div><div class=\"fl-dim-v\"><span>纵向实测值 / 单位</span></div><figure class=\"fl-frame fl-ratio-wide\"><img src=\"../samples/native/nature-camp/assets/images/waterfall-moss.jpg\" alt=\"瀑布与岩石，尺寸组件的排版示意\"></figure></div><p class=\"fl-caption\"><span class=\"fl-abb\">图 04</span>标注结构演示；本图未提供实测尺寸。</p></section>"
+    },
+    {
+      "id": "swiss-statistics",
+      "title": "关键数字 · 数值与口径",
+      "category": "business",
+      "description": "数值、单位、指标名和统计口径放在同一阅读单元里。",
+      "grammar": "fl-stat + fl-number + fl-unit；三列共用顶端轴线。",
+      "classes": [
+        "fl-caption",
+        "fl-cols-3",
+        "fl-gap-4",
+        "fl-grid",
+        "fl-h2",
+        "fl-key",
+        "fl-l-stack",
+        "fl-mb-2",
+        "fl-number",
+        "fl-stat",
+        "fl-text-muted",
+        "fl-unit"
+      ],
+      "limits": "示例为虚构数据。百分比须写明分母和时间，增幅须说明比较基期；数字大小不代表图表比例。",
+      "html": "<section class=\"fl-l-stack fl-gap-4\"><header><p class=\"fl-key fl-text-muted fl-mb-2\">经营概览 / 示例数据</p><h2 class=\"fl-h2\">数字之后，保留依据。</h2></header><div class=\"fl-grid fl-cols-3\">\n<div class=\"fl-stat\"><p class=\"fl-number\">24<span class=\"fl-unit\">项</span></p><h3 class=\"fl-key\">已交付项目</h3><p class=\"fl-caption\">2025 全年；含验收记录</p></div>\n<div class=\"fl-stat\"><p class=\"fl-number\">92<span class=\"fl-unit\">%</span></p><h3 class=\"fl-key\">按期交付率</h3><p class=\"fl-caption\">22 / 24 项，四舍五入</p></div>\n<div class=\"fl-stat\"><p class=\"fl-number\">8<span class=\"fl-unit\">年</span></p><h3 class=\"fl-key\">连续服务</h3><p class=\"fl-caption\">2018—2025，含首尾年</p></div></div></section>"
+    },
+    {
+      "id": "swiss-data-table",
+      "title": "经营表格 · 文字左齐，数字右齐",
+      "category": "business",
+      "description": "取消单元格底色，让行线、列宽与数值对齐承担阅读任务。",
+      "grammar": "fl-table 提供分隔；fl-num 统一数字字族与 tabular figures。",
+      "classes": [
+        "fl-caption",
+        "fl-gap-3",
+        "fl-h2",
+        "fl-key",
+        "fl-l-stack",
+        "fl-mb-2",
+        "fl-num",
+        "fl-table",
+        "fl-text-left"
+      ],
+      "limits": "保持表头、单位、时间与来源完整。表格数据是自拟示例；小数位同列一致，不用颜色替代正负号。",
+      "html": "<section class=\"fl-l-stack fl-gap-3\"><h2 class=\"fl-h2\">项目组合</h2><table class=\"fl-table fl-key\"><caption class=\"fl-caption fl-text-left fl-mb-2\">2025 年度示例 · 单位：万元</caption><thead><tr><th scope=\"col\">业务类别</th><th scope=\"col\" class=\"fl-num\">收入</th><th scope=\"col\" class=\"fl-num\">成本</th><th scope=\"col\" class=\"fl-num\">结余</th></tr></thead><tbody><tr><th scope=\"row\">研究与咨询</th><td class=\"fl-num\">640.0</td><td class=\"fl-num\">420.0</td><td class=\"fl-num\">220.0</td></tr><tr><th scope=\"row\">内容与出版</th><td class=\"fl-num\">380.0</td><td class=\"fl-num\">290.0</td><td class=\"fl-num\">90.0</td></tr><tr><th scope=\"row\">培训与活动</th><td class=\"fl-num\">260.0</td><td class=\"fl-num\">210.0</td><td class=\"fl-num\">50.0</td></tr></tbody><tfoot><tr><th scope=\"row\">合计</th><td class=\"fl-num\">1,280.0</td><td class=\"fl-num\">920.0</td><td class=\"fl-num\">360.0</td></tr></tfoot></table><p class=\"fl-caption\">数据为结构演示；结余 = 收入 − 成本，未计税费。</p></section>"
+    },
+    {
+      "id": "swiss-hanging-list",
+      "title": "悬挂列表 · 保持左边界",
+      "category": "reading",
+      "description": "短横占据悬挂区，续行仍与文字左边界对齐。",
+      "grammar": "fl-list 提供语义列表与悬挂符号；fl-l-offset 分配标题和内容。",
+      "classes": [
+        "fl-body",
+        "fl-h2",
+        "fl-key",
+        "fl-l-aside",
+        "fl-l-main",
+        "fl-l-offset",
+        "fl-list",
+        "fl-mb-2",
+        "fl-text-muted"
+      ],
+      "limits": "条目应属于同一分类。顺序重要时使用有编号的索引或步骤，不能只用装饰短横暗示先后。",
+      "html": "<section class=\"fl-l-offset\"><header class=\"fl-l-aside\"><p class=\"fl-key fl-text-muted fl-mb-2\">出发之前</p><h2 class=\"fl-h2\">把准备<br>说清楚。</h2></header><ul class=\"fl-l-main fl-list fl-body\"><li>确认集合地点、联系人与返回时间。</li><li>根据当天活动选择便于行走的衣物，携带个人饮水。</li><li>将观察工具与记录纸放在随手可取的位置。</li><li>记录身体状态；需要协助时及时告知带队人员。</li></ul></section>"
+    },
+    {
+      "id": "swiss-event-axis",
+      "title": "时间轴 · 节点与当前阶段",
+      "category": "itinerary",
+      "description": "一条连续轴线连接事件，当前节点用信号色明确定位。",
+      "grammar": "fl-l-timeline 决定等宽节点；fl-axis 提供轴线，fl-axis-now 标记当前。",
+      "classes": [
+        "fl-axis",
+        "fl-axis-now",
+        "fl-font-number",
+        "fl-gap-4",
+        "fl-h2",
+        "fl-h3",
+        "fl-key",
+        "fl-l-item",
+        "fl-l-stack",
+        "fl-l-timeline"
+      ],
+      "limits": "等宽列表示事件顺序，不表示时间长度。持续时长的真实比例使用节奏时间带；日期与现场安排须另行核验。",
+      "html": "<section class=\"fl-l-stack fl-gap-4\"><h2 class=\"fl-h2\">一次现场工作的节奏</h2><ol class=\"fl-l-timeline fl-axis\" style=\"list-style:none;padding:0;margin:0\"><li class=\"fl-l-item\"><time class=\"fl-key fl-font-number\">09:00</time><h3 class=\"fl-h3\">定向</h3><p class=\"fl-key\">确认路径<br>说明分工</p></li><li class=\"fl-l-item fl-axis-now\"><time class=\"fl-key fl-font-number\">09:30</time><h3 class=\"fl-h3\">观察</h3><p class=\"fl-key\">记录整体<br>进入细节</p></li><li class=\"fl-l-item\"><time class=\"fl-key fl-font-number\">11:00</time><h3 class=\"fl-h3\">交流</h3><p class=\"fl-key\">交换记录<br>核对问题</p></li><li class=\"fl-l-item\"><time class=\"fl-key fl-font-number\">11:45</time><h3 class=\"fl-h3\">收束</h3><p class=\"fl-key\">整理材料<br>检查返程</p></li></ol></section>"
+    },
+    {
+      "id": "swiss-stair-heading",
+      "title": "阶梯标题 · 按阅读顺序递进",
+      "category": "reading",
+      "description": "每一行向右推进一轨，以几何关系表达句子的推进。",
+      "grammar": "fl-l-stair 控制逐行缩进；标题使用共享 fl-h1 字阶。",
+      "classes": [
+        "fl-gap-4",
+        "fl-h1",
+        "fl-key",
+        "fl-l-stack",
+        "fl-l-stair",
+        "fl-mt-3",
+        "fl-text-muted"
+      ],
+      "limits": "每次右移都会减少可用行宽。控制短句长度；全文保持 DOM 顺序，不旋转或裁切承载信息的文字。",
+      "html": "<header class=\"fl-l-stack fl-gap-4\"><p class=\"fl-key fl-text-muted\">从问题到行动 / 一条思考路径</p><h2 class=\"fl-l-stair fl-h1\"><span>先看见，</span><span>再理解，</span><span>然后</span><span>行动。</span></h2><p class=\"fl-key fl-text-muted fl-mt-3\">右移来自共同的网格；句意决定每次停顿。</p></header>"
+    },
+    {
+      "id": "swiss-negative-space",
+      "title": "留白构图 · 空轨也有作用",
+      "category": "reading",
+      "description": "一个短标题与一段定义分处不同网格位置，以空白建立张力。",
+      "grammar": "fl-grid + fl-cols-6 + span/start；间距使用 space-7。",
+      "classes": [
+        "fl-body",
+        "fl-cols-6",
+        "fl-foot",
+        "fl-grid",
+        "fl-h1",
+        "fl-key",
+        "fl-lead",
+        "fl-mb-2",
+        "fl-mt-3",
+        "fl-mt-4",
+        "fl-mt-7",
+        "fl-span-4",
+        "fl-span-full",
+        "fl-start-3",
+        "fl-text-muted"
+      ],
+      "limits": "空白是有意保留的阅读停顿。信息量增长时重排内容，不能通过减小正文来维持同一轮廓。",
+      "html": "<section class=\"fl-grid fl-cols-6\"><header class=\"fl-span-4\"><p class=\"fl-key fl-text-muted fl-mb-2\">观察方法 / 01</p><h2 class=\"fl-h1\">给一个细节<br>足够的空间。</h2></header><div class=\"fl-start-3 fl-span-4 fl-mt-7\"><p class=\"fl-lead\">空白并非等待被填满。</p><p class=\"fl-body fl-mt-3\">它让相邻的信息分开，让重要的线索变得清晰，也让读者在翻页前拥有一次停顿。</p></div><footer class=\"fl-span-full fl-foot fl-mt-4\"><span>方法</span><span>先确定阅读顺序，再决定留白的位置。</span></footer></section>"
+    },
+    {
+      "id": "swiss-type-image",
+      "title": "字即构图 · 巨字与真实标题",
+      "category": "reading",
+      "description": "一个巨字作为视觉锚点，真实标题与说明保持独立、可阅读。",
+      "grammar": "fl-size-giant 扩展既定标题阶梯；几何关系由六轨网格承担。",
+      "classes": [
+        "fl-cols-6",
+        "fl-font-display",
+        "fl-grid",
+        "fl-h2",
+        "fl-items-end",
+        "fl-key",
+        "fl-leading-display",
+        "fl-mark",
+        "fl-mt-3",
+        "fl-size-giant",
+        "fl-span-3"
+      ],
+      "limits": "巨字只是视觉强调，信息必须在真实标题中完整出现。禁止为了塞入画面缩小正文字号，字形不可越出安全区。",
+      "html": "<section class=\"fl-grid fl-cols-6 fl-items-end\"><p class=\"fl-span-3 fl-font-display fl-size-giant fl-leading-display\" aria-hidden=\"true\" data-role=\"deco\">形</p><div class=\"fl-span-3\"><span class=\"fl-mark\" aria-hidden=\"true\"></span><h2 class=\"fl-h2 fl-mt-3\">从形态<br>读出关系。</h2><p class=\"fl-key fl-mt-3\">边缘、方向、疏密与比例。字形和摄影一样，可以成为一页的视觉重心。</p></div></section>"
+    }
+  ]
+}

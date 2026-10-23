@@ -21,7 +21,15 @@ bash "$HB/core/setup_env.sh"
 
 锁定浏览器用于减少换行、字体与 PDF 的版本漂移。当前运行时默认用 Playwright 配套 Chromium，启动失败给出错误，**不会静默寻找系统 Chrome**。已有浏览器可以通过 `HB_CHROMIUM=/绝对路径/浏览器可执行文件` 显式指定；构建清单记录实际版本和这个选择，构建 ID 随之变化。使用已有版本可避免下载，结果须在该版本下重新检查，不能冒称与参考环境完全一致。精确版本基准测试要用对应环境；一般项目应报告自己实际用的环境。
 
-资源先本地化，render 不联网。Campus 源字体文件名见 family.json（NotoSansSC-VF.ttf、NotoSerifSC-VF.ttf、Inter-VF.ttf），从已有 `HB_FONT_DIR`、用户缓存或开发字体目录查找。分发包不含开发字库时，自行提供已授权文件；`family.py init/fonts` 将所需字库实例化为项目静态文件并复制许可文本。手工项目可用 `font_static.py`，不会构建时后台下载或切换系统字体。
+资源先本地化，render 不联网。源字体文件名见 family.json（NotoSansSC-VF.ttf、NotoSerifSC-VF.ttf、Inter-VF.ttf），按 `HB_FONT_DIR` → 用户缓存 `~/.cache/handbook-designer/fonts` → 用户字体目录 → 仓库 `dev/fonts` → 系统字体的顺序查找。
+
+```bash
+python3 "$HB/core/fonts.py" status            # 每个家族要哪些字面，本机是否已有、在哪
+python3 "$HB/core/fonts.py" install           # 缺的开源字面下载到用户缓存
+python3 "$HB/core/fonts.py" install --system  # 同时装进用户字体目录（macOS ~/Library/Fonts）
+```
+
+只下载 OFL/Apache 等允许再分发的字面（Noto Serif SC / Noto Sans SC / Inter），带 SHA256 与许可文本；专有字体不下载、不安装，只报告"需自备"（当前家族不再依赖任何专有字面）。`family.py init/fonts` 再把所需字面实例化为项目静态文件并复制许可；手工项目可用 `font_static.py`。构建时不联网、不切换系统字体。
 
 ## 生产参数
 

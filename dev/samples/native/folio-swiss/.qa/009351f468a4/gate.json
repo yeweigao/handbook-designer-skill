@@ -1,0 +1,539 @@
+{
+  "contract": 1,
+  "build_id": "009351f468a4",
+  "fingerprint": "009351f468a4b213a2020838e2d2933370bac7bca6bdd2bf82b883e73eae1e6e",
+  "tools": {
+    "contract": 1,
+    "playwright": "1.64.1",
+    "chromium": "149.0.7827.55",
+    "executable": "HB_CHROMIUM",
+    "node": "22",
+    "tool_hash": "4074f3462b7adba815f93f215ed8e38ca8153feb75d4b8d6c594a06775683614"
+  },
+  "languages": {
+    "zh-CN": {
+      "checks": {
+        "render": "pass",
+        "measure": "fail",
+        "postflight": "pass",
+        "raster": "pass",
+        "coverage": "pass"
+      },
+      "pdf": ".build/009351f468a4/zh-CN/book.pdf",
+      "pdf_sha256": "4cd214e61c6bc94717f3df4cb79d941994e6476589d7ebefc4eb82b6be4caa4f",
+      "pages": 100
+    }
+  },
+  "status": "blocked",
+  "blocking": [
+    {
+      "lang": "zh-CN",
+      "id": "overlap.text",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-surface",
+      "target": "a-surface-004",
+      "evidence": {
+        "with": "a-surface-005",
+        "overlap_mm": [
+          16.93,
+          0.79
+        ]
+      },
+      "message": "文字「白纸」与「次要说明 / 来源」重叠（有意叠放请在其中一方写 data-overlap=\"a-surface-005\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.text",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-surface",
+      "target": "a-surface-007",
+      "evidence": {
+        "with": "a-surface-008",
+        "overlap_mm": [
+          16.93,
+          0.79
+        ]
+      },
+      "message": "文字「软纸」与「次要说明 / 来源」重叠（有意叠放请在其中一方写 data-overlap=\"a-surface-008\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.text",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-surface",
+      "target": "a-surface-010",
+      "evidence": {
+        "with": "a-surface-011",
+        "overlap_mm": [
+          16.93,
+          0.79
+        ]
+      },
+      "message": "文字「深墨」与「次要说明 / 来源」重叠（有意叠放请在其中一方写 data-overlap=\"a-surface-011\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.text",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-surface",
+      "target": "a-surface-013",
+      "evidence": {
+        "with": "a-surface-014",
+        "overlap_mm": [
+          16.93,
+          0.79
+        ]
+      },
+      "message": "文字「信号」与「次要说明 / 来源」重叠（有意叠放请在其中一方写 data-overlap=\"a-surface-014\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.text",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-profiles",
+      "target": "a-profiles-004",
+      "evidence": {
+        "with": "a-profiles-005",
+        "overlap_mm": [
+          9.33,
+          2.22
+        ]
+      },
+      "message": "文字「BOLD」与「有序，自由。」重叠（有意叠放请在其中一方写 data-overlap=\"a-profiles-005\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.text",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-profiles",
+      "target": "a-profiles-008",
+      "evidence": {
+        "with": "a-profiles-009",
+        "overlap_mm": [
+          10.47,
+          2.22
+        ]
+      },
+      "message": "文字「LIGHT」与「有序，自由。」重叠（有意叠放请在其中一方写 data-overlap=\"a-profiles-009\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "readability.size",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-scale",
+      "target": "a-scale-005",
+      "evidence": {
+        "font_px": 11.14,
+        "min_px": 14,
+        "role": "body",
+        "text": "尺度之间"
+      },
+      "message": "body 文字 11.14px 低于下限 14px：「尺度之间」"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.text",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-large",
+      "target": "a-large-002",
+      "evidence": {
+        "with": "a-large-004",
+        "overlap_mm": [
+          73.02,
+          0.98
+        ]
+      },
+      "message": "文字「大字作为画面」与「Aa」重叠（有意叠放请在其中一方写 data-overlap=\"a-large-004\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.text",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-large",
+      "target": "a-large-003",
+      "evidence": {
+        "with": "a-large-004",
+        "overlap_mm": [
+          82.53,
+          5.03
+        ]
+      },
+      "message": "文字「巨字、图像与空白共享视觉分量。完整标题仍参与内容审计。」与「Aa」重叠（有意叠放请在其中一方写 data-overlap=\"a-large-004\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.text",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-large",
+      "target": "a-large-004",
+      "evidence": {
+        "with": "a-large-005",
+        "overlap_mm": [
+          50.82,
+          28.31
+        ]
+      },
+      "message": "文字「Aa」与「字」重叠（有意叠放请在其中一方写 data-overlap=\"a-large-005\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.text",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-large",
+      "target": "a-large-005",
+      "evidence": {
+        "with": "a-large-007",
+        "overlap_mm": [
+          50.82,
+          3.7
+        ]
+      },
+      "message": "文字「字」与「280 / 196 / 112 px，字号不会随页面缩小。」重叠（有意叠放请在其中一方写 data-overlap=\"a-large-007\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.text",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-leading",
+      "target": "a-leading-012",
+      "evidence": {
+        "with": "a-leading-013",
+        "overlap_mm": [
+          10.09,
+          0.37
+        ]
+      },
+      "message": "文字「display」与「空间组织阅读。阅读需要停顿。」重叠（有意叠放请在其中一方写 data-overlap=\"a-leading-013\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.text",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-leading",
+      "target": "a-leading-014",
+      "evidence": {
+        "with": "a-leading-015",
+        "overlap_mm": [
+          6.37,
+          0.37
+        ]
+      },
+      "message": "文字「hero」与「空间组织阅读。阅读需要停顿。」重叠（有意叠放请在其中一方写 data-overlap=\"a-leading-015\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.image",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-scrim",
+      "target": "a-scrim-004",
+      "evidence": {
+        "image": "a-scrim-image-1"
+      },
+      "message": "文字「top」压在图片 a-scrim-image-1 上（有意叠放请写 data-overlap=\"a-scrim-image-1\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.image",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-scrim",
+      "target": "a-scrim-005",
+      "evidence": {
+        "image": "a-scrim-image-2"
+      },
+      "message": "文字「bottom」压在图片 a-scrim-image-2 上（有意叠放请写 data-overlap=\"a-scrim-image-2\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.image",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-scrim",
+      "target": "a-scrim-006",
+      "evidence": {
+        "image": "a-scrim-image-3"
+      },
+      "message": "文字「start」压在图片 a-scrim-image-3 上（有意叠放请写 data-overlap=\"a-scrim-image-3\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.image",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-scrim",
+      "target": "a-scrim-007",
+      "evidence": {
+        "image": "a-scrim-image-4"
+      },
+      "message": "文字「end」压在图片 a-scrim-image-4 上（有意叠放请写 data-overlap=\"a-scrim-image-4\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.image",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-page",
+      "target": "a-page-004",
+      "evidence": {
+        "image": "a-page-image-1"
+      },
+      "message": "文字「图层是关系」压在图片 a-page-image-1 上（有意叠放请写 data-overlap=\"a-page-image-1\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.image",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-page",
+      "target": "a-page-005",
+      "evidence": {
+        "image": "a-page-image-1"
+      },
+      "message": "文字「照片与文字分别组织；重叠须是作者明确的选择。」压在图片 a-page-image-1 上（有意叠放请写 data-overlap=\"a-page-image-1\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "image.bleed",
+      "status": "fail",
+      "severity": "hard",
+      "page": "bleed-top",
+      "target": "bleed-top-image-1",
+      "evidence": {
+        "side": "top",
+        "beyond_trim_mm": 3
+      },
+      "message": "bleed-top-image-1 越过成品边（top）3mm 但没有声明 data-bleed"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "image.bleed",
+      "status": "fail",
+      "severity": "hard",
+      "page": "bleed-top",
+      "target": "bleed-top-image-1",
+      "evidence": {
+        "side": "right",
+        "beyond_trim_mm": 3
+      },
+      "message": "bleed-top-image-1 越过成品边（right）3mm 但没有声明 data-bleed"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "image.bleed",
+      "status": "fail",
+      "severity": "hard",
+      "page": "bleed-top",
+      "target": "bleed-top-image-1",
+      "evidence": {
+        "side": "left",
+        "beyond_trim_mm": 3
+      },
+      "message": "bleed-top-image-1 越过成品边（left）3mm 但没有声明 data-bleed"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "image.bleed",
+      "status": "fail",
+      "severity": "hard",
+      "page": "bleed-full",
+      "target": "bleed-full-image-1",
+      "evidence": {
+        "side": "top",
+        "beyond_trim_mm": 3
+      },
+      "message": "bleed-full-image-1 越过成品边（top）3mm 但没有声明 data-bleed"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "image.bleed",
+      "status": "fail",
+      "severity": "hard",
+      "page": "bleed-full",
+      "target": "bleed-full-image-1",
+      "evidence": {
+        "side": "right",
+        "beyond_trim_mm": 3
+      },
+      "message": "bleed-full-image-1 越过成品边（right）3mm 但没有声明 data-bleed"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "image.bleed",
+      "status": "fail",
+      "severity": "hard",
+      "page": "bleed-full",
+      "target": "bleed-full-image-1",
+      "evidence": {
+        "side": "bottom",
+        "beyond_trim_mm": 3
+      },
+      "message": "bleed-full-image-1 越过成品边（bottom）3mm 但没有声明 data-bleed"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "image.bleed",
+      "status": "fail",
+      "severity": "hard",
+      "page": "bleed-full",
+      "target": "bleed-full-image-1",
+      "evidence": {
+        "side": "left",
+        "beyond_trim_mm": 3
+      },
+      "message": "bleed-full-image-1 越过成品边（left）3mm 但没有声明 data-bleed"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "image.bleed",
+      "status": "fail",
+      "severity": "hard",
+      "page": "bleed-outer",
+      "target": "bleed-outer-image-1",
+      "evidence": {
+        "side": "top",
+        "beyond_trim_mm": 3
+      },
+      "message": "bleed-outer-image-1 越过成品边（top）3mm 但没有声明 data-bleed"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "image.bleed",
+      "status": "fail",
+      "severity": "hard",
+      "page": "bleed-outer",
+      "target": "bleed-outer-image-1",
+      "evidence": {
+        "side": "right",
+        "beyond_trim_mm": 3
+      },
+      "message": "bleed-outer-image-1 越过成品边（right）3mm 但没有声明 data-bleed"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "image.bleed",
+      "status": "fail",
+      "severity": "hard",
+      "page": "bleed-outer",
+      "target": "bleed-outer-image-1",
+      "evidence": {
+        "side": "bottom",
+        "beyond_trim_mm": 3
+      },
+      "message": "bleed-outer-image-1 越过成品边（bottom）3mm 但没有声明 data-bleed"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.text",
+      "status": "fail",
+      "severity": "hard",
+      "page": "stair-grid",
+      "target": "stair-grid-004",
+      "evidence": {
+        "with": "stair-grid-005",
+        "overlap_mm": [
+          6.18,
+          2.25
+        ]
+      },
+      "message": "文字「观察，」与「理解，」重叠（有意叠放请在其中一方写 data-overlap=\"stair-grid-005\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.text",
+      "status": "fail",
+      "severity": "hard",
+      "page": "stair-grid",
+      "target": "stair-grid-005",
+      "evidence": {
+        "with": "stair-grid-006",
+        "overlap_mm": [
+          6.18,
+          2.25
+        ]
+      },
+      "message": "文字「理解，」与「判断，」重叠（有意叠放请在其中一方写 data-overlap=\"stair-grid-006\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "overlap.text",
+      "status": "fail",
+      "severity": "hard",
+      "page": "stair-grid",
+      "target": "stair-grid-006",
+      "evidence": {
+        "with": "stair-grid-007",
+        "overlap_mm": [
+          6.18,
+          2.25
+        ]
+      },
+      "message": "文字「判断，」与「行动。」重叠（有意叠放请在其中一方写 data-overlap=\"stair-grid-007\"）"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "readability.contrast",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-scrim",
+      "target": "a-scrim-005",
+      "evidence": {
+        "contrast_p05": 1.97,
+        "contrast_min": 1.88,
+        "contrast_median": 2.08,
+        "min": 4.5,
+        "role": "key",
+        "text": "bottom"
+      },
+      "message": "key 文字对比度 1.97:1（按背景最差 5% 计）低于 4.5:1：「bottom」"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "readability.contrast",
+      "status": "fail",
+      "severity": "hard",
+      "page": "a-scrim",
+      "target": "a-scrim-007",
+      "evidence": {
+        "contrast_p05": 2.05,
+        "contrast_min": 1.99,
+        "contrast_median": 2.11,
+        "min": 4.5,
+        "role": "key",
+        "text": "end"
+      },
+      "message": "key 文字对比度 2.05:1（按背景最差 5% 计）低于 4.5:1：「end」"
+    },
+    {
+      "lang": "zh-CN",
+      "id": "readability.contrast",
+      "status": "fail",
+      "severity": "hard",
+      "page": "x-band",
+      "target": "x-band-004",
+      "evidence": {
+        "contrast_p05": 1,
+        "contrast_min": 1,
+        "contrast_median": 18.42,
+        "min": 3,
+        "role": "display",
+        "text": "FOLIO"
+      },
+      "message": "display 文字对比度 1:1（按背景最差 5% 计）低于 3:1：「FOLIO」"
+    }
+  ],
+  "visual_review": "not-recorded"
+}

@@ -1,0 +1,38 @@
+{
+  "contract": 1,
+  "build_id": "e6c834dccee3",
+  "fingerprint": "e6c834dccee3f0ba29ac9f409b18c2aea1a82fed7f5de145842f4b1df28252dd",
+  "tools": {
+    "contract": 1,
+    "playwright": "1.64.1",
+    "chromium": "149.0.7827.55",
+    "executable": "HB_CHROMIUM",
+    "node": "22",
+    "tool_hash": "924e7e0ab586a377e90d02f9928f3a96f6ba143b2fb3949c8d5316cb3ff4ae1e"
+  },
+  "languages": {
+    "zh-CN": {
+      "checks": {
+        "render": "pass",
+        "measure": "pass",
+        "postflight": "pass",
+        "raster": "fail",
+        "coverage": "pass"
+      },
+      "pdf": ".build/e6c834dccee3/zh-CN/book.pdf",
+      "pdf_sha256": "78bef60aa8a381eff38c32fff1eb41bcc93e81e1543bcaa930fdcc21514847d9",
+      "pages": 100
+    }
+  },
+  "status": "blocked",
+  "blocking": [
+    {
+      "lang": "zh-CN",
+      "id": "raster",
+      "status": "unverified",
+      "severity": "hard",
+      "message": "最终 PDF 栅格化失败，无法视觉审稿：[safe-delete][SAFE_DELETE_BULK_CONFIRM_REQUIRED] {\"count\":103,\"threshold\":50,\"scope\":\"turn\",\"targets\":[\"/Users/apple/Documents/GitHub/handbook-designer-skill/dev/samples/native/folio-swiss/.qa/e6c834dccee3/zh-CN/raster\"],\"targetCount\":1}"
+    }
+  ],
+  "visual_review": "not-recorded"
+}

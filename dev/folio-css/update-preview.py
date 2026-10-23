@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('build')
-    parser.add_argument('--project', choices=['folio-system', 'folio-business'], default='folio-system')
+    parser.add_argument('--project', choices=['folio-system', 'folio-business', 'folio-swiss'], default='folio-system')
     args = parser.parse_args()
     if not re.fullmatch(r'[a-f0-9]{12}', args.build):
         parser.error('BUILD_ID must be twelve hexadecimal characters')
@@ -39,7 +39,7 @@ def main():
     snapshot = snapshot.replace('</head>', screen + '</head>')
     (PROJECT / 'preview.html').write_text(snapshot)
     raster = PROJECT / '.qa' / build / 'zh-CN/raster'
-    prefix = 'specimen' if args.project == 'folio-system' else 'business-specimen'
+    prefix = {'folio-system': 'specimen', 'folio-business': 'business-specimen', 'folio-swiss': 'swiss-specimen'}[args.project]
     shutil.copyfile(raster / 'sheet.png', ROOT / f'dev/folio-css/{prefix}.png')
     (ROOT / f'dev/folio-css/{prefix}.json').write_text(json.dumps({
         'build_id': build,

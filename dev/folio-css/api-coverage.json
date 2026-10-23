@@ -1,0 +1,1365 @@
+{
+  "version": "2.2.0",
+  "class_count": 353,
+  "entry_count": 91,
+  "classes": {
+    "fl-abb": [
+      "swiss-dimensions"
+    ],
+    "fl-absolute": [
+      "a-page"
+    ],
+    "fl-area": [
+      "a-page",
+      "edge-photo",
+      "panorama",
+      "bleed-top",
+      "bleed-full",
+      "bleed-outer"
+    ],
+    "fl-aux": [
+      "a-roles",
+      "caption"
+    ],
+    "fl-axis": [
+      "swiss-event-axis"
+    ],
+    "fl-axis-now": [
+      "swiss-event-axis"
+    ],
+    "fl-balance": [
+      "a-alignment"
+    ],
+    "fl-band": [
+      "x-band"
+    ],
+    "fl-bleed": [
+      "a-page"
+    ],
+    "fl-bleed-left": [
+      "x-edge"
+    ],
+    "fl-bleed-right": [
+      "x-crop",
+      "x-edge"
+    ],
+    "fl-body": [
+      "a-roles",
+      "question-answer",
+      "checklist",
+      "claim-evidence",
+      "swiss-index",
+      "swiss-term",
+      "swiss-hanging-list",
+      "swiss-negative-space"
+    ],
+    "fl-bullet": [
+      "x-sign"
+    ],
+    "fl-caps": [
+      "a-alignment"
+    ],
+    "fl-caption": [
+      "a-roles",
+      "caption",
+      "rhythm-band",
+      "kpi-evidence",
+      "target-actual",
+      "five-forces",
+      "decision-matrix",
+      "value-chain",
+      "capability-table",
+      "swiss-dimensions",
+      "swiss-statistics",
+      "swiss-data-table",
+      "chart-bar",
+      "chart-line",
+      "chart-stacked",
+      "chart-waterfall"
+    ],
+    "fl-check": [
+      "a-marks",
+      "checklist"
+    ],
+    "fl-cols-1": [
+      "a-grid"
+    ],
+    "fl-cols-12": [
+      "a-grid",
+      "rhythm-band"
+    ],
+    "fl-cols-2": [
+      "a-grid",
+      "decision-matrix"
+    ],
+    "fl-cols-3": [
+      "a-grid",
+      "itinerary-days",
+      "rhythm-band",
+      "milestones",
+      "kpi-evidence",
+      "five-forces",
+      "value-chain",
+      "swiss-statistics"
+    ],
+    "fl-cols-4": [
+      "a-grid"
+    ],
+    "fl-cols-6": [
+      "a-grid",
+      "swiss-negative-space",
+      "swiss-type-image"
+    ],
+    "fl-content-between": [
+      "a-align-items"
+    ],
+    "fl-content-center": [
+      "a-align-items"
+    ],
+    "fl-content-end": [
+      "a-align-items"
+    ],
+    "fl-content-start": [
+      "a-align-items"
+    ],
+    "fl-crop": [
+      "x-crop"
+    ],
+    "fl-crop-bottom": [
+      "x-crop"
+    ],
+    "fl-crop-left": [
+      "x-crop"
+    ],
+    "fl-crop-right": [
+      "x-crop"
+    ],
+    "fl-crop-top": [
+      "x-crop"
+    ],
+    "fl-dim": [
+      "swiss-dimensions"
+    ],
+    "fl-dim-v": [
+      "swiss-dimensions"
+    ],
+    "fl-display": [
+      "a-roles",
+      "swiss-term"
+    ],
+    "fl-duotone": [
+      "x-duotone"
+    ],
+    "fl-fill-accent": [
+      "a-rules"
+    ],
+    "fl-fill-ink": [
+      "a-rules"
+    ],
+    "fl-fill-lines": [
+      "a-marks"
+    ],
+    "fl-fill-soft": [
+      "a-rules"
+    ],
+    "fl-fit-contain": [
+      "a-crop"
+    ],
+    "fl-fit-cover": [
+      "a-crop"
+    ],
+    "fl-flex": [
+      "a-flex",
+      "contents"
+    ],
+    "fl-flex-col": [
+      "a-flex"
+    ],
+    "fl-focus-bottom": [
+      "a-crop"
+    ],
+    "fl-focus-center": [
+      "a-crop"
+    ],
+    "fl-focus-left": [
+      "a-crop"
+    ],
+    "fl-focus-right": [
+      "a-crop"
+    ],
+    "fl-focus-top": [
+      "a-crop"
+    ],
+    "fl-folio": [
+      "a-marks"
+    ],
+    "fl-font-body": [
+      "a-font"
+    ],
+    "fl-font-display": [
+      "a-font",
+      "quotation",
+      "swiss-type-image"
+    ],
+    "fl-font-label": [
+      "a-font"
+    ],
+    "fl-font-number": [
+      "a-font",
+      "swiss-event-axis"
+    ],
+    "fl-font-reading": [
+      "a-font"
+    ],
+    "fl-foot": [
+      "swiss-furniture",
+      "swiss-negative-space"
+    ],
+    "fl-foot-end": [
+      "swiss-furniture"
+    ],
+    "fl-frame": [
+      "a-image",
+      "photo-pair",
+      "contact",
+      "masonry",
+      "caption",
+      "swiss-legend",
+      "swiss-dimensions"
+    ],
+    "fl-frame-fill": [
+      "a-image",
+      "x-duotone"
+    ],
+    "fl-gap-0": [
+      "a-gaps",
+      "rhythm-band",
+      "decision-matrix"
+    ],
+    "fl-gap-1": [
+      "a-gaps"
+    ],
+    "fl-gap-2": [
+      "a-gaps",
+      "flow",
+      "opening",
+      "rhythm-band",
+      "decision-matrix",
+      "swiss-term",
+      "swiss-legend"
+    ],
+    "fl-gap-3": [
+      "a-gaps",
+      "five-forces",
+      "swiss-dimensions",
+      "swiss-data-table"
+    ],
+    "fl-gap-4": [
+      "a-gaps",
+      "flow",
+      "swiss-index",
+      "swiss-statistics",
+      "swiss-event-axis",
+      "swiss-stair-heading"
+    ],
+    "fl-gap-5": [
+      "a-gaps",
+      "swiss-furniture"
+    ],
+    "fl-gap-6": [
+      "a-gaps"
+    ],
+    "fl-gap-7": [
+      "a-gaps"
+    ],
+    "fl-gap-8": [
+      "a-gaps"
+    ],
+    "fl-gap-x-0": [
+      "a-gaps"
+    ],
+    "fl-gap-x-1": [
+      "a-gaps"
+    ],
+    "fl-gap-x-2": [
+      "a-gaps"
+    ],
+    "fl-gap-x-3": [
+      "a-gaps"
+    ],
+    "fl-gap-x-4": [
+      "a-gaps"
+    ],
+    "fl-gap-x-5": [
+      "a-gaps"
+    ],
+    "fl-gap-x-6": [
+      "a-gaps"
+    ],
+    "fl-gap-x-7": [
+      "a-gaps"
+    ],
+    "fl-gap-x-8": [
+      "a-gaps"
+    ],
+    "fl-gap-y-0": [
+      "a-gaps"
+    ],
+    "fl-gap-y-1": [
+      "a-gaps"
+    ],
+    "fl-gap-y-2": [
+      "a-gaps"
+    ],
+    "fl-gap-y-3": [
+      "a-gaps"
+    ],
+    "fl-gap-y-4": [
+      "a-gaps"
+    ],
+    "fl-gap-y-5": [
+      "a-gaps"
+    ],
+    "fl-gap-y-6": [
+      "a-gaps"
+    ],
+    "fl-gap-y-7": [
+      "a-gaps"
+    ],
+    "fl-gap-y-8": [
+      "a-gaps"
+    ],
+    "fl-grid": [
+      "a-grid",
+      "itinerary-days",
+      "rhythm-band",
+      "milestones",
+      "kpi-evidence",
+      "five-forces",
+      "decision-matrix",
+      "value-chain",
+      "swiss-dimensions",
+      "swiss-statistics",
+      "swiss-negative-space",
+      "swiss-type-image"
+    ],
+    "fl-grow": [
+      "a-flex"
+    ],
+    "fl-h-full": [
+      "a-sizing"
+    ],
+    "fl-h1": [
+      "a-roles",
+      "opening",
+      "swiss-furniture",
+      "swiss-index",
+      "swiss-stair-heading",
+      "swiss-negative-space"
+    ],
+    "fl-h2": [
+      "a-roles",
+      "swiss-dimensions",
+      "swiss-statistics",
+      "swiss-data-table",
+      "swiss-hanging-list",
+      "swiss-event-axis",
+      "swiss-type-image"
+    ],
+    "fl-h3": [
+      "a-roles",
+      "question-answer",
+      "itinerary-days",
+      "timeline-vertical",
+      "milestones",
+      "kpi-evidence",
+      "five-forces",
+      "decision-matrix",
+      "value-chain",
+      "claim-evidence",
+      "swiss-event-axis"
+    ],
+    "fl-hang": [
+      "a-alignment"
+    ],
+    "fl-image": [
+      "a-image"
+    ],
+    "fl-image-fill": [
+      "a-image"
+    ],
+    "fl-index": [
+      "swiss-index"
+    ],
+    "fl-index-end": [
+      "swiss-index"
+    ],
+    "fl-index-n": [
+      "swiss-index"
+    ],
+    "fl-items-baseline": [
+      "a-align-items",
+      "number-unit"
+    ],
+    "fl-items-center": [
+      "a-align-items"
+    ],
+    "fl-items-end": [
+      "a-align-items",
+      "swiss-type-image"
+    ],
+    "fl-items-start": [
+      "a-align-items"
+    ],
+    "fl-items-stretch": [
+      "a-align-items"
+    ],
+    "fl-justify-between": [
+      "a-align-items",
+      "contents"
+    ],
+    "fl-justify-center": [
+      "a-align-items"
+    ],
+    "fl-justify-end": [
+      "a-align-items"
+    ],
+    "fl-justify-self-center": [
+      "a-align-items"
+    ],
+    "fl-justify-self-end": [
+      "a-align-items"
+    ],
+    "fl-justify-self-start": [
+      "a-align-items"
+    ],
+    "fl-justify-self-stretch": [
+      "a-align-items"
+    ],
+    "fl-justify-start": [
+      "a-align-items"
+    ],
+    "fl-key": [
+      "a-roles",
+      "quotation",
+      "number-unit",
+      "open-table",
+      "itinerary-days",
+      "timeline-vertical",
+      "rhythm-band",
+      "milestones",
+      "swimlane",
+      "kpi-evidence",
+      "target-actual",
+      "five-forces",
+      "decision-matrix",
+      "value-chain",
+      "capability-table",
+      "claim-evidence",
+      "swiss-furniture",
+      "swiss-term",
+      "swiss-statistics",
+      "swiss-data-table",
+      "swiss-hanging-list",
+      "swiss-event-axis",
+      "swiss-stair-heading",
+      "swiss-negative-space",
+      "swiss-type-image"
+    ],
+    "fl-kicker": [
+      "a-roles",
+      "opening",
+      "itinerary-days",
+      "milestones",
+      "kpi-evidence",
+      "value-chain",
+      "claim-evidence"
+    ],
+    "fl-l-aside": [
+      "sidebar-offset",
+      "marginalia",
+      "photo-essay",
+      "typographic",
+      "claim-evidence",
+      "swiss-furniture",
+      "swiss-term",
+      "swiss-hanging-list"
+    ],
+    "fl-l-bleed-bottom": [
+      "edge-photo"
+    ],
+    "fl-l-bleed-full": [
+      "bleed-full"
+    ],
+    "fl-l-bleed-outer": [
+      "bleed-outer"
+    ],
+    "fl-l-bleed-side": [
+      "edge-photo"
+    ],
+    "fl-l-bleed-top": [
+      "bleed-top"
+    ],
+    "fl-l-caption": [
+      "overlay"
+    ],
+    "fl-l-chronology": [
+      "chronology",
+      "timeline-vertical"
+    ],
+    "fl-l-cluster": [
+      "flow",
+      "number-unit"
+    ],
+    "fl-l-column": [
+      "masonry"
+    ],
+    "fl-l-comparison": [
+      "comparison"
+    ],
+    "fl-l-contact": [
+      "contact"
+    ],
+    "fl-l-copy": [
+      "edge-photo",
+      "overlay",
+      "bleed-top",
+      "bleed-full",
+      "bleed-outer"
+    ],
+    "fl-l-full": [
+      "split",
+      "sidebar-offset",
+      "photo-pair",
+      "photo-essay",
+      "contact",
+      "masonry",
+      "stagger",
+      "timeline-grid"
+    ],
+    "fl-l-hanging": [
+      "hanging",
+      "contents",
+      "question-answer",
+      "checklist"
+    ],
+    "fl-l-item": [
+      "chronology",
+      "stagger",
+      "timeline-grid",
+      "timeline-vertical",
+      "swiss-event-axis"
+    ],
+    "fl-l-label": [
+      "hanging",
+      "chronology",
+      "contents",
+      "question-answer",
+      "timeline-vertical"
+    ],
+    "fl-l-main": [
+      "sidebar-offset",
+      "marginalia",
+      "hanging",
+      "chronology",
+      "photo-essay",
+      "typographic",
+      "contents",
+      "question-answer",
+      "timeline-vertical",
+      "claim-evidence",
+      "swiss-furniture",
+      "swiss-term",
+      "swiss-hanging-list"
+    ],
+    "fl-l-marginalia": [
+      "marginalia"
+    ],
+    "fl-l-masonry": [
+      "masonry"
+    ],
+    "fl-l-offset": [
+      "sidebar-offset",
+      "swiss-term",
+      "swiss-hanging-list"
+    ],
+    "fl-l-overlay": [
+      "overlay"
+    ],
+    "fl-l-pair": [
+      "marginalia",
+      "comparison"
+    ],
+    "fl-l-panorama": [
+      "panorama"
+    ],
+    "fl-l-panorama-image": [
+      "panorama"
+    ],
+    "fl-l-photo": [
+      "edge-photo",
+      "overlay",
+      "bleed-top",
+      "bleed-full",
+      "bleed-outer"
+    ],
+    "fl-l-photo-essay": [
+      "photo-essay"
+    ],
+    "fl-l-photo-pair": [
+      "photo-pair"
+    ],
+    "fl-l-sidebar": [
+      "sidebar-offset",
+      "claim-evidence",
+      "swiss-furniture"
+    ],
+    "fl-l-split": [
+      "split"
+    ],
+    "fl-l-stack": [
+      "flow",
+      "opening",
+      "quotation",
+      "caption",
+      "contents",
+      "question-answer",
+      "checklist",
+      "rhythm-band",
+      "decision-matrix",
+      "swiss-furniture",
+      "swiss-index",
+      "swiss-term",
+      "swiss-legend",
+      "swiss-dimensions",
+      "swiss-statistics",
+      "swiss-data-table",
+      "swiss-event-axis",
+      "swiss-stair-heading"
+    ],
+    "fl-l-stagger": [
+      "stagger"
+    ],
+    "fl-l-stair": [
+      "stair-grid",
+      "swiss-stair-heading"
+    ],
+    "fl-l-timeline": [
+      "timeline-grid",
+      "swiss-event-axis"
+    ],
+    "fl-l-title": [
+      "typographic"
+    ],
+    "fl-l-typographic": [
+      "typographic"
+    ],
+    "fl-lead": [
+      "a-roles",
+      "opening",
+      "swiss-negative-space"
+    ],
+    "fl-leading-body": [
+      "a-leading"
+    ],
+    "fl-leading-display": [
+      "a-leading",
+      "swiss-type-image"
+    ],
+    "fl-leading-hero": [
+      "a-leading"
+    ],
+    "fl-leading-lead": [
+      "a-leading",
+      "quotation"
+    ],
+    "fl-leading-reading": [
+      "a-leading"
+    ],
+    "fl-leading-tight": [
+      "a-leading"
+    ],
+    "fl-legend": [
+      "swiss-legend"
+    ],
+    "fl-list": [
+      "swiss-hanging-list"
+    ],
+    "fl-mark": [
+      "swiss-type-image"
+    ],
+    "fl-mb-0": [
+      "a-margin"
+    ],
+    "fl-mb-1": [
+      "a-margin"
+    ],
+    "fl-mb-2": [
+      "a-margin",
+      "itinerary-days",
+      "timeline-vertical",
+      "milestones",
+      "kpi-evidence",
+      "five-forces",
+      "decision-matrix",
+      "value-chain",
+      "claim-evidence",
+      "swiss-statistics",
+      "swiss-data-table",
+      "swiss-hanging-list",
+      "swiss-negative-space"
+    ],
+    "fl-mb-3": [
+      "a-margin"
+    ],
+    "fl-mb-4": [
+      "a-margin"
+    ],
+    "fl-mb-5": [
+      "a-margin"
+    ],
+    "fl-mb-6": [
+      "a-margin"
+    ],
+    "fl-mb-7": [
+      "a-margin"
+    ],
+    "fl-mb-8": [
+      "a-margin"
+    ],
+    "fl-measure": [
+      "a-prose"
+    ],
+    "fl-meta": [
+      "swiss-furniture"
+    ],
+    "fl-min-w-0": [
+      "a-sizing"
+    ],
+    "fl-mono": [
+      "a-crop"
+    ],
+    "fl-mt-0": [
+      "a-margin"
+    ],
+    "fl-mt-1": [
+      "a-margin"
+    ],
+    "fl-mt-2": [
+      "a-margin",
+      "target-actual",
+      "capability-table",
+      "chart-bar",
+      "chart-line",
+      "chart-stacked",
+      "chart-waterfall"
+    ],
+    "fl-mt-3": [
+      "a-margin",
+      "kpi-evidence",
+      "five-forces",
+      "value-chain",
+      "swiss-stair-heading",
+      "swiss-negative-space",
+      "swiss-type-image"
+    ],
+    "fl-mt-4": [
+      "a-margin",
+      "swiss-term",
+      "swiss-negative-space"
+    ],
+    "fl-mt-5": [
+      "a-margin"
+    ],
+    "fl-mt-6": [
+      "a-margin"
+    ],
+    "fl-mt-7": [
+      "a-margin",
+      "swiss-negative-space"
+    ],
+    "fl-mt-8": [
+      "a-margin"
+    ],
+    "fl-mt-auto": [
+      "a-margin"
+    ],
+    "fl-num": [
+      "swiss-data-table"
+    ],
+    "fl-number": [
+      "a-roles",
+      "number-unit",
+      "swiss-statistics"
+    ],
+    "fl-optical": [
+      "a-alignment"
+    ],
+    "fl-overprint": [
+      "x-overprint"
+    ],
+    "fl-p-0": [
+      "a-padding"
+    ],
+    "fl-p-1": [
+      "a-padding"
+    ],
+    "fl-p-2": [
+      "a-padding"
+    ],
+    "fl-p-3": [
+      "a-padding",
+      "five-forces",
+      "decision-matrix"
+    ],
+    "fl-p-4": [
+      "a-padding"
+    ],
+    "fl-p-5": [
+      "a-padding"
+    ],
+    "fl-p-6": [
+      "a-padding"
+    ],
+    "fl-p-7": [
+      "a-padding"
+    ],
+    "fl-p-8": [
+      "a-padding"
+    ],
+    "fl-pb-0": [
+      "a-padding"
+    ],
+    "fl-pb-1": [
+      "a-padding"
+    ],
+    "fl-pb-2": [
+      "a-padding"
+    ],
+    "fl-pb-3": [
+      "a-padding"
+    ],
+    "fl-pb-4": [
+      "a-padding"
+    ],
+    "fl-pb-5": [
+      "a-padding"
+    ],
+    "fl-pb-6": [
+      "a-padding"
+    ],
+    "fl-pb-7": [
+      "a-padding"
+    ],
+    "fl-pb-8": [
+      "a-padding"
+    ],
+    "fl-programme": [
+      "x-programme"
+    ],
+    "fl-proportional": [
+      "a-alignment"
+    ],
+    "fl-prose": [
+      "a-prose"
+    ],
+    "fl-prose-columns-2": [
+      "a-prose"
+    ],
+    "fl-prose-indent": [
+      "a-prose"
+    ],
+    "fl-pt-0": [
+      "a-padding"
+    ],
+    "fl-pt-1": [
+      "a-padding"
+    ],
+    "fl-pt-2": [
+      "a-padding"
+    ],
+    "fl-pt-3": [
+      "a-padding"
+    ],
+    "fl-pt-4": [
+      "a-padding",
+      "swiss-furniture"
+    ],
+    "fl-pt-5": [
+      "a-padding"
+    ],
+    "fl-pt-6": [
+      "a-padding"
+    ],
+    "fl-pt-7": [
+      "a-padding"
+    ],
+    "fl-pt-8": [
+      "a-padding"
+    ],
+    "fl-px-0": [
+      "a-padding"
+    ],
+    "fl-px-1": [
+      "a-padding"
+    ],
+    "fl-px-2": [
+      "a-padding",
+      "open-table"
+    ],
+    "fl-px-3": [
+      "a-padding"
+    ],
+    "fl-px-4": [
+      "a-padding"
+    ],
+    "fl-px-5": [
+      "a-padding"
+    ],
+    "fl-px-6": [
+      "a-padding"
+    ],
+    "fl-px-7": [
+      "a-padding"
+    ],
+    "fl-px-8": [
+      "a-padding"
+    ],
+    "fl-py-0": [
+      "a-padding"
+    ],
+    "fl-py-1": [
+      "a-padding"
+    ],
+    "fl-py-2": [
+      "a-padding",
+      "open-table",
+      "swimlane",
+      "target-actual",
+      "capability-table"
+    ],
+    "fl-py-3": [
+      "a-padding"
+    ],
+    "fl-py-4": [
+      "a-padding"
+    ],
+    "fl-py-5": [
+      "a-padding"
+    ],
+    "fl-py-6": [
+      "a-padding"
+    ],
+    "fl-py-7": [
+      "a-padding"
+    ],
+    "fl-py-8": [
+      "a-padding"
+    ],
+    "fl-ratio-landscape": [
+      "a-image"
+    ],
+    "fl-ratio-photo": [
+      "a-image",
+      "contact"
+    ],
+    "fl-ratio-portrait": [
+      "a-image",
+      "photo-pair"
+    ],
+    "fl-ratio-square": [
+      "a-image"
+    ],
+    "fl-ratio-tall": [
+      "a-image"
+    ],
+    "fl-ratio-wide": [
+      "a-image",
+      "caption",
+      "swiss-legend",
+      "swiss-dimensions"
+    ],
+    "fl-relative": [
+      "a-page"
+    ],
+    "fl-rotate-6": [
+      "x-overprint"
+    ],
+    "fl-rotate-n6": [
+      "x-overprint"
+    ],
+    "fl-row-span-1": [
+      "a-rows"
+    ],
+    "fl-row-span-2": [
+      "a-rows"
+    ],
+    "fl-row-span-3": [
+      "a-rows"
+    ],
+    "fl-row-span-4": [
+      "a-rows"
+    ],
+    "fl-row-span-5": [
+      "a-rows"
+    ],
+    "fl-row-span-6": [
+      "a-rows"
+    ],
+    "fl-row-span-full": [
+      "a-rows"
+    ],
+    "fl-row-start-1": [
+      "a-rows"
+    ],
+    "fl-row-start-2": [
+      "a-rows",
+      "five-forces"
+    ],
+    "fl-row-start-3": [
+      "a-rows",
+      "five-forces"
+    ],
+    "fl-row-start-4": [
+      "a-rows"
+    ],
+    "fl-row-start-5": [
+      "a-rows"
+    ],
+    "fl-row-start-6": [
+      "a-rows"
+    ],
+    "fl-rows-2": [
+      "a-rows"
+    ],
+    "fl-rows-3": [
+      "a-rows"
+    ],
+    "fl-rows-4": [
+      "a-rows"
+    ],
+    "fl-rows-6": [
+      "a-rows"
+    ],
+    "fl-rule": [
+      "a-rules",
+      "open-table",
+      "swimlane",
+      "target-actual",
+      "decision-matrix",
+      "capability-table"
+    ],
+    "fl-rule-accent": [
+      "a-rules"
+    ],
+    "fl-rule-bottom": [
+      "a-rules"
+    ],
+    "fl-rule-heavy": [
+      "a-rules"
+    ],
+    "fl-rule-none": [
+      "a-rules"
+    ],
+    "fl-rule-strong": [
+      "a-rules",
+      "open-table"
+    ],
+    "fl-running": [
+      "a-marks"
+    ],
+    "fl-scope": [
+      "a-page"
+    ],
+    "fl-scrim-bottom": [
+      "a-scrim"
+    ],
+    "fl-scrim-end": [
+      "a-scrim"
+    ],
+    "fl-scrim-start": [
+      "a-scrim"
+    ],
+    "fl-scrim-top": [
+      "a-scrim"
+    ],
+    "fl-self-center": [
+      "a-align-items"
+    ],
+    "fl-self-end": [
+      "a-align-items"
+    ],
+    "fl-self-start": [
+      "a-align-items"
+    ],
+    "fl-self-stretch": [
+      "a-align-items"
+    ],
+    "fl-show-baseline": [
+      "a-grid-guide"
+    ],
+    "fl-show-columns": [
+      "a-grid-guide"
+    ],
+    "fl-show-columns-12": [
+      "a-grid-guide"
+    ],
+    "fl-shrink-0": [
+      "a-flex"
+    ],
+    "fl-sideways": [
+      "a-direction"
+    ],
+    "fl-sign": [
+      "x-sign"
+    ],
+    "fl-size-aux": [
+      "a-scale"
+    ],
+    "fl-size-body": [
+      "a-scale"
+    ],
+    "fl-size-colossal": [
+      "a-large"
+    ],
+    "fl-size-display": [
+      "a-scale"
+    ],
+    "fl-size-giant": [
+      "a-large",
+      "swiss-type-image"
+    ],
+    "fl-size-h1": [
+      "a-scale"
+    ],
+    "fl-size-h2": [
+      "a-scale"
+    ],
+    "fl-size-h3": [
+      "a-scale",
+      "quotation"
+    ],
+    "fl-size-hero": [
+      "a-large",
+      "number-unit"
+    ],
+    "fl-size-key": [
+      "a-scale"
+    ],
+    "fl-size-lead": [
+      "a-scale"
+    ],
+    "fl-size-small": [
+      "a-scale"
+    ],
+    "fl-span-1": [
+      "a-span",
+      "rhythm-band"
+    ],
+    "fl-span-10": [
+      "a-span"
+    ],
+    "fl-span-11": [
+      "a-span"
+    ],
+    "fl-span-12": [
+      "a-span"
+    ],
+    "fl-span-2": [
+      "a-span",
+      "rhythm-band"
+    ],
+    "fl-span-3": [
+      "a-span",
+      "rhythm-band",
+      "swiss-type-image"
+    ],
+    "fl-span-4": [
+      "a-span",
+      "rhythm-band",
+      "swiss-negative-space"
+    ],
+    "fl-span-5": [
+      "a-span"
+    ],
+    "fl-span-6": [
+      "a-span"
+    ],
+    "fl-span-7": [
+      "a-span"
+    ],
+    "fl-span-8": [
+      "a-span"
+    ],
+    "fl-span-9": [
+      "a-span"
+    ],
+    "fl-span-full": [
+      "a-span",
+      "swiss-negative-space"
+    ],
+    "fl-start-1": [
+      "a-span",
+      "five-forces"
+    ],
+    "fl-start-10": [
+      "a-span"
+    ],
+    "fl-start-11": [
+      "a-span"
+    ],
+    "fl-start-12": [
+      "a-span"
+    ],
+    "fl-start-2": [
+      "a-span",
+      "five-forces"
+    ],
+    "fl-start-3": [
+      "a-span",
+      "swiss-negative-space"
+    ],
+    "fl-start-4": [
+      "a-span"
+    ],
+    "fl-start-5": [
+      "a-span"
+    ],
+    "fl-start-6": [
+      "a-span"
+    ],
+    "fl-start-7": [
+      "a-span"
+    ],
+    "fl-start-8": [
+      "a-span"
+    ],
+    "fl-start-9": [
+      "a-span"
+    ],
+    "fl-stat": [
+      "swiss-statistics"
+    ],
+    "fl-surface-accent": [
+      "a-surface",
+      "rhythm-band",
+      "x-band",
+      "x-overprint"
+    ],
+    "fl-surface-dark": [
+      "a-surface",
+      "rhythm-band",
+      "five-forces",
+      "x-band"
+    ],
+    "fl-surface-paper": [
+      "a-surface"
+    ],
+    "fl-surface-soft": [
+      "a-surface",
+      "rhythm-band",
+      "decision-matrix",
+      "x-band"
+    ],
+    "fl-table": [
+      "swiss-data-table"
+    ],
+    "fl-tabular": [
+      "a-alignment",
+      "number-unit",
+      "timeline-vertical",
+      "target-actual"
+    ],
+    "fl-term": [
+      "swiss-term"
+    ],
+    "fl-text-accent": [
+      "a-surface"
+    ],
+    "fl-text-center": [
+      "a-alignment"
+    ],
+    "fl-text-end": [
+      "a-alignment"
+    ],
+    "fl-text-left": [
+      "a-alignment",
+      "swiss-data-table"
+    ],
+    "fl-text-main": [
+      "a-surface"
+    ],
+    "fl-text-muted": [
+      "a-surface",
+      "swiss-furniture",
+      "swiss-term",
+      "swiss-statistics",
+      "swiss-hanging-list",
+      "swiss-stair-heading",
+      "swiss-negative-space"
+    ],
+    "fl-text-right": [
+      "a-alignment"
+    ],
+    "fl-text-start": [
+      "a-alignment"
+    ],
+    "fl-tone-inverse": [
+      "a-surface"
+    ],
+    "fl-tracking-normal": [
+      "a-leading"
+    ],
+    "fl-tracking-tight": [
+      "a-leading"
+    ],
+    "fl-tracking-tighter": [
+      "a-leading"
+    ],
+    "fl-tracking-wide": [
+      "a-leading"
+    ],
+    "fl-type-bold": [
+      "a-profiles"
+    ],
+    "fl-type-light": [
+      "a-profiles"
+    ],
+    "fl-type-photo": [
+      "x-photo-type"
+    ],
+    "fl-unit": [
+      "swiss-statistics"
+    ],
+    "fl-vertical": [
+      "a-direction"
+    ],
+    "fl-w-full": [
+      "a-sizing",
+      "open-table"
+    ],
+    "fl-weight-regular": [
+      "a-font"
+    ],
+    "fl-weight-strong": [
+      "a-font",
+      "open-table",
+      "rhythm-band",
+      "decision-matrix",
+      "claim-evidence"
+    ],
+    "fl-wrap": [
+      "a-flex"
+    ],
+    "fl-z-0": [
+      "a-page"
+    ],
+    "fl-z-1": [
+      "a-page"
+    ],
+    "fl-z-2": [
+      "a-page"
+    ]
+  },
+  "scope": "All public fl-* classes indexed by API group; representative compositions, not every permutation."
+}

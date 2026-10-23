@@ -1,37 +1,68 @@
-/* Folio 1.1.0 · shared print design tokens.
+/* Folio 2.2.0 · Swiss structure with bold/light typography.
    Edit these source modules, then regenerate design.css with dev/build-folio-css.py.
    CSS px are physical print sizes; changing paper dimensions does not scale type. */
 :root {
-  --fl-paper: #FFFEFA;
-  --fl-soft: #F0EEE8;
-  --fl-ink: #202B32;
-  --fl-muted: #56616A;
-  --fl-accent: #164BE8;
-  --fl-dark: #182238;
-  --fl-on-dark: #FFFEFA;
-  --fl-on-dark-muted: #CDD5E2;
-  --fl-on-dark-accent: #B7CCFF;
-  --fl-line: #B7BEC6;
-  --fl-line-dark: #78869E;
-  --fl-scrim-color: rgb(8 18 30 / .88);
+  --fl-paper: #FFFFFF;
+  --fl-soft: #F2F0EB;
+  --fl-ink: #111111;
+  --fl-muted: #625F59;
+  --fl-accent: #C83024;
+  --fl-dark: #141414;
+  --fl-on-dark: #FFFFFF;
+  --fl-on-dark-muted: #C4C1BA;
+  --fl-on-dark-accent: #FF8B7F;
+  --fl-line: #C5C2BC;
+  --fl-line-dark: #77736D;
+  --fl-scrim-color: rgb(14 14 14 / .88);
   --fl-scrim-stop: 72%;
+  /* A signal palette, not a required red decoration on every page. */
+  --fl-grid-tint: rgb(200 48 36 / .08);
+  --fl-grid-line: rgb(200 48 36 / .32);
+  --fl-signal: #F5C84B;
 
-  --fl-font-display: "Noto Serif SC", serif;
+  --fl-font-display-bold: "Noto Serif SC", serif;
+  --fl-font-display-light: "Noto Sans SC", sans-serif;
+  --fl-font-display: var(--fl-font-display-bold);
   --fl-font-reading: "Noto Serif SC", serif;
   --fl-font-body: "Noto Sans SC", sans-serif;
   --fl-font-label: "Inter", "Noto Sans SC", sans-serif;
   --fl-font-number: "Inter", "Noto Sans SC", sans-serif;
-  --fl-weight-display: 700;
+
+  /* A4 scale, restored from the shared bold/light typography rules.
+     Bold emphasis advances by 200 (capped at 900); light keeps its size weight. */
+  --fl-weight-hero: 900;
+  --fl-weight-hero-strong: 900;
+  --fl-weight-display: 900;
+  --fl-weight-display-strong: 900;
+  --fl-weight-h1: 700;
+  --fl-weight-h1-strong: 900;
+  --fl-weight-h2: 700;
+  --fl-weight-h2-strong: 900;
+  --fl-weight-h3: 600;
+  --fl-weight-h3-strong: 800;
+  --fl-weight-lead: 600;
+  --fl-weight-lead-strong: 800;
+  --fl-weight-body: 400;
+  --fl-weight-body-strong: 600;
+  --fl-weight-small: 500;
+  --fl-weight-small-strong: 700;
+  --fl-weight-key: 600;
+  --fl-weight-key-strong: 800;
+  --fl-weight-aux: 600;
+  --fl-weight-aux-strong: 800;
+
+  /* Font-role defaults apply when no size atom is present. */
   --fl-weight-reading: 400;
   --fl-weight-reading-strong: 700;
-  --fl-weight-body: 400;
-  --fl-weight-body-strong: 700;
   --fl-weight-label: 400;
   --fl-weight-label-strong: 600;
-  --fl-weight-number: 600;
+  /* 数字与正文同族；字重跟随字号档位，不再保留专用字面。 */
+  --fl-weight-number: var(--fl-weight-body);
+  --fl-weight-number-strong: var(--fl-weight-body-strong);
 
   --fl-size-aux: 11px;
   --fl-size-key: 13px;
+  --fl-size-small: 14px;
   --fl-size-body: 16px;
   --fl-size-lead: 20px;
   --fl-size-h3: 24px;
@@ -39,11 +70,15 @@
   --fl-size-h1: 46px;
   --fl-size-display: 64px;
   --fl-size-hero: 112px;
+  --fl-size-giant: 196px;
+  --fl-size-colossal: 280px;
   --fl-leading-body: 1.75;
   --fl-leading-reading: 1.5;
   --fl-leading-lead: 1.6;
   --fl-leading-tight: 1.25;
   --fl-leading-display: 1.12;
+  --fl-leading-hero: 1;
+  --fl-tracking-tighter: -.04em;
   --fl-tracking-tight: -.02em;
   --fl-tracking-normal: 0;
   --fl-tracking-wide: .12em;
@@ -56,6 +91,8 @@
   --fl-space-4: 42px;
   --fl-space-5: 56px;
   --fl-space-6: 84px;
+  --fl-space-7: 112px;
+  --fl-space-8: 168px;
   --fl-gutter: 6mm;
   --fl-margin-top: 18mm;
   --fl-margin-bottom: 21mm;
@@ -63,5 +100,39 @@
   --fl-margin-outer: 15mm;
   --fl-hair: 1px;
   --fl-rule: 2px;
+  --fl-rule-heavy: 8px;
   --fl-measure: 34ic;
+}
+
+/* Typography is a page-level switch, independent of layouts and components.
+   The default is bold; either class can also scope a section of a page. */
+.fl-type-bold {
+  --fl-font-display: var(--fl-font-display-bold);
+  --fl-weight-hero: 900; --fl-weight-hero-strong: 900;
+  --fl-weight-display: 900; --fl-weight-display-strong: 900;
+  --fl-weight-h1: 700; --fl-weight-h1-strong: 900;
+  --fl-weight-h2: 700; --fl-weight-h2-strong: 900;
+  --fl-weight-h3: 600; --fl-weight-h3-strong: 800;
+  --fl-weight-lead: 600; --fl-weight-lead-strong: 800;
+  --fl-weight-body: 400; --fl-weight-body-strong: 600;
+  --fl-weight-small: 500; --fl-weight-small-strong: 700;
+  --fl-weight-key: 600; --fl-weight-key-strong: 800;
+  --fl-weight-aux: 600; --fl-weight-aux-strong: 800;
+  --fl-weight-reading: 400; --fl-weight-reading-strong: 700;
+  --fl-weight-label: 400; --fl-weight-label-strong: 600;
+}
+.fl-type-light {
+  --fl-font-display: var(--fl-font-display-light);
+  --fl-weight-hero: 200; --fl-weight-hero-strong: 200;
+  --fl-weight-display: 200; --fl-weight-display-strong: 200;
+  --fl-weight-h1: 250; --fl-weight-h1-strong: 250;
+  --fl-weight-h2: 300; --fl-weight-h2-strong: 300;
+  --fl-weight-h3: 400; --fl-weight-h3-strong: 400;
+  --fl-weight-lead: 400; --fl-weight-lead-strong: 400;
+  --fl-weight-body: 400; --fl-weight-body-strong: 400;
+  --fl-weight-small: 500; --fl-weight-small-strong: 500;
+  --fl-weight-key: 600; --fl-weight-key-strong: 600;
+  --fl-weight-aux: 600; --fl-weight-aux-strong: 600;
+  --fl-weight-reading: 400; --fl-weight-reading-strong: 400;
+  --fl-weight-label: 400; --fl-weight-label-strong: 400;
 }

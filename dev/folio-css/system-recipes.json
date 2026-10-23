@@ -1,0 +1,757 @@
+{
+  "atoms": [
+    {
+      "id": "a-surface",
+      "title": "表面与前景角色",
+      "category": "颜色",
+      "classes": [
+        "fl-surface-paper",
+        "fl-surface-soft",
+        "fl-surface-dark",
+        "fl-surface-accent",
+        "fl-text-main",
+        "fl-text-muted",
+        "fl-text-accent",
+        "fl-tone-inverse"
+      ],
+      "description": "表面同时绑定背景、正文、次要字、强调字和线条。强调色服务阅读主次。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-grid fl-cols-2\"><section class=\"fl-surface-paper fl-p-3\"><p class=\"fl-h2\">白纸</p><p class=\"fl-key fl-text-muted\">次要说明 / 来源</p><p class=\"fl-key fl-text-accent\">一个明确的重点</p></section><section class=\"fl-surface-soft fl-p-3\"><p class=\"fl-h2\">软纸</p><p class=\"fl-key fl-text-muted\">次要说明 / 来源</p><p class=\"fl-key fl-text-accent\">一个明确的重点</p></section><section class=\"fl-surface-dark fl-p-3\"><p class=\"fl-h2\">深墨</p><p class=\"fl-key fl-text-muted\">次要说明 / 来源</p><p class=\"fl-key fl-text-accent\">一个明确的重点</p></section><section class=\"fl-surface-accent fl-p-3\"><p class=\"fl-h2\">信号</p><p class=\"fl-key fl-text-muted\">次要说明 / 来源</p><p class=\"fl-key fl-text-accent\">一个明确的重点</p></section></div>"
+    },
+    {
+      "id": "a-profiles",
+      "title": "两种标题结构",
+      "category": "排印",
+      "classes": [
+        "fl-type-bold",
+        "fl-type-light"
+      ],
+      "description": "bold用衬线标题，light用无衬线标题；大字更轻的阶梯属于light。数字与正文同族，跟随字号档位。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-grid fl-cols-2\"><section class=\"fl-type-bold\"><p class=\"fl-kicker\">BOLD</p><p class=\"fl-display\">有序，<br>自由。</p><p class=\"fl-body fl-mt-3\">同一网格与字号，不同的字体与分量。</p><p class=\"fl-number fl-mt-3\">2026</p></section><section class=\"fl-type-light\"><p class=\"fl-kicker\">LIGHT</p><p class=\"fl-display\">有序，<br>自由。</p><p class=\"fl-body fl-mt-3\">同一网格与字号，不同的字体与分量。</p><p class=\"fl-number fl-mt-3\">2026</p></section></div>"
+    },
+    {
+      "id": "a-roles",
+      "title": "文字的阅读任务",
+      "category": "排印",
+      "classes": [
+        "fl-display",
+        "fl-h1",
+        "fl-h2",
+        "fl-h3",
+        "fl-lead",
+        "fl-body",
+        "fl-key",
+        "fl-aux",
+        "fl-caption",
+        "fl-kicker",
+        "fl-number"
+      ],
+      "description": "语义样式不代替内容角色；正文、关键信息和图注仍需要正确data-role。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-l-stack fl-gap-3\"><p class=\"fl-display\">主张</p><p class=\"fl-h1\">专题标题</p><p class=\"fl-h2\">章节标题</p><p class=\"fl-h3\">栏目标题</p><p class=\"fl-lead\">引言引导读者进入正文。</p><p class=\"fl-body\">正文按自然阅读速度展开，保持字行与空间的关系。</p><p class=\"fl-key\">关键事实与提示</p><p class=\"fl-caption\">图 01 / 观察说明</p><p class=\"fl-aux\">来源 · 日期 · 页码</p><p class=\"fl-kicker\">FOLIO / FIELD NOTES</p><p class=\"fl-number\">128</p></div>"
+    },
+    {
+      "id": "a-font",
+      "title": "字体与真实字重",
+      "category": "排印",
+      "classes": [
+        "fl-font-display",
+        "fl-font-reading",
+        "fl-font-body",
+        "fl-font-label",
+        "fl-font-number",
+        "fl-weight-regular",
+        "fl-weight-strong"
+      ],
+      "description": "字体、字号、字重可独立组合。常规与强调请求已有静态字面，不合成伪粗体。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-l-stack fl-gap-3\"><p class=\"fl-font-display fl-size-h2\">标题 / Display</p><p class=\"fl-font-reading fl-size-h2\">阅读 / Reading</p><p class=\"fl-font-body fl-size-h2\">正文 / Body</p><p class=\"fl-font-label fl-size-h2\">LABEL / 元信息</p><p class=\"fl-font-number fl-size-h2\">0123456789</p><p class=\"fl-body\">常规 <strong>强调文字</strong></p><p class=\"fl-font-body fl-weight-strong\">显式选择强调</p></div>"
+    },
+    {
+      "id": "a-scale",
+      "title": "从图注到标题的字阶",
+      "category": "排印",
+      "classes": [
+        "fl-size-aux",
+        "fl-size-key",
+        "fl-size-small",
+        "fl-size-body",
+        "fl-size-lead",
+        "fl-size-h3",
+        "fl-size-h2",
+        "fl-size-h1",
+        "fl-size-display"
+      ],
+      "description": "尺寸是物理CSS px；字号原子同时应用当前模式对应字重。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-l-stack fl-gap-3\"><div class=\"fl-flex fl-items-baseline fl-gap-3\"><p class=\"fl-font-number fl-size-key\">11px</p><span class=\"fl-font-display fl-size-aux\">尺度之间</span></div><div class=\"fl-flex fl-items-baseline fl-gap-3\"><p class=\"fl-font-number fl-size-key\">13px</p><span class=\"fl-font-display fl-size-key\">尺度之间</span></div><div class=\"fl-flex fl-items-baseline fl-gap-3\"><p class=\"fl-font-number fl-size-key\">14px</p><span class=\"fl-font-display fl-size-small\">尺度之间</span></div><div class=\"fl-flex fl-items-baseline fl-gap-3\"><p class=\"fl-font-number fl-size-key\">16px</p><span class=\"fl-font-display fl-size-body\">尺度之间</span></div><div class=\"fl-flex fl-items-baseline fl-gap-3\"><p class=\"fl-font-number fl-size-key\">20px</p><span class=\"fl-font-display fl-size-lead\">尺度之间</span></div><div class=\"fl-flex fl-items-baseline fl-gap-3\"><p class=\"fl-font-number fl-size-key\">24px</p><span class=\"fl-font-display fl-size-h3\">尺度之间</span></div><div class=\"fl-flex fl-items-baseline fl-gap-3\"><p class=\"fl-font-number fl-size-key\">32px</p><span class=\"fl-font-display fl-size-h2\">尺度之间</span></div><div class=\"fl-flex fl-items-baseline fl-gap-3\"><p class=\"fl-font-number fl-size-key\">46px</p><span class=\"fl-font-display fl-size-h1\">尺度之间</span></div><div class=\"fl-flex fl-items-baseline fl-gap-3\"><p class=\"fl-font-number fl-size-key\">64px</p><span class=\"fl-font-display fl-size-display\">尺度之间</span></div></div>"
+    },
+    {
+      "id": "a-large",
+      "title": "大字作为画面",
+      "category": "排印",
+      "classes": [
+        "fl-size-hero",
+        "fl-size-giant",
+        "fl-size-colossal"
+      ],
+      "description": "巨字、图像与空白共享视觉分量。完整标题仍参与内容审计。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "大字需要足够行高与留白。正文不能裁切，只有重复装饰字可以越界。",
+      "html": "<div class=\"fl-type-light\"><p class=\"fl-display fl-size-colossal fl-leading-hero\">Aa</p><div class=\"fl-flex fl-items-baseline fl-gap-3\"><p class=\"fl-display fl-size-giant fl-leading-hero\">字</p><p class=\"fl-number fl-size-hero\">112</p></div><p class=\"fl-caption\">280 / 196 / 112 px，字号不会随页面缩小。</p></div>"
+    },
+    {
+      "id": "a-leading",
+      "title": "行距与字距",
+      "category": "排印",
+      "classes": [
+        "fl-leading-body",
+        "fl-leading-reading",
+        "fl-leading-lead",
+        "fl-leading-tight",
+        "fl-leading-display",
+        "fl-leading-hero",
+        "fl-tracking-tighter",
+        "fl-tracking-tight",
+        "fl-tracking-normal",
+        "fl-tracking-wide"
+      ],
+      "description": "行距控制上下关系，字距控制同一行的密度；小字号不靠紧排来补容量。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-grid fl-cols-2\"><section><p class=\"fl-caption\">body</p><p class=\"fl-body fl-leading-body\">空间组织阅读。<br>阅读需要停顿。</p></section><section><p class=\"fl-caption\">reading</p><p class=\"fl-body fl-leading-reading\">空间组织阅读。<br>阅读需要停顿。</p></section><section><p class=\"fl-caption\">lead</p><p class=\"fl-body fl-leading-lead\">空间组织阅读。<br>阅读需要停顿。</p></section><section><p class=\"fl-caption\">tight</p><p class=\"fl-body fl-leading-tight\">空间组织阅读。<br>阅读需要停顿。</p></section><section><p class=\"fl-caption\">display</p><p class=\"fl-body fl-leading-display\">空间组织阅读。<br>阅读需要停顿。</p></section><section><p class=\"fl-caption\">hero</p><p class=\"fl-body fl-leading-hero\">空间组织阅读。<br>阅读需要停顿。</p></section></div><div class=\"fl-mt-4\"><p class=\"fl-font-label fl-size-h3 fl-tracking-tighter\">FOLIO / tighter</p><p class=\"fl-font-label fl-size-h3 fl-tracking-tight\">FOLIO / tight</p><p class=\"fl-font-label fl-size-h3 fl-tracking-normal\">FOLIO / normal</p><p class=\"fl-font-label fl-size-h3 fl-tracking-wide\">FOLIO / wide</p></div>"
+    },
+    {
+      "id": "a-alignment",
+      "title": "对齐、标点与数字",
+      "category": "排印",
+      "classes": [
+        "fl-text-start",
+        "fl-text-end",
+        "fl-text-left",
+        "fl-text-center",
+        "fl-text-right",
+        "fl-tabular",
+        "fl-proportional",
+        "fl-balance",
+        "fl-caps",
+        "fl-hang",
+        "fl-optical"
+      ],
+      "description": "默认左齐右松；居中、右齐用于有明确轴线的内容，数字表列独立对齐。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-l-stack fl-gap-3\"><p class=\"fl-h3 fl-text-start\">左侧是一条共同的轴线。</p><p class=\"fl-h3 fl-text-center\">这是信息的中轴</p><p class=\"fl-h3 fl-text-end\">终点清晰可见</p><p class=\"fl-body fl-hang\">“开头标点可以悬挂，文字仍保持完整。</p><p class=\"fl-font-label fl-caps\">Folio / field notes</p><p class=\"fl-font-number fl-tabular fl-text-right\">1,280.50<br>9,042.00</p><p class=\"fl-h1 fl-balance fl-optical\">有序的留白</p></div>"
+    },
+    {
+      "id": "a-prose",
+      "title": "连续文流与行长",
+      "category": "排印",
+      "classes": [
+        "fl-measure",
+        "fl-prose",
+        "fl-prose-columns-2",
+        "fl-prose-indent"
+      ],
+      "description": "连续双栏依DOM顺序流动，缩进与段距二选一；版面不隐藏溢出。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-prose fl-prose-columns-2 fl-font-reading fl-leading-reading\"><p>版面不是容器的堆叠。一个段落从哪里开始、在哪里结束，与相邻照片隔开多少距离，都会影响阅读顺序。</p><p>先保留完整内容，再决定分组。行长、行距和段距共同控制阅读速度；长文应增加页数，而不是压缩字形。</p><p>同一套规则可以接纳文字、摄影与数据。变化来自关系，而不是换一套模板。</p><p>留白不是剩余空间。它让主题获得分量，也为翻页设置停顿。</p></div><div class=\"fl-prose-indent fl-measure fl-mt-5\"><p>短段落可以保持齐头。</p><p>连续叙述也可以选择缩进方式，并贯穿同一篇文章。</p></div>"
+    },
+    {
+      "id": "a-grid",
+      "title": "共同的横向网格",
+      "category": "网格",
+      "classes": [
+        "fl-grid",
+        "fl-cols-1",
+        "fl-cols-2",
+        "fl-cols-3",
+        "fl-cols-4",
+        "fl-cols-6",
+        "fl-cols-12"
+      ],
+      "description": "轨道是对齐坐标，不要求把正文塞成十二条窄栏。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-l-stack fl-gap-3\"><div><p class=\"fl-caption\">1 轨，共用栏距</p><div class=\"fl-grid fl-cols-1 fl-gap-y-0\"><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div></div></div><div><p class=\"fl-caption\">2 轨，共用栏距</p><div class=\"fl-grid fl-cols-2 fl-gap-y-0\"><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div></div></div><div><p class=\"fl-caption\">3 轨，共用栏距</p><div class=\"fl-grid fl-cols-3 fl-gap-y-0\"><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div></div></div><div><p class=\"fl-caption\">4 轨，共用栏距</p><div class=\"fl-grid fl-cols-4 fl-gap-y-0\"><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div></div></div><div><p class=\"fl-caption\">6 轨，共用栏距</p><div class=\"fl-grid fl-cols-6 fl-gap-y-0\"><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div></div></div><div><p class=\"fl-caption\">12 轨，共用栏距</p><div class=\"fl-grid fl-cols-12 fl-gap-y-0\"><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div><div class=\"fl-fill-accent\" style=\"height:28px\" aria-hidden=\"true\"></div></div></div></div>"
+    },
+    {
+      "id": "a-span",
+      "title": "横向跨度与起点",
+      "category": "网格",
+      "classes": [
+        "fl-span-1",
+        "fl-span-2",
+        "fl-span-3",
+        "fl-span-4",
+        "fl-span-5",
+        "fl-span-6",
+        "fl-span-7",
+        "fl-span-8",
+        "fl-span-9",
+        "fl-span-10",
+        "fl-span-11",
+        "fl-span-12",
+        "fl-span-full",
+        "fl-start-1",
+        "fl-start-2",
+        "fl-start-3",
+        "fl-start-4",
+        "fl-start-5",
+        "fl-start-6",
+        "fl-start-7",
+        "fl-start-8",
+        "fl-start-9",
+        "fl-start-10",
+        "fl-start-11",
+        "fl-start-12"
+      ],
+      "description": "跨度负责大小，起栏负责位置。二者组合后必须仍落在显式网格内。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-l-stack fl-gap-3\"><div class=\"fl-grid fl-cols-12 fl-gap-y-1\"><div class=\"fl-start-1 fl-span-1 fl-fill-accent\" style=\"height:14px\" aria-label=\"跨1轨\"></div><div class=\"fl-start-1 fl-span-2 fl-fill-accent\" style=\"height:14px\" aria-label=\"跨2轨\"></div><div class=\"fl-start-1 fl-span-3 fl-fill-accent\" style=\"height:14px\" aria-label=\"跨3轨\"></div><div class=\"fl-start-1 fl-span-4 fl-fill-accent\" style=\"height:14px\" aria-label=\"跨4轨\"></div><div class=\"fl-start-1 fl-span-5 fl-fill-accent\" style=\"height:14px\" aria-label=\"跨5轨\"></div><div class=\"fl-start-1 fl-span-6 fl-fill-accent\" style=\"height:14px\" aria-label=\"跨6轨\"></div><div class=\"fl-start-1 fl-span-7 fl-fill-accent\" style=\"height:14px\" aria-label=\"跨7轨\"></div><div class=\"fl-start-1 fl-span-8 fl-fill-accent\" style=\"height:14px\" aria-label=\"跨8轨\"></div><div class=\"fl-start-1 fl-span-9 fl-fill-accent\" style=\"height:14px\" aria-label=\"跨9轨\"></div><div class=\"fl-start-1 fl-span-10 fl-fill-accent\" style=\"height:14px\" aria-label=\"跨10轨\"></div><div class=\"fl-start-1 fl-span-11 fl-fill-accent\" style=\"height:14px\" aria-label=\"跨11轨\"></div><div class=\"fl-start-1 fl-span-12 fl-fill-accent\" style=\"height:14px\" aria-label=\"跨12轨\"></div></div><div class=\"fl-grid fl-cols-12 fl-gap-y-1\"><div class=\"fl-start-1 fl-span-1 fl-fill-ink\" style=\"height:14px\" aria-label=\"从第1轨开始\"></div><div class=\"fl-start-2 fl-span-1 fl-fill-ink\" style=\"height:14px\" aria-label=\"从第2轨开始\"></div><div class=\"fl-start-3 fl-span-1 fl-fill-ink\" style=\"height:14px\" aria-label=\"从第3轨开始\"></div><div class=\"fl-start-4 fl-span-1 fl-fill-ink\" style=\"height:14px\" aria-label=\"从第4轨开始\"></div><div class=\"fl-start-5 fl-span-1 fl-fill-ink\" style=\"height:14px\" aria-label=\"从第5轨开始\"></div><div class=\"fl-start-6 fl-span-1 fl-fill-ink\" style=\"height:14px\" aria-label=\"从第6轨开始\"></div><div class=\"fl-start-7 fl-span-1 fl-fill-ink\" style=\"height:14px\" aria-label=\"从第7轨开始\"></div><div class=\"fl-start-8 fl-span-1 fl-fill-ink\" style=\"height:14px\" aria-label=\"从第8轨开始\"></div><div class=\"fl-start-9 fl-span-1 fl-fill-ink\" style=\"height:14px\" aria-label=\"从第9轨开始\"></div><div class=\"fl-start-10 fl-span-1 fl-fill-ink\" style=\"height:14px\" aria-label=\"从第10轨开始\"></div><div class=\"fl-start-11 fl-span-1 fl-fill-ink\" style=\"height:14px\" aria-label=\"从第11轨开始\"></div><div class=\"fl-start-12 fl-span-1 fl-fill-ink\" style=\"height:14px\" aria-label=\"从第12轨开始\"></div></div></div>"
+    },
+    {
+      "id": "a-rows",
+      "title": "二维模块网格",
+      "category": "网格",
+      "classes": [
+        "fl-rows-2",
+        "fl-rows-3",
+        "fl-rows-4",
+        "fl-rows-6",
+        "fl-row-start-1",
+        "fl-row-start-2",
+        "fl-row-start-3",
+        "fl-row-start-4",
+        "fl-row-start-5",
+        "fl-row-start-6",
+        "fl-row-span-1",
+        "fl-row-span-2",
+        "fl-row-span-3",
+        "fl-row-span-4",
+        "fl-row-span-5",
+        "fl-row-span-6",
+        "fl-row-span-full"
+      ],
+      "description": "有界模块网格先定义高度，再跨行；文字溢出仍可见并接受检查。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-grid fl-cols-2\"><div class=\"fl-grid fl-cols-2 fl-rows-2 fl-gap-1\" style=\"height:180px\"><div class=\"fl-row-span-full fl-fill-accent\"></div><div class=\"fl-fill-soft\"></div><div class=\"fl-fill-soft\"></div></div><div class=\"fl-grid fl-cols-2 fl-rows-3 fl-gap-1\" style=\"height:180px\"><div class=\"fl-row-span-full fl-fill-accent\"></div><div class=\"fl-fill-soft\"></div><div class=\"fl-fill-soft\"></div><div class=\"fl-fill-soft\"></div></div><div class=\"fl-grid fl-cols-2 fl-rows-4 fl-gap-1\" style=\"height:180px\"><div class=\"fl-row-span-full fl-fill-accent\"></div><div class=\"fl-fill-soft\"></div><div class=\"fl-fill-soft\"></div><div class=\"fl-fill-soft\"></div><div class=\"fl-fill-soft\"></div></div><div class=\"fl-grid fl-cols-2 fl-rows-6 fl-gap-1\" style=\"height:180px\"><div class=\"fl-row-span-full fl-fill-accent\"></div><div class=\"fl-fill-soft\"></div><div class=\"fl-fill-soft\"></div><div class=\"fl-fill-soft\"></div><div class=\"fl-fill-soft\"></div><div class=\"fl-fill-soft\"></div><div class=\"fl-fill-soft\"></div></div></div><p class=\"fl-caption fl-mt-2\">2 / 3 / 4 / 6 行，照片或内容可以跨行。</p>"
+    },
+    {
+      "id": "a-flex",
+      "title": "流动分组",
+      "category": "网格",
+      "classes": [
+        "fl-flex",
+        "fl-flex-col",
+        "fl-wrap",
+        "fl-grow",
+        "fl-shrink-0"
+      ],
+      "description": "弹性布局连接同层级的短信息，不把所有内容都包装成卡片。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-flex fl-flex-col fl-gap-4\"><div class=\"fl-flex fl-wrap fl-gap-2\"><p class=\"fl-key fl-surface-soft fl-p-2\">观察</p><p class=\"fl-key fl-surface-soft fl-p-2\">记录</p><p class=\"fl-key fl-surface-soft fl-p-2\">比较</p><p class=\"fl-key fl-surface-soft fl-p-2\">提问</p><p class=\"fl-key fl-surface-soft fl-p-2\">复盘</p></div><div class=\"fl-flex fl-gap-3\"><p class=\"fl-number fl-shrink-0\">01</p><p class=\"fl-body fl-grow\">短标签可随空间换行，长正文在其阅读路径中展开。</p></div></div>"
+    },
+    {
+      "id": "a-align-items",
+      "title": "内容的对齐轴",
+      "category": "网格",
+      "classes": [
+        "fl-items-start",
+        "fl-items-center",
+        "fl-items-end",
+        "fl-items-baseline",
+        "fl-items-stretch",
+        "fl-self-start",
+        "fl-self-center",
+        "fl-self-end",
+        "fl-self-stretch",
+        "fl-justify-start",
+        "fl-justify-center",
+        "fl-justify-end",
+        "fl-justify-between",
+        "fl-justify-self-start",
+        "fl-justify-self-center",
+        "fl-justify-self-end",
+        "fl-justify-self-stretch",
+        "fl-content-start",
+        "fl-content-center",
+        "fl-content-end",
+        "fl-content-between"
+      ],
+      "description": "先选Grid/Flex，再选择子项、单项或多轨内容的对齐；align与justify不是同一个轴。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-l-stack fl-gap-3\"><div class=\"fl-flex fl-items-start fl-justify-between fl-rule fl-pt-2\" style=\"height:84px\"><p class=\"fl-key\">start</p><p class=\"fl-h1\">Aa</p><p class=\"fl-font-number fl-size-h3\">012</p></div><div class=\"fl-flex fl-items-center fl-justify-between fl-rule fl-pt-2\" style=\"height:84px\"><p class=\"fl-key\">center</p><p class=\"fl-h1\">Aa</p><p class=\"fl-font-number fl-size-h3\">012</p></div><div class=\"fl-flex fl-items-end fl-justify-between fl-rule fl-pt-2\" style=\"height:84px\"><p class=\"fl-key\">end</p><p class=\"fl-h1\">Aa</p><p class=\"fl-font-number fl-size-h3\">012</p></div><div class=\"fl-flex fl-items-baseline fl-justify-between fl-rule fl-pt-2\" style=\"height:84px\"><p class=\"fl-key\">baseline</p><p class=\"fl-h1\">Aa</p><p class=\"fl-font-number fl-size-h3\">012</p></div><div class=\"fl-flex fl-items-stretch fl-justify-between fl-rule fl-pt-2\" style=\"height:84px\"><p class=\"fl-key\">stretch</p><p class=\"fl-h1\">Aa</p><p class=\"fl-font-number fl-size-h3\">012</p></div></div>"
+    },
+    {
+      "id": "a-grid-guide",
+      "title": "可见的结构辅助线",
+      "category": "网格",
+      "classes": [
+        "fl-show-columns",
+        "fl-show-columns-12",
+        "fl-show-baseline"
+      ],
+      "description": "六/十二轨与基线可以叠加；嵌套辅助层不会把外层网格重复继承。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-show-columns fl-show-baseline\" style=\"height:224px\"><p class=\"fl-h1 fl-span-4\">先建立关系。</p></div><div class=\"fl-show-columns-12 fl-mt-3\" style=\"height:112px\"></div>"
+    },
+    {
+      "id": "a-gaps",
+      "title": "元素间距",
+      "category": "节奏",
+      "classes": [
+        "fl-gap-0",
+        "fl-gap-1",
+        "fl-gap-2",
+        "fl-gap-3",
+        "fl-gap-4",
+        "fl-gap-5",
+        "fl-gap-6",
+        "fl-gap-7",
+        "fl-gap-8",
+        "fl-gap-x-0",
+        "fl-gap-x-1",
+        "fl-gap-x-2",
+        "fl-gap-x-3",
+        "fl-gap-x-4",
+        "fl-gap-x-5",
+        "fl-gap-x-6",
+        "fl-gap-x-7",
+        "fl-gap-x-8",
+        "fl-gap-y-0",
+        "fl-gap-y-1",
+        "fl-gap-y-2",
+        "fl-gap-y-3",
+        "fl-gap-y-4",
+        "fl-gap-y-5",
+        "fl-gap-y-6",
+        "fl-gap-y-7",
+        "fl-gap-y-8"
+      ],
+      "description": "gap控制整体间距，x/y分别控制列与行；值来自共同基线。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<table class=\"fl-table\"><thead><tr><th>刻度</th><th>物理尺寸</th><th>相对关系</th></tr></thead><tbody><tr><td class=\"fl-num\">0</td><td class=\"fl-num\">0px</td><td><div class=\"fl-fill-accent\" style=\"width:1px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">1</td><td class=\"fl-num\">7px</td><td><div class=\"fl-fill-accent\" style=\"width:7px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">2</td><td class=\"fl-num\">14px</td><td><div class=\"fl-fill-accent\" style=\"width:14px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">3</td><td class=\"fl-num\">28px</td><td><div class=\"fl-fill-accent\" style=\"width:28px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">4</td><td class=\"fl-num\">42px</td><td><div class=\"fl-fill-accent\" style=\"width:42px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">5</td><td class=\"fl-num\">56px</td><td><div class=\"fl-fill-accent\" style=\"width:56px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">6</td><td class=\"fl-num\">84px</td><td><div class=\"fl-fill-accent\" style=\"width:84px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">7</td><td class=\"fl-num\">112px</td><td><div class=\"fl-fill-accent\" style=\"width:112px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">8</td><td class=\"fl-num\">168px</td><td><div class=\"fl-fill-accent\" style=\"width:168px;height:7px\" aria-hidden=\"true\"></div></td></tr></tbody></table><div class=\"fl-grid fl-cols-2 fl-gap-3 fl-mt-3\"><p class=\"fl-h3\">共同刻度</p><p class=\"fl-body\">在同一套节奏中安排内容。</p></div>"
+    },
+    {
+      "id": "a-padding",
+      "title": "容器内留白",
+      "category": "节奏",
+      "classes": [
+        "fl-p-0",
+        "fl-p-1",
+        "fl-p-2",
+        "fl-p-3",
+        "fl-p-4",
+        "fl-p-5",
+        "fl-p-6",
+        "fl-p-7",
+        "fl-p-8",
+        "fl-px-0",
+        "fl-px-1",
+        "fl-px-2",
+        "fl-px-3",
+        "fl-px-4",
+        "fl-px-5",
+        "fl-px-6",
+        "fl-px-7",
+        "fl-px-8",
+        "fl-py-0",
+        "fl-py-1",
+        "fl-py-2",
+        "fl-py-3",
+        "fl-py-4",
+        "fl-py-5",
+        "fl-py-6",
+        "fl-py-7",
+        "fl-py-8",
+        "fl-pt-0",
+        "fl-pt-1",
+        "fl-pt-2",
+        "fl-pt-3",
+        "fl-pt-4",
+        "fl-pt-5",
+        "fl-pt-6",
+        "fl-pt-7",
+        "fl-pt-8",
+        "fl-pb-0",
+        "fl-pb-1",
+        "fl-pb-2",
+        "fl-pb-3",
+        "fl-pb-4",
+        "fl-pb-5",
+        "fl-pb-6",
+        "fl-pb-7",
+        "fl-pb-8"
+      ],
+      "description": "内边距用来组织内容与边界的关系，不为每段自动加底色。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<table class=\"fl-table\"><thead><tr><th>刻度</th><th>物理尺寸</th><th>相对关系</th></tr></thead><tbody><tr><td class=\"fl-num\">0</td><td class=\"fl-num\">0px</td><td><div class=\"fl-fill-accent\" style=\"width:1px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">1</td><td class=\"fl-num\">7px</td><td><div class=\"fl-fill-accent\" style=\"width:7px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">2</td><td class=\"fl-num\">14px</td><td><div class=\"fl-fill-accent\" style=\"width:14px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">3</td><td class=\"fl-num\">28px</td><td><div class=\"fl-fill-accent\" style=\"width:28px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">4</td><td class=\"fl-num\">42px</td><td><div class=\"fl-fill-accent\" style=\"width:42px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">5</td><td class=\"fl-num\">56px</td><td><div class=\"fl-fill-accent\" style=\"width:56px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">6</td><td class=\"fl-num\">84px</td><td><div class=\"fl-fill-accent\" style=\"width:84px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">7</td><td class=\"fl-num\">112px</td><td><div class=\"fl-fill-accent\" style=\"width:112px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">8</td><td class=\"fl-num\">168px</td><td><div class=\"fl-fill-accent\" style=\"width:168px;height:7px\" aria-hidden=\"true\"></div></td></tr></tbody></table><div class=\"fl-p-3 fl-surface-soft fl-mt-3\"><p class=\"fl-body\">一条基线的内边距</p></div>"
+    },
+    {
+      "id": "a-margin",
+      "title": "段落与章节停顿",
+      "category": "节奏",
+      "classes": [
+        "fl-mt-0",
+        "fl-mt-1",
+        "fl-mt-2",
+        "fl-mt-3",
+        "fl-mt-4",
+        "fl-mt-5",
+        "fl-mt-6",
+        "fl-mt-7",
+        "fl-mt-8",
+        "fl-mb-0",
+        "fl-mb-1",
+        "fl-mb-2",
+        "fl-mb-3",
+        "fl-mb-4",
+        "fl-mb-5",
+        "fl-mb-6",
+        "fl-mb-7",
+        "fl-mb-8",
+        "fl-mt-auto"
+      ],
+      "description": "上下外边距划分段落与章节，auto用于有剩余高度的纵向布局。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<table class=\"fl-table\"><thead><tr><th>刻度</th><th>物理尺寸</th><th>相对关系</th></tr></thead><tbody><tr><td class=\"fl-num\">0</td><td class=\"fl-num\">0px</td><td><div class=\"fl-fill-accent\" style=\"width:1px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">1</td><td class=\"fl-num\">7px</td><td><div class=\"fl-fill-accent\" style=\"width:7px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">2</td><td class=\"fl-num\">14px</td><td><div class=\"fl-fill-accent\" style=\"width:14px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">3</td><td class=\"fl-num\">28px</td><td><div class=\"fl-fill-accent\" style=\"width:28px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">4</td><td class=\"fl-num\">42px</td><td><div class=\"fl-fill-accent\" style=\"width:42px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">5</td><td class=\"fl-num\">56px</td><td><div class=\"fl-fill-accent\" style=\"width:56px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">6</td><td class=\"fl-num\">84px</td><td><div class=\"fl-fill-accent\" style=\"width:84px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">7</td><td class=\"fl-num\">112px</td><td><div class=\"fl-fill-accent\" style=\"width:112px;height:7px\" aria-hidden=\"true\"></div></td></tr><tr><td class=\"fl-num\">8</td><td class=\"fl-num\">168px</td><td><div class=\"fl-fill-accent\" style=\"width:168px;height:7px\" aria-hidden=\"true\"></div></td></tr></tbody></table><div class=\"fl-flex fl-flex-col fl-mt-3\" style=\"height:112px\"><p class=\"fl-key\">组内紧密</p><p class=\"fl-key fl-mt-auto\">下一组在共同边界结束</p></div>"
+    },
+    {
+      "id": "a-sizing",
+      "title": "内容尺寸与剩余空间",
+      "category": "版面",
+      "classes": [
+        "fl-w-full",
+        "fl-h-full",
+        "fl-min-w-0"
+      ],
+      "description": "width/height填充已知容器，min-width:0允许Grid/Flex合理收缩；不等于允许裁文字。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-grid fl-cols-2\" style=\"height:280px\"><figure class=\"fl-frame fl-frame-fill fl-w-full fl-h-full\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\"></figure><div class=\"fl-min-w-0 fl-h-full fl-flex fl-flex-col\"><p class=\"fl-h2\">尺寸有边界，<br>内容保持完整。</p><p class=\"fl-body fl-mt-auto\">先定义容器，再填满。长句不能靠隐藏溢出来变短。</p></div></div>"
+    },
+    {
+      "id": "a-image",
+      "title": "图像比例与原始尺寸",
+      "category": "摄影",
+      "classes": [
+        "fl-image",
+        "fl-image-fill",
+        "fl-frame",
+        "fl-frame-fill",
+        "fl-ratio-square",
+        "fl-ratio-photo",
+        "fl-ratio-wide",
+        "fl-ratio-portrait",
+        "fl-ratio-tall",
+        "fl-ratio-landscape"
+      ],
+      "description": "图框选择比例；原图不被修改。充满有界图框与保持原始比例是两种任务。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-grid fl-cols-3 fl-items-start\"><figure><div class=\"fl-frame fl-ratio-square\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\"></div><p class=\"fl-caption fl-mt-1\">square</p></figure><figure><div class=\"fl-frame fl-ratio-photo\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\"></div><p class=\"fl-caption fl-mt-1\">photo</p></figure><figure><div class=\"fl-frame fl-ratio-wide\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\"></div><p class=\"fl-caption fl-mt-1\">wide</p></figure><figure><div class=\"fl-frame fl-ratio-portrait\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\"></div><p class=\"fl-caption fl-mt-1\">portrait</p></figure><figure><div class=\"fl-frame fl-ratio-tall\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\"></div><p class=\"fl-caption fl-mt-1\">tall</p></figure><figure><div class=\"fl-frame fl-ratio-landscape\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\"></div><p class=\"fl-caption fl-mt-1\">landscape</p></figure></div>"
+    },
+    {
+      "id": "a-crop",
+      "title": "裁切焦点与容纳",
+      "category": "摄影",
+      "classes": [
+        "fl-focus-top",
+        "fl-focus-bottom",
+        "fl-focus-left",
+        "fl-focus-right",
+        "fl-focus-center",
+        "fl-fit-cover",
+        "fl-fit-contain",
+        "fl-mono"
+      ],
+      "description": "焦点先看主体位置；contain保全画面，cover填满图框，灰度是显式选择。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-grid fl-cols-3 fl-items-start\"><figure><div class=\"fl-frame fl-ratio-square fl-focus-left\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\"></div><p class=\"fl-caption fl-mt-1\">left</p></figure><figure><div class=\"fl-frame fl-ratio-square fl-focus-center\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\"></div><p class=\"fl-caption fl-mt-1\">center</p></figure><figure><div class=\"fl-frame fl-ratio-square fl-focus-right\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\"></div><p class=\"fl-caption fl-mt-1\">right</p></figure></div><div class=\"fl-grid fl-cols-2 fl-mt-4\"><figure class=\"fl-frame fl-ratio-wide\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"fl-fit-contain\" alt=\"项目已登记授权的自然景观，作排版示意\"></figure><figure class=\"fl-frame fl-ratio-wide\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"fl-fit-cover fl-mono\" alt=\"项目已登记授权的自然景观，作排版示意\"></figure></div>"
+    },
+    {
+      "id": "a-scrim",
+      "title": "图上文字的对比层",
+      "category": "摄影",
+      "classes": [
+        "fl-scrim-top",
+        "fl-scrim-bottom",
+        "fl-scrim-start",
+        "fl-scrim-end"
+      ],
+      "description": "遮罩可以帮助局部对比，实际文字必须放在合适区域并检查最终照片。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "遮罩不能自动保证任意照片上的可读性。没有必要时保留客观摄影，文字移出图框。",
+      "html": "<div class=\"fl-grid fl-cols-2\"><figure class=\"fl-frame fl-ratio-square fl-relative\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\" data-edit-id=\"scrim-1\"><div class=\"fl-bleed fl-scrim-top\" aria-hidden=\"true\"></div><figcaption class=\"fl-absolute fl-tone-inverse fl-z-1 fl-key\" style=\"left:14px;top:14px\" data-overlap=\"scrim-1\">top</figcaption></figure><figure class=\"fl-frame fl-ratio-square fl-relative\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\" data-edit-id=\"scrim-2\"><div class=\"fl-bleed fl-scrim-bottom\" aria-hidden=\"true\"></div><figcaption class=\"fl-absolute fl-tone-inverse fl-z-1 fl-key\" style=\"left:14px;bottom:14px\" data-overlap=\"scrim-2\">bottom</figcaption></figure><figure class=\"fl-frame fl-ratio-square fl-relative\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\" data-edit-id=\"scrim-3\"><div class=\"fl-bleed fl-scrim-start\" aria-hidden=\"true\"></div><figcaption class=\"fl-absolute fl-tone-inverse fl-z-1 fl-key\" style=\"left:14px;top:14px\" data-overlap=\"scrim-3\">start</figcaption></figure><figure class=\"fl-frame fl-ratio-square fl-relative\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\" data-edit-id=\"scrim-4\"><div class=\"fl-bleed fl-scrim-end\" aria-hidden=\"true\"></div><figcaption class=\"fl-absolute fl-tone-inverse fl-z-1 fl-key\" style=\"right:14px;top:14px\" data-overlap=\"scrim-4\">end</figcaption></figure></div>"
+    },
+    {
+      "id": "a-rules",
+      "title": "线与色块的分量",
+      "category": "颜色",
+      "classes": [
+        "fl-rule",
+        "fl-rule-strong",
+        "fl-rule-heavy",
+        "fl-rule-accent",
+        "fl-rule-bottom",
+        "fl-rule-none",
+        "fl-fill-accent",
+        "fl-fill-ink",
+        "fl-fill-soft"
+      ],
+      "description": "线用于轴线、分组和计量；色块用于层级与节奏。空色块不是正文容器。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-l-stack fl-gap-3\"><div class=\"fl-rule fl-pt-2\"><p class=\"fl-key\">fl-rule</p></div><div class=\"fl-rule-strong fl-pt-2\"><p class=\"fl-key\">fl-rule-strong</p></div><div class=\"fl-rule-heavy fl-pt-2\"><p class=\"fl-key\">fl-rule-heavy</p></div><div class=\"fl-rule-accent fl-pt-2\"><p class=\"fl-key\">fl-rule-accent</p></div><div class=\"fl-grid fl-cols-3\"><div class=\"fl-fill-accent\" style=\"height:84px\"></div><div class=\"fl-fill-ink\" style=\"height:84px\"></div><div class=\"fl-fill-soft\" style=\"height:84px\"></div></div></div>"
+    },
+    {
+      "id": "a-marks",
+      "title": "查阅与书写",
+      "category": "版面",
+      "classes": [
+        "fl-fill-lines",
+        "fl-check",
+        "fl-running",
+        "fl-folio"
+      ],
+      "description": "书写区与勾选空间服务真实任务；页眉页脚属于阅读定位，不挤压正文。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-l-stack fl-gap-3\"><p class=\"fl-h2\">观察记录</p><p class=\"fl-body\"><span class=\"fl-check\" aria-hidden=\"true\"></span> 已记录可见的形态与位置</p><p class=\"fl-body\"><span class=\"fl-check\" aria-hidden=\"true\"></span> 已为判断注明来源</p><div class=\"fl-fill-lines\" style=\"height:168px\"></div><p class=\"fl-caption\">页眉与页码由fl-running / fl-folio放在物理安全区，页码使用页面计数器。</p></div>"
+    },
+    {
+      "id": "a-page",
+      "title": "页面几何与图层",
+      "category": "版面",
+      "classes": [
+        "fl-scope",
+        "fl-area",
+        "fl-relative",
+        "fl-absolute",
+        "fl-bleed",
+        "fl-z-0",
+        "fl-z-1",
+        "fl-z-2"
+      ],
+      "description": "fl-area负责物理版心；fl-scope限定片段。z类仅在定位/网格堆叠上下文中生效。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "这里是局部图层示意。真实页面几何由运行时生成，不能用示例容器代替@page与安全区。",
+      "html": "<div class=\"fl-relative fl-surface-soft\" style=\"height:336px\"><figure class=\"fl-absolute fl-z-0\" style=\"inset:0 42% 0 0\"><img src=\"../samples/native/nature-camp/assets/images/coast-lighthouse.jpg\" class=\"fl-image-fill\" alt=\"项目已登记授权的自然景观，作排版示意\" data-edit-id=\"page-photo\"></figure><div class=\"fl-absolute fl-z-1 fl-surface-paper fl-p-3\" style=\"left:40%;right:28px;top:56px\" data-overlap=\"page-photo\"><p class=\"fl-h2\">图层是关系</p><p class=\"fl-body fl-mt-2\">照片与文字分别组织；重叠须是作者明确的选择。</p></div></div>"
+    },
+    {
+      "id": "a-direction",
+      "title": "竖排与侧向阅读",
+      "category": "排印",
+      "classes": [
+        "fl-vertical",
+        "fl-sideways"
+      ],
+      "description": "明确改变书写方向，仍保留真实文字与DOM顺序。检查字体方向及页面可读性。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-flex fl-gap-5\" style=\"height:336px\"><p class=\"fl-h1 fl-vertical\">秩序与自由</p><p class=\"fl-font-label fl-size-h3 fl-sideways\">FOLIO / FIELD NOTES</p><div class=\"fl-self-end\"><p class=\"fl-body\">方向变化服务书脊、边栏与特定阅读节奏。</p></div></div>"
+    }
+  ],
+  "layouts": [
+    {
+      "id": "bleed-top",
+      "title": "顶部通栏摄影",
+      "category": "photography",
+      "classes": [
+        "fl-l-bleed-top",
+        "fl-l-photo",
+        "fl-l-copy",
+        "fl-area"
+      ],
+      "description": "摄影与版心共用一张纸。出血抵达纸边，阅读信息仍守安全边界。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "真实输出由project.json提供纸张尺寸；摄影裁切按主体检查，图上文字单独检查对比度。",
+      "html": "<section class=\"page fl-relative\" style=\"width:568px;height:760px;--bleed:0px;--fl-margin-top:42px;--fl-margin-bottom:42px;--fl-margin-inner:42px;--fl-margin-outer:42px\"><div class=\"fl-l-bleed-top\"><figure class=\"fl-l-photo fl-frame\" data-bleed=\"all\"><img src=\"../samples/native/nature-camp/assets/images/forest-cc0.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\" data-bleed=\"all\"></figure><div class=\"fl-l-copy fl-area\"><p class=\"fl-h1\">沿着光线，<br>理解现场。</p><p class=\"fl-key fl-mt-3\">照片提供事实，文字建立阅读方向。</p></div></div></section>"
+    },
+    {
+      "id": "bleed-full",
+      "title": "满版摄影",
+      "category": "photography",
+      "classes": [
+        "fl-l-bleed-full",
+        "fl-l-photo",
+        "fl-l-copy",
+        "fl-area"
+      ],
+      "description": "摄影与版心共用一张纸。出血抵达纸边，阅读信息仍守安全边界。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "真实输出由project.json提供纸张尺寸；摄影裁切按主体检查，图上文字单独检查对比度。",
+      "html": "<section class=\"page fl-relative\" style=\"width:568px;height:760px;--bleed:0px;--fl-margin-top:42px;--fl-margin-bottom:42px;--fl-margin-inner:42px;--fl-margin-outer:42px\"><div class=\"fl-l-bleed-full\"><figure class=\"fl-l-photo fl-frame\" data-bleed=\"all\"><img src=\"../samples/native/nature-camp/assets/images/forest-cc0.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\" data-bleed=\"all\"></figure><div class=\"fl-l-copy fl-area\"><div class=\"fl-surface-paper fl-p-3\" style=\"max-width:300px\"><p class=\"fl-h1\">沿着光线，<br>理解现场。</p><p class=\"fl-key fl-mt-3\">照片提供事实，文字建立阅读方向。</p></div></div></div></section>"
+    },
+    {
+      "id": "bleed-outer",
+      "title": "外侧出血摄影",
+      "category": "photography",
+      "classes": [
+        "fl-l-bleed-outer",
+        "fl-l-photo",
+        "fl-l-copy",
+        "fl-area"
+      ],
+      "description": "摄影与版心共用一张纸。出血抵达纸边，阅读信息仍守安全边界。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "真实输出由project.json提供纸张尺寸；摄影裁切按主体检查，图上文字单独检查对比度。",
+      "html": "<section class=\"page fl-relative\" style=\"width:568px;height:760px;--bleed:0px;--fl-margin-top:42px;--fl-margin-bottom:42px;--fl-margin-inner:42px;--fl-margin-outer:42px\"><div class=\"fl-l-bleed-outer\"><figure class=\"fl-l-photo fl-frame\" data-bleed=\"all\"><img src=\"../samples/native/nature-camp/assets/images/forest-cc0.jpg\" class=\"\" alt=\"项目已登记授权的自然景观，作排版示意\" data-bleed=\"all\"></figure><div class=\"fl-l-copy fl-area\"><p class=\"fl-h1\">沿着光线，<br>理解现场。</p><p class=\"fl-key fl-mt-3\">照片提供事实，文字建立阅读方向。</p></div></div></section>"
+    },
+    {
+      "id": "timeline-grid",
+      "title": "同一轴线的时间",
+      "category": "information",
+      "classes": [
+        "fl-l-timeline",
+        "fl-l-item",
+        "fl-l-full"
+      ],
+      "description": "明确列数形成共享轨道，通栏说明仍属于同一阅读单元。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-l-timeline fl-axis\" style=\"--fl-timeline-count:4\"><section class=\"fl-l-item\"><p class=\"fl-font-number fl-size-h2\">09:00</p><p class=\"fl-h3\">集合</p></section><section class=\"fl-l-item\"><p class=\"fl-font-number fl-size-h2\">10:00</p><p class=\"fl-h3\">观察</p></section><section class=\"fl-l-item\"><p class=\"fl-font-number fl-size-h2\">13:00</p><p class=\"fl-h3\">讨论</p></section><section class=\"fl-l-item\"><p class=\"fl-font-number fl-size-h2\">15:00</p><p class=\"fl-h3\">复盘</p></section><p class=\"fl-l-full fl-key fl-mt-4\">示例行程 / 节点按时间排序；需按真实安排核对时长。</p></div>"
+    },
+    {
+      "id": "stair-grid",
+      "title": "递进与阶梯",
+      "category": "reading",
+      "classes": [
+        "fl-l-stair"
+      ],
+      "description": "每一步移动一条共同轨道，文字按DOM顺序自然向下阅读。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-l-stair\"><p class=\"fl-h1\">观察，</p><p class=\"fl-h1\">理解，</p><p class=\"fl-h1\">判断，</p><p class=\"fl-h1\">行动。</p></div>"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x-band",
+      "title": "硬边字带与反白",
+      "category": "字形",
+      "classes": [
+        "fl-band",
+        "fl-surface-dark",
+        "fl-surface-accent",
+        "fl-surface-soft"
+      ],
+      "description": "完整文字落在纯色面上，字带和空间建立强弱关系。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-flex fl-flex-col\"><p class=\"fl-band fl-surface-dark fl-display fl-size-hero fl-w-full fl-flex fl-items-end\" style=\"height:196px\">FOLIO</p><p class=\"fl-band fl-surface-accent fl-h1 fl-w-full fl-flex fl-items-center\" style=\"height:112px\">有序的自由</p><p class=\"fl-band fl-surface-soft fl-h2 fl-w-full fl-flex fl-items-center\" style=\"height:84px\">形体越鲜明</p><p class=\"fl-band fl-surface-dark fl-body fl-w-full fl-flex fl-items-center\" style=\"height:112px\">色带贴住文字本身，只负责分隔与识别，不负责装饰。</p><p class=\"fl-band fl-surface-accent fl-key fl-w-full fl-flex fl-items-center fl-justify-between\" style=\"height:84px\"><span>反白也适用于注释</span><span class=\"fl-font-number\">2.2</span></p></div>"
+    },
+    {
+      "id": "x-crop",
+      "title": "裁字与页边",
+      "category": "字形",
+      "classes": [
+        "fl-crop",
+        "fl-crop-top",
+        "fl-crop-bottom",
+        "fl-crop-left",
+        "fl-crop-right",
+        "fl-bleed-right"
+      ],
+      "description": "裁字只作为重复的图形语言。完整名称保留在可读区域。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "内容标题不能通过裁切、deco或隐藏绕过内容审计。这里的裁框是明确的图形区域。",
+      "html": "<div class=\"fl-relative fl-bleed-right fl-surface-accent\" style=\"height:588px;overflow:clip\" data-bleed=\"right\"><div class=\"fl-crop fl-crop-right fl-crop-bottom fl-size-colossal\" style=\"font-size:560px;bottom:-.1em;color:var(--fl-ink)\" data-role=\"deco\" aria-hidden=\"true\">Aa</div><div class=\"fl-surface-paper fl-p-3\" style=\"position:absolute;left:28px;top:28px;max-width:280px\"><p class=\"fl-key\">FOLIO / 形体研究</p><p class=\"fl-caption fl-mt-1\">被切断的字只做重复的图形；完整名称留在这里。</p></div></div>"
+    },
+    {
+      "id": "x-photo-type",
+      "title": "照片进入字形",
+      "category": "字形",
+      "classes": [
+        "fl-type-photo"
+      ],
+      "description": "文字可以成为图形，但不能让唯一内容丢失可读性。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "填图字仅用于重复装饰。检查PDF字形、图片与可读副本，不能承诺所有编辑器行为。",
+      "html": "<div class=\"fl-type-bold fl-type-photo fl-size-colossal fl-tracking-tighter\" style=\"background-image:url(../samples/native/nature-camp/assets/images/waterfall-moss.jpg)\" data-role=\"deco\" aria-hidden=\"true\">山海</div><p class=\"fl-h1 fl-mt-4\">山海 / 字与图像的交汇</p><p class=\"fl-body fl-mt-2 fl-measure\">照片只当字形的材质。可读的标题另写在下方，字形本身不承载唯一信息。</p>"
+    },
+    {
+      "id": "x-duotone",
+      "title": "双色摄影与原色",
+      "category": "摄影",
+      "classes": [
+        "fl-duotone",
+        "fl-frame-fill"
+      ],
+      "description": "同一张照片可以表达客观信息，也可以经过明确的色调处理进入视觉叙事。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "CSS乘色是浏览器外观模拟，不是专色分色或印刷叠印参数。",
+      "html": "<div class=\"fl-grid fl-cols-2 fl-gap-2\" style=\"height:588px;grid-template-rows:auto 1fr\"><p class=\"fl-key\">原色记录</p><p class=\"fl-key\">双色 / 灰度乘色</p><figure class=\"fl-frame fl-frame-fill\"><img src=\"../samples/native/nature-camp/assets/images/fire-lookout.jpg\" alt=\"已登记的公有领域照片，作排版示意\" data-edit-id=\"duotone-a\"></figure><figure class=\"fl-frame fl-frame-fill fl-duotone\"><img src=\"../samples/native/nature-camp/assets/images/fire-lookout.jpg\" alt=\"已登记的公有领域照片，作排版示意\" data-edit-id=\"duotone-b\"></figure></div>"
+    },
+    {
+      "id": "x-overprint",
+      "title": "交叠与方向",
+      "category": "图形",
+      "classes": [
+        "fl-overprint",
+        "fl-rotate-6",
+        "fl-rotate-n6",
+        "fl-surface-accent"
+      ],
+      "description": "少量方向变化建立张力；正文与关键信息保持稳定。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "混色不是实际印刷叠印设置。旋转内容可能触发几何unverified，须完成契约要求的审查。",
+      "html": "<div class=\"fl-relative\" style=\"height:588px;overflow:clip\"><figure class=\"fl-frame fl-frame-fill\" style=\"position:absolute;inset:0\"><img src=\"../samples/native/nature-camp/assets/images/milky-way-arch.jpg\" alt=\"已登记的公有领域照片，作排版示意\" data-edit-id=\"op-photo\"></figure><div class=\"fl-absolute fl-surface-accent fl-overprint fl-rotate-6\" style=\"left:56px;top:84px;width:56%;height:30%\" data-overlap=\"op-photo\" aria-hidden=\"true\"></div><div class=\"fl-absolute fl-rotate-6 fl-p-3\" style=\"left:56px;top:84px;width:56%\" data-overlap=\"op-photo\"><p class=\"fl-h1 fl-tone-inverse\">偏离轴线，<br>仍然有理由。</p></div><div class=\"fl-absolute fl-surface-paper fl-rotate-n6 fl-p-2\" style=\"left:60%;top:53%;width:36%\" data-overlap=\"op-photo\"><p class=\"fl-key\">不透明色面</p><p class=\"fl-caption fl-mt-1\">同样的角度，不同的材质。</p></div></div>"
+    },
+    {
+      "id": "x-programme",
+      "title": "规则生成的图形",
+      "category": "图形",
+      "classes": [
+        "fl-programme"
+      ],
+      "description": "设计生成关系，使图形随规则变化。它表达节奏，不假装是业务数据。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "类清单覆盖该功能组的公开选项；示例展示典型组合。按真实内容、版心与安全区检查，不自动缩字。",
+      "html": "<div class=\"fl-programme\" style=\"--fl-programme-cols:6;--fl-programme-gap:7px\" aria-hidden=\"true\" data-role=\"deco\"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p class=\"fl-caption fl-mt-3\">30 个单元 / 6 轨：颜色与形状按固定周期变化。它表达节奏，不是数据图。</p>"
+    },
+    {
+      "id": "x-sign",
+      "title": "导向与路线标识",
+      "category": "导向",
+      "classes": [
+        "fl-sign",
+        "fl-bullet"
+      ],
+      "description": "路线同时使用文字、编号与方向。颜色是帮助识别的线索。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "距离与方向为结构示例。实际导向须核对现场，颜色不能是唯一信息载体。",
+      "html": "<div class=\"fl-flex fl-flex-col fl-gap-2\"><div class=\"fl-sign fl-surface-dark\" style=\"height:168px\"><span class=\"fl-bullet fl-font-number fl-size-h2\">1</span><p class=\"fl-display\" style=\"margin-left:28px\">观察站</p><p class=\"fl-key\" style=\"margin-left:auto\">向前 200 m →</p></div><div class=\"fl-sign fl-surface-accent\" style=\"height:168px\"><span class=\"fl-bullet fl-font-number fl-size-h2\">2</span><p class=\"fl-display\" style=\"margin-left:28px\">集合点</p><p class=\"fl-key\" style=\"margin-left:auto\">左转 ←</p></div><div class=\"fl-sign fl-surface-soft\" style=\"height:168px\"><span class=\"fl-bullet fl-font-number fl-size-h2\">3</span><p class=\"fl-display\" style=\"margin-left:28px\">水源</p><p class=\"fl-key\" style=\"margin-left:auto\">直行 80 m ↑</p></div></div><p class=\"fl-caption fl-mt-3\">编号、文字与方向同时出现；颜色只是辅助线索。距离为结构示例，实际导视须核对现场。</p>"
+    },
+    {
+      "id": "x-edge",
+      "title": "色面抵达纸边",
+      "category": "图形",
+      "classes": [
+        "fl-bleed-left",
+        "fl-bleed-right"
+      ],
+      "description": "延展色面与内部补偿留白同时存在，纸边不等于文字起点。",
+      "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
+      "limits": "仅在版心边缘使用，明确data-bleed并检查装订侧；其他padding原子可能覆盖补偿，需要重新检查。",
+      "html": "<section class=\"page fl-relative\" style=\"width:568px;height:620px;--bleed:0px;--fl-margin-top:56px;--fl-margin-bottom:56px;--fl-margin-inner:56px;--fl-margin-outer:56px\"><div class=\"fl-area fl-flex fl-flex-col fl-justify-center\" style=\"gap:28px\"><div class=\"fl-bleed-left fl-surface-accent fl-flex fl-items-center fl-py-3\" style=\"height:196px\" data-bleed=\"left\"><p class=\"fl-display\">开放的边界</p></div><p class=\"fl-body\">内容守在版心，色面向外展开；纸边不等于文字起点。</p><div class=\"fl-bleed-right fl-surface-dark fl-flex fl-items-center fl-py-3\" style=\"height:196px;padding-left:28px\" data-bleed=\"right\"><p class=\"fl-display\">完整的内容</p></div></div></section>"
+    }
+  ]
+}

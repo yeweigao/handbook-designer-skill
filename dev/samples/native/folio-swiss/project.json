@@ -1,0 +1,193 @@
+{
+  "contract": 1,
+  "title": "Folio 完整设计系统样刊 · 秩序与自由",
+  "entry": "book.html",
+  "styles": [
+    "design.css",
+    "book.css"
+  ],
+  "languages": [
+    "zh-CN"
+  ],
+  "default_language": "zh-CN",
+  "canvas": {
+    "trim_mm": [
+      210,
+      297
+    ],
+    "bleed_mm": 3,
+    "safe_mm": 8
+  },
+  "binding": "digital",
+  "first_page": "right",
+  "content_mode": "carry",
+  "fonts": [
+    {
+      "family": "Noto Serif SC",
+      "weight": "200",
+      "style": "normal",
+      "file": "assets/fonts/NotoSerifSC-200.ttf"
+    },
+    {
+      "family": "Noto Serif SC",
+      "weight": "250",
+      "style": "normal",
+      "file": "assets/fonts/NotoSerifSC-250.ttf"
+    },
+    {
+      "family": "Noto Serif SC",
+      "weight": "300",
+      "style": "normal",
+      "file": "assets/fonts/NotoSerifSC-300.ttf"
+    },
+    {
+      "family": "Noto Serif SC",
+      "weight": "400",
+      "style": "normal",
+      "file": "assets/fonts/NotoSerifSC-400.ttf"
+    },
+    {
+      "family": "Noto Serif SC",
+      "weight": "500",
+      "style": "normal",
+      "file": "assets/fonts/NotoSerifSC-500.ttf"
+    },
+    {
+      "family": "Noto Serif SC",
+      "weight": "600",
+      "style": "normal",
+      "file": "assets/fonts/NotoSerifSC-600.ttf"
+    },
+    {
+      "family": "Noto Serif SC",
+      "weight": "700",
+      "style": "normal",
+      "file": "assets/fonts/NotoSerifSC-700.ttf"
+    },
+    {
+      "family": "Noto Serif SC",
+      "weight": "800",
+      "style": "normal",
+      "file": "assets/fonts/NotoSerifSC-800.ttf"
+    },
+    {
+      "family": "Noto Serif SC",
+      "weight": "900",
+      "style": "normal",
+      "file": "assets/fonts/NotoSerifSC-900.ttf"
+    },
+    {
+      "family": "Noto Sans SC",
+      "weight": "200",
+      "style": "normal",
+      "file": "assets/fonts/NotoSansSC-200.ttf"
+    },
+    {
+      "family": "Noto Sans SC",
+      "weight": "250",
+      "style": "normal",
+      "file": "assets/fonts/NotoSansSC-250.ttf"
+    },
+    {
+      "family": "Noto Sans SC",
+      "weight": "300",
+      "style": "normal",
+      "file": "assets/fonts/NotoSansSC-300.ttf"
+    },
+    {
+      "family": "Noto Sans SC",
+      "weight": "400",
+      "style": "normal",
+      "file": "assets/fonts/NotoSansSC-400.ttf"
+    },
+    {
+      "family": "Noto Sans SC",
+      "weight": "500",
+      "style": "normal",
+      "file": "assets/fonts/NotoSansSC-500.ttf"
+    },
+    {
+      "family": "Noto Sans SC",
+      "weight": "600",
+      "style": "normal",
+      "file": "assets/fonts/NotoSansSC-600.ttf"
+    },
+    {
+      "family": "Noto Sans SC",
+      "weight": "700",
+      "style": "normal",
+      "file": "assets/fonts/NotoSansSC-700.ttf"
+    },
+    {
+      "family": "Noto Sans SC",
+      "weight": "800",
+      "style": "normal",
+      "file": "assets/fonts/NotoSansSC-800.ttf"
+    },
+    {
+      "family": "Noto Sans SC",
+      "weight": "900",
+      "style": "normal",
+      "file": "assets/fonts/NotoSansSC-900.ttf"
+    },
+    {
+      "family": "Inter",
+      "weight": "200",
+      "style": "normal",
+      "file": "assets/fonts/Inter-200.ttf"
+    },
+    {
+      "family": "Inter",
+      "weight": "250",
+      "style": "normal",
+      "file": "assets/fonts/Inter-250.ttf"
+    },
+    {
+      "family": "Inter",
+      "weight": "300",
+      "style": "normal",
+      "file": "assets/fonts/Inter-300.ttf"
+    },
+    {
+      "family": "Inter",
+      "weight": "400",
+      "style": "normal",
+      "file": "assets/fonts/Inter-400.ttf"
+    },
+    {
+      "family": "Inter",
+      "weight": "500",
+      "style": "normal",
+      "file": "assets/fonts/Inter-500.ttf"
+    },
+    {
+      "family": "Inter",
+      "weight": "600",
+      "style": "normal",
+      "file": "assets/fonts/Inter-600.ttf"
+    },
+    {
+      "family": "Inter",
+      "weight": "700",
+      "style": "normal",
+      "file": "assets/fonts/Inter-700.ttf"
+    },
+    {
+      "family": "Inter",
+      "weight": "800",
+      "style": "normal",
+      "file": "assets/fonts/Inter-800.ttf"
+    },
+    {
+      "family": "Inter",
+      "weight": "900",
+      "style": "normal",
+      "file": "assets/fonts/Inter-900.ttf"
+    }
+  ],
+  "family": {
+    "name": "folio",
+    "version": "2.2.0",
+    "sha256": "3f83085d8052fc2bcd23fa8f09690a6ef94d9733cc3321e6458d3e16dfad29f0"
+  }
+}

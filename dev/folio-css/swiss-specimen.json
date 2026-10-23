@@ -1,0 +1,8 @@
+{
+  "build_id": "7b049e159e72",
+  "pdf_sha256": "b8090ae665b888ee1ea522ed08e4dad5a105a32de8a518ea5e2099fbf87d23a2",
+  "page_count": 100,
+  "family_css_sha256": "3f83085d8052fc2bcd23fa8f09690a6ef94d9733cc3321e6458d3e16dfad29f0",
+  "preview": "../samples/native/folio-swiss/preview.html",
+  "source": "../samples/native/folio-swiss/book.html"
+}

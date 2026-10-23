@@ -4,13 +4,14 @@
 :where(.page, .fl-scope),
 :where(.page, .fl-scope) :where(*, *::before, *::after) { box-sizing: border-box; }
 :where(.page, .fl-scope) {
+  --fl-bg: var(--fl-paper);
   --fl-text: var(--fl-ink);
   --fl-text-muted: var(--fl-muted);
   --fl-text-accent: var(--fl-accent);
   --fl-stroke: var(--fl-line);
   --fl-current-weight: var(--fl-weight-body);
   --fl-current-strong: var(--fl-weight-body-strong);
-  background: var(--fl-paper);
+  background: var(--fl-bg);
   color: var(--fl-text);
   font-family: var(--fl-font-body);
   font-size: var(--fl-size-body);
@@ -18,13 +19,15 @@
   line-height: var(--fl-leading-body);
   font-synthesis: none;
   font-kerning: normal;
+  text-align: start;
+  text-autospace: normal;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 :where(.page) {
   --fl-page-left: var(--fl-margin-inner);
   --fl-page-right: var(--fl-margin-outer);
-  background: var(--fl-paper);
+  background: var(--fl-bg);
 }
 :where(.page:nth-of-type(even)) {
   --fl-page-left: var(--fl-margin-outer);

@@ -1,16 +1,23 @@
 {
   "contract": 1,
   "name": "folio",
-  "version": "1.1.0",
+  "version": "2.2.0",
   "title": "Folio · 印刷 CSS",
-  "description": "一套可组合的印刷 CSS：共享色彩、字体、六/十二栏网格、节奏与图像规则，配可选布局及原子组合示例；适合文字、摄影和混合内容。",
+  "description": "Swiss 结构底座上的统一印刷 CSS：bold 衬线/light 无衬线双阶梯、数字与正文同族、共享网格与节奏、功能组件及摄影构图。",
   "fonts": [
     {
       "family": "Noto Serif SC",
       "source": "NotoSerifSC-VF.ttf",
       "weights": [
+        200,
+        250,
+        300,
         400,
-        700
+        500,
+        600,
+        700,
+        800,
+        900
       ],
       "license": "noto-serif-sc-OFL.txt",
       "role": "display, reading"
@@ -19,8 +26,15 @@
       "family": "Noto Sans SC",
       "source": "NotoSansSC-VF.ttf",
       "weights": [
+        200,
+        250,
+        300,
         400,
-        700
+        500,
+        600,
+        700,
+        800,
+        900
       ],
       "license": "noto-sans-sc-OFL.txt",
       "role": "body"
@@ -29,11 +43,18 @@
       "family": "Inter",
       "source": "Inter-VF.ttf",
       "weights": [
+        200,
+        250,
+        300,
         400,
-        600
+        500,
+        600,
+        700,
+        800,
+        900
       ],
       "license": "inter-OFL.txt",
-      "role": "label, number"
+      "role": "label"
     }
   ],
   "canvas": {
