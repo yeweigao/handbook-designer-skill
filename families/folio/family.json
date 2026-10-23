@@ -1,6 +1,7 @@
 {
   "contract": 1,
   "name": "folio",
+  "css": "folio.css",
   "version": "2.2.0",
   "title": "Folio · 印刷 CSS",
   "description": "Swiss 结构底座上的统一印刷 CSS：bold 衬线/light 无衬线双阶梯、数字与正文同族、共享网格与节奏、功能组件及摄影构图。",

@@ -11,6 +11,53 @@ ROOT = Path(__file__).resolve().parents[1]
 PARTS = ["families/folio/tokens.css", "families/core/base.css",
          "families/core/layouts.css", "families/core/components.css",
          "families/core/variations.css", "families/core/atoms.css"]
+GROUPS = (("atoms", "原子"), ("layouts", "布局"),
+          ("components", "组件"), ("expressions", "表现与变奏"))
+
+
+def production_recipes(catalog):
+    """Publish the same recipes without the developer website's locations."""
+    recipes = {"version": catalog["version"], "coverage": catalog["coverage"],
+               "usage": "按 id 选择配方并替换真实内容。assets/images/ 下的图片是项目内示例路径，"
+                        "不是随包素材；使用本项目已登记来源的图片。展示尺寸与数据是示意，"
+                        "需按实际纸张、内容和最终 PDF 检查。"}
+    for section, _ in GROUPS:
+        recipes[section] = []
+        for original in catalog[section]:
+            entry = {key: value for key, value in original.items() if key != "specimenPage"}
+            entry["html"] = re.sub(r"(?:\.\./)+samples/native/[^/]+/assets/images/",
+                                   "assets/images/", entry["html"])
+            encoded = json.dumps(entry, ensure_ascii=False)
+            if "dev/" in encoded or "../samples/" in encoded:
+                raise ValueError(f"{entry['id']}: production recipe leaks a developer path")
+            recipes[section].append(entry)
+    return recipes
+
+
+def recipe_index(recipes):
+    """Small, readable entry point; full HTML stays in the adjacent JSON."""
+    lines = ["# Folio 配方索引", "",
+             "由同一设计系统目录生成；正式用法只需本目录的 `folio.css`、本索引和 [recipes.json](recipes.json)。",
+             f"当前 {recipes['coverage']['entries']} 项配方，覆盖 {recipes['coverage']['classes']} 个公开类。"
+             "先查阅读任务与类名，再按 id 读取需要的配方；不必整份载入。", "",
+             "图片 `assets/images/<文件名>` 是待替换的项目内示例路径，随包不提供图片。"
+             "以项目真实内容、已登记图片和画布替换示意；配方展示尺寸、文字和数值不是交付内容。", "",
+             "按 id 读取完整 HTML、约束与图表数据：", "", "```bash",
+             "python3 - <skill目录>/families/folio/recipes.json photo-pair <<'PY'",
+             "import json, sys", "data = json.load(open(sys.argv[1], encoding='utf-8'))",
+             "entry = next((item for group in ('atoms', 'layouts', 'components', 'expressions')",
+             "              for item in data[group] if item['id'] == sys.argv[2]), None)",
+             "if entry is None: raise SystemExit('未找到配方 ID：' + sys.argv[2])",
+             "print(json.dumps(entry, ensure_ascii=False, indent=2))", "PY", "```", ""]
+    for section, title in GROUPS:
+        lines.extend([f"## {title} · {len(recipes[section])} 项", "",
+                      "| ID | 名称 | 公开类 |", "|---|---|---|"])
+        for entry in recipes[section]:
+            title = entry["title"].replace("|", "\\|")
+            classes = " · ".join(f"`{name}`" for name in entry["classes"])
+            lines.append(f"| `{entry['id']}` | {title} | {classes} |")
+        lines.append("")
+    return "\n".join(lines)
 
 
 def outputs():
@@ -75,9 +122,13 @@ def outputs():
                  "entry_count": len(ids), "classes": class_map,
                  "scope": "All public fl-* classes indexed by API group; representative compositions, not every permutation."}
     catalog["coverage"] = {"classes": len(class_map), "entries": len(ids)}
+    recipes = production_recipes(catalog)
     js = "// Generated from catalog.json. Plain script also works when opened as a local file.\n"
     js += "window.FOLIO_CATALOG = " + json.dumps(catalog, ensure_ascii=False, indent=2) + ";\n"
-    return {"families/folio/design.css": css, "dev/folio-css/catalog.js": js,
+    return {"families/folio/folio.css": css,
+            "families/folio/recipes.json": json.dumps(recipes, ensure_ascii=False, indent=2) + "\n",
+            "families/folio/recipe-index.md": recipe_index(recipes),
+            "dev/folio-css/catalog.js": js,
             "dev/folio-css/api-coverage.json": json.dumps(inventory, ensure_ascii=False, indent=2) + "\n"}
 
 

@@ -666,3 +666,17 @@
 - 验证：`selftest --quick` PASS（36 份活跃文档链接、31 项 Python 测试，证据 `hb-native-selftest.HdaFiO`）；20/20 浏览器测试；`dev/build-folio-css.py --check` 与 `git diff --check` 通过；独立只读代码审查未发现阻塞问题。
 - 审稿边界：本轮整册缩略 + 第 95 页阅读尺度；其余 99 页逐页哈希与已审基线相同。契约 0 错、1 条样刊专用类提示已确认。未做纸样/独立审美校准，不计 S11/S12。
 - 提交：本记录与源码、生成物、最终验收证据一并提交到 main，按用户要求推送 origin/main。
+
+### S16 · Folio 正式主题与 Skill 提示契约 · 完成 · 2026-10-24
+
+- 用户要求：正常 Skill 执行不依赖 dev；正式家族文件叫 folio.css；book.css 非必要不新增，只能在同一设计系统内补丁；入口以结果、判断依据、约束和交付证据为主。
+- 基线：45142c1。先核对官方 GPT-6 / Opus 5.5 / Skill 写作指南与本地实现，消除“自由写 CSS”与“遵循主题”冲突。
+- 范围：正式 CSS 命名与旧项目兼容、正式配方与打包自足、入口/工作流精简、冻结家族哈希检查。保留三页试作和最终 PDF 验收；不改已有样刊的冻结作者源。
+- 契约变更：styles[0] 明确为冻结主题（新 Folio 为 folio.css，旧 design.css 继续支持），存在 family.sha256 时核验原始字节；`style.family-hash` 为硬错且不受 style_waiver 降级。未记录哈希的旧项目继续兼容；语义字阶/节奏检查仍从家族 2.2 起算。
+- 实现：family.json.css 指定分发文件；init 已有 project.json 时零写入。生成器唯一输出 folio.css，并由同一目录输出正式 recipes.json / recipe-index.md；CSS 声明不变，仅改维护注释。现有样册保持自己的 design.css。
+- 提示契约：SKILL 5307 → 2814 字符；结果/主题边界/必要证据/按需路由前置，new 九步改为输入/设计/交付条件。book.css 默认留空，扩展须说明阅读任务、现有能力缺口、局部范围。清除普通作者修改共享主题、访问开发站的要求；命令与图表参考放正式 references。
+- 用户包：默认不带 dev/docs，99 个文件、约 0.3 MB；所有包内本地 Markdown 链接解析通过；未提交正式生成物仅走明确白名单，缺失则拒绝打包。完整配方 91 项、公开类 353 个。
+- 验证：`selftest --quick` PASS（44 个 Python 测试、38 份活跃文档链接，证据 `hb-native-selftest.MPebPr`）；family-css 浏览器 20/20，render/export 14/14；skill-creator quick_validate、生成一致性和 diff 检查通过。
+- 隔离实跑：无 dev 用户包从缓存字体正常 init；真实三页（封面/双栏/日程）book.css 无声明，构建 `be2ff550c562` 五项全 pass。全页阅读尺度目检后正式 PDF、可编辑 PDF、离线 HTML、源包干净重建四项全 pass。重复 init 零写入。证据见 [包验证](FOLIO-SKILL-PACKAGE-PROOF-2026-10-24.json)，目录 `/private/tmp/folio-skill-isolated-ldbe3bzk`。
+- 边界：这不是完整 CSS 解析器或跨模型审美成功率验证。原 100 页样刊未迁移/重导出；运行时代码更新会使旧项目 gate 的工具指纹失效，后续改版需重新验收。旧成品及其当时审稿保留。
+- 官方资料与取舍：[提示词依据](FOLIO-SKILL-PROMPTING-2026-10-24.md)。另做新上下文 agent 小型只读决策试用：三页活动指南选正式配方、book.css 留空，不冒充成品验收；不计跨模型审美测试。本轮尚未提交。

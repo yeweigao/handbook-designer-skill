@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-24",
+  "package": "dist/handbook-designer-skill-v2.2.0.zip",
+  "package_sha256": "295d01f9b953bfa847a2b2a5b36023c1ecf642b863fc6500339e2ae2dce2ddc1",
+  "isolated_root": "/private/tmp/folio-skill-isolated-ldbe3bzk",
+  "dev_present": false,
+  "styles": [
+    "folio.css",
+    "book.css"
+  ],
+  "custom_css_declarations": 0,
+  "build_id": "be2ff550c562",
+  "page_count": 3,
+  "checks": {
+    "render": "pass",
+    "measure": "pass",
+    "postflight": "pass",
+    "raster": "pass",
+    "coverage": "pass"
+  },
+  "pdf_sha256": "0c970858e121f8f8a65f8f2351cc53c071b3025b2d4bd971b0592849e2db94c6",
+  "delivery_checks": [
+    {
+      "id": "pdf.en",
+      "status": "pass",
+      "severity": "hard",
+      "message": "正式 PDF 与验收记录一致",
+      "evidence": {}
+    },
+    {
+      "id": "editable.en",
+      "status": "pass",
+      "severity": "hard",
+      "message": "可编辑 PDF：字体扩充嵌入（非子集）、无 Type 3、逐页栅格与正式版一致",
+      "evidence": {
+        "replaced": 8,
+        "fonts": [
+          "Inter-600",
+          "Inter-800",
+          "NotoSansSC-200",
+          "NotoSansSC-250",
+          "NotoSansSC-400",
+          "NotoSansSC-600",
+          "NotoSerifSC-600",
+          "NotoSerifSC-700"
+        ],
+        "glyphs": {
+          "Inter-600": 1146,
+          "NotoSansSC-200": 8495,
+          "NotoSansSC-400": 8495,
+          "NotoSansSC-600": 8495,
+          "Inter-800": 1146,
+          "NotoSerifSC-700": 8493,
+          "NotoSerifSC-600": 8493,
+          "NotoSansSC-250": 8495
+        },
+        "not_replaced": [],
+        "bytes": 10179256,
+        "compare": "{\"pages_a\": 3, \"pages_b\": 3, \"diff\": [0.0, 0.0, 0.0], \"worst\": 0.0}"
+      }
+    },
+    {
+      "id": "offline.en",
+      "status": "pass",
+      "severity": "hard",
+      "message": "离线 HTML：无外部请求、资源全部就绪、打印结果与正式 PDF 一致",
+      "evidence": {
+        "pages_a": 3,
+        "pages_b": 3,
+        "diff": [
+          0,
+          0,
+          0
+        ],
+        "worst": 0
+      }
+    },
+    {
+      "id": "source.rebuild",
+      "status": "pass",
+      "severity": "hard",
+      "message": "源文件包在干净目录重建：构建 ID 相同、验收通过、逐页栅格一致",
+      "evidence": {
+        "rebuilt_build": "be2ff550c562"
+      }
+    }
+  ],
+  "reinit_zero_write": true,
+  "limitations": [
+    "Representative three-page technical proof by author; no cross-model full-book aesthetic benchmark.",
+    "Existing frozen 100-page specimen sources were not migrated or re-exported; runtime changes invalidate old in-repository gate fingerprints.",
+    "Source fonts and installed Playwright/Chromium reused; no dependencies downloaded."
+  ]
+}

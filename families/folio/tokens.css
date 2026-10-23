@@ -1,5 +1,5 @@
 /* Folio 2.2.0 · Swiss structure with bold/light typography.
-   Edit these source modules, then regenerate design.css with dev/build-folio-css.py.
+   Theme maintenance: regenerate folio.css from source modules. Book authors keep the theme frozen.
    CSS px are physical print sizes; changing paper dimensions does not scale type. */
 :root {
   --fl-paper: #FFFFFF;

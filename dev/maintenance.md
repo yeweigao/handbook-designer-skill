@@ -16,7 +16,7 @@
 | 原稿、内容/数字及素材覆盖 | extract.py、office_extract.py、coverage.py/mjs |
 | 交付、离线与源包重建 | export.mjs、editable_pdf.py、offline_html.py、pack.py |
 | Folio 逐项安全写回 | folio.mjs、folio_sync.py；编辑器独立仓库 |
-| 家族 CSS 与版本 | families/；项目复制后 design.css 为权威，不自动跟随升级 |
+| 家族 CSS 与版本 | families/；项目复制后 styles[0] 的冻结主题（新 Folio 为 folio.css）为权威，不自动跟随升级 |
 | 语义/构图/最终 PDF 视觉判断 | references/review.md、workflows/visual-review.md；不可伪装机器证明 |
 | 项目修订与经验 | 项目 experience.md；格式 templates/experience.md |
 

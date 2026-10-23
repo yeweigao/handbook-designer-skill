@@ -7,8 +7,10 @@
 - 字号只能取字阶值；裁字、填图字这类显式放大的装饰字允许取最大字阶的整数倍。
 - 渐变、圆角、阴影、滤镜与大量自定义类不计错误，但会记下数量，供审稿判断"是不是换了一套视觉语言"。
 
-需要保留旧行为时，在 project.json 写 `style_waiver`（附理由），本模块的硬项随之降为警告。
+需要保留旧行为时，在 project.json 写 `style_waiver`（附理由），字阶与节奏硬项随之降为警告。
+冻结家族的 SHA256 不匹配始终是错误；升级须主动更新来源记录并重新验收。
 """
+import hashlib
 import os
 import re
 
@@ -28,12 +30,9 @@ DECOR = {"linear-gradient": "渐变", "radial-gradient": "渐变", "border-radiu
 
 
 def _family_css(root, p):
-    """冻结的家族 CSS：优先 design.css，其次按 family.sha256 指纹找。"""
-    styles = [s for s in (p.get("styles") or []) if isinstance(s, str)]
-    for rel in styles:
-        if os.path.basename(rel) == "design.css":
-            return rel
-    return styles[0] if styles else None
+    """契约规定 styles[0] 是冻结家族；文件名不决定身份。"""
+    styles = p.get("styles") or []
+    return styles[0] if isinstance(styles, list) and styles and isinstance(styles[0], str) else None
 
 
 def _read(path):
@@ -112,7 +111,21 @@ def _checked_version(p):
 
 def check_style(rep, root, p):
     family_rel = _family_css(root, p)
-    if not family_rel or not _checked_version(p):
+    if not family_rel:
+        return
+    expected = (p.get("family") or {}).get("sha256")
+    if expected is not None:
+        try:
+            with open(os.path.join(root, family_rel), "rb") as f:
+                actual = hashlib.sha256(f.read()).hexdigest()
+        except OSError:
+            actual = None
+        if actual != expected:
+            rep.error("style.family-hash", family_rel,
+                      "冻结家族 CSS 与 family.sha256 不符：恢复原文件；若为主动升级，"
+                      "审阅家族差异、更新来源版本与哈希并重新验收。style_waiver 不豁免冻结完整性。")
+            return
+    if not _checked_version(p):
         return
     family_css = _strip(_read(os.path.join(root, family_rel)))
     ladder = family_ladder(family_css)

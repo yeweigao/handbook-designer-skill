@@ -2,7 +2,7 @@ import test, {before,after} from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {launch} from '../../../hb/core/browser.mjs';
-const css = await fs.readFile(new URL('../../../families/folio/design.css',import.meta.url),'utf8');
+const css = await fs.readFile(new URL('../../../families/folio/folio.css',import.meta.url),'utf8');
 let browser;
 before(async()=>{({browser}=await launch());});
 after(async()=>{await browser?.close();});

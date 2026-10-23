@@ -2,7 +2,7 @@
 
 以 Swiss 网格、对齐、比例和留白为共同底座的印刷 CSS 语言。相同的颜色角色、字体、网格和节奏可以组合出纯文字、摄影、信息查阅和混合页面。普通 HTML/CSS 是作者源，布局类是可选起点，组件是可拆开的组合示例。
 
-[交互展示](../../dev/folio-css/index.html) 展示原子、布局及组件；[示例目录](../../dev/folio-css/catalog.json) 保存真实 HTML 配方。示例中的代码使用本家族实际 CSS，展示网页的导航和缩放不进入印刷文件。
+[配方索引](recipe-index.md) 定位全部原子、布局、组件与变奏；[recipes.json](recipes.json) 提供普通 HTML 配方。先按任务查 id，再取对应条目，不必全量加载。图片路径需换成本项目真实资源；内容 ID 与印刷声明按项目契约补齐。正式使用不需要开发展示站。
 
 ## 文件与使用
 
@@ -14,16 +14,16 @@
 | `../core/components.css` | 页眉、索引、图注、表格、KPI、尺寸线等功能器件 |
 | `../core/variations.css` | 显式选用的字带、裁字、双色摄影和程序图形 |
 | `../core/atoms.css` | 独立原子、排印角色、图片与功能标记 |
-| `design.css` | 按上述顺序生成的完整单文件，供项目冻结复制 |
+| `folio.css` | 按上述顺序生成的完整单文件，供项目冻结复制 |
 | `family.json` | 名称、版本、画布与实际字体资源 |
 
-修改源模块后执行 `python3 dev/build-folio-css.py` 重建 `design.css`。展示页使用的压缩可变字体子集可用 `python3 dev/folio-css/build-demo-fonts.py` 重建。项目初始化仍只复制一个 CSS 文件，不在运行时加载共享模块，不需要浏览器端构建或 CSS 框架依赖。
+制作一册使用已生成的 `folio.css`，不修改共享源模块；正常项目不需要浏览器端构建或 CSS 框架依赖。源模块只供明确的主题维护任务。
 
 ```sh
 python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh-CN,en
 ```
 
-初始化后，`project.json.styles` 依次加载 `design.css` 和本书 `book.css`；语言覆盖、Folio 编辑覆盖由现有运行时追加。项目保存来源版本与 CSS 哈希，已建项目保持自己的冻结副本。升级时主动比较与重审受影响页面，不替换旧验收证据。Folio 会从本机读取 Noto Serif SC / Noto Sans SC / Inter 的源文件并生成本项目字体子集（OFL，可再分发）；字体文件不随本仓库分发。
+初始化后，`project.json.styles` 依次加载 `folio.css` 和本书 `book.css`；语言覆盖、Folio 编辑覆盖由现有运行时追加。项目保存来源版本与 CSS 哈希，已建项目保持自己的冻结副本。升级时主动比较与重审受影响页面，不替换旧验收证据。Folio 会从本机读取 Noto Serif SC / Noto Sans SC / Inter 的源文件并生成本项目字体子集（OFL，可再分发）；字体文件不随本仓库分发。
 
 ## 组合层次
 
@@ -33,7 +33,7 @@ python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh
 4. **组件配方** 组合前三层，例如人物署名、图与图注、目录、统计和引文。
 5. **完整页面** 依据材料组合，具体文字、照片、分页和跨页关系由作者负责。
 
-无需选整页模板才能开始。可保留布局的结构，调整原子或使用本书 CSS；也可直接写新的原生 Grid/Flex。普通段落不附送底色或边框；功能组件显式提供必要轴线与分隔，可用原子移除。
+优先通过现有类组合完整页面，无需选整页模板。`book.css` 默认可空，只有明确的局部缺口才补丁；边界见 [主题与补丁](../../references/style.md)。普通段落不附送底色或边框；功能组件显式提供必要轴线与分隔，可用原子移除。
 
 ## 统一规则
 
@@ -178,7 +178,7 @@ python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh
 
 ## 企业信息与行程组件
 
-展示目录同时包括多日行程、纵向时刻、比例节奏带、里程碑、并行泳道、KPI、目标对照、五力、定性矩阵、价值链与能力证据。完整范围见 [覆盖清单](../../dev/folio-css/coverage.md)。四种定量图表通过 [数据构造工具](../../dev/folio-css/charts.md) 输出，HTML标签接受原生印刷审计；CSS不承担数学计算。
+展示目录同时包括多日行程、纵向时刻、比例节奏带、里程碑、并行泳道、KPI、目标对照、五力、定性矩阵、价值链与能力证据。完整范围见 [配方索引](recipe-index.md)。四种定量图表通过 [数据构造工具](../../references/charts.md) 输出，HTML标签接受原生印刷审计；CSS不承担数学计算。
 
 图框默认 `--fl-frame-width:100%`、`--fl-frame-position:relative`；侧向出血布局在槽位中设定这两个变量，避免通用 `.fl-frame` 覆盖布局几何。直接尺寸原子或本书CSS仍可明确覆盖。
 
@@ -211,7 +211,7 @@ python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh
 
 ## 显式表现工具
 
-`variations.css` 在原子之前加载，默认值均可覆盖。不把装饰加入常规段落、引用或照片。展示页第 05 章与样册末章「表现与变奏」是同一批配方；目录里的分组键仍叫 `expressions`，写 `variations` 也会并入同一章，不会丢配方。
+`variations.css` 在原子之前加载，默认值均可覆盖。不把装饰加入常规段落、引用或照片。正式配方的 `expressions` 分组给出这些能力的组合示例。
 
 - `fl-band`：紧贴文字的硬边字带，可与任意 `fl-surface-*` 组合；完整可读标题仍是内容。
 - `fl-crop` + `fl-crop-{top,bottom,left,right}`：锚定页边的巨字，偏移 `--fl-crop-offset`。被裁文字只能是重复装饰，需另有完整内容。
@@ -222,4 +222,4 @@ python3 hb/core/family.py init folio /tmp/folio-book --title '书名' --langs zh
 - `fl-rotate-{6,n6} / fl-vertical / fl-sideways`：显式方向；旋转可能产生几何未验证，最终内容须满足契约，不能靠deco标签绕过检查。
 - `fl-bleed-left / fl-bleed-right`：从版心边缘延伸到纸边，内部补偿留白；仅放在版心边缘，配真实data-bleed声明。
 
-重建后对颜色嵌套、原子优先级、字体组合、时间轴和镜像摄影做浏览器回归。当前新样册与历史样册的实际验证范围见[验证记录](../../dev/folio-css/verification.md)。
+这些能力不是对任意内容和组合的预先保证；新册仍需技术验收与最终 PDF 逐页审稿。主题维护者的展示和回归记录位于源码仓库的开发目录，不属于正常制作依赖。

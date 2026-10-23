@@ -4,9 +4,9 @@
   python3 hb/core/family.py init <家族> <项目目录> --title <书名> [--langs zh-CN,en] [--mode carry]
   python3 hb/core/family.py fonts <项目目录>     重新生成项目字体（GB2312 常用字 + 拉丁 + 本项目用到的全部字符）
 
-init 从 families/<家族>/ 复制 design.css（记录版本与哈希到 project.json），生成静态字体与授权文本、
+init 从 families/<家族>/ 复制其 css 字段指定的文件（旧家族默认 design.css），记录版本与哈希到 project.json，生成静态字体与授权文本、
 最小作者源骨架（一页封面）、brief.md / page-plan.md 模板与 sources/ 目录。不覆盖已存在的项目文件。
-字体来源（按顺序查找）：$HB_FONT_DIR、~/.cache/handbook-designer/fonts、用户字体目录、仓库 dev/fonts。开源字面可用 `fonts.py install` 补齐。
+字体来源（按顺序查找）：$HB_FONT_DIR、~/.cache/handbook-designer/fonts、旧开发目录 dev/fonts（仅兼容后备）。开源字面可用 `fonts.py install` 补齐。
 """
 import glob
 import hashlib
@@ -110,7 +110,8 @@ def load_family(name):
     d = os.path.join(FAMILIES, name)
     if not os.path.isfile(os.path.join(d, "family.json")):
         raise SystemExit(f"没有家族 {name}（可用：{', '.join(list_families())}）")
-    return d, json.load(open(os.path.join(d, "family.json"), encoding="utf-8"))
+    with open(os.path.join(d, "family.json"), encoding="utf-8") as f:
+        return d, json.load(f)
 
 
 def list_families():
@@ -120,16 +121,23 @@ def list_families():
 def write_new(path, content):
     if not os.path.exists(path):
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        open(path, "w", encoding="utf-8").write(content)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(content)
 
 
 def init(name, project, title, langs, mode):
-    d, fam = load_family(name)
     project = os.path.abspath(project)
+    pj = os.path.join(project, "project.json")
+    if os.path.exists(pj):
+        print(f"项目已存在，保留全部文件与冻结家族：{project}")
+        return
+    d, fam = load_family(name)
     os.makedirs(project, exist_ok=True)
-    css = open(os.path.join(d, "design.css"), encoding="utf-8").read()
-    write_new(os.path.join(project, "design.css"), css)
-    write_new(os.path.join(project, "book.css"), f"/* 《{title}》专属构图。家族原语见 families/{name}/README.md */\n")
+    css_name = fam.get("css", "design.css")
+    with open(os.path.join(d, css_name), encoding="utf-8") as f:
+        css = f.read()
+    write_new(os.path.join(project, css_name), css)
+    write_new(os.path.join(project, "book.css"), f"/* 《{title}》局部补丁，默认可空。先用家族原子、布局与组件；仅补充必要几何和品牌适配，不重造设计系统。家族 API：families/{name}/README.md */\n")
     esc = title.replace("&", "&amp;").replace("<", "&lt;")
     write_new(os.path.join(project, "book.html"), f"""<!DOCTYPE html>
 <html lang="{langs[0]}">
@@ -152,12 +160,12 @@ def init(name, project, title, langs, mode):
     write_new(os.path.join(project, "page-plan.md"), "# 页面计划\n\n视觉主张：\n\n| 页 | 任务 | 内容 | 构图要点 |\n|---|---|---|---|\n")
     os.makedirs(os.path.join(project, "sources"), exist_ok=True)
     fonts = build_fonts(project, fam, charset(project))
-    pj = os.path.join(project, "project.json")
     if not os.path.exists(pj):
-        p = {"contract": 1, "title": title, "entry": "book.html", "styles": ["design.css", "book.css"], "languages": langs,
+        p = {"contract": 1, "title": title, "entry": "book.html", "styles": [css_name, "book.css"], "languages": langs,
              "default_language": langs[0], "canvas": fam["canvas"], "binding": "digital", "first_page": "right", "content_mode": mode,
              "fonts": fonts, "family": {"name": name, "version": fam["version"], "sha256": hashlib.sha256(css.encode()).hexdigest()}}
-        json.dump(p, open(pj, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+        with open(pj, "w", encoding="utf-8") as f:
+            json.dump(p, f, ensure_ascii=False, indent=2)
     print(f"已从家族 {name} v{fam['version']} 创建项目：{project}")
 
 

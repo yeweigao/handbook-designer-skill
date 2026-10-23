@@ -2,7 +2,7 @@
 
 本机素材已恢复后，直接打开 [index.html](index.html)。新克隆先按 [样册素材说明](../samples/README.md) 恢复照片/源字体，再运行下方网页字体子集命令。无需启动开发服务器、安装前端框架或编译 CSS；也可以从仓库根目录运行 `python3 -m http.server 8765 --bind 127.0.0.1`，访问 `/dev/folio-css/`。
 
-- 规则预览直接使用 `families/folio/design.css`，可操作网格比例、图片比例与焦点，以及同一构图的bold/light与三种表面。
+- 规则预览直接使用 `families/folio/folio.css`，可操作网格比例、图片比例与焦点，以及同一构图的bold/light与三种表面。
 - 布局与基础组件来自 `catalog.json`，Swiss功能配方来自 `swiss-recipes.json`，行程/经营/分析配方来自 `business-recipes.json`，数据图表来自 `chart-examples.json`，原子与变奏来自 `system-recipes.json`（数量以界面与生成数据为准）；`catalog.js` 是标准脚本形式的生成副本，让本地文件打开也可使用。
 - 完整样刊为100页，逐项索引见 [specimen-index.md](specimen-index.md)。`specimen-map.js` 提供详情对应的页码与锚点；网站和样刊共用91个目录项、353个公开类。
 - 点击示例看完整结构、组合说明、适用边界与源码；结构视图只加轮廓及弱化照片，不改变布局。

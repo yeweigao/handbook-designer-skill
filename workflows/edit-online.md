@@ -10,7 +10,7 @@ node "$HB/core/cli.mjs" folio-sync "$P" <下载的HTML>
 node "$HB/core/cli.mjs" check "$P"
 ```
 
-使用与本契约联动的 Folio 版本；S9 的实现位于独立仓库 `folio-html-studio` 的 `hb-package` 分支。其合并/部署状态见 [进度](../dev/audits/PROGRESS.md)；不能假设线上版本已经更新。需要使用时确认所用版本保留构建标记与 ID。
+使用与本契约联动的 Folio 版本；导入时确认编辑器保留构建标记与稳定 ID，不以历史分支名推断线上兼容性。没有兼容编辑器时仍可交付正式 PDF、离线 HTML 与源包，不能声称在线写回已验证。
 
 编辑包是按语言生成的单文件 HTML，保留页面、内容、编辑 ID 和构建标记；基准存于 `.build/<构建ID>/<语言>/folio-base.html`，写回前不要删基准。
 

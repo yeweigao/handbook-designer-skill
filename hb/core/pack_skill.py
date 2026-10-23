@@ -9,8 +9,9 @@ templates、purposes、brands）和开发资产（dev 里的样册、测试、�
     python3 hb/core/pack_skill.py --list          # 只列出会打进包的文件
     python3 hb/core/pack_skill.py --with-samples  # 额外带上样册源码（不含照片与字体）
 
-包含项由下面 RUNTIME / SHOWCASE / SAMPLES 三个清单决定，新增顶层目录时要同步。
-文件清单优先取 `git ls-files`，所以不会有缓存、构建产物、照片混进来。
+默认只包含正式运行时与使用参考，dev 展示/测试/审计不参与正常使用。
+文件清单优先取 `git ls-files`；仅 REQUIRED_FILES 中的正式入口可在未提交时加入，
+不会顺带收进其他未跟踪文件。必要入口缺失直接报错。
 """
 
 from __future__ import annotations
@@ -27,10 +28,13 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 # 运行时：缺一个就跑不起来
 RUNTIME = ("SKILL.md", "README.md", "LICENSE", "hb", "families", "references",
            "workflows", "templates", "purposes", "brands")
-# 展示页：SKILL.md 让作者「先看原子、布局与组件展示」，属于使用路径的一部分
-SHOWCASE = ("dev/folio-css",)
 # 样册源码：可选的阅读材料，只有文本，没有照片与字体
 SAMPLES = ("dev/samples/native/folio-swiss", "dev/samples/native/nature-camp")
+# 限定的正式产物允许在提交前验包；不是整个未跟踪目录的通行证。
+REQUIRED_FILES = ("SKILL.md", "hb/core/cli.mjs", "families/folio/family.json",
+                  "families/folio/folio.css", "families/folio/recipes.json",
+                  "families/folio/recipe-index.md", "references/commands.md",
+                  "references/charts.md")
 
 ROOT_NAME = "handbook-designer-skill"
 
@@ -62,12 +66,16 @@ def tracked_files():
 
 
 def selected(with_samples=False):
-    prefixes = list(RUNTIME) + list(SHOWCASE) + (list(SAMPLES) if with_samples else [])
-    chosen = []
+    missing = [path for path in REQUIRED_FILES if not os.path.isfile(os.path.join(ROOT, path))]
+    if missing:
+        raise SystemExit("打包缺少必需文件：" + "、".join(missing))
+    prefixes = list(RUNTIME) + (list(SAMPLES) if with_samples else [])
+    chosen = set(REQUIRED_FILES)
     for path in tracked_files():
         for prefix in prefixes:
             if path == prefix or path.startswith(prefix + "/"):
-                chosen.append(path)
+                if os.path.isfile(os.path.join(ROOT, path)):
+                    chosen.add(path)
                 break
     return sorted(chosen)
 
@@ -95,8 +103,7 @@ def build(destination, with_samples=False, quiet=False):
 
     with zipfile.ZipFile(destination) as zf:
         names = set(zf.namelist())
-    must = {f"{ROOT_NAME}/SKILL.md", f"{ROOT_NAME}/hb/core/cli.mjs",
-            f"{ROOT_NAME}/families/folio/design.css"}
+    must = {f"{ROOT_NAME}/{path}" for path in REQUIRED_FILES}
     missing = sorted(must - names)
     if missing:
         raise SystemExit("打包缺少必需文件：" + "、".join(missing))

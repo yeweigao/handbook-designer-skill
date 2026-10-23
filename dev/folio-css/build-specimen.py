@@ -411,7 +411,7 @@ def build(project, font_cache=None):
     document='<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><title>Folio 完整设计系统样刊</title></head><body>\n'+'\n'.join(p.serialize() for p in pages)+'\n</body></html>\n'
     (project/'book.html').write_text(document)
     (project/'book.css').write_text(BOOK_CSS)
-    shutil.copy2(ROOT/'families/folio/design.css',project/'design.css')
+    shutil.copy2(ROOT/'families/folio/folio.css',project/'design.css')
     corpus='\n'.join(s['text'] for s in segments)
     fonts=prepare_fonts(project,corpus,font_cache)
     family=json.loads((ROOT/'families/folio/family.json').read_text())

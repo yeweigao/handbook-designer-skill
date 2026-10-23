@@ -1,3 +1,5 @@
+> 当前正式使用：见 [Folio API](../families/folio/README.md) 和 [主题补丁契约](../references/style.md)。本文供维护主题，普通成书不需读取或执行开发构建；后半的历史比较保留作版本背景。
+
 # 家族 CSS 是怎么写的
 
 > 说明性文档，不是新规则来源。硬约束仍以 `references/contract.md` + `hb/core/validate.py` 为准；
@@ -7,13 +9,13 @@
 
 ## 一、家族 CSS 是什么，不是什么
 
-一句话：**家族 CSS 提供共同语言，页面构图由作者写 `book.css` 决定。**
+一句话：**用 Folio 主题组合页面；`book.css` 默认可空，仅为真实缺口提供局部补丁。**
 
 | 层 | 文件 | 内容 | 变化频率 |
 |---|---|---|---|
 | 运行时生成 | 内存中的 `<style data-hb="print">` / `fonts` | `@page`、`.page` 几何、`--bleed` 等变量、`page-n` 计数器、`@font-face` | 由 `project.json` 决定 |
-| 家族基因 | `families/<名>/design.css` → 项目 `design.css` | 颜色角色、字体角色、字号阶梯、网格、线宽、间距、低层原语 | 家族升级时（不静默） |
-| 本书构图 | `book.css` | 整页结构、封面、跨页、局部尺寸、本书专属类 | 每本书 |
+| 家族基因 | `families/folio/folio.css` → 项目 `folio.css`（历史 `design.css` 兼容） | 颜色角色、字体角色、字号阶梯、网格、线宽、间距、低层原语 | 家族升级时（不静默） |
+| 本书补丁 | `book.css` | 现有组合无法表达的局部几何、裁切与已授权品牌适配 | 必要时 |
 | 语言差异 | `lang/<lang>.css` | 断行、行长、标题换行补偿 | 每种语言 |
 
 家族里**不许**出现 `.cover-layout-01`、`.two-column-page` 这类只能整套照抄的整页类。
@@ -24,12 +26,12 @@
 ```
 families/<名>/
   family.json    # 机器读取：版本、画布、字体角色、字符集声明
-  design.css     # 作者读取：init 时原样复制到项目的那一份
+  folio.css      # 作者读取：init 时原样复制；旧 design.css 继续支持
   README.md      # 人读：关键决定、原语清单、不能照搬的部分、版本记录
 families/licenses/  # family.json 里引用的 OFL 授权文本
 ```
 
-`design.css` 可以是手写的单文件（Campus），也可以是生成物（Folio）：
+冻结主题可以是手写单文件（Campus 的 `design.css`），也可以是生成物（Folio 的 `folio.css`）：
 
 ```
 families/folio/tokens.css        # 颜色、字体、字号、行距、版心、间距、线宽
@@ -39,12 +41,12 @@ families/core/components.css     # 可拆功能器件，默认零特异性
 families/core/variations.css     # 显式表现工具
 families/core/atoms.css          # 原子、排印角色、图片、页码
         ↓  python3 dev/build-folio-css.py
-families/folio/design.css        # 单文件分发，无 @import、无运行时依赖
+families/folio/folio.css        # 单文件分发，无 @import、无运行时依赖
 ```
 
 生成路线的唯一硬要求：**分发文件必须自洽**——不能 `@import` 源模块，也不能 `@font-face`（字体归 `project.json`）。
 `build-folio-css.py` 在拼接时会直接拒绝这两项；`--check` 在提交物与源模块不一致时失败。
-运行时不认识 `families/core/`，项目里只有一份冻结的 `design.css`。
+运行时不加载 `families/core/`，项目只加载 `styles[0]` 的冻结主题。新 Folio 使用 `folio.css`；旧 `design.css` 项目继续按原声明运行。正式命名由 family.json 的 css 字段指定，缺省为旧名称。
 
 `family.py list` 的判定很简单：**目录里存在 `family.json` 就算一个可用家族**（`hb/core/family.py:94`）。
 所以漏写 `family.json` 的家族不会报错，只会静默消失。
@@ -81,7 +83,7 @@ families/folio/design.css        # 单文件分发，无 @import、无运行时�
 ```
 <style data-hb="print">    ← project.json 生成的 @page / .page / 变量 / 计数器
 <style data-hb="fonts">    ← 由 project.json.fonts 生成的 @font-face
-<link design.css> <link book.css> <link lang/<lang>.css> <link edits.css>
+<link styles[0] (folio.css / legacy design.css)> <link book.css> <link lang/<lang>.css> <link edits.css>
 ```
 
 由此得到三条硬性写法：
@@ -94,7 +96,7 @@ families/folio/design.css        # 单文件分发，无 @import、无运行时�
 `--safe-*` 是「印刷安全区」，从成品边向内量，所有文字（含页码页眉）必须落在里面；
 `--m-*` 这类版心边距是**作者自己定义**的，通常写成 `calc(var(--bleed) + 18mm)`，两者不是一回事。
 
-## 四、design.css 的写法：按「从底到顶」十段
+## 四、主题维护：按「从底到顶」十段
 
 Campus 的实际顺序就是推荐顺序，每段只解决一件事（Folio 把 1–4 段放进 `tokens.css`、5–7 放进 `base.css`、8–10 放进 `atoms.css`，另加一段可选的 `layouts.css`，内容等价，只是物理位置不同）：
 
@@ -208,8 +210,8 @@ p { text-wrap: pretty; }
 
 ## 八、参考实物：Folio（当前）与 Campus（历史）
 
-- `families/folio/design.css`（623 行 / 286 条规则 / 74 个 `--fl-*` 变量）是当前分发文件；它由 `tokens.css` + `core/{base,layouts,atoms}.css` 拼接生成，源模块约 550 行。
-- `dev/build-folio-css.py --check` 会在源模块与生成物不一致时报错，是改 CSS 后的必跑项；生成器同时输出展示页用的 `catalog.js`。
+- `families/folio/folio.css`是当前分发文件；它由 `tokens.css` + `core/{base,layouts,components,variations,atoms}.css` 拼接生成。
+- `dev/build-folio-css.py --check` 会在源模块与生成物不一致时报错，是改 CSS 后的必跑项；生成器同时输出展示页 `catalog.js` 与正式 `recipes.json / recipe-index.md`，不另立手工配方来源。
 - `families/campus/design.css`（约 140 行）是单文件手写家族的完整样本，十段内容可直接对照；`families/campus/README.md` 的章节结构（适合什么材料 → 关键决定 → 原语 → 不能照搬 → 版本 → 已审样册）仍可当模板。
 - 两者的分工差异见下节，不要混用类名：Campus 用 `.h1/.body/.on-dark`，Folio 用 `.fl-h1/.fl-body/.fl-surface-dark`。
 

@@ -1,4 +1,5 @@
 """样式一致性检查（adherence）单元测试：python3 dev/tests/core/test_adherence.py"""
+import hashlib
 import os
 import shutil
 import sys
@@ -48,12 +49,15 @@ class Adherence(unittest.TestCase):
         with open(os.path.join(self.dir, rel), "w", encoding="utf-8") as f:
             f.write(text)
 
-    def run_check(self, book_css, version="2.2.0", waiver=None, html=None):
+    def run_check(self, book_css, version="2.2.0", waiver=None, html=None,
+                  family_css="design.css", frozen_hash=None):
         self.write("book.css", book_css)
         if html is not None:
             self.write("book.html", html)
-        project = {"styles": ["design.css", "book.css"], "entry": "book.html",
+        project = {"styles": [family_css, "book.css"], "entry": "book.html",
                    "family": {"name": "folio", "version": version}}
+        if frozen_hash is not None:
+            project["family"]["sha256"] = frozen_hash
         if waiver:
             project["style_waiver"] = waiver
         rep = Stub()
@@ -112,9 +116,45 @@ class Adherence(unittest.TestCase):
         rep = self.run_check(".x{}")
         self.assertIn("style.offladder", rep.codes())
 
+    def test_folio_filename_preserves_style_checks(self):
+        os.rename(os.path.join(self.dir, "design.css"), os.path.join(self.dir, "folio.css"))
+        rep = self.run_check(".x { font-size: 38px; }", family_css="folio.css",
+                             frozen_hash=hashlib.sha256(DESIGN.encode()).hexdigest())
+        self.assertEqual(rep.codes(), ["style.offladder"])
 
-if __name__ == "__main__":
-    unittest.main(verbosity=2)
+    def test_legacy_frozen_filename_still_passes(self):
+        rep = self.run_check(".x { font-size: 16px; }",
+                             frozen_hash=hashlib.sha256(DESIGN.encode()).hexdigest())
+        self.assertEqual(rep.items, [])
+
+    def test_styles_first_file_is_family_even_with_a_later_design_css(self):
+        os.rename(os.path.join(self.dir, "design.css"), os.path.join(self.dir, "folio.css"))
+        self.write("design.css", ".x { font-size: 38px; }")
+        project = {"styles": ["folio.css", "design.css"], "entry": "book.html",
+                   "family": {"name": "folio", "version": "2.2.0",
+                              "sha256": hashlib.sha256(DESIGN.encode()).hexdigest()}}
+        rep = Stub()
+        adherence.check_style(rep, self.dir, project)
+        self.assertEqual(rep.codes(), ["style.offladder"])
+        self.assertEqual(rep.items[0][2], "design.css")
+
+    def test_frozen_hash_mismatch_cannot_be_waived(self):
+        original = hashlib.sha256(DESIGN.encode()).hexdigest()
+        self.write("design.css", DESIGN.replace("16px", "18px"))
+        rep = self.run_check("", waiver="客户指定字号", frozen_hash=original)
+        self.assertEqual(rep.codes(), ["style.family-hash"])
+        self.assertEqual(rep.items[0][1], "error")
+
+    def test_legacy_version_with_recorded_hash_still_checks_integrity(self):
+        original = hashlib.sha256(DESIGN.encode()).hexdigest()
+        self.write("design.css", DESIGN + "\n/* changed */\n")
+        rep = self.run_check("", version="1.1.0", frozen_hash=original)
+        self.assertEqual(rep.codes(), ["style.family-hash"])
+
+    def test_missing_frozen_file_does_not_match_recorded_hash(self):
+        os.unlink(os.path.join(self.dir, "design.css"))
+        rep = self.run_check("", frozen_hash=hashlib.sha256(DESIGN.encode()).hexdigest())
+        self.assertEqual(rep.codes(), ["style.family-hash"])
 
 
 class Process(unittest.TestCase):
@@ -137,7 +177,6 @@ class Process(unittest.TestCase):
             self.assertEqual(rep2.items, [])
         finally:
             shutil.rmtree(d, ignore_errors=True)
-
     def test_short_books_are_not_prompted(self):
         import validate
         d = tempfile.mkdtemp(prefix="hb-process-")
@@ -149,3 +188,7 @@ class Process(unittest.TestCase):
             self.assertEqual(rep.items, [])
         finally:
             shutil.rmtree(d, ignore_errors=True)
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

@@ -2,7 +2,7 @@
 
 HTML/CSS 原生手册项目的权威约定。渲染（`hb/core/render`）、检查（`hb/core/measure`、`postflight`、`coverage`）、续页、导出和 Folio 联动都以本文为准。机器校验入口：`python3 hb/core/validate.py <项目>`。
 
-改动本文须同步改 `validate.py` 与相关测试，并在 `dev/audits/PROGRESS.md` 的交接记录中写明「契约变更」。
+改动本文须同步改校验入口及其检查模块与相关测试，并在 `dev/audits/PROGRESS.md` 的交接记录中写明「契约变更」。
 
 ## 1. 项目目录
 
@@ -12,8 +12,8 @@ project/
   brief.md            # 授权、读者、阅读任务、重要假设
   page-plan.md        # 页面任务与整册节奏
   book.html           # 作者源：页面结构 + 默认语言文案（§3）
-  design.css          # 家族基因（从 families/<名> 复制，记录来源与哈希）
-  book.css            # 本书专属构图
+  folio.css           # 家族主题（旧项目可为 design.css；styles[0] 指定，记录来源与哈希）
+  book.css            # 可留空的局部补丁，不重建主题
   edits.css           # 可选：Folio 修改转成的覆盖规则，待 agent 审阅
   copy/<lang>.json    # 非默认语言的文案（§4）
   lang/<lang>.css     # 可选：某语言的长度、断行、字重、页面覆盖
@@ -34,7 +34,7 @@ project/
   "contract": 1,
   "title": "示例手册",
   "entry": "book.html",
-  "styles": ["design.css", "book.css"],
+  "styles": ["folio.css", "book.css"],
   "languages": ["zh-CN", "en"],
   "default_language": "zh-CN",
   "canvas": { "trim_mm": [210, 297], "bleed_mm": 0, "safe_mm": 8 },
@@ -46,7 +46,7 @@ project/
     { "family": "Noto Sans SC", "file": "assets/fonts/NotoSansSC-700.ttf", "weight": "700", "style": "normal" }
   ],
   "readability": { "body_px": 16 },
-  "family": { "name": "campus", "version": "1", "sha256": "…" }
+  "family": { "name": "folio", "version": "2.2.0", "sha256": "…" }
 }
 ```
 
@@ -67,7 +67,7 @@ project/
 | `fonts` | 是 | 至少一项。字体只在这里声明，渲染据此生成 `@font-face`；作者 CSS 不得自写 `@font-face`。每项是一个固定字重的**静态字体**（`weight` 为单个值）：可变字体在 Chrome 导出的 PDF 里会变成 Type 3，印刷与可编辑 PDF 都不接受。用 `python3 hb/core/font_static.py` 从可变字体实例化 |
 | `readability` | 否 | 覆盖可读性下限（§3.4），只能比默认值更严 |
 | `readability_waiver` | 否 | 用户明确授权降低下限时填写：`{"reason": "…", "approved_by": "…", "date": "YYYY-MM-DD", "values": {"aux_px": 9}}`。检查器按放宽后的值检查，并始终报告一条 hint |
-| `family` | 否 | 家族 CSS 的来源名、版本与 `design.css` 复制时的哈希 |
+| `family` | 否 | 家族 CSS 的来源名、版本与 `styles[0]` 原始字节的 SHA256；有记录时校验冻结文件完整性 |
 
 物理尺寸、出血、装订只在 `project.json` 声明一次。渲染器据此生成打印 CSS，作者 CSS 出现 `@page` 即为错误。生成的内容固定为：
 
@@ -138,17 +138,18 @@ PDF 页面框：MediaBox = CropBox = BleedBox = 媒体尺寸（成品 + 出血�
 
 ### 3.6 样式一致性（家族基因）
 
-`project.json.styles` 的第一个文件是家族 CSS（`design.css`），它是本项目的冻结基因；其余 CSS 是本书自己的页面 CSS。校验器静态检查三件事，不需要浏览器：
+`project.json.styles` 的第一个文件是冻结主题，新 Folio 为 `folio.css`，历史 `design.css` 或其他文件名按声明继续支持。其余 CSS 是局部补丁；文件名不能改变这个顺序约定。校验器执行以下静态检查，不需要浏览器：
 
 | 检查 | 规则 | 级别 |
 |---|---|---|
+| `style.family-hash` | 存在 `family.sha256` 时，核验 `styles[0]` 文件原始字节；不符须恢复冻结副本或按已授权主题升级记录新来源 | error，不受 style_waiver 降级 |
 | `style.token` | 字号、间距、行距、字距、基线、栏距、版心这类**节奏 token**（`--fl-size-*`、`--fl-space-*`、`--fl-leading-*`、`--fl-tracking-*`、`--fl-baseline`、`--fl-gutter`、`--fl-margin-*`）不得在本书 CSS 重定义 | error |
 | `style.offladder` | `font-size` 只能取字阶值；裁字、填图字这类显式放大的装饰字可以取最大字阶的 2 倍或 3 倍。内联 `style` 里的 px 同样计算 | error |
 | `style.brand` / `style.decor` / `style.custom` | 颜色 token 覆写、渐变/圆角/阴影/滤镜、自定义类数量会被记下，供审稿判断"是不是换了一套视觉语言" | warning |
 
-品牌适配仍然允许：颜色 token 可以覆写，但要在 `brief.md` 记明理由并重新测量对比度（`measure` 会给实测值）。把整套排印与间距换掉的，不是品牌适配，是另起一套系统。确需保留旧行为时，在 `project.json` 写 `style_waiver`（附理由），硬项降为警告；没有理由的空白字符串不算放宽。
+品牌适配仍然允许：颜色 token 可以覆写，但要在 `brief.md` 记明理由并重新测量对比度（`measure` 会给实测值）。把整套排印与间距换掉的，不是品牌适配，是另起一套系统。确需保留旧行为时，在 `project.json` 写 `style_waiver`（附理由），`style.token / style.offladder` 降为警告；冻结哈希错误不降级。没有理由的空白字符串不算放宽。
 
-本条自家族 2.2.0 起生效；更早冻结的项目按其当时版本审，不被追溯。
+字阶/节奏规则自家族 2.2.0 起生效，更早项目不追溯。冻结哈希检查适用于所有已记录哈希的项目；历史未记录的项目仍可使用。上述静态规则不是完整 CSS 解析器，不能证明所有选择器、相对单位或视觉决定均合规，最终仍需审稿。
 
 ## 4. 多语言
 
