@@ -74,12 +74,13 @@
     $('#dialog-grammar').textContent = `组合：${entry.grammar}`;
     $('#dialog-limits').textContent = `适用边界：${entry.limits}`;
     const specimen = $('#dialog-specimen'); specimen.replaceChildren();
-    const specimenPage = typeof entry.specimenPage === 'string' ? { id: entry.specimenPage, label: entry.specimenPage } : entry.specimenPage;
+    const location = window.FOLIO_SPECIMEN?.[entry.id];
+    const specimenPage = location || (typeof entry.specimenPage === 'string' ? { id: entry.specimenPage, label: entry.specimenPage } : entry.specimenPage);
     specimen.hidden = !specimenPage;
     if (specimenPage) {
       const link = document.createElement('a');
       link.href = `../samples/native/folio-swiss/preview.html#${encodeURIComponent(specimenPage.id)}`;
-      link.textContent = `查看样刊对应页 · ${specimenPage.label || specimenPage.id} ↗`;
+      link.textContent = `查看样刊${specimenPage.page ? `第 ${specimenPage.page} 页` : '对应页'} · ${specimenPage.label || specimenPage.id} ↗`;
       specimen.append(link);
     }
     $('#dialog-code').textContent = sourceFor(entry);

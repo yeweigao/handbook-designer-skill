@@ -684,8 +684,8 @@
       ],
       "description": "文字可以成为图形，但不能让唯一内容丢失可读性。",
       "grammar": "共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。",
-      "limits": "填图字仅用于重复装饰。检查PDF字形、图片与可读副本，不能承诺所有编辑器行为。",
-      "html": "<div class=\"fl-type-bold fl-type-photo fl-size-colossal fl-tracking-tighter\" style=\"background-image:url(../samples/native/nature-camp/assets/images/waterfall-moss.jpg)\" data-role=\"deco\" aria-hidden=\"true\">山海</div><p class=\"fl-h1 fl-mt-4\">山海 / 字与图像的交汇</p><p class=\"fl-body fl-mt-2 fl-measure\">照片只当字形的材质。可读的标题另写在下方，字形本身不承载唯一信息。</p>"
+      "limits": "填图字仅用于重复装饰。此例用当前纯色色面遮住打印边缘杂线；照片或渐变背景不能照搬该遮边。检查最终PDF与可读副本。",
+      "html": "<div class=\"fl-type-bold fl-type-photo fl-size-colossal fl-tracking-tighter\" style=\"background-image:url(../samples/native/nature-camp/assets/images/waterfall-moss.jpg);outline:2px solid var(--fl-bg);outline-offset:-1px\" data-role=\"deco\" aria-hidden=\"true\">山海</div><p class=\"fl-h1 fl-mt-4\">山海 / 字与图像的交汇</p><p class=\"fl-body fl-mt-2 fl-measure\">照片只当字形的材质。可读的标题另写在下方，字形本身不承载唯一信息。</p>"
     },
     {
       "id": "x-duotone",

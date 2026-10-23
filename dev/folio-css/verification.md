@@ -1,5 +1,20 @@
 # Folio CSS 验证记录
 
+## 2.2.0 · 展示入口与最终样刊收尾（2026-10-23）
+
+- 原网站继续承载完整目录：26 组原子、21 个布局、36 个组件、8 个变奏，共 91 项、353 个公开类。新增 [完整页码索引](specimen-index.md)，由同一目录自动生成。
+- 详情真正读取 `specimen-map.js`，显示页码；全景链接从不存在的 `#panorama` 修正为 `#panorama-1`。新增回归逐项核对全部 91 个锚点。
+- 网页字体子集复用 `family.find_source` 的源字体缓存查找，不再要求仓库内有 `dev/fonts`，不下载依赖。README 澄清固定预览与自包含离线 HTML 的区别，完整 PDF 由本地 export 生成。
+- 第 95 页填图字在 PDF 边缘有照片细线：局部配方遮边，并明确只适用纯色色面。共享 CSS 与运行时未改变。
+- 最终构建 `0bdda986d0b9`：100 页，render / measure / postflight / raster / coverage 全 pass，blocking 0。契约 0 错、1 条 `style.custom` 提示；确认 13 个自定义类只承担样刊说明/索引/页脚/示例摆位。
+- 视觉复核：整册缩略 + 第 95 页阅读尺度；其余 99 页与已审构建 `7b049e159e72` 的栅格逐页字节一致，继承其既有判断。不是独立评测，也未声称本轮逐字重读全部 100 页。[复核记录](../samples/native/folio-swiss/.qa/0bdda986d0b9/visual-review.md)与[100 页哈希](../samples/native/folio-swiss/.qa/0bdda986d0b9/raster-comparison.json)。
+- 浏览器回归：`family-css` 9 + `family-css-extended` 4 + `family-css-swiss` 7 = **20/20 pass**。本轮只读审查另确认 91 项映射一致、无阻塞问题。
+- 导出：`out/folio-swiss-v2.2/` 已刷新；正式 PDF 与验收哈希一致，可编辑 PDF 无 Type 3 且字体完整嵌入、离线 HTML 无外部请求，源包在干净目录重建为同构建；三种派生产物均逐页栅格一致，交付文件哈希全部复核。
+- 快速自检：`bash dev/tests/selftest.sh --quick` PASS，36 份活跃文档链接、语法与 31 项 Python 测试通过；证据目录 `hb-native-selftest.HdaFiO`。浏览器与样刊另由上述实跑覆盖。
+- 实际环境：Node 24.9.0 / Python 3.13.3 / Playwright 1.64.1 / 已安装 Chromium 149.0.7827.55；无新增依赖。
+
+---
+
 ## 2.2.0 · Swiss 底座调试轮（2026-10-23）
 
 承接 Swiss 底座融合，本轮把「样册必须真的过契约」跑通：91 个目录项 → 100 页 A4 样刊。

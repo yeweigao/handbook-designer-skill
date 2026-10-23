@@ -20,8 +20,9 @@ node hb/core/cli.mjs check dev/samples/native/folio-swiss       # 正常走验�
 
 ## 要看成品，不需要重建
 
-`<册>/preview.html` 是自包含的离线阅读页（图片已内联），`<册>/out/` 是导出包。
-`preview.html` 只有历史两册入库；`out/` 一律不入库，本地留着自己用。
+`<册>/preview.html` 是固定构建的阅读预览，当前 Swiss 样册仍引用本册 `assets/`，需先恢复素材与字体。
+三本 Folio 样册的 `preview.html` 都保留在仓库；`<册>/out/` 一律不入库。
+导出包中的 `*.html` 才是图片、字体全部内联的自包含离线成品，和正式 PDF 一起保存在本地。
 
 ## 各册
 

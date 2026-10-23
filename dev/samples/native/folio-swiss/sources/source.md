@@ -4612,7 +4612,7 @@ FOLIO / COMPLETE SPECIMEN
 组合关系 / 共享 CSS 与普通语义 HTML 组合，数值来自 Folio tokens。
 
 <!-- x-photo-type-007 -->
-适用边界 / 填图字仅用于重复装饰。检查PDF字形、图片与可读副本，不能承诺所有编辑器行为。
+适用边界 / 填图字仅用于重复装饰。此例用当前纯色色面遮住打印边缘杂线；照片或渐变背景不能照搬该遮边。检查最终PDF与可读副本。
 
 <!-- x-photo-type-008 -->
 CSS / fl-type-photo

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build compact variable-font subsets used only by the Folio browser showcase."""
 import json
+import importlib.util
 from pathlib import Path
 
 from fontTools import subset
@@ -8,8 +9,10 @@ from fontTools.ttLib import TTFont
 
 ROOT = Path(__file__).resolve().parents[2]
 SHOWCASE = ROOT / "dev" / "folio-css"
-SOURCES = ROOT / "dev" / "fonts"
 FONTS = SHOWCASE / "fonts"
+_family_spec = importlib.util.spec_from_file_location("folio_family", ROOT / "hb/core/family.py")
+_family = importlib.util.module_from_spec(_family_spec)
+_family_spec.loader.exec_module(_family)
 FONT_SOURCES = {
     "NotoSansSC-demo.woff2": "NotoSansSC-VF.ttf",
     "NotoSerifSC-demo.woff2": "NotoSerifSC-VF.ttf",
@@ -25,7 +28,7 @@ def showcase_text():
 
 
 def build_one(source, destination, text):
-    font = TTFont(SOURCES / source)
+    font = TTFont(_family.find_source(source))
     options = subset.Options()
     options.flavor = "woff2"
     options.layout_features = ["*"]

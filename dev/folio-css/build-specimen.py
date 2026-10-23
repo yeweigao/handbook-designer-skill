@@ -418,6 +418,7 @@ def build(project, font_cache=None):
     meta={'contract':1,'title':'Folio 完整设计系统样刊 · 秩序与自由','entry':'book.html','styles':['design.css','book.css'],'languages':['zh-CN'],'default_language':'zh-CN','canvas':family['canvas'],'binding':'digital','first_page':'right','content_mode':'carry','fonts':fonts,'family':{'name':'folio','version':family['version'],'sha256':hashlib.sha256((project/'design.css').read_bytes()).hexdigest()}}
     (project/'project.json').write_text(json.dumps(meta,ensure_ascii=False,indent=2)+'\n')
     (project/'coverage.json').write_text(json.dumps({'catalog_version':catalog.get('version'),'catalog_sha256':hashlib.sha256(raw.encode()).hexdigest(),'entries':len(entries),'page_count':len(pages),'mapping':mapping},ensure_ascii=False,indent=2)+'\n')
+    write_specimen_index(json.loads((project/'coverage.json').read_text()))
     page_map={ident:{'id':entry['page_ids'][0],'page':entry['pages'][0],'label':entry['title']} for ident,entry in mapping.items()}
     (SHOWCASE/'specimen-map.js').write_text('// Generated coverage locations only; not a PDF approval record.\nwindow.FOLIO_SPECIMEN = '+json.dumps(page_map,ensure_ascii=False,indent=2)+';\n')
     (project/'sources/segments.json').write_text(json.dumps({'contract':1,'source':'source.md','segments':segments},ensure_ascii=False,indent=2)+'\n')
@@ -428,6 +429,26 @@ def build(project, font_cache=None):
     (project/'page-plan.md').write_text('# 页序与覆盖\n\n依次为原子与规则、布局关系、内容组件、表现与变奏。普通配方一项一页；出血页面提升为真实物理页；全景为左右相邻两页。章节索引允许显式续页。全部目录映射见 coverage.json。\n')
     (project/'README.md').write_text('# Folio 完整设计系统样刊\n\n此目录由 `python3 dev/folio-css/build-specimen.py` 根据交互展示的同一份目录生成。修改配方请编辑 dev/folio-css 中的源 JSON，先运行 dev/build-folio-css.py，再重建本册。作者源为 book.html 与 book.css，家族 CSS 与字体已冻结；coverage.json 映射每一目录项到书页。表现与变奏章先有 philosophy-variations.md 的视觉主张（受控变量），再逐页落版；主张只管判断标准，不定尺寸与模数。主张不进成品，留在项目目录，供改版时对照。\n\n构建完后依次执行 validate、check、实际看全部最终 PDF、review，再更新展示预览。生成器不写任何通过或视觉批准声明。\n')
     print(f'Built {project.relative_to(ROOT) if project.is_relative_to(ROOT) else project}: {len(entries)} entries → {len(pages)} pages, {len(segments)} text segments, {len(assets)} images')
+
+
+def write_specimen_index(coverage):
+    """Publish a readable map of every catalog item without rebuilding book sources."""
+    lines = ['# Folio 2.2 完整样刊目录', '',
+             f"{coverage['entries']} 个展示条目，对应 {coverage['page_count']} 页 A4 样刊。",
+             '原子部分索引全部公开类及其刻度，例子演示典型组合；不代表穷举所有排列。', '',
+             '[交互展示](index.html) · [翻看完整样刊](../samples/native/folio-swiss/preview.html) · [机器可读覆盖表](../samples/native/folio-swiss/coverage.json)', '']
+    for section in SECTIONS:
+        items = [entry for entry in coverage['mapping'].values() if entry['section'] == section]
+        if not items:
+            continue
+        lines += [f'## {NAMES[section]}', '', '| 页码 | 示例 |', '|---|---|']
+        for entry in items:
+            pages = '–'.join(map(str, entry['pages']))
+            title = entry['title'].replace('|', ' / ')
+            lines.append(f"| {pages} | [{title}](../samples/native/folio-swiss/preview.html#{entry['page_ids'][0]}) |")
+        lines.append('')
+    lines += ['历史版本的构图对照见 [1.1 样册页序](specimen-map.md)。', '']
+    (SHOWCASE / 'specimen-index.md').write_text('\n'.join(lines))
 
 
 def main():

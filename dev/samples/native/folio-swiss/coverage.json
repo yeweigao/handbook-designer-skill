@@ -1,6 +1,6 @@
 {
   "catalog_version": "2.2.0",
-  "catalog_sha256": "d8c73e2774c765e909d1cca2cb83076ad25a6572ab4fcfe74c3c68ce93fa0161",
+  "catalog_sha256": "7dbc0e98f2ef0b622c97ee9d713af69083373c1ec047478a76db5c6d2d2fdd5e",
   "entries": 91,
   "page_count": 100,
   "mapping": {
@@ -950,7 +950,7 @@
       "page_ids": [
         "x-photo-type"
       ],
-      "source_sha256": "aa10689ef3c207f037448c3c57f4cb6516f8f024906e9ee64ed18ee1ee845f40"
+      "source_sha256": "138ffec8ef28daebcec6e7d55468ba1a967ec751f2fed0e44953d1b797b29132"
     },
     "x-duotone": {
       "section": "expressions",

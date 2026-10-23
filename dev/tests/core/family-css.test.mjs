@@ -74,3 +74,23 @@ test('local showcase filters recipes, opens source, preserves layout in structur
   assert.deepEqual(errors,[]);
  }finally{await page.close();}
 });
+
+test('every showcase entry links to a real specimen page, including the two-page panorama',async()=>{
+ const page=await browser.newPage({viewport:{width:1440,height:1000}});
+ try{
+  await page.goto(new URL('../../folio-css/index.html',import.meta.url).href);
+  const entries=await page.evaluate(()=>['atoms','layouts','components','expressions'].flatMap(k=>FOLIO_CATALOG[k]).map(e=>({id:e.id,location:window.FOLIO_SPECIMEN?.[e.id]})));
+  const preview=await fs.readFile(new URL('../../samples/native/folio-swiss/preview.html',import.meta.url),'utf8');
+  const anchors=new Set([...preview.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));
+  for(const entry of entries){assert.ok(entry.location?.page,`${entry.id}: missing page number`);assert.ok(anchors.has(entry.location.id),`${entry.id}: missing anchor ${entry.location.id}`);}
+  await page.locator('#layout-search').fill('panorama');
+  await page.locator('#layout-gallery .recipe-card:visible button').click();
+  const expected=entries.find(e=>e.id==='panorama').location;
+  assert.match(await page.locator('#dialog-specimen').innerText(),new RegExp(`第 ${expected.page} 页`));
+  assert.ok((await page.locator('#dialog-specimen a').getAttribute('href')).endsWith('#panorama-1'));
+  await page.keyboard.press('Escape');
+  await page.locator('#expression-search').fill('x-edge');
+  await page.locator('#expression-gallery .recipe-card:visible button').click();
+  assert.match(await page.locator('#dialog-specimen').innerText(),/第 100 页/);
+ }finally{await page.close();}
+});
