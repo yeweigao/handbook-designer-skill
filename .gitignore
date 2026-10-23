@@ -34,3 +34,4 @@ dev/samples/product-brochure/
 dev/samples/native/*/assets/
 dev/folio-css/fonts/
 output/
+dist/

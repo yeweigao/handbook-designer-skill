@@ -21,7 +21,7 @@ node hb/core/cli.mjs check dev/samples/native/folio-swiss       # 正常走验�
 ## 要看成品，不需要重建
 
 `<册>/preview.html` 是自包含的离线阅读页（图片已内联），`<册>/out/` 是导出包。
-两者都不入库，本地留着自己用。
+`preview.html` 只有历史两册入库；`out/` 一律不入库，本地留着自己用。
 
 ## 各册
 
