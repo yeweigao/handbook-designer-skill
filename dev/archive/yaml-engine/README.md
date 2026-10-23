@@ -4,7 +4,7 @@
 
 **不是可执行安装包或兼容入口。** 旧相对路径、字体缓存、运行清单和历史输出不保证在此直接可运行；需要重现旧缺陷请从 VERSION.json 的 source_commit 建独立 checkout，并使用当时依赖。当前公开入口只有 hb/core/cli.mjs。
 
-原 dev/gallery、dev/previews 与旧 dev/samples 保留在原处，作为对应历史输出证据，S11 再作视觉资产审计；不把它们当当前运行模板。hb/package*.json 与 requirements* 仍是新运行时沿用的依赖来源；不为归档再维护一套可运行副本。
+原 dev/gallery、dev/previews 与旧 dev/samples 已移出仓库（本地保留），不进版本库；不把它们当当前运行模板。hb/package*.json 与 requirements* 仍是新运行时沿用的依赖来源；不为归档再维护一套可运行副本。
 
 ## 有价值回归的现行归属
 

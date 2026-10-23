@@ -43,7 +43,7 @@ HTML 组件配方 → 作者页面 → 最终 PDF 审稿
 
 验证包括生成文件一致性、实际浏览器中嵌套颜色/字号、网格跨度、图片焦点、跨页坐标，以及真实样册的 PDF 技术检查和逐页视觉复核。网页展示不是印刷验收；作者复核也不计为 S12 独立评测。
 
-参考来自用户提供的 `ppt-master-themes/website/public/layouts/index.html` 与旧 `dev/samples/themes/photo/book.html`：采纳结构/成品双视图、网格分解、摄影节奏与可解释组合；不继承旧引擎接口或逐页复制旧装饰。
+参考来自用户提供的 `ppt-master-themes/website/public/layouts/index.html` 与旧 `dev/samples/themes/photo/book.html`（该目录已移出仓库，本地保留）：采纳结构/成品双视图、网格分解、摄影节奏与可解释组合；不继承旧引擎接口或逐页复制旧装饰。
 
 ## 2026-10-23 · 信息与分析扩展
 

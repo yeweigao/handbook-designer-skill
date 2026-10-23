@@ -67,7 +67,7 @@ families/folio/design.css        # 单文件分发，无 @import、无运行时�
 }
 ```
 
-- `fonts[].source` 是可变或静态字体文件名，按 `$HB_FONT_DIR` → `~/.cache/handbook-designer/fonts` → `dev/fonts` 与用户字体目录顺序查找；
+- `fonts[].source` 是可变或静态字体文件名，按 `$HB_FONT_DIR` → `~/.cache/handbook-designer/fonts` → 用户字体目录顺序查找（`dev/fonts` 已移出仓库）；
   可变源按 `weights` 实例化成静态字体再子集化，静态源直接子集化，输出到项目 `assets/fonts/<Family>-<weight>.ttf`。
   这就是为什么家族可以声明多个字重却只提供一份源文件，也是为什么**排版里用到的字重必须在 `weights` 里列出**——否则运行时没有这个文件，检查会报字体回退。
 - `license` 指向 `families/licenses/` 里的文件，init 时复制进项目 `assets/fonts/`。新增字体必须补授权文本。
